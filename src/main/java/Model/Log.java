@@ -1,3 +1,5 @@
+package Model;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -6,7 +8,7 @@ public class Log {
     String date;
     double paymentAmount;
     double discountAmount;
-    ArrayList <Merch> tradedMerchList;
+    ArrayList < Product > tradedProductList;
     String buyerName;
     String sellerName;
     boolean reachedBuyer;

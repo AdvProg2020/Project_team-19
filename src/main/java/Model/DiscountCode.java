@@ -1,6 +1,8 @@
+package Model;
+
 import java.util.ArrayList;
 
-public class CodeDiscount {
+public class DiscountCode {
     String code;
     String startTime;
     String endTime;

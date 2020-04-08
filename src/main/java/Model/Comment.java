@@ -1,6 +1,8 @@
+package Model;
+
 public class Comment {
     Person commenter;
-    Merch merch;
+    Product product;
     String commentString;
     int[] verifiedState;
     boolean isBought;
