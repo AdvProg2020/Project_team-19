@@ -9,4 +9,13 @@ public class ProductRequest extends Request {
     private double price;
     RequestState requestState;
     private HashMap<String, String> properties;
+
+    public ProductRequest(String productID, String name, String brand, double price, RequestState requestState, HashMap<String, String> properties) {
+        this.productID = productID;
+        this.name = name;
+        this.brand = brand;
+        this.price = price;
+        this.requestState = requestState;
+        this.properties = properties;
+    }
 }

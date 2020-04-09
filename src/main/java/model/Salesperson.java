@@ -8,6 +8,9 @@ public class Salesperson extends Person {
     private String company;
     private HashMap < Product, ProductState> offeredProducts;
     private ArrayList < Discount > discountProducts;
+    private ArrayList<DiscountCode> discountCodes;
+    private int credit;
+
 
     class ProductState {
         boolean inDiscount;
@@ -25,6 +28,10 @@ public class Salesperson extends Person {
         public void setAmount(int amount){
             this.amount+=amount;
         }
+    }
+
+    public void setCredit(int credit) {
+        this.credit = credit;
     }
 
     public void changeProductAmount ( Product offeredProduct , int amount ) { //amount can be negative

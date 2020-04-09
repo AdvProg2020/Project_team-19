@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.UUID;
+
 
 public class Product {
     enum ProductState {
@@ -11,13 +11,25 @@ public class Product {
 
     ArrayList<Salesperson> owners;
     private HashMap<String, String> properties;
-
+    private String productID;
     private double price;
     private int count;
-    private String productID;
     private String name;
     private String brand;
     private String sellerName;
+    private Category category;
+    private String description;
+    private double averageScore; //is related to Model.Score Class
+    private ArrayList<Comment> comments;
+    private ProductState productState;
+
+    public static Product findProductByName(String name){
+        return null;
+    }
+
+    public static Product findProductById(String id){
+        return null;
+    }
 
     public Product(String productID, String name, String brand, double price, String sellerName, ProductState productState,Category category) {
         this.productID = productID;
@@ -36,10 +48,5 @@ public class Product {
         return count > 0;
     }
 
-    private ProductState productState;
 
-    Category category;
-    String description;
-    double averageScore; //is related to Model.Score Class
-    ArrayList<Comment> comments;
 }
