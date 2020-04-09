@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 abstract public class Person {
     private boolean isLoggedIn;
