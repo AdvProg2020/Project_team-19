@@ -1,18 +1,42 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class Product {
-    UUID productID;
-    int[] productState;
-    ArrayList<Salesperson> owners;
+    enum ProductState {
+        BUILD_IN_PROGRESS, EDIT_IN_PROGRESS, VERIFIED
+    }
 
-    String name;
-    String brand;
-    double price;
-    String sellerName;
-    boolean available;
+    ArrayList<Salesperson> owners;
+    private HashMap<String, String> properties;
+
+    private double price;
+    private int count;
+    private String productID;
+    private String name;
+    private String brand;
+    private String sellerName;
+
+    public Product(String productID, String name, String brand, double price, String sellerName, ProductState productState,Category category) {
+        this.productID = productID;
+        this.name = name;
+        this.brand = brand;
+        this.price = price;
+        this.sellerName = sellerName;
+        this.productState = productState;
+        this.count = 0;
+        for (String property : category.getProperties()) {
+            //setting properties
+        }
+    }
+
+    public boolean isAvailable() {
+        return count > 0;
+    }
+
+    private ProductState productState;
 
     Category category;
     String description;

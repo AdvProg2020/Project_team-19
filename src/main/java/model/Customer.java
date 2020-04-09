@@ -1,8 +1,10 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Customer extends Person {
+    private ArrayList<BuyLog> buyLogs;
     private LinkedList < Product > cart;
     private double credit;
 

@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Salesperson extends Person {
-    private HashMap < Product, productState > offeredProducts;
+    private ArrayList<SellLog> sellLogs;
+    private String company;
+    private HashMap < Product, ProductState> offeredProducts;
     private ArrayList < Discount > discountProducts;
 
-    class productState {
+    class ProductState {
         boolean inDiscount;
         int amount;
 
-        public productState(boolean inDiscount, int amount) {
+        public ProductState(boolean inDiscount, int amount) {
             this.inDiscount = inDiscount;
             this.amount = amount;
         }
@@ -38,14 +40,14 @@ public class Salesperson extends Person {
     }
 
     public void addToOfferedProducts ( Product offeredProduct , int amount ) {
-        offeredProducts.put ( offeredProduct , new productState(false,amount));
+        offeredProducts.put ( offeredProduct , new ProductState(false,amount));
     }
 
     public void removeFromOfferedProducts ( Product offeredProduct , int amount ) {
         offeredProducts.remove ( offeredProduct );
     }
 
-    public HashMap < Product, productState > getOfferedProducts () {
+    public HashMap < Product, ProductState> getOfferedProducts () {
         return offeredProducts;
     }
 }
