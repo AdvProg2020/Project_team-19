@@ -1,10 +1,19 @@
 package controller;
 
 public class Controller {
-    
-    public void purchaseProcess () {
-        // Change credit
-        // Remaking cart
-        //djjkkfyty
+
+    public boolean isANewUserName (String newUserName) {
+        for (String userName : Database.getAllUserNames()) {
+            if (newUserName.equals(userName))
+                return false;
+        }
+        return true;
     }
+
+
+
+
+
+
+
 }

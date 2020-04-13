@@ -11,6 +11,11 @@ public class Salesperson extends Person {
     private ArrayList<DiscountCode> discountCodes;
     private int credit;
 
+    public Salesperson(HashMap<String, String> personInfo) {
+        super(personInfo);
+        this.company = personInfo.get("company");
+    }
+
 
     class ProductState {
         boolean inDiscount;
