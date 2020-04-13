@@ -15,6 +15,7 @@ public class Salesperson extends Person {
     class ProductState {
         boolean inDiscount;
         int amount;
+        double price;
 
         public ProductState(boolean inDiscount, int amount) {
             this.inDiscount = inDiscount;

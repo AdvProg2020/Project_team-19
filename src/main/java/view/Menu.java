@@ -9,6 +9,10 @@ public abstract class Menu {
     public static Scanner scanner;
     protected HashMap<Integer, Menu> subMenus;
 
+    public static void setScanner(Scanner scanner) {
+        Menu.scanner = scanner;
+    }
+
     public Menu(String name, Menu parent) {
         this.name = name;
         this.parent = parent;

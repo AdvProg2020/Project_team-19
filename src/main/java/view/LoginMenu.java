@@ -1,28 +1,46 @@
 package view;
 
+import java.util.HashMap;
+
 public class LoginMenu extends Menu {
+    private HashMap<String,String> personInfo ;
     public LoginMenu ( Menu parent ) {
         super ( "Login Menu" , parent );
         this.subMenus.put(1,getRegisterMenu());
-        this.subMenus.put(2,getLogInMenu());
+        this.subMenus.put(2,getLoginMenu());
+        personInfo = new HashMap<String, String>();
     }
 
     private Menu getRegisterMenu(){
         return new Menu("Register",this) {
             @Override
             public void show() {
-                //to do
+
             }
 
             @Override
             public void execute() {
-                super.execute();
+                System.out.println("Enter username");
+                String username=scanner.nextLine();
+                personInfo.put("username",username);
+                System.out.println("Enter type");
+                personInfo.put("type",scanner.nextLine());
+                System.out.println("Enter first name");
+                System.out.println("Enter password");
+                personInfo.put("password",scanner.nextLine());
+                personInfo.put("firstName",scanner.nextLine());
+                System.out.println("Enter last name");
+                personInfo.put("lastName",scanner.nextLine());
+                System.out.println("Enter email");
+                personInfo.put("email",scanner.nextLine());
+                System.out.println("Enter phone number");
+                personInfo.put("phoneNumber",scanner.nextLine());
             }
         };
     }
 
-    private Menu getLogInMenu(){
-        return new Menu("Log in",this) {
+    private Menu getLoginMenu(){
+        return new Menu("Login",this) {
             @Override
             public void show() {
                 //to do
