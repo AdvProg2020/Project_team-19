@@ -12,7 +12,6 @@ public class Product {
     ArrayList<Salesperson> owners;
     private HashMap<String, String> properties;
     private String productID;
-    private double price;
     private int count;
     private String name;
     private String brand;
@@ -31,11 +30,10 @@ public class Product {
         return null;
     }
 
-    public Product(String productID, String name, String brand, double price, String sellerName, ProductState productState,Category category) {
+    public Product(String productID, String name, String brand, String sellerName, ProductState productState,Category category) {
         this.productID = productID;
         this.name = name;
         this.brand = brand;
-        this.price = price;
         this.sellerName = sellerName;
         this.productState = productState;
         this.count = 0;

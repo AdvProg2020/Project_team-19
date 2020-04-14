@@ -1,70 +1,62 @@
 package view;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import controller.*;
 
 public class LoginMenu extends Menu {
-    public LoginMenu(Menu parent) {
-        super("Login Menu", parent);
-        submenus.put(1, getCreateAccountMenu());
-        submenus.put(2, getLoginMenu());
-        submenus.put(3, getHelpMenu(this));
+    private HashMap<String,String> personInfo ;
+    public LoginMenu ( Menu parent ) {
+        super ( "Login Menu" , parent );
+        this.subMenus.put(1,getRegisterMenu());
+        this.subMenus.put(2,getLoginMenu());
+        personInfo = new HashMap<String, String>();
     }
 
-    //1 = create account   2 = login   3 = help
-
-    private Menu getCreateAccountMenu() {
-        return new Menu("Create New Account", this) {
+    private Menu getRegisterMenu() {
+        return new Menu("Register", this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " :");
-                System.out.println("enter required info or back to return");
-                // next prints happens  in execute when info is valid
+
             }
 
             @Override
             public void execute() {
-                String input = scanner.nextLine();
-                if (input.equalsIgnoreCase("back")) {
-                    this.parentMenu.show();
-                    this.parentMenu.execute();
+                System.out.println("Username must contain more than 4 character and include digit or alphabet");
+                System.out.println("Enter username");
+                String username = scanner.nextLine();
+                if (!RegisterController.checkUserNameAuthenticity(username)) {
+                    System.out.println("Your username is not valid");
+                    personInfo.put("username", username);
+                    System.out.println("Enter type");
+                    personInfo.put("type", scanner.nextLine());
+                    System.out.println("Enter first name");
+                    System.out.println("Enter password");
+                    personInfo.put("password", scanner.nextLine());
+                    personInfo.put("firstName", scanner.nextLine());
+                    System.out.println("Enter last name");
+                    personInfo.put("lastName", scanner.nextLine());
+                    System.out.println("Enter email");
+                    personInfo.put("email", scanner.nextLine());
+                    System.out.println("Enter phone number");
+                    personInfo.put("phoneNumber", scanner.nextLine());
                 }
-                // if ( controller username is unique ) {
-                // controller (getPersonInfoForCreatingAccount(splitInput[2].equals("customer")));
-                //} else print invalid username
             }
         };
     }
 
-    private Menu getLoginMenu() {
-        return new Menu("Login", this) {
+    private Menu getLoginMenu(){
+        return new Menu("Login",this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " :");
-                System.out.println("enter password or back");  // imagine username exists
-                // next prints happens in execute when info is not valid
+                //to do
             }
 
             @Override
             public void execute() {
-                String input = scanner.nextLine();
-                if (input.equalsIgnoreCase("back")) {
-                    this.parentMenu.show();
-                    this.parentMenu.execute();
-                }
-                // check username exists then check correctness of password
-                //if both valid, controller do other works
+                super.execute();
             }
         };
     }
 
-    private ArrayList getPersonInfoForCreatingAccount(boolean isSalesperson) {
-        ArrayList<String> personInfo = new ArrayList<String>();
-        String input;
-        int key = isSalesperson ? 6 : 5;
-        for (int i = 0; i < key; i++) {   //1.password, 2.fname, 3.lname, 4.email, 5.telephone, salesperson : 6.company name
-            System.out.format("enter %d:\n", i + 1);
-            personInfo.add(scanner.nextLine());
-        }
-        return personInfo;
-    }
+
 }

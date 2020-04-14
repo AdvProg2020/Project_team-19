@@ -16,10 +16,10 @@ public class Salesperson extends Person {
         this.company = personInfo.get("company");
     }
 
-
     class ProductState {
         boolean inDiscount;
         int amount;
+        double price;
 
         public ProductState(boolean inDiscount, int amount) {
             this.inDiscount = inDiscount;

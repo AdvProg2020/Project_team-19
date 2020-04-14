@@ -10,7 +10,7 @@ public class SalespersonRequest extends Request {
     private String emailAddress;
     private String phoneNumber;
     private String password;
-    
+
 
     public SalespersonRequest(HashMap<String, String> personInfo) {
         this.username = personInfo.get("username");
