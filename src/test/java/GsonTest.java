@@ -1,4 +1,4 @@
-import controller.GsonEx;
+import controller.Database;
 import org.junit.Test;
 import org.junit.Assert;
 
@@ -9,7 +9,7 @@ public class GsonTest {
     @Test
     public void getFieldsGson() throws IOException {
         String[] array = new String[]{"20", "30", "18", "28"};
-        Assert.assertEquals(Arrays.asList(array), GsonEx.handleJsonArray("C:\\Users\\solale\\IdeaProjects\\OnlineShoppingProject\\src\\main\\resources\\gson.txt","age"));
+        Assert.assertEquals(Arrays.asList(array), Database.handleJsonArray("age"));
     }
 
 }

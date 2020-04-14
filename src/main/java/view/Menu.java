@@ -2,6 +2,8 @@ package view;
 
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class Menu {
     protected String name;
@@ -40,6 +42,26 @@ public abstract class Menu {
             nextMenu = subMenus.get(chosenMenu);
         nextMenu.show();
         nextMenu.execute();
+    }
+
+    private static String getInputInFormat(String helpText, String regex) {
+        return getInputInFormatWithError(helpText, regex, "");
+    }
+
+    private static String getInputInFormatWithError(String helpText, String regex, String error) {
+
+        Pattern pattern = Pattern.compile(regex);
+        boolean inputIsInvalid;
+        String line;
+        do {
+            System.out.println(helpText);
+            line = scanner.nextLine().trim();
+            Matcher matcher = pattern.matcher(line);
+            inputIsInvalid = !matcher.find();
+            if (inputIsInvalid)
+                System.out.print(error);
+        } while (inputIsInvalid);
+        return line;
     }
 }
 

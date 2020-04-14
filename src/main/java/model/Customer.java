@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class Customer extends Person {
@@ -8,7 +9,11 @@ public class Customer extends Person {
     private LinkedList < Product > cart;
     private double credit;
 
-    public void addToCart ( Product product ) {
+    public Customer(HashMap<String, String> personInfo) {
+        super(personInfo);
+    }
+
+    public void addToCart (Product product ) {
         cart.add ( product );
     }
 

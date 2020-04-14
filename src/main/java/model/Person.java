@@ -1,5 +1,7 @@
 package model;
 
+import java.util.HashMap;
+
 abstract public class Person {
     private boolean isLoggedIn;
     private String username;
@@ -9,7 +11,20 @@ abstract public class Person {
     private String phoneNumber;
     private String password;
 
-    public void setFirstName ( String firstName ) {
+    public Person(HashMap<String, String> personInfo) {
+        this.username = personInfo.get("username");
+        this.firstName = personInfo.get("firstName");
+        this.lastName = personInfo.get("lastName");
+        this.emailAddress = personInfo.get("email");
+        this.phoneNumber = personInfo.get("phoneNumber");
+        this.password = personInfo.get("password");
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setFirstName (String firstName ) {
         this.firstName = firstName;
     }
 
