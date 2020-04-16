@@ -3,9 +3,9 @@ package view;
 public class PurchaseMenu extends Menu {
     public PurchaseMenu(Menu parent){
         super("Purchase Menu",parent);
-        submenus.put(1,getReceiverInformationMenu());
-        submenus.put(2,getDiscountCodeMenu());
-        submenus.put(3,getPaymentMenu());
+        subMenus.put(1,getReceiverInformationMenu());
+        subMenus.put(2,getDiscountCodeMenu());
+        subMenus.put(3,getPaymentMenu());
     }
 
     public Menu getReceiverInformationMenu(){

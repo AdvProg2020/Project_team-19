@@ -3,8 +3,8 @@ package view;
 public class SearchMenu extends Menu {
     public SearchMenu(Menu parent) {
         super("Search Menu", parent);
-        submenus.put(1, getSearchMenu());
-        submenus.put(2, getSearchMenuByField());
+        subMenus.put(1, getSearchMenu());
+        subMenus.put(2, getSearchMenuByField());
     }
 
     private Menu getSearchMenu() {

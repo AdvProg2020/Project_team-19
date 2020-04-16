@@ -3,10 +3,10 @@ package view;
 public class SalespersonProductMenu extends Menu {
     public SalespersonProductMenu(Menu parent){
         super("Manage Products",parent);
-        submenus.put(1,new ManageProduct(this));
-        submenus.put(2,getViewSalesHistory());
-        submenus.put(3,getAddProductMenu());
-        submenus.put(4,getShowCategoriesMenu());
+        subMenus.put(1,new ManageProduct(this));
+        subMenus.put(2,getViewSalesHistory());
+        subMenus.put(3,getAddProductMenu());
+        subMenus.put(4,getShowCategoriesMenu());
     }
 
     public Menu getViewSalesHistory(){
@@ -57,10 +57,10 @@ public class SalespersonProductMenu extends Menu {
 class ManageProduct extends Menu{
     public ManageProduct(Menu parent){
         super("Manage Products",parent);
-        submenus.put(1,getViewProductMenu());
-        submenus.put(2,getEditProductMenu());
-        submenus.put(3,getRemoveProductMenu());
-        submenus.put(4,getViewBuyersMenu());
+        subMenus.put(1,getViewProductMenu());
+        subMenus.put(2,getEditProductMenu());
+        subMenus.put(3,getRemoveProductMenu());
+        subMenus.put(4,getViewBuyersMenu());
     }
 
     public Menu getViewProductMenu(){

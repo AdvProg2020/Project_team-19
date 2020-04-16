@@ -1,14 +1,13 @@
 package view;
 
 import java.util.HashMap;
-import controller.*;
 
 public class LoginMenu extends Menu {
     private HashMap<String,String> personInfo ;
     public LoginMenu ( Menu parent ) {
         super ( "Login Menu" , parent );
-        this.submenus.put(1,getRegisterMenu());
-        this.submenus.put(2,getLoginMenu());
+        this.subMenus.put(1,getRegisterMenu());
+        this.subMenus.put(2,getLoginMenu());
         personInfo = new HashMap<String, String>();
     }
 

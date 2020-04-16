@@ -8,8 +8,8 @@ import java.util.List;
 public class ManageRequestsMenu extends Menu {
     public ManageRequestsMenu(Menu parent) {
         super("Manage Requests", parent);
-        submenus.put(1, getShowRequestsMenu());
-        submenus.put(2, getHelpMenu(this));
+        subMenus.put(1, getShowRequestsMenu());
+        subMenus.put(2, getHelpMenu(this));
     }
 
     private Menu getShowRequestsMenu () {
@@ -37,16 +37,14 @@ public class ManageRequestsMenu extends Menu {
     }
 
     private RequestController.FilterType getRequestTypeByInput (String input) {
-        switch (input) {
-            case "1":
-                return RequestController.FilterType.ALL;
-            case "2":
-                return RequestController.FilterType.SALESPERSON;
-            case "3":
-                return RequestController.FilterType.PRODUCT;
-            default:
-                return RequestController.FilterType.DISCOUNT;
+        if ("1".equals(input)) {
+            return RequestController.FilterType.ALL;
+        } else if ("2".equals(input)) {
+            return RequestController.FilterType.SALESPERSON;
+        } else if ("3".equals(input)) {
+            return RequestController.FilterType.PRODUCT;
         }
+        return RequestController.FilterType.DISCOUNT;
     }
 
     private void showRequests (List<Request> requests) {
@@ -55,18 +53,5 @@ public class ManageRequestsMenu extends Menu {
         }
     }
 
-    private Menu getAcceptMenu () {
-        return new Menu("Accept Menu", this) {
-            @Override
-            public void show() {
-                super.show();
-            }
-
-            @Override
-            public void execute() {
-                super.execute();
-            }
-        };
-    }
 
 }

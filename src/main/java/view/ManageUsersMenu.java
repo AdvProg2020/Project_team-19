@@ -3,9 +3,9 @@ package view;
 public class ManageUsersMenu extends Menu {
     public ManageUsersMenu(Menu parent){
         super("Manage Users",parent);
-        submenus.put(1,getViewUserMenu());
-        submenus.put(2,getDeleteUserMenu());
-        submenus.put(3,getCreateManagerProfileMenu());
+        subMenus.put(1,getViewUserMenu());
+        subMenus.put(2,getDeleteUserMenu());
+        subMenus.put(3,getCreateManagerProfileMenu());
     }
 
     public Menu getViewUserMenu(){

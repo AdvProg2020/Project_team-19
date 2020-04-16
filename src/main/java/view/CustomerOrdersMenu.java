@@ -3,8 +3,8 @@ package view;
 public class CustomerOrdersMenu extends Menu {
     public CustomerOrdersMenu(Menu parent){
         super("View Orders",parent);
-        submenus.put(1,getViewOrderMenu());
-        submenus.put(2,getRateProductMenu());
+        subMenus.put(1,getViewOrderMenu());
+        subMenus.put(2,getRateProductMenu());
     }
 
     public Menu getViewOrderMenu(){

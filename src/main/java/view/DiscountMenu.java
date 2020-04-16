@@ -3,8 +3,8 @@ package view;
 public class DiscountMenu extends Menu {
     public DiscountMenu(Menu parent) {
         super("Discount Menu", parent);
-        submenus.put(1, new SearchMenu(this));
-        submenus.put(2, getHelpMenu(this));
+        subMenus.put(1, new SearchMenu(this));
+        subMenus.put(2, getHelpMenu(this));
         //ye tor bayad handel konim age ro ye product ya haraj kilik kone
     }
 

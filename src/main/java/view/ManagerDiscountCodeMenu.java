@@ -3,10 +3,10 @@ package view;
 public class ManagerDiscountCodeMenu extends Menu {
     public ManagerDiscountCodeMenu(Menu parent){
         super("Discount Menu",parent);
-        submenus.put(1,getCreateDiscountCode());
-        submenus.put(2,getViewDiscountCode());
-        submenus.put(3,getEditDiscountCode());
-        submenus.put(4,getDeleteDiscountCode());
+        subMenus.put(1,getCreateDiscountCode());
+        subMenus.put(2,getViewDiscountCode());
+        subMenus.put(3,getEditDiscountCode());
+        subMenus.put(4,getDeleteDiscountCode());
 
     }
 

@@ -6,13 +6,13 @@ import java.util.Scanner;
 public abstract class Menu {
     private String name;
     protected Menu parentMenu;
-    protected HashMap <Integer,Menu> submenus;
+    protected HashMap <Integer,Menu> subMenus;
     protected static Scanner scanner;
 
     public Menu (String name, Menu parentMenu) {
         this.name = name;
         this.parentMenu = parentMenu;
-        submenus = new HashMap <Integer, Menu> ();
+        subMenus = new HashMap <Integer, Menu> ();
     }
 
     public static void setScanner(Scanner scanner) {
@@ -25,25 +25,25 @@ public abstract class Menu {
 
     public void show () {
         System.out.println(this.name + ":");
-        for (Integer menuNum : submenus.keySet()) {
-            System.out.println(menuNum + ". " + submenus.get(menuNum).getName());
+        for (Integer menuNum : subMenus.keySet()) {
+            System.out.println(menuNum + ". " + subMenus.get(menuNum).getName());
         }
         if (this.parentMenu != null)
-            System.out.println((submenus.size() + 1) + ". Back");
+            System.out.println((subMenus.size() + 1) + ". Back");
         else
-            System.out.println((submenus.size() + 1) + ". Exit");
+            System.out.println((subMenus.size() + 1) + ". Exit");
     }
 
     public  void execute () {
         Menu nextMenu = null;
         int chosenMenu = Integer.parseInt(scanner.nextLine());
-        if (chosenMenu == submenus.size() + 1) {
+        if (chosenMenu == subMenus.size() + 1) {
             if (this.parentMenu == null)
                 System.exit(1);
             else
                 nextMenu = this.parentMenu;
         } else
-            nextMenu = submenus.get(chosenMenu);
+            nextMenu = subMenus.get(chosenMenu);
         nextMenu.show();
         nextMenu.execute();
     }
@@ -52,8 +52,8 @@ public abstract class Menu {
         return new Menu("Help", parent) {
             @Override
             public void show() {
-                for (Integer submenuNumber : this.parentMenu.submenus.keySet()) {
-                    System.out.println(this.parentMenu.submenus.get(submenuNumber).getName());
+                for (Integer submenuNumber : this.parentMenu.subMenus.keySet()) {
+                    System.out.println(this.parentMenu.subMenus.get(submenuNumber).getName());
                 }
                 System.out.println("enter back to return");
                 //bazgashti
