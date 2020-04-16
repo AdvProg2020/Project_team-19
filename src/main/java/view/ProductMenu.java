@@ -4,8 +4,8 @@ public class ProductMenu extends Menu {
 
     public ProductMenu ( Menu parent ) {
         super ("Product Menu" , parent);
-        submenus.put(1, new SearchMenu(this));
-        submenus.put(2, getHelpMenu(this));
+        subMenus.put(1, new SearchMenu(this));
+        subMenus.put(2, getHelpMenu(this));
         //ye tor bayad handel konim age ro ye product ya haraj kilik kone
     }
     // 1 = search   2 = help

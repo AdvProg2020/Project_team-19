@@ -26,6 +26,10 @@ public class Salesperson extends Person {
             this.amount = amount;
         }
 
+        public double getPrice() {
+            return price;
+        }
+
         public void setInDiscount(boolean inDiscount) {
             this.inDiscount = inDiscount;
         }
@@ -62,4 +66,9 @@ public class Salesperson extends Person {
     public HashMap < Product, ProductState> getOfferedProducts () {
         return offeredProducts;
     }
+
+    public double getProductPrice(Product product){
+        return offeredProducts.get(product).getPrice();
+    }
+
 }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 abstract public class Person {
     private boolean isLoggedIn;
+    private HashMap<String, String> personInfo;
     private String username;
     private String firstName;
     private String lastName;
@@ -12,28 +13,15 @@ abstract public class Person {
     private String password;
 
     public Person(HashMap<String, String> personInfo) {
-        this.username = personInfo.get("username");
-        this.firstName = personInfo.get("firstName");
-        this.lastName = personInfo.get("lastName");
-        this.emailAddress = personInfo.get("email");
-        this.phoneNumber = personInfo.get("phoneNumber");
-        this.password = personInfo.get("password");
+        this.personInfo = new HashMap<String, String>(personInfo);
     }
 
-    public void setFirstName (String firstName ) {
-        this.firstName = firstName;
+    public String getPassword() {
+        return password;
     }
 
-    public void setLastName ( String lastName ) {
-        this.lastName = lastName;
-    }
-
-    public void setEmailAddress ( String emailAddress ) {
-        this.emailAddress = emailAddress;
-    }
-
-    public void setPhoneNumber ( String phoneNumber ) {
-        this.phoneNumber = phoneNumber;
+    public void setField(String field, String newValue){
+        personInfo.put(field,newValue);
     }
 
     public void setPassword ( String password ) {
