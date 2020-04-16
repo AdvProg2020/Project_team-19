@@ -37,7 +37,7 @@ public class ManageCategoriesMenu extends Menu {
     }
 
     public Menu getRemoveMenu() {
-        return new Menu("Remove category", this) {
+        return new Menu("Remove Category", this) {
             @Override
             public void show() {
                 super.show();

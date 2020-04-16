@@ -1,8 +1,6 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Category {
 
@@ -12,17 +10,52 @@ public class Category {
     private Set<Category> children;
     private HashSet<String> properties;
     private ArrayList< Product > productList;
+    private static Category current;
+    private static Category tempCurrent;
+    private static LinkedHashSet<Category> rootCategories = new LinkedHashSet<Category>();
 
     public Category(boolean isRoot, String name, Category parent) {
         this.isRoot = isRoot;
+
+        if (isRoot)
+            rootCategories.add ( this );
         this.name = name;
+
         this.parent = parent;
-        this.children = new HashSet<Category>();
+
+        if (!isRoot)
+            parent.children.add ( this );
+
+        this.children = new LinkedHashSet<Category>();
         this.productList = new ArrayList<Product>();
     }
 
     public static boolean checkValidCategory(String address){
-        //search each category in its level recursively
+        List<String> seperatedCategories = Arrays.asList ( address.split ( "/" ) );
+        boolean levelCheck = false;
+        for (Category rootCategory : rootCategories) {
+            if (rootCategory.name.equals ( seperatedCategories.get ( 0 ) )) {
+                tempCurrent = rootCategory;
+                while (!seperatedCategories.isEmpty ()) {
+                    seperatedCategories.remove ( 0 ); //error
+                    levelCheck = childExists ( seperatedCategories.get ( 0 ) );
+                    if (!levelCheck)
+                        return false;
+                }
+                break;
+            }
+        }
+        current = tempCurrent;
+        return true;
+    }
+
+    private static boolean childExists (String name) {
+        for (Category child : current.children) {
+            if (child.name.equals ( name )) {
+                tempCurrent = child;
+                return true;
+            }
+        }
         return false;
     }
 
@@ -46,7 +79,16 @@ public class Category {
         this.productList.remove(product);
     }
 
-    public void AddSubCategory(Category category){ }
+    public void setName ( String name ) {
+        this.name = name;
+    }
 
+    public void AddSubCategory( Category category){
+        this.children.add ( category );
+    }
+
+    public void removeSubCategory(Category category) {
+        this.children.remove ( category );
+    }
 
 }

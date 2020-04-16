@@ -33,7 +33,7 @@ public class RegisterController {
         // write on file
     }
 
-    public boolean checkUserNameValidity (String username) {
+    public static boolean checkUserNameAuthenticity ( String username) {
         if (username.matches("\\w+")) {
             return username.length() >= 4;
         }

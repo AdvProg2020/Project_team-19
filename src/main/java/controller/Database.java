@@ -38,6 +38,11 @@ public class Database {
     public static ArrayList<Person> getAllPeople() {
         return allPeople;
     }
+
+    static ArrayList<String> getAllUsernames () {
+        return null;
+    }
+
     public static void setAddress(String address) {
         Database.address = address;
     }
