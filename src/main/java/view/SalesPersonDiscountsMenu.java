@@ -3,9 +3,9 @@ package view;
 public class SalesPersonDiscountsMenu extends Menu {
     public SalesPersonDiscountsMenu(Menu parent){
         super("Discounts Menu",parent);
-        subMenus.put(1,getAddDiscountMenu());
-        subMenus.put(2,getViewDiscountMenu());
-        subMenus.put(3,getEditDiscountMenu());
+        submenus.put(1,getAddDiscountMenu());
+        submenus.put(2,getViewDiscountMenu());
+        submenus.put(3,getEditDiscountMenu());
     }
 
     public Menu getAddDiscountMenu(){

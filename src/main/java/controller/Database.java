@@ -8,10 +8,13 @@ import com.google.gson.stream.JsonToken;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
+
 import model.*;
 
 public class Database {
-    public static ArrayList<Person> allPeople = new ArrayList<Person>();
+    private static ArrayList<Person> allPeople = new ArrayList<Person>();
+    public static ArrayList<Request> allRequests = new ArrayList<Request>();
     private static String address;
 
     public static <T> ArrayList<T> read(Type typeOfT) throws FileNotFoundException {
@@ -38,6 +41,19 @@ public class Database {
     public static ArrayList<Person> getAllPeople() {
         return allPeople;
     }
+
+    public static ArrayList<Request> getAllRequest () {
+        return allRequests;
+    }
+
+    public static void setAllRequests(ArrayList<Request> allRequests) {
+        Database.allRequests = allRequests;
+    }
+
+    public static void removeFromAllRequest (Request request) {
+        allRequests.remove(request);
+    }
+
     public static void setAddress(String address) {
         Database.address = address;
     }

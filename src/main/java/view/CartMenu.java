@@ -3,12 +3,12 @@ package view;
 public class CartMenu extends Menu {
     public CartMenu(Menu parent){
         super("Cart",parent);
-        subMenus.put(1,getShowCartMenu());
-        subMenus.put(2,getViewProductMenu());
-        subMenus.put(3,getDecreaseProductMenu());
-        subMenus.put(4,getIncreaseProductMenu());
-        subMenus.put(5, getShowTotalPriceMenu());
-        subMenus.put(6,new PurchaseMenu(this));
+        submenus.put(1,getShowCartMenu());
+        submenus.put(2,getViewProductMenu());
+        submenus.put(3,getDecreaseProductMenu());
+        submenus.put(4,getIncreaseProductMenu());
+        submenus.put(5, getShowTotalPriceMenu());
+        submenus.put(6,new PurchaseMenu(this));
     }
 
     public Menu getShowCartMenu(){

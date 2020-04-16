@@ -19,13 +19,13 @@ public class RegisterController {
 
     private static void registerCustomer (HashMap<String, String> personInfo) {
         Customer newCustomer = new Customer(personInfo);
-        Database.allPeople.add(newCustomer);
+        Database.getAllPeople().add(newCustomer);
         // bayad be hame customera add she
     }
 
     private static void registerSalesperson (HashMap<String, String> personInfo) {
-        SalespersonRequest request = new SalespersonRequest(personInfo);
-        // taeed modir va ...
+//        SalespersonRequest request = new SalespersonRequest(personInfo, );
+//        // taeed modir va ...
     }
 
     private static void registerManager (HashMap<String, String> personInfo) {

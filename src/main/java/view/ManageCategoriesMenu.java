@@ -3,9 +3,9 @@ package view;
 public class ManageCategoriesMenu extends Menu {
     public ManageCategoriesMenu(Menu parent) {
         super("Manage Categories Menu", parent);
-        subMenus.put(1, getAddMenu());
-        subMenus.put(2, getEditMenu());
-        subMenus.put(3, getRemoveMenu());
+        submenus.put(1, getAddMenu());
+        submenus.put(2, getEditMenu());
+        submenus.put(3, getRemoveMenu());
     }
 
     public Menu getAddMenu() {
