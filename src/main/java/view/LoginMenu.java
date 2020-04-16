@@ -24,8 +24,6 @@ public class LoginMenu extends Menu {
                 System.out.println("Username must contain more than 4 character and include digit or alphabet");
                 System.out.println("Enter username");
                 String username = scanner.nextLine();
-                if (!RegisterController.checkUserNameAuthenticity(username)) {
-                    System.out.println("Your username is not valid");
                     personInfo.put("username", username);
                     System.out.println("Enter type");
                     personInfo.put("type", scanner.nextLine());
@@ -40,7 +38,6 @@ public class LoginMenu extends Menu {
                     System.out.println("Enter phone number");
                     personInfo.put("phoneNumber", scanner.nextLine());
                 }
-            }
         };
     }
 
