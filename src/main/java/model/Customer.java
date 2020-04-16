@@ -6,19 +6,32 @@ import java.util.LinkedList;
 
 public class Customer extends Person {
     private ArrayList<BuyLog> buyLogs;
-    private LinkedList < Product > cart;
+    private HashMap<DiscountCode,Integer> discountCodes;
     private double credit;
+
+    public DiscountCode findDiscountCodeByCode(String code){
+        for (DiscountCode discountCode : discountCodes.keySet()) {
+            if(discountCode.getCode().equals(code))
+                return discountCode;
+        }
+        return null;
+    }
+
+    public boolean isThereDiscountCodeByCode(String code){
+        return findDiscountCodeByCode(code)!=null;
+    }
 
     public Customer(HashMap<String, String> personInfo) {
         super (personInfo);
+        discountCodes = new HashMap<DiscountCode, Integer>();
+        buyLogs = new ArrayList<BuyLog>();
     }
 
-    public void addToCart (Product product ) {
-        cart.add ( product );
-    }
-
-    public void removeFromCart ( Product product ) {
-        cart.remove ( product );
+    public void useDiscountCode(DiscountCode discountCode){
+        discountCodes.put(discountCode,discountCodes.get(discountCode)-1);
+        if(discountCodes.get(discountCode)==0){
+            discountCodes.remove(discountCode);
+        }
     }
 
     public boolean checkCredit () {
@@ -35,10 +48,6 @@ public class Customer extends Person {
     }
 
     public void getLog () {
-
-    }
-
-    public void buy () {
 
     }
 

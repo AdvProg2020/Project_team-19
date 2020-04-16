@@ -22,4 +22,31 @@ public class DiscountCode {
         this.customerList = customerList;
     }
 
+    public double getDiscountPercentage() {
+        return discountPercentage;
+    }
+
+    public double getMaxDiscount() {
+        return maxDiscount;
+    }
+
+    public int getUseCounter() {
+        return useCounter;
+    }
+
+    public static DiscountCode findDiscountCodeByCode(String code){
+        for (DiscountCode discountCode : allDiscountCodes) {
+            if(discountCode.code.equals(code))
+                return discountCode;
+        }
+        return null;
+    }
+
+    public static boolean isThereDiscountCodeByCode(String code){
+        return findDiscountCodeByCode(code)!=null;
+    }
+
+    public String getCode() {
+        return code;
+    }
 }
