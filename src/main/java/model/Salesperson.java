@@ -1,5 +1,12 @@
 package model;
 
+import controller.Database;
+import controller.PersonController;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,10 +18,13 @@ public class Salesperson extends Person {
     private ArrayList<DiscountCode> discountCodes;
     private int credit;
 
-    public Salesperson(HashMap<String, String> personInfo) {
+
+    public Salesperson(HashMap<String, String> personInfo) throws IOException {
         super(personInfo);
         this.company = personInfo.get("company");
+        Database.saveToFile(this,Database.createPath("salesperson",personInfo.get("username")));
     }
+
 
     class ProductState {
         boolean inDiscount;

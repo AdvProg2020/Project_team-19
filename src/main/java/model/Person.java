@@ -1,5 +1,8 @@
 package model;
 
+import controller.Database;
+
+import java.io.IOException;
 import java.util.HashMap;
 
 abstract public class Person {
@@ -15,6 +18,7 @@ abstract public class Person {
     public Person(HashMap<String, String> personInfo) {
         this.personInfo = new HashMap<String, String>(personInfo);
     }
+
 
     public String getPassword() {
         return password;

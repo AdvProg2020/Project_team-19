@@ -1,13 +1,25 @@
 package model;
+;
+import controller.Database;
+import controller.PersonController;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 public class Customer extends Person {
     private ArrayList<BuyLog> buyLogs;
     private HashMap<DiscountCode,Integer> discountCodes;
     private double credit;
+    private Cart cart;
+
+
+    public Customer(HashMap<String, String> personInfo) throws IOException {
+        super (personInfo);
+        discountCodes = new HashMap<DiscountCode, Integer>();
+        buyLogs = new ArrayList<BuyLog>();
+        Database.saveToFile(this,Database.createPath("customer",personInfo.get("username")));
+    }
 
     public DiscountCode findDiscountCodeByCode(String code){
         for (DiscountCode discountCode : discountCodes.keySet()) {
@@ -21,11 +33,10 @@ public class Customer extends Person {
         return findDiscountCodeByCode(code)!=null;
     }
 
-    public Customer(HashMap<String, String> personInfo) {
-        super (personInfo);
-        discountCodes = new HashMap<DiscountCode, Integer>();
-        buyLogs = new ArrayList<BuyLog>();
+    public Cart getCart() {
+        return cart;
     }
+
 
     public void useDiscountCode(DiscountCode discountCode){
         discountCodes.put(discountCode,discountCodes.get(discountCode)-1);
@@ -54,5 +65,6 @@ public class Customer extends Person {
     public void updateHistory () {
 
     }
+
 
 }

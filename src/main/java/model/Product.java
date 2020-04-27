@@ -1,5 +1,8 @@
 package model;
 
+import controller.Database;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -15,10 +18,9 @@ public class Product {
     private int count;
     private String name;
     private String brand;
-    private String sellerName;
     private Category category;
     private String description;
-    private double averageScore; //is related to Model.Score Class
+    private double score;
     private ArrayList<Comment> comments;
     private ProductState productState;
 
@@ -30,16 +32,16 @@ public class Product {
         return null;
     }
 
-    public Product(String productID, String name, String brand, String sellerName, ProductState productState,Category category) {
+    public Product(String productID, String name, String brand, String sellerName, ProductState productState,Category category) throws IOException {
         this.productID = productID;
         this.name = name;
         this.brand = brand;
-        this.sellerName = sellerName;
         this.productState = productState;
         this.count = 0;
         for (String property : category.getProperties()) {
             //setting properties
         }
+        Database.saveToFile(this,Database.createPath("product",productID));
     }
 
     public boolean isAvailable() {

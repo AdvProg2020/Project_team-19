@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class Category {
 
-    private boolean isRoot;
+    private boolean isLeaf;
     private String name;
     private Category parent;
     private Set<Category> children;
@@ -14,7 +14,7 @@ public class Category {
     private ArrayList< Product > productList;
 
     public Category(boolean isRoot, String name, Category parent) {
-        this.isRoot = isRoot;
+        this.isLeaf = isRoot;
         this.name = name;
         this.parent = parent;
         this.children = new HashSet<Category>();
