@@ -7,12 +7,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class RequestController {
+    public static ArrayList<Request> allRequests = new ArrayList<>();
     public enum FilterType {
         ALL, SALESPERSON, PRODUCT, DISCOUNT
     }
 
     public Request getRequestById (String requestId) {
-        for (Request request : Database.allRequests) {
+        for (Request request : allRequests) {
             if (request.getRequestId().equals(requestId))
                 return request;
         }
@@ -28,7 +29,7 @@ public class RequestController {
     }
 
     public static <T> ArrayList<Request> getSpecificTypeOfRequests(Class<T> requestKind) {
-        ArrayList<Request> requests = Database.allRequests;
+        ArrayList<Request> requests = allRequests;
         return requests.stream().filter(requestKind::isInstance).collect(Collectors.toCollection(ArrayList::new));
     }
 

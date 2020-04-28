@@ -13,8 +13,7 @@ import java.util.HashMap;
 import model.*;
 
 public class Database {
-    public static ArrayList<Person> allPeople = new ArrayList<>();
-    public static ArrayList<Request> allRequests = new ArrayList<>();
+
     public static HashMap<String,String> address = new HashMap<String, String>();
 
     public static <T> Object read(Type typeOfT, String address) throws FileNotFoundException {
@@ -32,9 +31,6 @@ public class Database {
         writer.close();
     }
 
-    public static ArrayList<Person> getAllPeople() {
-        return allPeople;
-    }
 
     public static <T> void saveToFile(T object,String address) throws IOException {
         Database.write(object,object.getClass(),address);

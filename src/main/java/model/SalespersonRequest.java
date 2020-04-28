@@ -1,14 +1,17 @@
 package model;
 
+import controller.Database;
+
 import java.io.IOException;
 import java.util.HashMap;
 
 public class SalespersonRequest extends Request {
     private HashMap<String, String> personInfo;
 
-    public SalespersonRequest(HashMap<String, String> personInfo, String requestId) {
+    public SalespersonRequest(HashMap<String, String> personInfo, String requestId) throws IOException {
         super(requestId);
         this.personInfo = personInfo;
+        Database.saveToFile(this, Database.createPath("salesPersonRequests", requestId));
     }
 
     @Override

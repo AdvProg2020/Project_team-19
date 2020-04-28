@@ -25,7 +25,7 @@ public class RegisterController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Database.getAllPeople().add(newCustomer);
+        PersonController.addPerson(newCustomer);
         // bayad be hame customera add she
     }
 

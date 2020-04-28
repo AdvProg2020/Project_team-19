@@ -1,5 +1,8 @@
 package model;
 
+import controller.Database;
+
+import java.io.IOException;
 import java.util.HashMap;
 
 public class ProductRequest extends Request {
@@ -10,7 +13,7 @@ public class ProductRequest extends Request {
     RequestState requestState;
     private HashMap<String, String> properties;
 
-    public ProductRequest(String requestId,String productID, String name, String brand, double price, RequestState requestState, HashMap<String, String> properties) {
+    public ProductRequest(String requestId,String productID, String name, String brand, double price, RequestState requestState, HashMap<String, String> properties) throws IOException {
         super(requestId);
         this.productID = productID;
         this.name = name;
@@ -18,6 +21,7 @@ public class ProductRequest extends Request {
         this.price = price;
         this.requestState = requestState;
         this.properties = properties;
+        Database.saveToFile(this, Database.createPath("productRequests", requestId));
     }
 
 

@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class PersonController {
-    private static ArrayList<Person> allPersons = new ArrayList<Person>();
+    private static ArrayList<Person> allPersons = new ArrayList<>();
     private static Person loggedInPerson = null;
 
     public static void initializePersons() throws FileNotFoundException {
@@ -22,6 +22,14 @@ public class PersonController {
         }
     }
 
+    public static void addPerson (Person person) {
+        allPersons.add(person);
+    }
+
+    public static void removePersonFromAllPersons (Person person) {
+        allPersons.remove(person);
+    }
+
     public static boolean isThereLoggedInPerson(){
         return loggedInPerson!=null;
     }
@@ -31,7 +39,7 @@ public class PersonController {
     }
 
     public static Person findPersonByUsername (String username) {
-        for (Person person : Database.allPeople) {
+        for (Person person : allPersons) {
             if (person.getUsername().equals(username))
                 return person;
         }

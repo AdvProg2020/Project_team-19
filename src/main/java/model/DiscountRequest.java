@@ -1,5 +1,8 @@
 package model;
 
+import controller.Database;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class DiscountRequest extends Request {
@@ -14,7 +17,7 @@ public class DiscountRequest extends Request {
 
     public DiscountRequest(String requestId,String discountID, ArrayList<Product> discountProductList,
                            ArrayList<Product> addProduct, ArrayList<Product> removeProduct, String startTime,
-                           String endTime, double discountPercentage) {
+                           String endTime, double discountPercentage) throws IOException {
         super(requestId);
         this.discountID = discountID;
         this.discountProductList = discountProductList;
@@ -23,6 +26,7 @@ public class DiscountRequest extends Request {
         this.startTime = startTime;
         this.endTime = endTime;
         this.discountPercentage = discountPercentage;
+        Database.saveToFile(this, Database.createPath("discountRequests", requestId));
     }
 
 
