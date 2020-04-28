@@ -13,8 +13,8 @@ public class ManagerMenu extends Menu {
     }
 
     public Menu getManageProductsMenu() {
-        //To Do change it to class
-        return new Menu("Mange All Products", this) {
+        //ToDo change it to class
+        return new Menu("Manage All Products", this) {
             @Override
             public void show() {
 
