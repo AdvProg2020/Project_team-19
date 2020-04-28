@@ -2,6 +2,7 @@ package controller;
 
 import model.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public class RegisterController {
@@ -18,7 +19,12 @@ public class RegisterController {
     }
 
     private static void registerCustomer (HashMap<String, String> personInfo) {
-        Customer newCustomer = new Customer(personInfo);
+        Customer newCustomer = null;
+        try {
+            newCustomer = new Customer(personInfo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Database.getAllPeople().add(newCustomer);
         // bayad be hame customera add she
     }
@@ -29,7 +35,11 @@ public class RegisterController {
     }
 
     private static void registerManager (HashMap<String, String> personInfo) {
-        Manager manager = new Manager(personInfo);
+        try {
+            Manager manager = new Manager(personInfo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         // write on file
     }
 

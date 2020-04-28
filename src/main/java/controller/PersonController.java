@@ -2,8 +2,25 @@ package controller;
 
 import model.*;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+
 public class PersonController {
+    private static ArrayList<Person> allPersons = new ArrayList<Person>();
     private static Person loggedInPerson = null;
+
+    public static void initializePersons() throws FileNotFoundException {
+        for (File file : Database.returnListOfFiles(Database.address.get("customer"))) {
+            allPersons.add((Customer) Database.read(Customer.class,file.getAbsolutePath()));
+        }
+        for (File file : Database.returnListOfFiles(Database.address.get("manager"))) {
+            allPersons.add((Manager) Database.read(Manager.class,file.getAbsolutePath()));
+        }
+        for (File file : Database.returnListOfFiles(Database.address.get("salesperson"))) {
+            allPersons.add((Salesperson) Database.read(Salesperson.class,file.getAbsolutePath()));
+        }
+    }
 
     public static boolean isThereLoggedInPerson(){
         return loggedInPerson!=null;
@@ -64,3 +81,4 @@ public class PersonController {
     }
 
 }
+

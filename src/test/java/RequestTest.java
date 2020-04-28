@@ -23,7 +23,9 @@ public class RequestTest {
 //        requests.add(new SalespersonRequest(personInfo2,UUID.randomUUID().toString()));
 //        Database.setAllRequests(requests);  /****fek konam bayad database ro khali konim**/
 //
-//        System.out.print(RequestController.getSpecificTypeOfRequests(SalespersonRequest.class));
+//        for (Request request : RequestController.getSpecificTypeOfRequests(SalespersonRequest.class)) {
+//            System.out.println(request.show());
+//        }
 //        Database.allRequests.clear();
     }
 
@@ -32,4 +34,5 @@ public class RequestTest {
         Request request = new ProductRequest(UUID.randomUUID().toString(), Request.RequestState.EDIT);
         request.doThis();
     }
+
 }

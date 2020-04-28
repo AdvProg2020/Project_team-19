@@ -20,11 +20,11 @@ abstract public class Person {
         return password;
     }
 
-    public void setField(String field, String newValue){
-        personInfo.put(field,newValue);
+    public void setField(String field, String newValue) {
+        personInfo.put(field, newValue);
     }
 
-    public void setPassword ( String password ) {
+    public void setPassword(String password) {
         this.password = password;
     }
 

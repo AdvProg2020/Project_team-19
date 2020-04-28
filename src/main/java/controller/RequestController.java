@@ -12,7 +12,7 @@ public class RequestController {
     }
 
     public Request getRequestById (String requestId) {
-        for (Request request : Database.getAllRequest()) {
+        for (Request request : Database.allRequests) {
             if (request.getRequestId().equals(requestId))
                 return request;
         }
@@ -24,11 +24,11 @@ public class RequestController {
     }
 
     public void declineRequest (Request request) {
-        Database.removeFromAllRequest(request);
+        //Database.removeFromAllRequest(request);
     }
 
-    private static <T> ArrayList<Request> getSpecificTypeOfRequests (Class<T> requestKind) {
-        ArrayList<Request> requests = Database.getAllRequest();
+    public static <T> ArrayList<Request> getSpecificTypeOfRequests(Class<T> requestKind) {
+        ArrayList<Request> requests = Database.allRequests;
         return requests.stream().filter(requestKind::isInstance).collect(Collectors.toCollection(ArrayList::new));
     }
 

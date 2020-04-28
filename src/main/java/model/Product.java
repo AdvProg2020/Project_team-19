@@ -3,9 +3,8 @@ package model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
 public class Product {
-    enum ProductState {
+    public enum ProductState {
         BUILD_IN_PROGRESS, EDIT_IN_PROGRESS, VERIFIED
     }
 
@@ -22,20 +21,13 @@ public class Product {
     private ArrayList<Comment> comments;
     private ProductState productState;
 
-    public static Product findProductByName(String name){
-        return null;
-    }
-
-    public static Product findProductById(String id){
-        return null;
-    }
-
     public Product(String productID, String name, String brand, String sellerName, ProductState productState,Category category) {
         this.productID = productID;
         this.name = name;
         this.brand = brand;
         this.sellerName = sellerName;
         this.productState = productState;
+        this.category = category;
         this.count = 0;
         for (String property : category.getProperties()) {
             //setting properties
@@ -45,6 +37,8 @@ public class Product {
     public boolean isAvailable() {
         return count > 0;
     }
+
+
 
 
 }

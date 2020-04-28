@@ -1,5 +1,6 @@
 package model;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public class SalespersonRequest extends Request {
@@ -12,7 +13,11 @@ public class SalespersonRequest extends Request {
 
     @Override
     public void doThis() {
-        Salesperson salesperson = new Salesperson(personInfo);
+        try {
+            Salesperson salesperson = new Salesperson(personInfo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         //add be all salesperson
         //add be file
     }
