@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 public class GsonTest {
 //    public void GsonTest {
@@ -56,13 +57,16 @@ public class GsonTest {
     @Test
     public void testForGSONObjInObj () {
         Category category = new Category(true, "labaniat", null);
+        HashMap<String, String> properties1 = new HashMap<>();
+        properties1.put("color", "yellow");
+        properties1.put("size", "big");
 
-        Product product = new Product("1", "panir", "lighvan", "yeki",
-                Product.ProductState.BUILD_IN_PROGRESS, category);
+        Product product = new Product("1", "panir", "lighvan",
+                Product.ProductState.BUILD_IN_PROGRESS, category.getName(), properties1);
 
         //aval properties category ro comment kon bad test kon
         try {
-            Database.write(product, product.getClass(), "C:\\Users\\HAMID\\Desktop\\json.json");
+            Database.write(product, product.getClass(), "C:\\Users\\HAMID\\Desktop\\yalda.json");
         } catch (IOException e) {
             e.printStackTrace();
         }

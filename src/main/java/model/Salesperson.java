@@ -1,18 +1,14 @@
 package model;
 
+
 import controller.Database;
-import controller.PersonController;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Salesperson extends Person {
     private ArrayList<SellLog> sellLogs;
-    private String company;
     private HashMap<Product, ProductState> offeredProducts;
     private ArrayList<Discount> discountProducts;
     private ArrayList<DiscountCode> discountCodes;
@@ -21,19 +17,22 @@ public class Salesperson extends Person {
 
     public Salesperson(HashMap<String, String> personInfo) throws IOException {
         super(personInfo);
-        this.company = personInfo.get("company");
+        sellLogs = new ArrayList<>();
+        offeredProducts = new HashMap<>();
+        discountProducts = new ArrayList<>();
+        discountCodes = new ArrayList<>();
         Database.saveToFile(this, Database.createPath("salesperson", personInfo.get("username")));
     }
-
 
     class ProductState {
         boolean inDiscount;
         int amount;
         double price;
 
-        public ProductState(boolean inDiscount, int amount) {
+        public ProductState(boolean inDiscount, int amount, double price) {
             this.inDiscount = inDiscount;
             this.amount = amount;
+            this.price = price;
         }
 
         public double getPrice() {
@@ -65,11 +64,11 @@ public class Salesperson extends Person {
         return offeredProducts.containsKey(offeredProduct);
     }
 
-    public void addToOfferedProducts(Product offeredProduct, int amount) {
-        offeredProducts.put(offeredProduct, new ProductState(false, amount));
+    public void addToOfferedProducts(Product offeredProduct, int amount, double price) {
+        offeredProducts.put(offeredProduct, new ProductState(false, amount, price));
     }
 
-    public void removeFromOfferedProducts(Product offeredProduct, int amount) {
+    public void removeFromOfferedProducts(Product offeredProduct) {
         offeredProducts.remove(offeredProduct);
     }
 
@@ -81,5 +80,11 @@ public class Salesperson extends Person {
         return offeredProducts.get(product).getPrice();
     }
 
+    @Override
+    public String toString() {
+        return "Salesperson{" +
+                "offeredProducts=" + offeredProducts +
+                '}';
+    }
 }
 

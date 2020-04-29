@@ -8,8 +8,8 @@ public class Category {
     private String name;
     private Category parent;
     private Set<Category> children;
-    private HashSet<String> properties;
-    private ArrayList< Product > productList;
+    private HashSet<String> propertyFields;
+    private ArrayList<Product> productList;
     private static Category current;
     private static Category tempCurrent;
     private static LinkedHashSet<Category> rootCategories = new LinkedHashSet<Category>();
@@ -26,8 +26,16 @@ public class Category {
         if (!isRoot)
             parent.children.add ( this );
 
-        this.children = new LinkedHashSet<Category>();
-        this.productList = new ArrayList<Product>();
+        this.children = new LinkedHashSet<>();
+        this.productList = new ArrayList<>();
+    }
+
+    public void setPropertyFields(HashSet<String> propertyFields) {
+        this.propertyFields = propertyFields;
+    }
+
+    public void setProductList(ArrayList<Product> productList) {
+        this.productList = productList;
     }
 
     public static boolean checkValidCategory(String address){
@@ -59,8 +67,8 @@ public class Category {
         return false;
     }
 
-    public HashSet<String> getProperties() {
-        return properties;
+    public HashSet<String> getPropertyFields() {
+        return propertyFields;
     }
 
     public void addProduct(Product product){
@@ -68,11 +76,11 @@ public class Category {
     }
 
     public void addProperty(String property){
-        this.properties.add(property);
+        this.propertyFields.add(property);
     }
 
     public void removeProperty(String property){
-        this.properties.remove(property);
+        this.propertyFields.remove(property);
     }
 
     public void removeProduct(Product product){
@@ -91,4 +99,20 @@ public class Category {
         this.children.remove ( category );
     }
 
+    public ArrayList<Product> getProductList() {
+        return productList;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "name='" + name + '\'' +
+                ", propertyFields=" + propertyFields +
+                ", productList=" + productList +
+                '}';
+    }
 }
