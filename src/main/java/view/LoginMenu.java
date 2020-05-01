@@ -1,5 +1,8 @@
 package view;
 
+import controller.PersonController;
+import controller.RegisterController;
+
 import java.util.HashMap;
 
 public class LoginMenu extends Menu {
@@ -40,7 +43,7 @@ public class LoginMenu extends Menu {
 
                 //ToDo Test This
                 System.out.println ( "Enter username" );
-                String username = enterOption (Option.USERNAME)
+                String username = enterOption (Option.USERNAME);
                 personInfo.put("username", username);
 
                 //ToDo Test This
@@ -136,7 +139,7 @@ public class LoginMenu extends Menu {
     }
 
     private PersonType enterType () {
-        PersonType typeChosen;
+        PersonType typeChosen = null;
         do {
             System.out.println ( "Choose type" );
             System.out.println (
@@ -144,7 +147,7 @@ public class LoginMenu extends Menu {
                             "2. Salesperson\n" +
                             "3. Manager" );
             try {
-                typeChosen = chooseType ( );
+                typeChosen = PersonController.chooseType ( );
             } catch (Exception e) {
                 System.out.println ( e.getMessage () );
             }

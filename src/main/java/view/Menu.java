@@ -7,7 +7,7 @@ public abstract class Menu {
     private String name;
     protected Menu parentMenu;
     protected HashMap <Integer,Menu> subMenus;
-    protected static Scanner scanner;
+    public static Scanner scanner;
 
     public Menu (String name, Menu parentMenu) {
         this.name = name;

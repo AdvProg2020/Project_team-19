@@ -1,10 +1,13 @@
 package controller;
 
 import model.*;
+import view.LoginMenu;
+import view.MainMenu;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class PersonController {
     private static ArrayList<Person> allPersons = new ArrayList<>();
@@ -88,5 +91,23 @@ public class PersonController {
         return loggedInPerson instanceof Customer;
     }
 
+    public static <T> ArrayList<Person> filterByRoll(Class<T> personType) {
+        return allPersons.stream().filter(personType::isInstance).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public static LoginMenu.PersonType chooseType() throws Exception {
+        int chosenType;
+        chosenType = MainMenu.scanner.nextInt ( );
+        switch (chosenType) {
+            case 1:
+                return LoginMenu.PersonType.CUSTOMER;
+            case 2:
+                return LoginMenu.PersonType.SALESPERSON;
+            case 3:
+                return LoginMenu.PersonType.MANAGER;
+            default:
+                throw new Exception ("Invalid Input");
+        }
+    }
 }
 
