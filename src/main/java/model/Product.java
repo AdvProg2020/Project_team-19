@@ -41,6 +41,18 @@ public class Product {
         return properties;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public double getAverageScore() {
+        return averageScore;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
     @Override
     public String toString() {
         return "Product : " +

@@ -5,8 +5,6 @@ import model.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
@@ -35,9 +33,9 @@ public class ProductController {
         }).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public static ArrayList<Salesperson> getSellersNameByPriceFiltering(double lowPrice, double highPrice, Product product) {
-        return stock.get(product).stream().filter(salesperson -> {
-            return salesperson.getProductPrice(product) >= lowPrice && salesperson.getProductPrice(product) <= highPrice;
+    public static ArrayList<OwnedProduct> filterOwnedProductByPrice(double lowPrice, double highPrice, Product product) {
+        return getProductsOfProduct(product).stream().filter(ownedProduct -> {
+            return ownedProduct.getPrice() <= highPrice && ownedProduct.getPrice() >= lowPrice;
         }).collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -66,10 +64,16 @@ public class ProductController {
     }
 
     public static ArrayList<OwnedProduct> sortProductByPrice(Product product) {
-        ArrayList<OwnedProduct> sortedProducts = new ArrayList<>();
-        sortedProducts = getProductsOfProduct(product);
+        ArrayList<OwnedProduct> sortedProducts = getProductsOfProduct(product);
 
         sortedProducts.sort(new SortByPrice());
+        return sortedProducts;
+    }
+
+    public static ArrayList<Product> sortProductByAverageScore(Category category) {
+        ArrayList<Product> sortedProducts = category.getProductList();
+
+        sortedProducts.sort(new SortByAverageScore());
         return sortedProducts;
     }
 }
@@ -89,6 +93,10 @@ class OwnedProduct {
         return price;
     }
 
+    public Product getProduct() {
+        return product;
+    }
+
     @Override
     public String toString() {
         return "OwnedProduct{" +
@@ -102,6 +110,24 @@ class SortByPrice implements Comparator<OwnedProduct> {
 
     @Override
     public int compare(OwnedProduct product1, OwnedProduct product2) {
-        return (int) (product1.getPrice() - product2.getPrice());
+        if (product1.getPrice() != product2.getPrice())
+            return (int) (product1.getPrice() - product2.getPrice());
+        else if (!product1.getProduct().getName().equals(product2.getProduct().getName()))
+            return product1.getProduct().getName().compareTo(product2.getProduct().getName());
+        else
+            return product1.getProduct().getBrand().compareTo(product2.getProduct().getBrand());
+    }
+}
+
+class SortByAverageScore implements Comparator<Product> {
+
+    @Override
+    public int compare(Product product1, Product product2) {
+        if (product1.getAverageScore() != product2.getAverageScore())
+            return (int) (product1.getAverageScore() - product2.getAverageScore());
+        else if (!product1.getName().equals(product2.getName()))
+            return product1.getName().compareTo(product2.getName());
+        else
+            return product1.getBrand().compareTo(product2.getBrand());
     }
 }

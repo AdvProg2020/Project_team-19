@@ -93,7 +93,7 @@ public class ProductTest {
         category.setProductList(products);
 
 
-        System.out.println(ProductController.getSellersNameByPriceFiltering(500, 2200, product1));
+        System.out.println(ProductController.filterOwnedProductByPrice(500, 2200, product1));
         System.out.println(ProductController.filterACategoryByPrice(500, 2200, category));
         Product.stock.clear();
 
