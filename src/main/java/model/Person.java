@@ -17,18 +17,14 @@ abstract public class Person {
     }
 
     public String getPassword() {
-        return password;
+        return personInfo.get("password");
     }
 
     public void setField(String field, String newValue) {
         personInfo.put(field, newValue);
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getUsername() {
-        return username;
+        return personInfo.get("username");
     }
 }

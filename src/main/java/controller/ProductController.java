@@ -97,11 +97,15 @@ class OwnedProduct {
         return product;
     }
 
+    public Salesperson getSalesperson() {
+        return salesperson;
+    }
+
     @Override
     public String toString() {
         return "OwnedProduct{" +
-                "product=" + product +
                 ", price=" + price +
+                "seller= " + salesperson.getUsername() +
                 '}';
     }
 }
@@ -112,10 +116,8 @@ class SortByPrice implements Comparator<OwnedProduct> {
     public int compare(OwnedProduct product1, OwnedProduct product2) {
         if (product1.getPrice() != product2.getPrice())
             return (int) (product1.getPrice() - product2.getPrice());
-        else if (!product1.getProduct().getName().equals(product2.getProduct().getName()))
-            return product1.getProduct().getName().compareTo(product2.getProduct().getName());
         else
-            return product1.getProduct().getBrand().compareTo(product2.getProduct().getBrand());
+            return product1.getSalesperson().getUsername().compareTo(product2.getSalesperson().getUsername());
     }
 }
 
