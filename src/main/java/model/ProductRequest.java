@@ -3,35 +3,38 @@ package model;
 import controller.Database;
 
 import java.io.IOException;
-import java.util.HashMap;
+
+import static controller.ProductController.*;
 
 public class ProductRequest extends Request {
-    private String productID;
-    private String name;
-    private String brand;
+    private Salesperson salesperson;
+    private Product product;
     private double price;
-    RequestState requestState;
-    private HashMap<String, String> properties;
+    private int amount;
 
-    public ProductRequest(String requestId,String productID, String name, String brand, double price, RequestState requestState, HashMap<String, String> properties) throws IOException {
-        super(requestId);
-        this.productID = productID;
-        this.name = name;
-        this.brand = brand;
+    public ProductRequest(String requestId, double price, int amount, RequestState requestState,
+                          Salesperson salesperson, Product product) throws IOException {
+        super(requestId, requestState);
         this.price = price;
-        this.requestState = requestState;
-        this.properties = properties;
+        this.amount = amount;
+        this.salesperson = salesperson;
+        this.product = product;
         Database.saveToFile(this, Database.createPath("productRequests", requestId));
     }
 
 
     @Override
     public void doThis() {
-        if (requestState.name().equals("ADD")) {
-            addProduct();
+        switch (getRequestState()) {
+            case ADD:
+                addProduct(product, salesperson, amount, price);
+                changeState();
+            case EDIT:
+                editProduct(product, salesperson, amount, price);
+                changeState();
+            case DELETE:
+                removeProduct(product, salesperson);
         }
-        else
-            editProduct();
     }
 
     @Override
@@ -40,19 +43,7 @@ public class ProductRequest extends Request {
         return getRequestId();
     }
 
-    private void addProduct () {
-        //...
-        System.out.println("add product");
-    }
-
-    private void editProduct () {
-        //...
-        System.out.println("edit product");
-    }
-
-    //a simple constructor for test
-    public ProductRequest (String requestId , RequestState requestState) {
-        super(requestId);
-        this.requestState = requestState;
+    private void changeState() {
+        salesperson.setProductState(product, ProductState.State.VERIFIED);
     }
 }

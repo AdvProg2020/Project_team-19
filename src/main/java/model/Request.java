@@ -1,16 +1,23 @@
 package model;
 
+import static controller.RequestController.allRequests;
+
 public abstract class Request {
-    private String requestId;
-
     public enum RequestState {
-        ADD, EDIT
+        ADD, EDIT, DELETE
     }
 
-    public Request(String requestId) {
+    private String requestId;
+    private RequestState requestState;
+
+    public Request(String requestId, RequestState requestState) {
         this.requestId = requestId;
+        this.requestState = requestState;
     }
 
+    public RequestState getRequestState() {
+        return requestState;
+    }
 
     public String getRequestId() {
         return requestId;
@@ -20,5 +27,12 @@ public abstract class Request {
 
     public abstract String show();
 
+    public static Request getRequestById(String requestId) {
+        for (Request request : allRequests) {
+            if (request.getRequestId().equals(requestId))
+                return request;
+        }
+        return null;
+    }
 
 }

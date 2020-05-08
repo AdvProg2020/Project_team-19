@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class Salesperson extends Person {
     private ArrayList<SellLog> sellLogs;
     private HashMap<Product, ProductState> offeredProducts;
-    private ArrayList<Discount> discountProducts;
+    private ArrayList<Discount> discounts;
     private ArrayList<DiscountCode> discountCodes;
     private int credit;
 
@@ -19,34 +19,11 @@ public class Salesperson extends Person {
         super(personInfo);
         sellLogs = new ArrayList<>();
         offeredProducts = new HashMap<>();
-        discountProducts = new ArrayList<>();
+        discounts = new ArrayList<>();
         discountCodes = new ArrayList<>();
         Database.saveToFile(this, Database.createPath("salesperson", personInfo.get("username")));
     }
 
-    class ProductState {
-        boolean inDiscount;
-        int amount;
-        double price;
-
-        public ProductState(boolean inDiscount, int amount, double price) {
-            this.inDiscount = inDiscount;
-            this.amount = amount;
-            this.price = price;
-        }
-
-        public double getPrice() {
-            return price;
-        }
-
-        public void setInDiscount(boolean inDiscount) {
-            this.inDiscount = inDiscount;
-        }
-
-        public void setAmount(int amount) {
-            this.amount += amount;
-        }
-    }
 
     public void setCredit(int credit) {
         this.credit = credit;
@@ -60,7 +37,11 @@ public class Salesperson extends Person {
         offeredProducts.get(product).setInDiscount(state);
     }
 
-    public boolean findProduct(Product offeredProduct) {
+    public void setProductState(Product product, ProductState.State state) {
+        offeredProducts.get(product).setState(state);
+    }
+
+    public boolean hasProduct(Product offeredProduct) {
         return offeredProducts.containsKey(offeredProduct);
     }
 
@@ -72,12 +53,33 @@ public class Salesperson extends Person {
         offeredProducts.remove(offeredProduct);
     }
 
+    public void addToDiscounts(Discount discount){
+        discounts.add(discount);
+    }
+
+    public void removeFromDiscounts(Discount discount) {
+        discounts.remove(discount);
+    }
+
     public HashMap<Product, ProductState> getOfferedProducts() {
         return offeredProducts;
     }
 
     public double getProductPrice(Product product) {
         return offeredProducts.get(product).getPrice();
+    }
+
+    public void setProductPrice(Product product, double price) {
+        offeredProducts.get(product).setPrice(price);
+    }
+
+    public void setProductAmount(Product product, int amount) {
+        offeredProducts.get(product).setAmount(amount);
+    }
+
+    public void editProduct(Product product, double price, int amount) {
+        setProductPrice(product, price);
+        setProductAmount(product, amount);
     }
 
     @Override
@@ -88,3 +90,47 @@ public class Salesperson extends Person {
     }
 }
 
+class ProductState {
+    public enum State {
+        BUILD_IN_PROGRESS, EDIT_IN_PROGRESS, VERIFIED
+    }
+
+    private boolean inDiscount;
+    private int amount;
+    private double price;
+    private State productState;
+
+    public ProductState( boolean inDiscount, int amount, double price) {
+        this.inDiscount = inDiscount;
+        this.amount = amount;
+        this.price = price;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public State getProductState() {
+        return productState;
+    }
+
+    public void setInDiscount(boolean inDiscount) {
+        this.inDiscount = inDiscount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void setState(State productState) {
+        this.productState = productState;
+    }
+}
