@@ -10,21 +10,20 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import model.*;
 
 public class Database {
 
-    public static HashMap<String,String> address = new HashMap<String, String>();
+    public static HashMap<String,String> address = new HashMap<>();
 
-    public static <T> Object read(Type typeOfT, String address) throws FileNotFoundException {
-        GsonBuilder builder = new GsonBuilder().setPrettyPrinting();
+    public static Object read(Type typeOfT, String address) throws FileNotFoundException {
+        GsonBuilder builder = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting();
         Gson gson = builder.create();
         BufferedReader bufferedReader = new BufferedReader(new FileReader(address));
         return gson.fromJson(bufferedReader, typeOfT);
     }
 
-    public static <T> void write(T obj, Type typeOfT,String address) throws IOException {
-        GsonBuilder builder = new GsonBuilder();
+    public static <T> void write(T obj, String address) throws IOException {
+        GsonBuilder builder = new GsonBuilder().enableComplexMapKeySerialization();
         Gson gson = builder.create();
         FileWriter writer = new FileWriter(address);
         writer.write(gson.toJson(obj));
@@ -33,7 +32,7 @@ public class Database {
 
 
     public static <T> void saveToFile(T object,String address) throws IOException {
-        Database.write(object,object.getClass(),address);
+        Database.write(object, address);
     }
 
     public static String handleJsonObject(JsonReader reader, String wantedFieldName) throws IOException {
@@ -61,7 +60,7 @@ public class Database {
 
     public static ArrayList<String> handleJsonArray(String filedName,String address) throws IOException {
         JsonReader reader = new JsonReader(new FileReader(address));
-        ArrayList<String> arrayList = new ArrayList<String>();
+        ArrayList<String> arrayList = new ArrayList<>();
         reader.beginArray();
         while (true) {
             JsonToken token = reader.peek();
