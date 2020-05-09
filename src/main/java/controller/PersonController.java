@@ -74,7 +74,7 @@ public class PersonController {
         loggedInPerson = null;
     }
 
-    public boolean checkPassword(String password,String username) throws WrongPasswordException{
+    public static boolean checkPassword ( String password , String username ) throws WrongPasswordException{
         if (!findPersonByUsername(username).getPassword().equals(password))
             throw new WrongPasswordException();
         return true;
