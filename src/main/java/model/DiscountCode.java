@@ -76,4 +76,15 @@ public class DiscountCode {
     public void setUseCounter(int useCounter) {
         this.useCounter = useCounter;
     }
+
+    @Override
+    public String toString () {
+        return "Discount code : " + code + "\n" +
+                "Start time : " + startTime + "\n" +
+                "End time : " + endTime + "\n" +
+                "Discount Percentage : " + discountPercentage + "\n" +
+                "Max Discount : " + maxDiscount + "\n" +
+                "Use Counter : " + useCounter;
+    }
+
 }

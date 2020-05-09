@@ -58,7 +58,7 @@ public class PersonController {
     }
 
     public static void login(String username,String password) throws Exception{
-        if ( !Pattern.compile ( "\\w{3,}" ).matcher ( username ).matches ( ) )
+        if ( !Pattern.compile ( "\\w{3,}" ).matcher ( username ).matches ( ) ) //ToDo put this in view
             throw new Exception ( "Username should contain more than 3 characters." );
         else if(!isTherePersonByUsername(username)){
             throw new UsernameNotFoundException();

@@ -64,6 +64,9 @@ public class Customer extends Person {
     public void updateHistory () {
 
     }
+    public HashMap < DiscountCode, Integer > getDiscountCodes () {
+        return discountCodes;
+    }
 
 
 }
