@@ -5,26 +5,16 @@ import model.*;
 import java.util.HashMap;
 
 public class CartController {
-    private Customer customer;
-    private HashMap<Product, ProductState> products;
+
+    private HashMap<Product, ProductStateInCart> products;
     private static CartController single_instance = null;
     private double totalPrice;
     private double totalPriceAfterDiscount;
+    private ProductStateInCart productState;
 
-    public class ProductState {
-        int count;
-        double price;
-        Salesperson salesperson;
-
-        public ProductState(int count, Salesperson salesperson, Product product) {
-            this.count = count;
-            this.salesperson = salesperson;
-            price = salesperson.getProductPrice(product);
-        }
-    }
 
     private CartController() {
-        products = new HashMap<Product, ProductState>();
+        products = new HashMap<Product, ProductStateInCart>();
     }
 
     public static CartController getInstance() {
@@ -35,40 +25,55 @@ public class CartController {
     }
 
     public void addProduct(Product product, Salesperson salesperson) {
-        products.put(product, new ProductState(1, salesperson, product));
+        if(PersonController.isThereLoggedInPerson()){
+            ( (Customer)PersonController.getLoggedInPerson()).getCart().addProduct(product,salesperson);
+        }else
+        products.put(product, new ProductStateInCart(1, salesperson, product));
     }
 
     public void setProductCount(Product product, int count) {
-        products.get(product).count += count;
+        if(PersonController.isThereLoggedInPerson()){
+            ( (Customer)PersonController.getLoggedInPerson()).getCart().setProductCount(product,count);
+        }else
+            products.get(product).setCount(products.get(product).getCount() + count);
+    }
+
+    public void setLoggedInPerson(){
+        ( (Customer)PersonController.getLoggedInPerson()).getCart().setProducts(products);
     }
 
     public void calculateTotalPrice() {
         totalPrice = 0;
-        for (ProductState value : products.values()) {
-            totalPrice += value.price;
+        for (ProductStateInCart value : products.values()) {
+            totalPrice += value.getPrice();
         }
     }
 
-    public void purchase() throws NoLoggedInPersonException, AccountIsNotCustomerException {
+    public void purchase() throws NoLoggedInPersonException, AccountIsNotCustomerException,NotEnoughCreditMoney {
         if (!PersonController.isThereLoggedInPerson()) {
             throw new NoLoggedInPersonException();
         } else if (!PersonController.isLoggedInPersonCustomer()) {
             throw new AccountIsNotCustomerException();
         } else {
-            customer = (Customer) PersonController.getLoggedInPerson();
+            Customer customer = (Customer) PersonController.getLoggedInPerson();
+            if(customer.checkCredit(customer.getCart().calculateTotalPrice())){
+                throw new NotEnoughCreditMoney();
+            }
         }
     }
 
     public void manageDiscountCode(String discountCode) throws WrongDiscountCode {
+        Customer customer= (Customer)PersonController.getLoggedInPerson();
         if (!customer.isThereDiscountCodeByCode(discountCode)) {
             throw new WrongDiscountCode();
         } else {
             DiscountCode thisDiscountCode = customer.findDiscountCodeByCode(discountCode);
-            calculateTotalPrice();
-            totalPriceAfterDiscount = totalPrice * (thisDiscountCode.getDiscountPercentage());
-            if (totalPriceAfterDiscount > thisDiscountCode.getMaxDiscount()) {
-                totalPriceAfterDiscount = thisDiscountCode.getMaxDiscount();
+            double tempPrice = customer.getCart().calculateTotalPrice();
+             double tempTotalPriceAfterDiscount = tempPrice * (thisDiscountCode.getDiscountPercentage());
+            if (tempTotalPriceAfterDiscount > thisDiscountCode.getMaxDiscount()) {
+                tempTotalPriceAfterDiscount = thisDiscountCode.getMaxDiscount();
             }
+            customer.getCart().setTotalPriceAfterDiscount(tempTotalPriceAfterDiscount);
             customer.useDiscountCode(thisDiscountCode);
         }
     }
@@ -82,6 +87,10 @@ public class CartController {
     }
 
     public static class WrongDiscountCode extends Exception {
+        String message;
+    }
+
+    public static class NotEnoughCreditMoney extends Exception{
         String message;
     }
 }

@@ -21,7 +21,7 @@ public class ProductRequest extends Request {
         this.price = price;
         this.requestState = requestState;
         this.properties = properties;
-        Database.saveToFile(this, Database.createPath("productRequests", requestId));
+        Database.saveToFile(this, Database.createPath("productRequests", requestId),false);
     }
 
 

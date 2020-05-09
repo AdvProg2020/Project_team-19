@@ -16,13 +16,13 @@ public class PersonController {
     private static Person loggedInPerson = null;
 
     public static void initializePersons() throws FileNotFoundException {
-        for (File file : Database.returnListOfFiles(Database.address.get("customer"))) {
+        for (File file : Database.returnListOfFiles(Database.address.get("customers"))) {
             allPersons.add((Customer) Database.read(Customer.class,file.getAbsolutePath()));
         }
-        for (File file : Database.returnListOfFiles(Database.address.get("manager"))) {
+        for (File file : Database.returnListOfFiles(Database.address.get("managers"))) {
             allPersons.add((Manager) Database.read(Manager.class,file.getAbsolutePath()));
         }
-        for (File file : Database.returnListOfFiles(Database.address.get("salesperson"))) {
+        for (File file : Database.returnListOfFiles(Database.address.get("salespersons"))) {
             allPersons.add((Salesperson) Database.read(Salesperson.class,file.getAbsolutePath()));
         }
     }
@@ -39,11 +39,13 @@ public class PersonController {
         return loggedInPerson!=null;
     }
 
-    public static boolean isTherePersonByUsername(String username) {
-        return findPersonByUsername ( username ) != null;
+    public static boolean isTherePersonByUsername(String username) throws UsernameNotFoundException {
+        if(findPersonByUsername(username) == null)
+            throw new UsernameNotFoundException();
+        return true;
     }
 
-    public static Person findPersonByUsername (String username) {
+    public static Person findPersonByUsername (String username){
         for (Person person : allPersons) {
             if (person.getUsername().equals(username))
                 return person;
@@ -72,16 +74,18 @@ public class PersonController {
         loggedInPerson = null;
     }
 
-    public static boolean checkPassword(String password,String username){
-        return findPersonByUsername(username).getPassword().equals(password);
+    public boolean checkPassword(String password,String username) throws WrongPasswordException{
+        if (!findPersonByUsername(username).getPassword().equals(password))
+            throw new WrongPasswordException();
+        return true;
     }
 
     public static class UsernameNotFoundException extends Exception{
-        String message="There is no account whit such username";
+        String message="This username does not exist";
     }
 
     public static class WrongPasswordException extends Exception{
-        String message="Password is wrong";
+        String message="Incorrect password";
     }
 
     public static Person getLoggedInPerson() {

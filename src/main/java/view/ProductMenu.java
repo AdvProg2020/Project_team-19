@@ -1,5 +1,9 @@
 package view;
 
+import controller.ProductController;
+import model.OwnedProduct;
+import model.Product;
+
 public class ProductMenu extends Menu {
 
     public ProductMenu ( Menu parent ) {
@@ -25,7 +29,33 @@ public class ProductMenu extends Menu {
             this.parentMenu.show();
             this.parentMenu.execute();
         }
-        //fek konam execute nadashte bashe dige
+    }
+
+        public void viwProduct(String productId){
+        Product product = Product.getProductById(productId);
+        System.out.println(String.format("%s", "------------------------------------------------------------------------------------------"));
+        System.out.println(String.format("%s %20s %20s %20s %25s","|","product ID","|","product Name","|"));
+        System.out.println(String.format("%s", "------------------------------------------------------------------------------------------"));
+        System.out.println(String.format("%s %20s %20s %20s %25s","|",product.getID(),"|",product.getName(),"|"));
+        System.out.println(String.format("%s", "------------------------------------------------------------------------------------------"));
+        System.out.println(String.format("%s %20s %20s %20s %25s","|","property","|","value","|"));
+        for (String s : product.getProperties().keySet()) {
+        System.out.println(String.format("%s", "------------------------------------------------------------------------------------------"));
+        System.out.println(String.format("%s %20s %20s %20s %25s","|",s , "|",product.getProperties().get(s) ,"|"));
+        }
+        System.out.println(String.format("%s", "------------------------------------------------------------------------------------------"));
+        System.out.println();
+        System.out.println("all salesperson");
+        for (OwnedProduct ownedProduct : ProductController.getProductsOfProduct(product)) {
+            System.out.println(String.format("%s", "------------------------------------------------------------------------------------------"));
+            if(ownedProduct.getSalesperson().isInDiscount(product))
+            {
+                System.out.println(String.format("%s %20s %s %20s %s %20s %5s","|",ownedProduct.getSellerName() , "|",ownedProduct.getPrice(),"|",ownedProduct.getSalesperson().getDiscountPrice(product),"|"));
+
+            }else
+                System.out.println(String.format("%s %20s %5s %20s %s %20s %5s","|",ownedProduct.getSellerName() , "|",ownedProduct.getPrice(),"|"," ","|"));
+        }
+        System.out.println(String.format("%s", "------------------------------------------------------------------------------------------"));
     }
 
 }

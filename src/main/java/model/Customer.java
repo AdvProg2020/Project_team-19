@@ -16,9 +16,9 @@ public class Customer extends Person {
 
     public Customer(HashMap<String, String> personInfo) throws IOException {
         super (personInfo);
-        discountCodes = new HashMap <> ( );
-        buyLogs = new ArrayList <> ( );
-        Database.saveToFile(this,Database.createPath("customer",personInfo.get("username")));
+        discountCodes = new HashMap<DiscountCode, Integer>();
+        buyLogs = new ArrayList<BuyLog>();
+        Database.saveToFile(this,Database.createPath("customers",personInfo.get("username")),false);
     }
 
     public DiscountCode findDiscountCodeByCode(String code){
@@ -45,9 +45,8 @@ public class Customer extends Person {
         }
     }
 
-    public boolean checkCredit () {
-        // Comparing cart price with credit
-        return false;
+    public boolean checkCredit (double price) {
+        return price <= credit;
     }
 
     public void setCredit ( double credit ) {
@@ -58,12 +57,8 @@ public class Customer extends Person {
         return credit;
     }
 
-    public void getLog () {
-
-    }
-
-    public HashMap < DiscountCode, Integer > getDiscountCodes () {
-        return discountCodes;
+    public void addToBuyLogs(BuyLog buyLog) {
+        buyLogs.add(buyLog);
     }
 
     public void updateHistory () {

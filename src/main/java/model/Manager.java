@@ -17,6 +17,6 @@ public class Manager extends Person  {
     public Manager(HashMap<String, String> personInfo) throws IOException {
         super(personInfo);
         managers.add(this);
-        Database.saveToFile(this,Database.createPath("manager", personInfo.get("username")));
+        Database.saveToFile(this,Database.createPath("manager", personInfo.get("username")),false);
     }
 }

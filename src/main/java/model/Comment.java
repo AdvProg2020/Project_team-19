@@ -22,7 +22,7 @@ public class Comment {
         this.commenter = commenter;
         this.product = product;
         this.commentString = commentString;
-        Database.saveToFile(this,Database.createPath("comment",commentId));
+        Database.saveToFile(this,Database.createPath("comment",commentId),false);
     }
 
 }

@@ -3,12 +3,48 @@ package controller;
 import model.Category;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public class CategoryController {
+    private static CategoryController single_instance = null;
+    private LinkedList<Category> rootCategories;
 
-    public void addCategory ( Category parent, Category category ) {
-        parent.AddSubCategory ( category );
+    private CategoryController(){
+        rootCategories = new LinkedList<>();
     }
+
+    public static CategoryController getInstance() {
+        if (single_instance == null)
+            single_instance = new CategoryController();
+
+        return single_instance;
+    }
+
+    public void addCategory ( String categoryAddress, Category category ){
+
+    }
+
+    public Category findCategoryByAddress(String address){
+        List<String> separatedCategories = Arrays.asList ( address.split ( "/" ) );
+        Category tempCurrent;
+        boolean levelCheck = false;
+        for (Category rootCategory : rootCategories) {
+            if (rootCategory.getName().equals ( separatedCategories.get ( 0 ) )) {
+                tempCurrent = rootCategory;
+                while (!separatedCategories.isEmpty ()) {
+                    separatedCategories.remove ( 0 ); //error
+                    levelCheck = rootCategory.childExists ( separatedCategories.get ( 0 ) );
+                    if (!levelCheck)
+                        return null;
+                }
+                return tempCurrent;
+            }
+        }
+        return null;
+    }
+
 
     public void removeCategory ( Category parent, Category category ) {
         parent.removeSubCategory ( category );
@@ -19,7 +55,6 @@ public class CategoryController {
     }
 
     public void editCategoryProperties ( Category category, ArrayList<String> addProperties, ArrayList<String> removeProperties ) {
-        //add and remove must not contain same properties. This should be handled. Which one should be first?
         for (String property : addProperties) {
             category.addProperty ( property );
         }

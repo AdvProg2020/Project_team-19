@@ -14,4 +14,8 @@ public class Discount {
     private String endTime;
     private double discountPercentage;
 
+    public double getPriceAfterDiscount(double price){
+        return price*(1-discountPercentage/100);
+    }
+
 }

@@ -26,7 +26,7 @@ public class DiscountRequest extends Request {
         this.startTime = startTime;
         this.endTime = endTime;
         this.discountPercentage = discountPercentage;
-        Database.saveToFile(this, Database.createPath("discountRequests", requestId));
+        Database.saveToFile(this, Database.createPath("discountRequests", requestId),false);
     }
 
 

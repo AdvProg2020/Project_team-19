@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DiscountCode {
     public static ArrayList<DiscountCode> allDiscountCodes = new ArrayList<DiscountCode>();
@@ -10,7 +11,6 @@ public class DiscountCode {
     private double discountPercentage;
     private double maxDiscount; //maximum amount
     private int useCounter;
-    private ArrayList<Customer> customerList;
 
     public DiscountCode(String code, String startTime, String endTime, double discountPercentage, double maxDiscount, int useCounter, ArrayList<Customer> customerList) {
         this.code = code;
@@ -19,7 +19,10 @@ public class DiscountCode {
         this.discountPercentage = discountPercentage;
         this.maxDiscount = maxDiscount;
         this.useCounter = useCounter;
-        this.customerList = customerList;
+    }
+
+    public static ArrayList<DiscountCode> getAllDiscountCodes() {
+        return allDiscountCodes;
     }
 
     public double getDiscountPercentage() {
@@ -50,13 +53,27 @@ public class DiscountCode {
         return code;
     }
 
-    @Override
-    public String toString () {
-        return "Discount code : " + code + "\n" +
-                "Start time : " + startTime + "\n" +
-                "End time : " + endTime + "\n" +
-                "Discount Percentage : " + discountPercentage + "\n" +
-                "Max Discount : " + maxDiscount + "\n" +
-                "Use Counter : " + useCounter;
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public void setDiscountPercentage(double discountPercentage) {
+        this.discountPercentage = discountPercentage;
+    }
+
+    public void setMaxDiscount(double maxDiscount) {
+        this.maxDiscount = maxDiscount;
+    }
+
+    public void setUseCounter(int useCounter) {
+        this.useCounter = useCounter;
     }
 }

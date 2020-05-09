@@ -8,12 +8,13 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
+import static model.Product.getProductById;
 import static model.Product.stock;
 import static controller.Database.address;
 
 public class ProductController {
-    private static ArrayList<Product> allProducts = new ArrayList<Product>();
-    private static ArrayList<Comment> allComments = new ArrayList<Comment>();
+    public static ArrayList<Product> allProducts = new ArrayList<>();
+    public static ArrayList<Product> currentProducts = new ArrayList<>();
 
     public static void initializeProducts() throws FileNotFoundException {
         for (File file : Database.returnListOfFiles(address.get("product"))) {
@@ -21,22 +22,66 @@ public class ProductController {
         }
     }
 
-    public static void initializeComments() throws FileNotFoundException {
-        for (File file : Database.returnListOfFiles(address.get("comment"))) {
-            allComments.add((Comment) Database.read(Product.class, file.getAbsolutePath()));
+    public static Product searchProduct(String productID) {
+        for (Product product : currentProducts) {
+            if (product.getID().equals(productID))
+                return product;
         }
+        return null;
+    }
+
+    public static void addExistProduct(Product product, Salesperson salesperson, int amount, double price) {
+        stock.get(product).add(salesperson);
+        salesperson.addToOfferedProducts(product, amount, price);
+
+        //change file ba write okeye
+    }
+
+    public static void addNewProduct(Product product, Salesperson salesperson, int amount, double price) {
+        ArrayList<Salesperson> sellers = new ArrayList<>();
+        sellers.add(salesperson);
+
+        stock.put(product, sellers);
+        allProducts.add(product);
+        salesperson.addToOfferedProducts(product, amount, price);
+
+        //new file
+        //be file ham add mikonim to stock
+    }
+
+    public static void addProduct(Product product, Salesperson salesperson, int amount, double price) {
+        if (getProductById(product.getID()) != null)
+            addExistProduct(product, salesperson, amount, price);
+
+        else
+            addNewProduct(product, salesperson, amount, price);
+
+    }
+
+
+    public static void editProduct(Product product, Salesperson salesperson, int amount, double price) {
+        salesperson.editProduct(product, price, amount);
+        //to file ham edit she
+        //...
+        System.out.println("edit product");
+    }
+
+    public static void removeProduct(Product product, Salesperson salesperson) {
+        allProducts.remove(product);
+        stock.get(product).remove(salesperson);
+        salesperson.removeFromOfferedProducts(product);
+
+        //az file hazf she
     }
 
     public static ArrayList<Product> filterByField(String fieldName, String property, Category category) {
-        return category.getProductList().stream().filter(product -> {
-            return product.getProperties().get(fieldName).equals(property);
-        }).collect(Collectors.toCollection(ArrayList::new));
+        return category.getProductList().stream().filter(product -> product.getProperties().get(fieldName).
+                equals(property)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public static ArrayList<OwnedProduct> filterOwnedProductByPrice(double lowPrice, double highPrice, Product product) {
-        return getProductsOfProduct(product).stream().filter(ownedProduct -> {
-            return ownedProduct.getPrice() <= highPrice && ownedProduct.getPrice() >= lowPrice;
-        }).collect(Collectors.toCollection(ArrayList::new));
+        return getProductsOfProduct(product).stream().filter(ownedProduct -> ownedProduct.getPrice() <= highPrice &&
+                ownedProduct.getPrice() >= lowPrice).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public static ArrayList<Product> filterACategoryByPrice(double lowPrice, double highPrice, Category category) {
@@ -78,37 +123,7 @@ public class ProductController {
     }
 }
 
-class OwnedProduct {
-    private Product product;
-    private Salesperson salesperson;
-    double price;
 
-    public OwnedProduct(Product product, Salesperson salesperson, double price) {
-        this.price = price;
-        this.product = product;
-        this.salesperson = salesperson;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public Salesperson getSalesperson() {
-        return salesperson;
-    }
-
-    @Override
-    public String toString() {
-        return "OwnedProduct{" +
-                ", price=" + price +
-                "seller= " + salesperson.getUsername() +
-                '}';
-    }
-}
 
 class SortByPrice implements Comparator<OwnedProduct> {
 

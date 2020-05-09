@@ -55,14 +55,13 @@ public class GsonTest {
 
 
     @Test
-    public void testForGSONObjInObj () {
+    public void testForGSONObjInObj () throws IOException {
         Category category = new Category(true, "labaniat", null);
         HashMap<String, String> properties1 = new HashMap<>();
         properties1.put("color", "yellow");
         properties1.put("size", "big");
 
-        Product product = new Product("1", "panir", "lighvan",
-                Product.ProductState.BUILD_IN_PROGRESS, category.getName(), properties1);
+        Product product = new Product("1", "panir", "lighvan", category.getName(), properties1);
 
         //aval properties category ro comment kon bad test kon
         try {
