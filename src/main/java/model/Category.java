@@ -2,6 +2,8 @@ package model;
 
 import java.util.*;
 
+import static controller.CategoryController.rootCategories;
+
 public class Category {
 
     private boolean isLeaf;
@@ -12,8 +14,6 @@ public class Category {
     private ArrayList<Product> productList;
     private static Category current;
     private static Category tempCurrent;
-    public static LinkedHashSet<Category> rootCategories = new LinkedHashSet<>();
-
     public Category(boolean isLeaf, String name, Category parent) {
         this.isLeaf = isLeaf;
 

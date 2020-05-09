@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CategoryController {
     private static CategoryController single_instance = null;
-    private LinkedList<Category> rootCategories;
+    public static LinkedList<Category> rootCategories;
 
     private CategoryController(){
         rootCategories = new LinkedList<>();
