@@ -30,7 +30,7 @@ public class Product {
         this.category = category;
         this.count = 0;
         this.properties = properties;
-        //Database.saveToFile(this, Database.createPath("products", productID + ".json"),false);
+        Database.saveToFile(this, Database.createPath("products", productID + ".json"),false);
     }
 
 

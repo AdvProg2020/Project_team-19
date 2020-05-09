@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Category {
 
-    private boolean isRoot;
+    private boolean isLeaf;
     private String name;
     private Category parent;
     private Set<Category> children;
@@ -12,21 +12,19 @@ public class Category {
     private ArrayList<Product> productList;
     private static Category current;
     private static Category tempCurrent;
-    private static LinkedHashSet<Category> rootCategories = new LinkedHashSet<Category>();
+    public static LinkedHashSet<Category> rootCategories = new LinkedHashSet<>();
 
+    public Category(boolean isLeaf, String name, Category parent) {
+        this.isLeaf = isLeaf;
 
-
-    public Category(boolean isRoot, String name, Category parent) {
-        this.isRoot = isRoot;
-
-        if (isRoot)
-            rootCategories.add ( this );
+        if (parent == null)
+            rootCategories.add(this);
         this.name = name;
 
         this.parent = parent;
 
-        if (!isRoot)
-            parent.children.add ( this );
+        if (parent != null)
+            parent.children.add(this);
 
         this.children = new LinkedHashSet<>();
         this.productList = new ArrayList<>();
@@ -58,32 +56,32 @@ public class Category {
         return propertyFields;
     }
 
-    public void addProduct(Product product){
+    public void addProduct(Product product) {
         this.productList.add(product);
     }
 
-    public void addProperty(String property){
+    public void addProperty(String property) {
         this.propertyFields.add(property);
     }
 
-    public void removeProperty(String property){
+    public void removeProperty(String property) {
         this.propertyFields.remove(property);
     }
 
-    public void removeProduct(Product product){
+    public void removeProduct(Product product) {
         this.productList.remove(product);
     }
 
-    public void setName ( String name ) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public void AddSubCategory( Category category){
-        this.children.add ( category );
+    public void AddSubCategory(Category category) {
+        this.children.add(category);
     }
 
     public void removeSubCategory(Category category) {
-        this.children.remove ( category );
+        this.children.remove(category);
     }
 
     public ArrayList<Product> getProductList() {
@@ -92,6 +90,14 @@ public class Category {
 
     public String getName() {
         return name;
+    }
+
+    public boolean getIsLeaf() {
+        return isLeaf;
+    }
+
+    public Set<Category> getChildren() {
+        return children;
     }
 
     @Override

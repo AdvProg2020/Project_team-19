@@ -1,5 +1,8 @@
 package view;
 
+
+import static controller.ProductController.searchProduct;
+
 public class SearchMenu extends Menu {
     public SearchMenu(Menu parent) {
         super("Search Menu", parent);
@@ -11,7 +14,7 @@ public class SearchMenu extends Menu {
         return new Menu("Search", this) {
             @Override
             public void show() {
-                System.out.println("Search sth or enter back to return");
+                System.out.println("Enter Product ID :");
                 //momkene beshe behtaresh kard
             }
 
@@ -22,7 +25,10 @@ public class SearchMenu extends Menu {
                     this.parentMenu.show();
                     this.parentMenu.execute();
                 }
-                //show all
+                if(searchProduct(input) != null) {
+                    //view product
+                } else
+                    System.out.println("Could not find any matches");
             }
         };
     }

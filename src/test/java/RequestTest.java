@@ -31,8 +31,7 @@ public class RequestTest {
 
     @Test
     public void TestForEnumProduct () {
-        Request request = new ProductRequest(UUID.randomUUID().toString(), Request.RequestState.EDIT);
-        request.doThis();
+
     }
 
 }

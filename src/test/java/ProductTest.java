@@ -24,9 +24,11 @@ public class ProductTest {
         properties2.put("color", "white");
         properties2.put("size", "small");
 
-        Product product1 = new Product("1", "panir", "lighvan", category.getName(), properties1);
+        Product product1 = new Product("1", "panir", "lighvan",
+                 category.getName(), properties1);
 
-        Product product2 = new Product("2", "shir", "mihan", category.getName(), properties2);
+        Product product2 = new Product("2", "shir", "mihan",
+                category.getName(), properties2);
 
         ArrayList<Product> products = new ArrayList<>();
         products.add(product1);
@@ -69,10 +71,12 @@ public class ProductTest {
         ArrayList<Salesperson> owners2 = new ArrayList<>();
         owners2.add(seller2);
 
-        Product product1 = new Product("1", "panir", "lighvan", category.getName(), properties1);
+        Product product1 = new Product("1", "panir", "lighvan",
+                 category.getName(), properties1);
 
 
-        Product product2 = new Product("2", "shir", "mihan", category.getName(), properties2);
+        Product product2 = new Product("2", "shir", "mihan",
+                 category.getName(), properties2);
 
 
         seller1.addToOfferedProducts(product1, 2, 2000);
@@ -126,10 +130,12 @@ public class ProductTest {
         ArrayList<Salesperson> owners2 = new ArrayList<>();
         owners2.add(seller2);
 
-        Product product1 = new Product("1", "panir", "lighvan", category.getName(), properties1);
+        Product product1 = new Product("1", "panir", "lighvan",
+                 category.getName(), properties1);
 
 
-        Product product2 = new Product("2", "shir", "mihan", category.getName(), properties2);
+        Product product2 = new Product("2", "shir", "mihan",
+                 category.getName(), properties2);
 
 
         seller1.addToOfferedProducts(product1, 2, 2500);

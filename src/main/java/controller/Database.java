@@ -37,14 +37,14 @@ public class Database {
     }
 
     public static <T> Object read(Type typeOfT, String address) throws FileNotFoundException {
-        GsonBuilder builder = new GsonBuilder().setPrettyPrinting();
+        GsonBuilder builder = new GsonBuilder().setLenient().enableComplexMapKeySerialization();
         Gson gson = builder.create();
         BufferedReader bufferedReader = new BufferedReader(new FileReader(address));
         return gson.fromJson(bufferedReader, typeOfT);
     }
 
-    public static <T> void write(T obj, Type typeOfT,String address) throws IOException {
-        GsonBuilder builder = new GsonBuilder();
+    public static <T> void write(T obj, String address) throws IOException {
+        GsonBuilder builder = new GsonBuilder().enableComplexMapKeySerialization();
         Gson gson = builder.create();
         FileWriter writer = new FileWriter(address);
         writer.write(gson.toJson(obj));
@@ -84,7 +84,7 @@ public class Database {
 
     public static ArrayList<String> handleJsonArray(String filedName,String address) throws IOException {
         JsonReader reader = new JsonReader(new FileReader(address));
-        ArrayList<String> arrayList = new ArrayList<String>();
+        ArrayList<String> arrayList = new ArrayList<>();
         reader.beginArray();
         while (true) {
             JsonToken token = reader.peek();

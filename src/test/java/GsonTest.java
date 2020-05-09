@@ -61,11 +61,12 @@ public class GsonTest {
         properties1.put("color", "yellow");
         properties1.put("size", "big");
 
-        Product product = new Product("1", "panir", "lighvan", category.getName(), properties1);
+        Product product = new Product("1", "panir", "lighvan",
+                 category.getName(), properties1);
 
         //aval properties category ro comment kon bad test kon
         try {
-            Database.write(product, product.getClass(), "C:\\Users\\HAMID\\Desktop\\yalda.json");
+            Database.write(product, "C:\\Users\\HAMID\\Desktop\\yalda.json");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -84,5 +85,29 @@ public class GsonTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void appendFile() throws IOException {
+        Category category = new Category(true, "labaniat", null);
+        HashMap<String, String> properties1 = new HashMap<>();
+        properties1.put("color", "yellow");
+        properties1.put("size", "big");
+
+        Product product = new Product("1", "panir", "lighvan",
+                category.getName(), properties1);
+
+        Product product1 = new Product("2", "shir", "mihan", category.getName(),
+                properties1);
+        //Database.writeAppend(product, "C:\\Users\\HAMID\\Desktop\\Product.json");
+        Database.writeAppend(product1, "C:\\Users\\HAMID\\Desktop\\Product.json");
+        System.out.println(Database.read(Product.class, "C:\\Users\\HAMID\\Desktop\\Product.json"));
+    }
+
+    @Test
+    public void getProperty() {
+        String path = System.getProperty("user.dir");
+
+        System.out.println("Working Directory = " + path);
     }
 }
