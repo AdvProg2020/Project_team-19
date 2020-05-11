@@ -23,6 +23,14 @@ public class ProductController {
         }
     }
 
+    public static boolean isThereProductById(String productID)  {
+        return searchProduct(productID)!=null;
+    }
+
+    public static class WrongProductIdException extends Exception{
+        public String message="No product with such id";
+    }
+
     public static Product searchProduct(String productID) {
         for (Product product : currentProducts) {
             if (product.getID().equals(productID))
@@ -114,6 +122,14 @@ public class ProductController {
         }
 
         return productList;
+    }
+
+    public static boolean doesSellerHasProduct(Product product, Salesperson salesperson){
+        for (OwnedProduct ownedProduct : getProductsOfProduct(product)) {
+            if(ownedProduct.getSalesperson().equals(salesperson))
+                return true;
+        }
+        return false;
     }
 
     public static ArrayList<OwnedProduct> sortProductByPrice(Product product) {

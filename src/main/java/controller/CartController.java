@@ -6,15 +6,14 @@ import java.util.HashMap;
 
 public class CartController {
 
-    private HashMap<Product, ProductStateInCart> products;
+    //private HashMap<Product, ProductStateInCart> products;
     private static CartController single_instance = null;
-    private double totalPrice;
-    private double totalPriceAfterDiscount;
-    private ProductStateInCart productState;
+    private Cart tempCart;
 
 
-    private CartController() {
-        products = new HashMap<Product, ProductStateInCart>();
+    private CartController()
+    {
+        tempCart = new Cart();
     }
 
     public static CartController getInstance() {
@@ -28,25 +27,25 @@ public class CartController {
         if(PersonController.isThereLoggedInPerson()){
             ( (Customer)PersonController.getLoggedInPerson()).getCart().addProduct(product,salesperson);
         }else
-        products.put(product, new ProductStateInCart(1, salesperson, product));
+            tempCart.addProduct(product,salesperson);
     }
 
     public void setProductCount(Product product, int count) {
-        if(PersonController.isThereLoggedInPerson()){
+        if(PersonController.isThereLoggedInPerson()&&PersonController.isLoggedInPersonCustomer()){
             ( (Customer)PersonController.getLoggedInPerson()).getCart().setProductCount(product,count);
         }else
-            products.get(product).setCount(products.get(product).getCount() + count);
+            tempCart.setProductCount(product,count);
     }
 
-    public void setLoggedInPerson(){
-        ( (Customer)PersonController.getLoggedInPerson()).getCart().setProducts(products);
+    public void setLoggedInPersonCart(){
+        ( (Customer)PersonController.getLoggedInPerson()).setCart(new Cart(tempCart));
     }
 
-    public void calculateTotalPrice() {
-        totalPrice = 0;
-        for (ProductStateInCart value : products.values()) {
-            totalPrice += value.getPrice();
+    public double calculateTotalPrice() {
+        if(PersonController.isThereLoggedInPerson()&&PersonController.isLoggedInPersonCustomer()){
+            return ( (Customer)PersonController.getLoggedInPerson()).getCart().calculateTotalPrice();
         }
+        return tempCart.calculateTotalPrice();
     }
 
     public void purchase() throws NoLoggedInPersonException, AccountIsNotCustomerException,NotEnoughCreditMoney {
@@ -69,13 +68,27 @@ public class CartController {
         } else {
             DiscountCode thisDiscountCode = customer.findDiscountCodeByCode(discountCode);
             double tempPrice = customer.getCart().calculateTotalPrice();
-            double tempTotalPriceAfterDiscount = tempPrice * (thisDiscountCode.getDiscountPercentage());
+             double tempTotalPriceAfterDiscount = tempPrice * (thisDiscountCode.getDiscountPercentage());
             if (tempTotalPriceAfterDiscount > thisDiscountCode.getMaxDiscount()) {
                 tempTotalPriceAfterDiscount = thisDiscountCode.getMaxDiscount();
             }
             customer.getCart().setTotalPriceAfterDiscount(tempTotalPriceAfterDiscount);
             customer.useDiscountCode(thisDiscountCode);
         }
+    }
+
+    public int itemNumber(){
+        if(PersonController.isThereLoggedInPerson()&&PersonController.isLoggedInPersonCustomer()){
+            return ( (Customer)PersonController.getLoggedInPerson()).getCart().getProducts().size();
+        }
+        return tempCart.getProducts().size();
+    }
+
+    public Cart getCart() {
+        if(PersonController.isThereLoggedInPerson()&&PersonController.isLoggedInPersonCustomer()){
+            return ( (Customer)PersonController.getLoggedInPerson()).getCart();
+        }
+        return tempCart;
     }
 
     public static class NoLoggedInPersonException extends Exception {

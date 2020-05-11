@@ -56,6 +56,7 @@ public class Discount {
         }
         return null;
     }
+
     public double getPriceAfterDiscount(double price) {
         return price * (1 - discountPercentage / 100);
     }

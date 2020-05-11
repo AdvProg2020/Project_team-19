@@ -4,15 +4,16 @@ import controller.ProductController;
 import model.OwnedProduct;
 import model.Product;
 
+import java.util.regex.Pattern;
+
 public class ProductMenu extends Menu {
 
     public ProductMenu ( Menu parent ) {
         super ("Product Menu" , parent);
         subMenus.put(1, new SearchMenu(this));
         subMenus.put(2, getHelpMenu(this));
-        //ye tor bayad handel konim age ro ye product ya haraj kilik kone
+        subMenus.put(3,getCompareTwoProductsMenu());
     }
-    // 1 = search   2 = help
 
 
     @Override
@@ -31,31 +32,41 @@ public class ProductMenu extends Menu {
         }
     }
 
-        public void viwProduct(String productId){
-        Product product = Product.getProductById(productId);
-        System.out.println(String.format("%s", "------------------------------------------------------------------------------------------"));
-        System.out.println(String.format("%s %20s %20s %20s %25s","|","product ID","|","product Name","|"));
-        System.out.println(String.format("%s", "------------------------------------------------------------------------------------------"));
-        System.out.println(String.format("%s %20s %20s %20s %25s","|",product.getID(),"|",product.getName(),"|"));
-        System.out.println(String.format("%s", "------------------------------------------------------------------------------------------"));
-        System.out.println(String.format("%s %20s %20s %20s %25s","|","property","|","value","|"));
-        for (String s : product.getProperties().keySet()) {
-        System.out.println(String.format("%s", "------------------------------------------------------------------------------------------"));
-        System.out.println(String.format("%s %20s %20s %20s %25s","|",s , "|",product.getProperties().get(s) ,"|"));
-        }
-        System.out.println(String.format("%s", "------------------------------------------------------------------------------------------"));
-        System.out.println();
-        System.out.println("all salesperson");
-        for (OwnedProduct ownedProduct : ProductController.getProductsOfProduct(product)) {
-            System.out.println(String.format("%s", "------------------------------------------------------------------------------------------"));
-            if(ownedProduct.getSalesperson().isInDiscount(product))
-            {
-                System.out.println(String.format("%s %20s %s %20s %s %20s %5s","|",ownedProduct.getSellerName() , "|",ownedProduct.getPrice(),"|",ownedProduct.getSalesperson().getDiscountPrice(product),"|"));
+    public Menu getCompareTwoProductsMenu(){
+        return new Menu("compare two products",this) {
+            @Override
+            public void show() {
 
-            }else
-                System.out.println(String.format("%s %20s %5s %20s %s %20s %5s","|",ownedProduct.getSellerName() , "|",ownedProduct.getPrice(),"|"," ","|"));
-        }
-        System.out.println(String.format("%s", "------------------------------------------------------------------------------------------"));
+            }
+
+            @Override
+            public void execute() {
+                System.out.println("please enter first product's id:");
+                String id1 = getValidProductId();
+                System.out.println("please enter second product's id:");
+                String id2 = getValidProductId();
+                compareTwoProducts(ProductController.searchProduct(id1),ProductController.searchProduct(id2));
+            }
+        };
+    }
+
+    public static void compareTwoProducts(Product product1,Product product2){
+        String firstRowFormat = "|%-36s|%-38s|";
+        String threePartRowFormat = "|%-30s|%-30s|%-30s|";
+        System.out.println(String.format("%s", "----------------------------------------------------------------------------"));
+        System.out.println(String.format(firstRowFormat,product1.getName(),product2.getName()));
+        System.out.println(String.format("%s", "----------------------------------------------------------------------------"));
+        System.out.println(String.format(threePartRowFormat,"average score",product1.getAverageScore(),product2.getAverageScore()));
+        System.out.println(String.format("%s", "----------------------------------------------------------------------------"));
+        System.out.println(String.format(threePartRowFormat,"current available price",product1.getLeastPrice(),product2.getLeastPrice()));
+        System.out.println(String.format("%s", "----------------------------------------------------------------------------"));
+        System.out.println(String.format(threePartRowFormat,"sellers' average price",product1.getAverageScore(),product2.getAveragePrice()));
+            for (String s : product1.getProperties().keySet()) {
+                if(product2.getProperties().containsKey(s)){
+                    System.out.println(String.format("%s", "----------------------------------------------------------------------------"));
+                    System.out.println(String.format(threePartRowFormat,s,product1.getProperties().get(s),product2.getProperties().get(s)));
+                }
+            }
     }
 
 }

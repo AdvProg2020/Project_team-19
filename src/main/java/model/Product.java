@@ -19,6 +19,8 @@ public class Product {
     private String category;
     private String description;
     private double averageScore;
+    private double averagePrice;
+    private double leastPrice;
     private ArrayList<Comment> comments;
 
     public Product(String productID, String name, String brand, String category,
@@ -57,6 +59,26 @@ public class Product {
 
     public String getID() {
         return productID;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public ArrayList<Comment> getComments() {
+        return comments;
+    }
+
+    public double getAveragePrice() {
+        return averagePrice;
+    }
+
+    public double getLeastPrice() {
+        return leastPrice;
+    }
+
+    public void addComment(Comment comment){
+        comments.add(comment);
     }
 
     public static Product getProductById(String productID) {

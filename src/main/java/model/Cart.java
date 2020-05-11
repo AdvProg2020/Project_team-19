@@ -27,8 +27,19 @@ public class Cart {
         products.get(product).count+=count;
     }
 
+    public Cart() {
+        products = new HashMap<Product,ProductStateInCart>();
+    }
+
+    public Cart(Cart cart){
+        products = new HashMap<Product,ProductStateInCart>();
+        for (Product product : cart.products.keySet()) {
+            products.put(product,new ProductStateInCart(cart.products.get(product)));
+        }
+    }
+
     public double calculateTotalPrice(){
-        totalPrice = 0;
+        totalPrice =0;
         for (ProductStateInCart value : products.values()) {
             totalPrice+=value.price;
         }
@@ -54,9 +65,7 @@ public class Cart {
         for (Product product : products.keySet()) {
             Salesperson salesperson = products.get(product).salesperson;
             int count = products.get(product).count;
-            salesperson.addSellLogAndPurchase(new SellLog("",LocalDateTime.now(),salesperson.getProductPrice(product)*count,
-                    salesperson.discountAmount(product)*count,product, (Customer)PersonController.getLoggedInPerson()
-                    ,true,count));
+            salesperson.addSellLogAndPurchase(new SellLog("",LocalDateTime.now(),salesperson.getProductPrice(product)*count,salesperson.discountAmount(product)*count,product, (Customer)PersonController.getLoggedInPerson(),true,count));
         }
     }
 
@@ -75,4 +84,5 @@ public class Cart {
     public void setTotalPriceAfterDiscount(double totalPriceAfterDiscount) {
         this.totalPriceAfterDiscount = totalPriceAfterDiscount;
     }
+
 }

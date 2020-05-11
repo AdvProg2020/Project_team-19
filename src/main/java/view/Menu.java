@@ -80,7 +80,44 @@ public abstract class Menu {
     }
 
     public void goBack () {
-        this.parentMenu.run ();
+        this.parentMenu.run ( );
+    }
+
+    public String getValidMenuNumber(int most)  {
+        String menuNum;
+        Pattern numPattern = Pattern.compile("[0-9]");
+        boolean check =false;
+        do {
+            menuNum = scanner.nextLine();
+            if (numPattern.matcher(menuNum).matches() && Integer.parseInt(menuNum)<=most){
+                check = true;
+            }else {
+                System.out.println("Your input number must be between 1 to" + most);
+            }
+        }while (!check);
+        return menuNum;
+    }
+
+    public static class WrongMenuNumberException extends Exception {
+        String massage;
+        public WrongMenuNumberException(int most){
+            massage = "Your input number must be between 1 to" + most;
+        }
+
+    }
+
+    public String getValidProductId () {
+        boolean check;
+        String input;
+        do {
+            input = scanner.nextLine ( );
+            check = ProductController.isThereProductById(input);
+            if (!check){
+                System.out.println("There no product with such username. Please enter product id again:");
+            }
+
+        }while (!check);
+        return input;
     }
 
 

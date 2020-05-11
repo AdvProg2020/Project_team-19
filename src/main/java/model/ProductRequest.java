@@ -49,11 +49,4 @@ public class ProductRequest extends Request {
     private void changeState() {
         salesperson.setProductState(product, ProductState.State.VERIFIED);
     }
-
-    @Override
-    public String toString() {
-        return "ProductRequest{" +
-                "salesperson=" + salesperson +
-                '}';
-    }
 }

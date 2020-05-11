@@ -18,7 +18,7 @@ public class Customer extends Person {
         super (personInfo);
         discountCodes = new HashMap<DiscountCode, Integer>();
         buyLogs = new ArrayList<BuyLog>();
-        Database.saveToFile(this,Database.createPath("customers",personInfo.get("username")));
+        Database.saveToFile(this,Database.createPath("customers",personInfo.get("username")),false);
     }
 
     public DiscountCode findDiscountCodeByCode(String code){
@@ -51,6 +51,18 @@ public class Customer extends Person {
 
     public void setCredit ( double credit ) {
         this.credit = credit;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    public boolean isProductBought(Product product){
+        for (BuyLog buyLog : buyLogs) {
+            if(buyLog.isThereProduct(product))
+                return true;
+        }
+        return false;
     }
 
     public double getCredit () {
