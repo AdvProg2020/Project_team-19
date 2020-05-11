@@ -1,5 +1,9 @@
 package model;
 
+import controller.Database;
+
+import java.io.IOException;
+
 import static controller.RequestController.allRequests;
 
 public abstract class Request {
@@ -10,9 +14,11 @@ public abstract class Request {
     private String requestId;
     private RequestState requestState;
 
-    public Request(String requestId, RequestState requestState) {
+    public Request(String requestId, RequestState requestState) throws IOException {
         this.requestId = requestId;
         this.requestState = requestState;
+        Database.saveToFile(this, Database.createPath("requests", requestId));
+        allRequests.add(this);
     }
 
     public RequestState getRequestState() {
@@ -23,7 +29,7 @@ public abstract class Request {
         return requestId;
     }
 
-    public abstract void doThis();
+    public abstract void doThis() throws IOException;
 
     public abstract String show();
 
@@ -35,4 +41,8 @@ public abstract class Request {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return requestId;
+    }
 }

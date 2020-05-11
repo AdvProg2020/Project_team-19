@@ -5,6 +5,7 @@ import controller.Database;
 import java.io.IOException;
 
 import static controller.ProductController.*;
+import static controller.RequestController.allRequests;
 
 public class ProductRequest extends Request {
     private Salesperson salesperson;
@@ -19,21 +20,23 @@ public class ProductRequest extends Request {
         this.amount = amount;
         this.salesperson = salesperson;
         this.product = product;
-        Database.saveToFile(this, Database.createPath("product_requests", requestId),false);
     }
 
 
     @Override
-    public void doThis() {
+    public void doThis() throws IOException {
         switch (getRequestState()) {
             case ADD:
                 addProduct(product, salesperson, amount, price);
                 changeState();
+                break;
             case EDIT:
                 editProduct(product, salesperson, amount, price);
                 changeState();
+                break;
             case DELETE:
                 removeProduct(product, salesperson);
+                break;
         }
     }
 
@@ -45,5 +48,12 @@ public class ProductRequest extends Request {
 
     private void changeState() {
         salesperson.setProductState(product, ProductState.State.VERIFIED);
+    }
+
+    @Override
+    public String toString() {
+        return "ProductRequest{" +
+                "salesperson=" + salesperson +
+                '}';
     }
 }

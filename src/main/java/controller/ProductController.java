@@ -4,6 +4,7 @@ import model.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.stream.Collectors;
@@ -30,11 +31,17 @@ public class ProductController {
         return null;
     }
 
-    public static void addExistProduct(Product product, Salesperson salesperson, int amount, double price) {
-        stock.get(product).add(salesperson);
+    public static void addExistProduct(Product product, Salesperson salesperson, int amount, double price) throws IOException {
+        if (stock.get(product) != null)
+            stock.get(product).add(salesperson);
+        else {
+            ArrayList<Salesperson> sellers = new ArrayList<>();
+            sellers.add(salesperson);
+            stock.put(product, sellers);
+        }
         salesperson.addToOfferedProducts(product, amount, price);
 
-        //change file ba write okeye
+        Database.editInFile(salesperson, "salespersons", salesperson.getUsername());
     }
 
     public static void addNewProduct(Product product, Salesperson salesperson, int amount, double price) {
@@ -49,7 +56,7 @@ public class ProductController {
         //be file ham add mikonim to stock
     }
 
-    public static void addProduct(Product product, Salesperson salesperson, int amount, double price) {
+    public static void addProduct(Product product, Salesperson salesperson, int amount, double price) throws IOException {
         if (getProductById(product.getID()) != null)
             addExistProduct(product, salesperson, amount, price);
 
@@ -59,19 +66,20 @@ public class ProductController {
     }
 
 
-    public static void editProduct(Product product, Salesperson salesperson, int amount, double price) {
+    public static void editProduct(Product product, Salesperson salesperson, int amount, double price) throws IOException {
         salesperson.editProduct(product, price, amount);
-        //to file ham edit she
-        //...
-        System.out.println("edit product");
+        Database.editInFile(salesperson, "salespersons", salesperson.getUsername());
+
+        //TODO edit stock file
     }
 
-    public static void removeProduct(Product product, Salesperson salesperson) {
+    public static void removeProduct(Product product, Salesperson salesperson) throws IOException {
         allProducts.remove(product);
         stock.get(product).remove(salesperson);
         salesperson.removeFromOfferedProducts(product);
 
-        //az file hazf she
+        //TODo edit stock file
+        Database.deleteFile(Database.createPath("products", product.getID()));
     }
 
     public static ArrayList<Product> filterByField(String fieldName, String property, Category category) {
@@ -122,8 +130,6 @@ public class ProductController {
         return sortedProducts;
     }
 }
-
-
 
 class SortByPrice implements Comparator<OwnedProduct> {
 

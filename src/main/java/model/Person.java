@@ -2,18 +2,14 @@ package model;
 
 import java.util.HashMap;
 
+import static controller.PersonController.allPersons;
+
 abstract public class Person {
-    private boolean isLoggedIn;
     private HashMap<String, String> personInfo;
-    private String username;
-    private String firstName;
-    private String lastName;
-    private String emailAddress;
-    private String phoneNumber;
-    private String password;
 
     public Person(HashMap<String, String> personInfo) {
-        this.personInfo = new HashMap<String, String>(personInfo);
+        this.personInfo = new HashMap<>(personInfo);
+        allPersons.add(this);
     }
 
     public String getPassword() {
@@ -30,5 +26,9 @@ abstract public class Person {
 
     public String getType() {
         return personInfo.get ( "type" );
+
+    @Override
+    public String toString() {
+        return personInfo.get("username");
     }
 }

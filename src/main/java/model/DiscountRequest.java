@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static controller.DiscountController.*;
+import static controller.RequestController.allRequests;
 import static model.Discount.getDiscountById;
 
 public class DiscountRequest extends Request {
@@ -25,7 +26,6 @@ public class DiscountRequest extends Request {
         this.endTime = endTime;
         this.discountPercentage = discountPercentage;
         this.salesperson = salesperson;
-        Database.saveToFile(this, Database.createPath("discountRequests", requestId),false);
     }
 
     @Override
@@ -33,10 +33,13 @@ public class DiscountRequest extends Request {
         switch (getRequestState()) {
             case ADD:
                 addDiscount(salesperson, new Discount(discountID, startTime, endTime, discountPercentage, products));
+                break;
             case EDIT:
                 editDiscount();
+                break;
             case DELETE:
                 removeDiscount(salesperson, getDiscountById(discountID));
+                break;
         }
     }
 
@@ -56,5 +59,12 @@ public class DiscountRequest extends Request {
         discount.setProducts(products);
         //...
         System.out.println("edit discount");
+    }
+
+    @Override
+    public String toString() {
+        return "DiscountRequest{" +
+                "discountID='" + discountID + '\'' +
+                '}';
     }
 }

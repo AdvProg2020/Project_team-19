@@ -19,7 +19,7 @@ public class Salesperson extends Person {
         sellLogs = new ArrayList<>();
         offeredProducts = new HashMap<>();
         discounts = new ArrayList<>();
-        Database.saveToFile(this, Database.createPath("salesperson", personInfo.get("username")),false);
+        Database.saveToFile(this, Database.createPath("salespersons", personInfo.get("username")));
     }
 
 
@@ -31,14 +31,6 @@ public class Salesperson extends Person {
 
     public double getDiscountPrice(Product product){
         return offeredProducts.get(product).getDiscount().getPriceAfterDiscount(offeredProducts.get(product).getPrice());
-    }
-
-    public void addToDiscounts(Discount discount){
-        discounts.add(discount);
-    }
-
-    public void removeFromDiscounts(Discount discount) {
-        discounts.remove(discount);
     }
 
     public void setProductState(Product product, ProductState.State state) {
@@ -63,6 +55,14 @@ public class Salesperson extends Person {
 
     public void addToOfferedProducts(Product offeredProduct, int amount, double price) {
         offeredProducts.put(offeredProduct, new ProductState( amount, price));
+    }
+
+    public void removeFromDiscounts(Discount discount) {
+        discounts.remove(discount);
+    }
+
+    public void addToDiscounts(Discount discount) {
+        discounts.add(discount);
     }
 
     public void removeFromOfferedProducts(Product offeredProduct) {
@@ -91,17 +91,9 @@ public class Salesperson extends Person {
     }
 
     public double discountAmount(Product product){
-        // return offeredProducts.get(product).discount
+       // return offeredProducts.get(product).discount
         return 1;
     }
-
-    @Override
-    public String toString() {
-        return "Salesperson{" +
-                "offeredProducts=" + offeredProducts +
-                '}';
-    }
-
 }
 
 class ProductState {

@@ -30,7 +30,8 @@ public class Product {
         this.category = category;
         this.count = 0;
         this.properties = properties;
-        Database.saveToFile(this, Database.createPath("products", productID + ".json"),false);
+        Database.saveToFile(this, Database.createPath("products", productID));
+        allProducts.add(this);
     }
 
 
@@ -73,8 +74,16 @@ public class Product {
         this.properties = properties;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
     @Override
     public String toString() {
+        return productID;
+
+    public String printProduct() {
         return "Product : " +
                 ", productID='" + productID + '\'' +
                 ", count=" + count +

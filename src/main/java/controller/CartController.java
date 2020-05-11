@@ -69,7 +69,7 @@ public class CartController {
         } else {
             DiscountCode thisDiscountCode = customer.findDiscountCodeByCode(discountCode);
             double tempPrice = customer.getCart().calculateTotalPrice();
-             double tempTotalPriceAfterDiscount = tempPrice * (thisDiscountCode.getDiscountPercentage());
+            double tempTotalPriceAfterDiscount = tempPrice * (thisDiscountCode.getDiscountPercentage());
             if (tempTotalPriceAfterDiscount > thisDiscountCode.getMaxDiscount()) {
                 tempTotalPriceAfterDiscount = thisDiscountCode.getMaxDiscount();
             }

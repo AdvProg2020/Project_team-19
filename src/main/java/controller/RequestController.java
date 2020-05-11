@@ -9,38 +9,31 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
+import static controller.Database.*;
 import static model.Product.getProductById;
 
 public class RequestController {
     public static ArrayList<Request> allRequests = new ArrayList<>();
 
-    public enum FilterType {
+    public enum FilterRequestType {
         ALL, SALESPERSON, PRODUCT, DISCOUNT
     }
 
     public static void initializeRequests() throws FileNotFoundException {
-        for (File file : Database.returnListOfFiles(Database.address.get("discount_requests"))) {
+        for (File file : Database.returnListOfFiles(Database.address.get("requests"))) {
             allRequests.add((DiscountRequest) Database.read(DiscountRequest.class, file.getAbsolutePath()));
         }
-        for (File file : Database.returnListOfFiles(Database.address.get("product_requests"))) {
-            allRequests.add((ProductRequest) Database.read(ProductRequest.class, file.getAbsolutePath()));
-        }
-        for (File file : Database.returnListOfFiles(Database.address.get("salesperson_requests"))) {
-            allRequests.add((SalespersonRequest) Database.read(SalespersonRequest.class, file.getAbsolutePath()));
-        }
     }
 
-    public static void acceptRequest(Request request) {
+    public static void acceptRequest(Request request) throws IOException {
         request.doThis();
         allRequests.remove(request);
-
-        //az file hazf she
+        deleteFile(createPath("requests", request.getRequestId()));
     }
 
-    public static void declineRequest(Request request) {
+    public static void declineRequest(Request request) throws IOException {
         allRequests.remove(request);
-
-        //az file hazf she
+        deleteFile(createPath("requests", request.getRequestId()));
     }
 
     public static void addSalesPerson(HashMap<String, String> personInfo) {
@@ -71,7 +64,7 @@ public class RequestController {
         return request.show();
     }
 
-    public static ArrayList<Request> processGetSpecificRequests(FilterType type) {
+    public static ArrayList<Request> processGetSpecificRequests(FilterRequestType type) {
         switch (type) {
             case SALESPERSON:
                 return getSpecificTypeOfRequests(SalespersonRequest.class);

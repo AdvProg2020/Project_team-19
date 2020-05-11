@@ -10,30 +10,18 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import model.*;
-
 public class Database {
 
-    public static HashMap<String,String> address = new HashMap<String, String>();
+    public static HashMap<String, String> address = new HashMap<>();
 
-    public static void initializeAddress(){
+    public static void initializeAddress() {
         String databaseAddress = System.getProperty("user.dir") + File.separator + "database";
-        address.put("customers",databaseAddress+File.separator+"persons"+File.separator+"customers");
-        address.put("managers",databaseAddress+File.separator+"persons"+File.separator+"managers");
-        address.put("salespersons",databaseAddress+File.separator+"persons"+File.separator+"salespersons");
-        address.put("products",databaseAddress+File.separator+"products");
-        address.put("discount_codes",databaseAddress+File.separator+"discount_codes");
-        address.put("product_requests",databaseAddress+File.separator+"requests"+File.separator+"product_requests");
-        address.put("salesperson_requests",databaseAddress+File.separator+"requests"+File.separator+"salesperson_requests");
-        address.put("discount_requests",databaseAddress+File.separator+"requests"+File.separator+"discount_requests");
-    }
-
-    public static <T> void writeAppend(T obj, String address) throws IOException {
-        GsonBuilder builder = new GsonBuilder().enableComplexMapKeySerialization();
-        Gson gson = builder.create();
-        FileWriter writer = new FileWriter(address, true);
-        writer.write(gson.toJson(obj));
-        writer.close();
+        address.put("customers", databaseAddress + File.separator + "persons" + File.separator + "customers");
+        address.put("managers", databaseAddress + File.separator + "persons" + File.separator + "managers");
+        address.put("salespersons", databaseAddress + File.separator + "persons" + File.separator + "salespersons");
+        address.put("products", databaseAddress + File.separator + "products");
+        address.put("discount_codes", databaseAddress + File.separator + "discount_codes");
+        address.put("requests", databaseAddress + File.separator + "requests");
     }
 
     public static <T> Object read(Type typeOfT, String address) throws FileNotFoundException {
@@ -51,12 +39,16 @@ public class Database {
         writer.close();
     }
 
+    public static <T> void editInFile(T obj, String keyPath, String fileName) throws IOException {
+        String filePath = createPath(keyPath, fileName);
+        deleteFile(filePath);
 
-    public static <T> void saveToFile(T object,String address,boolean append) throws IOException {
-        if(append){
-            writeAppend(object,address);
-        }else
-        Database.write(object,address);
+        String newFilePath = createPath(keyPath, obj.toString());
+        write(obj, newFilePath);
+    }
+
+    public static <T> void saveToFile(T object, String address) throws IOException {
+        Database.write(object, address);
     }
 
     public static String handleJsonObject(JsonReader reader, String wantedFieldName) throws IOException {
@@ -82,7 +74,7 @@ public class Database {
         return null;
     }
 
-    public static ArrayList<String> handleJsonArray(String filedName,String address) throws IOException {
+    public static ArrayList<String> handleJsonArray(String filedName, String address) throws IOException {
         JsonReader reader = new JsonReader(new FileReader(address));
         ArrayList<String> arrayList = new ArrayList<>();
         reader.beginArray();
@@ -103,11 +95,11 @@ public class Database {
         return arrayList;
     }
 
-    public static String createPath (String keyPath, String name) {
-        return address.get(keyPath) + "\\" + name;
+    public static String createPath(String keyPath, String name) {
+        return address.get(keyPath) + File.separator + name + ".json";
     }
 
-    public static File[] returnListOfFiles(String folderAddress){
+    public static File[] returnListOfFiles(String folderAddress) {
         File folder = new File(folderAddress);
         return folder.listFiles();
     }
@@ -122,7 +114,7 @@ public class Database {
         }
     }
 
-    public static class FileDoesNotExistsException extends Exception{
+    public static class FileDoesNotExistsException extends Exception {
         String message;
     }
 

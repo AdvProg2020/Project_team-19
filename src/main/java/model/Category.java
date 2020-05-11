@@ -14,6 +14,7 @@ public class Category {
     private ArrayList<Product> productList;
     private static Category current;
     private static Category tempCurrent;
+
     public Category(boolean isLeaf, String name, Category parent) {
         this.isLeaf = isLeaf;
 

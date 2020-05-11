@@ -1,13 +1,13 @@
-import model.DiscountRequest;
-import model.ProductRequest;
-import model.Request;
-import model.SalespersonRequest;
+import model.*;
 import controller.*;
 import org.junit.Test;
 
-import java.util.ArrayList;
+
+import static org.junit.Assert.*;
+import org.junit.Test;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.UUID;
+import static model.Product.stock;
 
 public class RequestTest {
     @Test
@@ -30,8 +30,24 @@ public class RequestTest {
     }
 
     @Test
-    public void TestForEnumProduct () {
+    public void acceptRequestsAndSellerCheck () throws IOException {
+        Database.initializeAddress();
+        Category category = new Category(true, "labaniat", null);
+        HashMap<String, String> properties1 = new HashMap<>();
+        properties1.put("color", "yellow");
+        Product product = new Product("1", "panir", "lighvan",
+                category.getName(), properties1);
 
+        stock.put(product, null);
+        HashMap<String, String> personInfo = new HashMap<>();
+        personInfo.put("username", "yeki");
+        personInfo.put("password", "salam");
+        Salesperson seller1 = new Salesperson(personInfo);
+
+        ProductRequest pr = new ProductRequest("idrequest", 2000, 2, Request.RequestState.ADD,seller1, product);
+        RequestController.acceptRequest(pr);
+
+        assertEquals(seller1.getProductPrice(product), 2000.0, 0);
     }
 
 }

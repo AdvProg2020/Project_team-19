@@ -26,7 +26,6 @@ public class RegisterController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        PersonController.addPerson(newCustomer);
     }
 
     public static void registerSalesperson (HashMap<String, String> personInfo) {

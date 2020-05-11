@@ -18,7 +18,7 @@ public class Customer extends Person {
         super (personInfo);
         discountCodes = new HashMap<DiscountCode, Integer>();
         buyLogs = new ArrayList<BuyLog>();
-        Database.saveToFile(this,Database.createPath("customers",personInfo.get("username")),false);
+        Database.saveToFile(this,Database.createPath("customers",personInfo.get("username")));
     }
 
     public DiscountCode findDiscountCodeByCode(String code){

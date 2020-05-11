@@ -28,7 +28,7 @@ public class Cart {
     }
 
     public double calculateTotalPrice(){
-        totalPrice =0;
+        totalPrice = 0;
         for (ProductStateInCart value : products.values()) {
             totalPrice+=value.price;
         }
@@ -54,7 +54,9 @@ public class Cart {
         for (Product product : products.keySet()) {
             Salesperson salesperson = products.get(product).salesperson;
             int count = products.get(product).count;
-            salesperson.addSellLogAndPurchase(new SellLog("",LocalDateTime.now(),salesperson.getProductPrice(product)*count,salesperson.discountAmount(product)*count,product, (Customer)PersonController.getLoggedInPerson(),true,count));
+            salesperson.addSellLogAndPurchase(new SellLog("",LocalDateTime.now(),salesperson.getProductPrice(product)*count,
+                    salesperson.discountAmount(product)*count,product, (Customer)PersonController.getLoggedInPerson()
+                    ,true,count));
         }
     }
 

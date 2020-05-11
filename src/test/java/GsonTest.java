@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import static controller.ProductController.allProducts;
+
 public class GsonTest {
 //    public void GsonTest {
 //        ArrayList <Test> tests = new ArrayList<Test>();
@@ -100,7 +102,6 @@ public class GsonTest {
         Product product1 = new Product("2", "shir", "mihan", category.getName(),
                 properties1);
         //Database.writeAppend(product, "C:\\Users\\HAMID\\Desktop\\Product.json");
-        Database.writeAppend(product1, "C:\\Users\\HAMID\\Desktop\\Product.json");
         System.out.println(Database.read(Product.class, "C:\\Users\\HAMID\\Desktop\\Product.json"));
     }
 
@@ -109,5 +110,17 @@ public class GsonTest {
         String path = System.getProperty("user.dir");
 
         System.out.println("Working Directory = " + path);
+    }
+
+    @Test
+    public void edit() throws IOException {
+        Database.initializeAddress();
+        Category category = new Category(true, "labaniat", null);
+        HashMap<String, String> properties1 = new HashMap<>();
+        properties1.put("color", "yellow");
+        Product product = new Product("new", "panir", "lighvan",
+                category.getName(), properties1);
+        product.setName("shiiir");
+        Database.editInFile(product, "products", product.getID());
     }
 }
