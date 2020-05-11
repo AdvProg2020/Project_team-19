@@ -25,7 +25,7 @@ public class DiscountRequest extends Request {
         this.endTime = endTime;
         this.discountPercentage = discountPercentage;
         this.salesperson = salesperson;
-        Database.saveToFile(this, Database.createPath("discountRequests", requestId));
+        Database.saveToFile(this, Database.createPath("discountRequests", requestId),false);
     }
 
     @Override

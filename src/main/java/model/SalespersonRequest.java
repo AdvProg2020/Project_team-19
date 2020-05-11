@@ -13,7 +13,7 @@ public class SalespersonRequest extends Request {
     public SalespersonRequest(HashMap<String, String> personInfo, String requestId) throws IOException {
         super(requestId, null);
         this.personInfo = personInfo;
-        Database.saveToFile(this, Database.createPath("salesPersonRequests", requestId));
+        Database.saveToFile(this, Database.createPath("salesPersonRequests", requestId),false);
     }
 
     @Override

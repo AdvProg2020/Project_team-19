@@ -3,6 +3,7 @@ package view;
 import controller.PersonController;
 import controller.RegisterController;
 
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,6 +40,9 @@ public class LoginMenu extends Menu {
 
     private static String typeInstance;
 
+    private static final String CREATE_ACCOUNT_HELP = "Enter type and username in the order shown below :" + "\n" + "create account [type] [username]";
+    private static final String LOGIN_HELP = "You can login with your username by typing :" + "\n" + "login [username]";
+
     private static final Pattern[] patternArray = {passwordPattern , namePattern , namePattern , emailPattern , phonePattern};
 
     private static final String[] informationArray = {"password" , "first name" , "last name" , "email" , "phone number"};
@@ -59,6 +63,17 @@ public class LoginMenu extends Menu {
         personInfo = new HashMap <> ( );
     }
 
+    @Override
+    public void execute () { //ToDo add this to customer and salesperson and manager
+        Menu nextMenu;
+        int chosenMenu = Integer.parseInt(scanner.nextLine());
+        if (chosenMenu == subMenus.size() + 1) {
+            nextMenu = this.parentMenu.parentMenu;
+        } else
+            nextMenu = subMenus.get(chosenMenu);
+        nextMenu.run ();
+    }
+
     private Menu getRegisterMenu () {
         return new Menu ( "Register" , this ) {
             @Override
@@ -69,19 +84,20 @@ public class LoginMenu extends Menu {
             @Override
             public void execute () {
 
-                System.out.println ( "Enter type and username in the order shown below :" );
-                System.out.println ( "create account [type] [username]" );
-
                 getTypeAndUsernameForRegister ( );
+                if (!BACK_PRESSED)
+                    getPasswordTillEnd ( );
 
-                getPasswordTillEnd ( );
 
                 //ToDo write on Database
-                RegisterController.register ( personInfo );
+                if (!BACK_PRESSED) {
+                    RegisterController.register ( personInfo );
 
-                System.out.println ( "A verification code has been sent to your email." );
-                System.out.println ( "Just kidding lmao" );
-                System.out.println ( "You can log in whenever you wanted to" );
+                    System.out.println ( "A verification code has been sent to your email." );
+                    System.out.println ( "Just kidding lmao" );
+                    System.out.println ( "You can log in whenever you wanted to" );
+                }
+                BACK_PRESSED = false;
             }
         };
     }
@@ -95,11 +111,7 @@ public class LoginMenu extends Menu {
 
             @Override
             public void execute () {
-                System.out.println ( "You can login with your username by typing :" );
-                System.out.println ( "login [username]" );
-
                 getUsernameForLogin();
-
             }
         };
     }
@@ -108,13 +120,15 @@ public class LoginMenu extends Menu {
         return regex.matcher ( input ).matches ( );
     }
 
-    private String getValidInput ( Pattern regex, int arrayIndex ) {
+    private String getValidInput ( Pattern regex, int arrayIndex) {
         boolean check;
         String input;
         do {
             if ( regex.equals ( phonePattern ) )
                 System.out.print ( "+" );
             input = scanner.nextLine ( );
+            if (input.equals ( BACK_BUTTON ))
+                return BACK_BUTTON;
             check = checkRegex ( regex , input );
             if ( !check )
                 System.out.println ( "Invalid input\n" +
@@ -131,7 +145,13 @@ public class LoginMenu extends Menu {
         String input;
         Matcher inputsMatcher;
         do {
+            System.out.println ( CREATE_ACCOUNT_HELP );
+            System.out.println ( BACK_HELP );
             input = scanner.nextLine ( );
+            if (input.equals ( BACK_BUTTON )) {
+                BACK_PRESSED = true;
+                break;
+            }
             inputsMatcher = createAccountPattern.matcher ( input );
             check = registerHandler ( inputsMatcher );
         } while ( !check );
@@ -145,15 +165,25 @@ public class LoginMenu extends Menu {
         String username = null;
         String password;
         do {
+            System.out.println ( LOGIN_HELP );
+            System.out.println ( BACK_HELP );
             input = scanner.nextLine ( );
+            if (input.equals ( BACK_BUTTON )) {
+                BACK_PRESSED = true;
+                break;
+            }
             System.out.println ( "Enter password" );
             password = scanner.nextLine ( );
+            if (input.equals ( BACK_BUTTON )) { //ToDo Tamiz nis. Tamiz this.
+                BACK_PRESSED = true;
+                break;
+            }
             inputsMatcher = loginPattern.matcher ( input );
             check = loginHandler ( inputsMatcher , password );
         } while ( !check );
 
         usernameInstance = username;
-        //ToDo typeInstance = getTypeFromList(username);
+        typeInstance = PersonController.getTypeFromList(username);
 
     }
 
@@ -210,6 +240,11 @@ public class LoginMenu extends Menu {
         for (int i = 0; i < 5; i++) {
             System.out.println ( "Enter " + informationArray[i] );
             input = getValidInput ( patternArray[i] , i );
+            if (input.equals ( BACK_BUTTON )) {
+                personInfo.clear ();
+                BACK_PRESSED = true;
+                return;
+            }
             personInfo.put ( informationArray[i] , input );
         }
     }

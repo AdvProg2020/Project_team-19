@@ -1,7 +1,5 @@
 package view;
 
-import model.UserMenu;
-
 public class MainMenu extends Menu {
     public MainMenu(Menu parent){
         super("Main Menu", parent);

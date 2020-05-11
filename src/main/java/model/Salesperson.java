@@ -33,6 +33,14 @@ public class Salesperson extends Person {
         return offeredProducts.get(product).getDiscount().getPriceAfterDiscount(offeredProducts.get(product).getPrice());
     }
 
+    public void addToDiscounts(Discount discount){
+        discounts.add(discount);
+    }
+
+    public void removeFromDiscounts(Discount discount) {
+        discounts.remove(discount);
+    }
+
     public void setProductState(Product product, ProductState.State state) {
         offeredProducts.get(product).setState(state);
     }
@@ -83,7 +91,7 @@ public class Salesperson extends Person {
     }
 
     public double discountAmount(Product product){
-       // return offeredProducts.get(product).discount
+        // return offeredProducts.get(product).discount
         return 1;
     }
 

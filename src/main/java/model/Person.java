@@ -27,4 +27,8 @@ abstract public class Person {
     public String getUsername() {
         return personInfo.get("username");
     }
+
+    public String getType() {
+        return personInfo.get ( "type" );
+    }
 }

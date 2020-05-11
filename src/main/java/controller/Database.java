@@ -56,7 +56,7 @@ public class Database {
         if(append){
             writeAppend(object,address);
         }else
-        Database.write(object,object.getClass(),address);
+        Database.write(object,address);
     }
 
     public static String handleJsonObject(JsonReader reader, String wantedFieldName) throws IOException {

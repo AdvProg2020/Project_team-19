@@ -39,9 +39,9 @@ public class PersonController {
         return loggedInPerson!=null;
     }
 
-    public static boolean isTherePersonByUsername(String username) throws UsernameNotFoundException {
+    public static boolean isTherePersonByUsername(String username) {
         if(findPersonByUsername(username) == null)
-            throw new UsernameNotFoundException();
+            return false;
         return true;
     }
 
@@ -61,9 +61,9 @@ public class PersonController {
         if ( !Pattern.compile ( "\\w{3,}" ).matcher ( username ).matches ( ) ) //ToDo put this in view
             throw new Exception ( "Username should contain more than 3 characters." );
         else if(!isTherePersonByUsername(username)){
-            throw new UsernameNotFoundException();
+            throw new UsernameNotFoundException("This username does not exist");
         }else if(!checkPassword(password,username)){
-            throw new WrongPasswordException();
+            throw new WrongPasswordException("Incorrect password");
         }else {
             loggedInPerson = findPersonByUsername(username);
             goToMenu();
@@ -76,16 +76,20 @@ public class PersonController {
 
     public static boolean checkPassword ( String password , String username ) throws WrongPasswordException{
         if (!findPersonByUsername(username).getPassword().equals(password))
-            throw new WrongPasswordException();
+            throw new WrongPasswordException("Incorrect password");
         return true;
     }
 
     public static class UsernameNotFoundException extends Exception{
-        String message="This username does not exist";
+        UsernameNotFoundException ( String message ) {
+            super ( message );
+        }
     }
 
     public static class WrongPasswordException extends Exception{
-        String message="Incorrect password";
+        public WrongPasswordException ( String message ) {
+            super ( message );
+        }
     }
 
     public static Person getLoggedInPerson() {
@@ -107,6 +111,14 @@ public class PersonController {
     private static void goToMenu () {
 //        if (loggedInPerson instanceof Customer)
 //            CustomerMenu
+    }
+
+    public static String getTypeFromList (String username) {
+        for (Person person : allPersons) {
+            if (person.getUsername ().equals ( username ))
+                return person.getType ();
+        }
+        return null;
     }
 }
 

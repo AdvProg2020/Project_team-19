@@ -5,14 +5,17 @@ import java.util.Scanner;
 
 public abstract class Menu {
     private String name;
-    protected Menu parentMenu;
+    Menu parentMenu;
     protected HashMap <Integer,Menu> subMenus;
-    public static Scanner scanner;
+    static Scanner scanner;
+    static final String BACK_BUTTON = "..";
+    static final String BACK_HELP = "You can type \"..\" to cancel the process";
+    static boolean BACK_PRESSED;
 
     public Menu (String name, Menu parentMenu) {
         this.name = name;
         this.parentMenu = parentMenu;
-        subMenus = new HashMap <Integer, Menu> ();
+        subMenus = new HashMap <> ( );
     }
 
     public static void setScanner(Scanner scanner) {
@@ -36,16 +39,16 @@ public abstract class Menu {
 
     public void execute () {
         Menu nextMenu = null;
-        int chosenMenu = Integer.parseInt(scanner.nextLine());
-        if (chosenMenu == subMenus.size() + 1) {
-            if (this.parentMenu == null)
-                System.exit(1);
+        int chosenMenu = Integer.parseInt ( scanner.nextLine ( ) );
+        if ( chosenMenu == subMenus.size ( ) + 1 ) {
+            if ( this.parentMenu == null )
+                System.exit ( 1 );
             else
-                nextMenu = this.parentMenu;
+                return;
         } else
-            nextMenu = subMenus.get(chosenMenu);
-        nextMenu.show();
-        nextMenu.execute();
+            nextMenu = subMenus.get ( chosenMenu );
+        nextMenu.run ( );
+        this.run ();
     }
 
     protected Menu getHelpMenu(Menu parent) {
@@ -71,9 +74,13 @@ public abstract class Menu {
         };
     }
 
-    protected void run (Menu menu) {
-        menu.show ();
-        menu.execute ();
+    public void run () {
+        this.show ();
+        this.execute ();
+    }
+
+    public void goBack () {
+        this.parentMenu.run ();
     }
 
 
