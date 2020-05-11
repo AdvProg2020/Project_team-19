@@ -1,0 +1,107 @@
+package model;
+
+import controller.Database;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import static controller.ProductController.allProducts;
+
+public class Product {
+    public static HashMap<Product, ArrayList<Salesperson>> stock = new HashMap<>();
+
+    private HashMap<String, String> properties;
+    private String productID;
+    private int count;
+    private String name;
+    private String brand;
+    private String category;
+    private String description;
+    private double averageScore;
+    private double averagePrice;
+    private double leastPrice;
+    private ArrayList<Comment> comments;
+
+    public Product(String productID, String name, String brand, String category,
+                   HashMap<String, String> properties) throws IOException {
+
+        this.productID = productID;
+        this.name = name;
+        this.brand = brand;
+        this.category = category;
+        this.count = 0;
+        this.properties = properties;
+        Database.saveToFile(this, Database.createPath("products", productID + ".json"),false);
+    }
+
+
+    public boolean isAvailable() {
+        return count > 0;
+    }
+
+    public HashMap<String, String> getProperties() {
+        return properties;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getAverageScore() {
+        return averageScore;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public String getID() {
+        return productID;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public ArrayList<Comment> getComments() {
+        return comments;
+    }
+
+    public double getAveragePrice() {
+        return averagePrice;
+    }
+
+    public double getLeastPrice() {
+        return leastPrice;
+    }
+
+    public void addComment(Comment comment){
+        comments.add(comment);
+    }
+
+    public static Product getProductById(String productID) {
+        for (Product product : allProducts) {
+            if (product.getID().equals(productID))
+                return product;
+        }
+        return null;
+    }
+
+    public void edit(String name, String brand, String category, HashMap<String, String> properties) {
+        this.name = name;
+        this.brand = brand;
+        this.category = category;
+        this.properties = properties;
+    }
+
+    @Override
+    public String toString() {
+        return "Product : " +
+                ", productID='" + productID + '\'' +
+                ", count=" + count +
+                ", name='" + name + '\'' +
+                ", brand='" + brand + '\'' +
+                '}';
+    }
+}
