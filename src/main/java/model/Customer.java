@@ -53,6 +53,10 @@ public class Customer extends Person {
         this.credit = credit;
     }
 
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
     public double getCredit () {
         return credit;
     }

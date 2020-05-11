@@ -38,7 +38,7 @@ public class CartController {
     }
 
     public void setLoggedInPersonCart(){
-       // ( (Customer)PersonController.getLoggedInPerson()).getCart().setProducts(products);
+        ( (Customer)PersonController.getLoggedInPerson()).setCart(new Cart(tempCart));
     }
 
     public double calculateTotalPrice() {

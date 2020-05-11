@@ -66,6 +66,9 @@ public class PersonController {
             throw new WrongPasswordException();
         }else {
             loggedInPerson = findPersonByUsername(username);
+            if(isLoggedInPersonCustomer()){
+                CartController.getInstance().setLoggedInPersonCart();
+            }
             goToMenu();
         }
     }
