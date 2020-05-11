@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class PersonController {
-    private static ArrayList<Person> allPersons = new ArrayList<>();
+    public static ArrayList<Person> allPersons = new ArrayList<>();
     private static Person loggedInPerson = null;
 
     public static void initializePersons() throws FileNotFoundException {

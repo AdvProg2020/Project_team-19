@@ -1,7 +1,10 @@
 package view;
 
+import controller.ProductController;
+
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public abstract class Menu {
     private String name;

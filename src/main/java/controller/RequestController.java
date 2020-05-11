@@ -15,7 +15,7 @@ import static model.Product.getProductById;
 public class RequestController {
     public static ArrayList<Request> allRequests = new ArrayList<>();
 
-    public enum FilterRequestType {
+    public enum FilterType {
         ALL, SALESPERSON, PRODUCT, DISCOUNT
     }
 
@@ -64,7 +64,7 @@ public class RequestController {
         return request.show();
     }
 
-    public static ArrayList<Request> processGetSpecificRequests(FilterRequestType type) {
+    public static ArrayList<Request> processGetSpecificRequests( FilterType type) {
         switch (type) {
             case SALESPERSON:
                 return getSpecificTypeOfRequests(SalespersonRequest.class);

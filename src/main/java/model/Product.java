@@ -104,6 +104,7 @@ public class Product {
     @Override
     public String toString() {
         return productID;
+    }
 
     public String printProduct() {
         return "Product : " +

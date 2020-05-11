@@ -26,6 +26,7 @@ abstract public class Person {
 
     public String getType() {
         return personInfo.get ( "type" );
+    }
 
     @Override
     public String toString() {
