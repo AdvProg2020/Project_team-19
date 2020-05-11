@@ -53,4 +53,8 @@ public class Comment {
     public boolean isCommentVerified(){
         return state.equals(VerifiedState.VERIFIED);
     }
+
+    public void setBought(boolean bought) {
+        isBought = bought;
+    }
 }

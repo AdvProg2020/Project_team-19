@@ -172,15 +172,17 @@ public class ViewProductMenu extends Menu {
     }
 
     public void buildComment( Customer customer){
-        System.out.println("please enter your comment title or press \"E\" to return to previous menu: ");
+        System.out.println("please enter your comment title or enter \"..\" to return to previous menu: ");
         String commentTitle = scanner.nextLine();
-        System.out.println("please enter your comment or press \"E\" to return to previous menu: ");
+        System.out.println("please enter your comment or enter \"..\" to return to previous menu: ");
         String string = scanner.nextLine();
-        if(string.equalsIgnoreCase("E")){
+        if(string.equalsIgnoreCase("..")){
             return;
         }else {
-            //TODO manage is bought
             Comment newComment = new Comment(true,customer,string,commentTitle);
+            if(customer.isProductBought(product)){
+                newComment.setBought(true);
+            }
             product.addComment(newComment);
         }
 

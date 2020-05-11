@@ -25,4 +25,8 @@ public class BuyLog {
         this.tradedProductList = tradedProductList;
         this.reachedBuyer = reachedBuyer;
     }
+
+    public boolean isThereProduct(Product product){
+        return tradedProductList.containsKey(product);
+    }
 }

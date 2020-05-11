@@ -57,6 +57,14 @@ public class Customer extends Person {
         this.cart = cart;
     }
 
+    public boolean isProductBought(Product product){
+        for (BuyLog buyLog : buyLogs) {
+            if(buyLog.isThereProduct(product))
+                return true;
+        }
+        return false;
+    }
+
     public double getCredit () {
         return credit;
     }
