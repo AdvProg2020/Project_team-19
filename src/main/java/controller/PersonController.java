@@ -21,6 +21,7 @@ public class PersonController {
         }
         for (File file : Database.returnListOfFiles(Database.address.get("managers"))) {
             allPersons.add((Manager) Database.read(Manager.class,file.getAbsolutePath()));
+            RegisterController.setFirstManagerRegistered ( true );
         }
         for (File file : Database.returnListOfFiles(Database.address.get("salespersons"))) {
             allPersons.add((Salesperson) Database.read(Salesperson.class,file.getAbsolutePath()));

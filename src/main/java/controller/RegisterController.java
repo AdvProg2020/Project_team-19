@@ -1,6 +1,7 @@
 package controller;
 
 import model.*;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -29,7 +30,11 @@ public class RegisterController {
     }
 
     public static void registerSalesperson (HashMap<String, String> personInfo) {
-//        SalespersonRequest request = new SalespersonRequest(personInfo, );
+        try {
+            SalespersonRequest request = new SalespersonRequest(personInfo, RandomStringUtils.random ( 4 ) );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 //        taeed modir va ...
     }
 
@@ -37,7 +42,11 @@ public class RegisterController {
         return firstManagerRegistered;
     }
 
-    public static void registerManager (HashMap<String, String> personInfo) {
+    public static void setFirstManagerRegistered ( boolean firstManagerRegistered ) {
+        RegisterController.firstManagerRegistered = firstManagerRegistered;
+    }
+
+    public static void registerManager ( HashMap<String, String> personInfo) {
         try {
             Manager manager = new Manager(personInfo);
             firstManagerRegistered = true;

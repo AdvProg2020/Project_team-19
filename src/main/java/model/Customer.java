@@ -73,6 +73,10 @@ public class Customer extends Person {
         buyLogs.add(buyLog);
     }
 
+    public ArrayList < BuyLog > getBuyLogs () {
+        return buyLogs;
+    }
+
     public void updateHistory () {
 
     }

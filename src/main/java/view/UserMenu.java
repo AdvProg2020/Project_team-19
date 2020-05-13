@@ -1,14 +1,17 @@
 package view;
 
 import controller.PersonController;
-import view.CustomerMenu;
 import model.Manager;
 import model.Person;
 import model.Salesperson;
+import view.*;
+
+import static controller.PersonController.getLoggedInPerson;
 
 public class UserMenu extends Menu {
     public UserMenu (Menu parent) {
         super ( "User Menu" , parent );
+
     }
 
     @Override
@@ -18,18 +21,20 @@ public class UserMenu extends Menu {
 
     @Override
     public void execute () {
-        Person loggedInPerson = PersonController.getLoggedInPerson ();
-        if ( loggedInPerson == null ) {
+        if ( getLoggedInPerson () == null ) {
             LoginMenu loginMenu = new LoginMenu ( this );
             loginMenu.run ();
         }
         else {
-            if (loggedInPerson instanceof Manager ) {
+            if (getLoggedInPerson () instanceof Manager ) {
                 ManagerMenu managerMenu = new ManagerMenu ( this );
-            } else if (loggedInPerson instanceof Salesperson ) {
+                managerMenu.run();
+            } else if (getLoggedInPerson () instanceof Salesperson ) {
                 SalespersonMenu salespersonMenu = new SalespersonMenu ( this );
+                salespersonMenu.run();
             } else {
                 CustomerMenu customerMenu = new CustomerMenu ( this );
+                customerMenu.run ();
             }
         }
     }

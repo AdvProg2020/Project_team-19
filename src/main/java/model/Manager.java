@@ -12,11 +12,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class Manager extends Person  {
-    public static ArrayList<Manager> managers;
+    public static ArrayList<Manager> managers = new ArrayList <> (  );
 
     public Manager(HashMap<String, String> personInfo) throws IOException {
         super(personInfo);
         managers.add(this);
-        Database.saveToFile(this,Database.createPath("manager", personInfo.get("username")));
+        Database.saveToFile(this,Database.createPath("managers", personInfo.get("username")));
     }
 }

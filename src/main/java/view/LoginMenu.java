@@ -3,23 +3,27 @@ package view;
 import controller.PersonController;
 import controller.RegisterController;
 
-import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static view.LoginMenu.PersonInfo.*;
 
 public class LoginMenu extends Menu {
 
     private HashMap < String, String > personInfo;
 
-    public enum PersonType {
-        CUSTOMER ( "Customer" ),
-        SALESPERSON ( "Salesperson" ),
-        MANAGER ( "Manager" );
+    public enum PersonInfo {
+        USERNAME ( "username" ),
+        PASSWORD ("password"),
+        FIRST_NAME ( "first name" ),
+        LAST_NAME ( "last name" ),
+        EMAIL ("email"),
+        PHONE ("phone number");
 
         public final String label;
 
-        PersonType ( String label ) {
+        PersonInfo ( String label ) {
             this.label = label;
         }
     }
@@ -43,16 +47,16 @@ public class LoginMenu extends Menu {
     private static final String CREATE_ACCOUNT_HELP = "Enter type and username in the order shown below :" + "\n" + "create account [type] [username]";
     private static final String LOGIN_HELP = "You can login with your username by typing :" + "\n" + "login [username]";
 
-    private static final Pattern[] patternArray = {passwordPattern , namePattern , namePattern , emailPattern , phonePattern};
+    public static final Pattern[] patternArray = {passwordPattern , namePattern , namePattern , emailPattern , phonePattern};
 
-    private static final String[] informationArray = {"password" , "first name" , "last name" , "email" , "phone number"};
+    public static final String[] informationArray = {PASSWORD.label , FIRST_NAME.label , LAST_NAME.label , EMAIL.label , PHONE.label};
 
-    private static final String[] helpArray = {
+    public static final String[] helpArray = {
             "Your password should be more than 8 characters and should contain at least 1 small letter, 1 capital letter, and 1 number." ,
             "Pardon me " + usernameInstance + " but that definitely isn't how your first name is written." ,
             usernameInstance + " is that seriously your last name?" ,
             "Enter a valid email address " + usernameInstance + ". It should be like this : blah@blah.blah" ,
-            "Enter a valid phone number " + usernameInstance + ". You shouldn't put +, I already put that for you >:("};
+            "Enter a valid phone number " + usernameInstance + ". You shouldn't put +, I already put that for you >:("}; //ToDo null mide
 
 
     public LoginMenu ( Menu parent ) {
@@ -66,7 +70,7 @@ public class LoginMenu extends Menu {
     @Override
     public void execute () { //ToDo add this to customer and salesperson and manager
         Menu nextMenu;
-        int chosenMenu = Integer.parseInt(scanner.nextLine());
+        int chosenMenu = Integer.parseInt(getValidMenuNumber ( subMenus.size () + 1 ));
         if (chosenMenu == subMenus.size() + 1) {
             nextMenu = this.parentMenu.parentMenu;
         } else
@@ -116,11 +120,11 @@ public class LoginMenu extends Menu {
         };
     }
 
-    private boolean checkRegex ( Pattern regex , String input ) {
+    private static boolean checkRegex ( Pattern regex , String input ) {
         return regex.matcher ( input ).matches ( );
     }
 
-    private String getValidInput ( Pattern regex, int arrayIndex) {
+    public static String getValidInput ( Pattern regex, int arrayIndex) {
         boolean check;
         String input;
         do {
@@ -132,7 +136,7 @@ public class LoginMenu extends Menu {
             check = checkRegex ( regex , input );
             if ( !check )
                 System.out.println ( "Invalid input\n" +
-                                        "[Help : \n" + helpArray[arrayIndex]);
+                                        "[Help : \n" + helpArray[arrayIndex] + "]");
         } while ( !check );
 
         return input;
@@ -198,8 +202,7 @@ public class LoginMenu extends Menu {
             try {
                 type = inputsMatcher.group ( 1 );
                 username = inputsMatcher.group ( 2 );
-                if ( !typePattern.matcher ( type ).matches ( ) )
-                    throw new Exception ("This type isn't valid.");
+                registerTypeErrorHandler ( type );
                 registerUsernameErrorHandler ( username );
                 System.out.println ( "Yaaay! It was successful! Now enter your information to complete the registration process." );
                 usernameInstance = username;
@@ -247,6 +250,13 @@ public class LoginMenu extends Menu {
             }
             personInfo.put ( informationArray[i] , input );
         }
+    }
+
+    private void registerTypeErrorHandler(String type) throws Exception {
+        if ( !typePattern.matcher ( type ).matches ( ) )
+            throw new Exception ("This type isn't valid.");
+        if ( type.equalsIgnoreCase ( "manager" ) && RegisterController.isFirstManagerRegistered () )
+            throw new Exception ( "You can't add a manager. Contact one of the existing managers." );
     }
 
 

@@ -8,6 +8,17 @@ public class SalespersonMenu extends Menu {
         subMenus.put(3,new SalespersonProductMenu(this));
     }
 
+    @Override
+    public void execute () { //ToDo add this to customer and salesperson and manager
+        Menu nextMenu;
+        int chosenMenu = Integer.parseInt(getValidMenuNumber ( subMenus.size () + 1 ));
+        if (chosenMenu == subMenus.size() + 1) {
+            nextMenu = this.parentMenu.parentMenu;
+        } else
+            nextMenu = subMenus.get(chosenMenu);
+        nextMenu.run ();
+    }
+
     public Menu getShowCompanyInfo(){
         return new Menu("Show Campany Information",this) {
             @Override

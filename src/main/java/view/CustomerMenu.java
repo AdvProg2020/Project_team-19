@@ -22,11 +22,22 @@ public class CustomerMenu extends Menu {
         subMenus.put(6,getViewBalanceMenu());
     }
 
+    @Override
+    public void execute () { //ToDo add this to customer and salesperson and manager
+        Menu nextMenu;
+        int chosenMenu = Integer.parseInt(getValidMenuNumber ( subMenus.size () + 1 ));
+        if (chosenMenu == subMenus.size() + 1) {
+            nextMenu = this.parentMenu.parentMenu;
+        } else
+            nextMenu = subMenus.get(chosenMenu);
+        nextMenu.run ();
+    }
+
     public Menu getViewBalanceMenu(){
         return new Menu("View Balance",this) {
             @Override
             public void show() {
-                //htmn customer bshe vqti b inja mirse, k exception nkhorim
+                //ToDo htmn customer bshe vqti b inja mirse, k exception nkhorim
                 System.out.println ( "Your balance is :" );
                 System.out.println ( thisGuy.getCredit () );
             }
@@ -52,11 +63,4 @@ public class CustomerMenu extends Menu {
         };
     }
 
-    public void show() {
-        System.out.println ( this.getName () + " :" );
-    }
-
-    public void execute() {
-
-    }
 }

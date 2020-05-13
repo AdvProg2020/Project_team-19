@@ -42,7 +42,7 @@ public abstract class Menu {
 
     public void execute () {
         Menu nextMenu = null;
-        int chosenMenu = Integer.parseInt ( scanner.nextLine ( ) );
+        int chosenMenu = Integer.parseInt ( getValidMenuNumber ( subMenus.size () + 1 ) );
         if ( chosenMenu == subMenus.size ( ) + 1 ) {
             if ( this.parentMenu == null )
                 System.exit ( 1 );
@@ -82,9 +82,9 @@ public abstract class Menu {
         this.execute ();
     }
 
-    public void goBack () {
-        this.parentMenu.run ( );
-    }
+//    public void goBack () {
+//        this.parentMenu.run ( );
+//    }
 
     public String getValidMenuNumber(int most)  {
         String menuNum;
@@ -95,16 +95,15 @@ public abstract class Menu {
             if (numPattern.matcher(menuNum).matches() && Integer.parseInt(menuNum)<=most){
                 check = true;
             }else {
-                System.out.println("Your input number must be between 1 to" + most);
+                System.out.println("Your input number must be between 1 to " + most);
             }
         }while (!check);
         return menuNum;
     }
 
     public static class WrongMenuNumberException extends Exception {
-        String massage;
         public WrongMenuNumberException(int most){
-            massage = "Your input number must be between 1 to" + most;
+            super ("Your input number must be between 1 to" + most);
         }
 
     }
@@ -114,6 +113,8 @@ public abstract class Menu {
         String input;
         do {
             input = scanner.nextLine ( );
+            if (input.equals ( BACK_BUTTON ))
+                break;
             check = ProductController.isThereProductById(input);
             if (!check){
                 System.out.println("There no product with such username. Please enter product id again:");

@@ -21,6 +21,7 @@ public class CartMenu extends Menu {
             @Override
             public void show() {
                 showCartTable();
+                super.show ();
             }
 
             @Override
@@ -33,16 +34,18 @@ public class CartMenu extends Menu {
     public Menu getViewProductMenu() {
         return new Menu("View Product", this) {
             @Override
-            public void show() {
-                super.show();
-            }
+            public void show() { }
 
             @Override
             public void execute() {
                 System.out.println("Please enter product id:");
+                System.out.println ("Or you can type .. if you want to surrender." );
                 String id = getValidProductId();
+                if (id.equals ( BACK_BUTTON ))
+                    return;
                 Product product = ProductController.searchProduct(id);
                 ViewProductMenu viewProductMenu = new ViewProductMenu(this, product);
+                viewProductMenu.run ();
             }
         };
     }
@@ -50,14 +53,15 @@ public class CartMenu extends Menu {
     public Menu getIncreaseProductMenu() {
         return new Menu("Increase Product", this) {
             @Override
-            public void show() {
-                super.show();
-            }
+            public void show() { }
 
             @Override
             public void execute() {
                 System.out.println("Please enter product id:");
+                System.out.println ("Or you can type .. if you want to surrender." );
                 String id = getValidProductId();
+                if (id.equals ( BACK_BUTTON ))
+                    return;
                 Product product = ProductController.searchProduct(id);
                 CartController.getInstance().setProductCount(product, 1);
             }
@@ -67,14 +71,15 @@ public class CartMenu extends Menu {
     public Menu getDecreaseProductMenu() {
         return new Menu("Decrease Product", this) {
             @Override
-            public void show() {
-                super.show();
-            }
+            public void show() { }
 
             @Override
             public void execute() {
                 System.out.println("Please enter product id:");
+                System.out.println ("Or you can type .. if you want to surrender." );
                 String id = getValidProductId();
+                if (id.equals ( BACK_BUTTON ))
+                    return;
                 Product product = ProductController.searchProduct(id);
                 CartController.getInstance().setProductCount(product, 1);
             }
@@ -86,18 +91,12 @@ public class CartMenu extends Menu {
             @Override
             public void show() {
                 System.out.println("Subtotal(" + CartController.getInstance().itemNumber() + " items): " + CartController.getInstance().calculateTotalPrice() + "Toman");
-                System.out.println("press back to return");
+                super.show ();
             }
 
             @Override
             public void execute() {
-                String input;
-                do {
-                    input = scanner.nextLine();
-                    if (input.equalsIgnoreCase("back")) {
-                        return;
-                    }
-                } while (true);
+                super.execute ();
             }
         };
     }
