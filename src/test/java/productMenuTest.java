@@ -31,7 +31,7 @@ public class productMenuTest {
         Product product1 = new Product("1", "panir", "lighvan", category.getName(), properties1);
         ProductController.allProducts.add(product1);
         ProductMenu productMenu = new ProductMenu(null);
-        ViewProductMenu viewProductMenu = new ViewProductMenu(null,product1);
+        ViewProductMenu viewProductMenu = new ViewProductMenu(null);
     }
 
 }

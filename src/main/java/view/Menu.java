@@ -11,6 +11,7 @@ public abstract class Menu {
     Menu parentMenu;
     protected HashMap <Integer,Menu> subMenus;
     static Scanner scanner;
+    protected String helpMessage;
     static final String BACK_BUTTON = "..";
     static final String BACK_HELP = "You can type \"..\" to cancel the process";
     static boolean BACK_PRESSED;
@@ -19,6 +20,7 @@ public abstract class Menu {
         this.name = name;
         this.parentMenu = parentMenu;
         subMenus = new HashMap <> ( );
+        helpMessage = "";
     }
 
     public static void setScanner(Scanner scanner) {
@@ -59,18 +61,16 @@ public abstract class Menu {
             @Override
             public void show() {
                 for (Integer submenuNumber : this.parentMenu.subMenus.keySet()) {
-                    System.out.println(this.parentMenu.subMenus.get(submenuNumber).getName());
+                    System.out.println(this.parentMenu.subMenus.get(submenuNumber).toString());
                 }
-                System.out.println("Enter back to return");
-                //bazgashti
+                System.out.println("Enter '..' to return");
             }
 
             @Override
             public void execute() {
                 String input = scanner.nextLine();
-                if (input.equalsIgnoreCase("back")) {
-                    this.parentMenu.show();
-                    this.parentMenu.execute();
+                if (input.equalsIgnoreCase("..")) {
+                    return;
                 } else
                     System.out.println("chizi zadi?");
             }
@@ -82,9 +82,6 @@ public abstract class Menu {
         this.execute ();
     }
 
-    public void goBack () {
-        this.parentMenu.run ( );
-    }
 
     public String getValidMenuNumber(int most)  {
         String menuNum;
@@ -123,5 +120,22 @@ public abstract class Menu {
         return input;
     }
 
+    public String getValidUsername () {
+        boolean check;
+        String input;
+        do {
+            input = scanner.nextLine ( );
+            check = ProductController.isThereProductById(input);
+            if (!check){
+                System.out.println("There no product with such username. Please enter product id again:");
+            }
 
+        }while (!check);
+        return input;
+    }
+
+    @Override
+    public String toString() {
+        return name+": "+helpMessage;
+    }
 }

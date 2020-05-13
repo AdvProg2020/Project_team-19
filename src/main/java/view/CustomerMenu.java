@@ -7,6 +7,8 @@ import model.DiscountCode;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static controller.PersonController.increaseCustomerCredit;
+
 public class CustomerMenu extends Menu {
 
     private static HashMap < DiscountCode, Integer > customersDiscountCodes = new HashMap <> (  );
@@ -48,6 +50,30 @@ public class CustomerMenu extends Menu {
             @Override
             public void execute() {
                 customersDiscountCodes = thisGuy.getDiscountCodes ();
+            }
+        };
+    }
+
+    public Menu getIncreaseCreditMenu() {
+        return new Menu("Increase Balance Menu", this) {
+            @Override
+            public void show() {
+                System.out.println(this.getName() + " :");
+            }
+
+            @Override
+            public void execute() {
+                if (!PersonController.checkValidPersonType(thisGuy.getUsername(), Customer.class)) {
+                    System.out.println("You Should Be A Customer.");
+                    return;
+                }
+                String input;
+                System.out.println("Enter Amount You Want to Add to Your Credit :");
+                while(!(input = scanner.nextLine()).matches("\\d+(.\\d+)?") && !input.equals(".."))
+                    System.out.println("Enter Valid Credit or \"..\" to Back");
+                if (input.equals(".."))
+                    return;
+                increaseCustomerCredit(thisGuy, Double.parseDouble(input));
             }
         };
     }

@@ -5,10 +5,10 @@ import java.util.HashMap;
 import static controller.PersonController.allPersons;
 
 abstract public class Person {
-    private HashMap<String, String> personInfo;
+    protected HashMap<String, String> personInfo;
 
-    public Person(HashMap<String, String> personInfo) {
-        this.personInfo = new HashMap<>(personInfo);
+    public Person(HashMap<String, String> personInfo1) {
+        this.personInfo = personInfo1; //hatman to menu new she
         allPersons.add(this);
     }
 

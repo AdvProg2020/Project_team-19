@@ -4,6 +4,9 @@ public  class OwnedProduct {
         private Product product;
         private Salesperson salesperson;
         double price;
+        double priceAfterDiscount;
+        int count;
+        boolean inDiscount;
 
         public OwnedProduct(Product product, Salesperson salesperson, double price) {
             this.price = price;
@@ -11,7 +14,25 @@ public  class OwnedProduct {
             this.salesperson = salesperson;
         }
 
-        public double getPrice() {
+        public OwnedProduct(ProductStateInCart productStateInCart,Product product){
+            price = productStateInCart.getPrice();
+            this.product = product;
+            salesperson = productStateInCart.salesperson;
+            inDiscount = productStateInCart.inDiscount;
+            if(productStateInCart.isInDiscount()){
+            priceAfterDiscount = productStateInCart.getPriceAfterDiscount();}
+            count = productStateInCart.count;
+        }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public void setPriceAfterDiscount(double priceAfterDiscount) {
+        this.priceAfterDiscount = priceAfterDiscount;
+    }
+
+    public double getPrice() {
             return price;
         }
 

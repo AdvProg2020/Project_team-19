@@ -27,6 +27,18 @@ public class PersonController {
         }
     }
 
+    public static <T> boolean checkValidPersonType(String username, Class<T> personType){
+        for (Person person : filterByRoll(personType)) {
+            if(person.getUsername().equals(username))
+                return true;
+        }
+        return false;
+    }
+
+    public static void increaseCustomerCredit(Customer customer, double credit) {
+        customer.increaseCredit(credit);
+    }
+
     public static void addPerson (Person person) {
         allPersons.add(person);
     }
@@ -101,6 +113,9 @@ public class PersonController {
 
     public static void setLoggedInPerson(Person loggedInPerson) {
         PersonController.loggedInPerson = loggedInPerson;
+        if(isLoggedInPersonCustomer()){
+            CartController.getInstance().setLoggedInPersonCart();
+        }
     }
 
     public static boolean isLoggedInPersonCustomer(){

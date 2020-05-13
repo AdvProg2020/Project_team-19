@@ -2,7 +2,7 @@ package controller;
 
 import model.*;
 
-import java.util.HashMap;
+import java.io.IOException;
 
 public class CartController {
 
@@ -24,21 +24,21 @@ public class CartController {
     }
 
     public void addProduct(Product product, Salesperson salesperson) {
-        if(PersonController.isThereLoggedInPerson()){
-            ( (Customer)PersonController.getLoggedInPerson()).getCart().addProduct(product,salesperson);
-        }else
+        if (PersonController.isThereLoggedInPerson()&&PersonController.isLoggedInPersonCustomer()){
+            ((Customer)PersonController.getLoggedInPerson()).getCart().addProduct(product,salesperson);
+        } else
             tempCart.addProduct(product,salesperson);
     }
 
-    public void setProductCount(Product product, int count) {
+    public void setProductCount(Product product, int count,Salesperson salesperson) {
         if(PersonController.isThereLoggedInPerson()&&PersonController.isLoggedInPersonCustomer()){
-            ( (Customer)PersonController.getLoggedInPerson()).getCart().setProductCount(product,count);
+            ( (Customer)PersonController.getLoggedInPerson()).getCart().setProductCount(product,salesperson,count);
         }else
-            tempCart.setProductCount(product,count);
+            tempCart.setProductCount(product,salesperson,count);
     }
 
     public void setLoggedInPersonCart(){
-        ( (Customer)PersonController.getLoggedInPerson()).setCart(new Cart(tempCart));
+        ( (Customer)PersonController.getLoggedInPerson()).setCartAfterLogin(tempCart);
     }
 
     public double calculateTotalPrice() {
@@ -48,33 +48,24 @@ public class CartController {
         return tempCart.calculateTotalPrice();
     }
 
-    public void purchase() throws NoLoggedInPersonException, AccountIsNotCustomerException,NotEnoughCreditMoney {
+    public void purchase() throws NoLoggedInPersonException, AccountIsNotCustomerException, NotEnoughCreditMoney, IOException {
         if (!PersonController.isThereLoggedInPerson()) {
-            throw new NoLoggedInPersonException();
+            throw new NoLoggedInPersonException("You are not logged in."+"\n"+"Please login to continue.");
         } else if (!PersonController.isLoggedInPersonCustomer()) {
-            throw new AccountIsNotCustomerException();
+            throw new AccountIsNotCustomerException("Please login with customer account.");
         } else {
             Customer customer = (Customer) PersonController.getLoggedInPerson();
-            if(customer.checkCredit(customer.getCart().calculateTotalPrice())){
-                throw new NotEnoughCreditMoney();
+            if(!customer.checkCredit(customer.getCart().calculateTotalPrice())){
+                throw new NotEnoughCreditMoney("Your balance is not enough"+"\n"+"Please increase your credit.");
+            }else {
+                Cart.purchase(customer);
             }
         }
     }
 
-    public void manageDiscountCode(String discountCode) throws WrongDiscountCode {
+    public void manageDiscountCode(DiscountCode discountCode) {
         Customer customer= (Customer)PersonController.getLoggedInPerson();
-        if (!customer.isThereDiscountCodeByCode(discountCode)) {
-            throw new WrongDiscountCode();
-        } else {
-            DiscountCode thisDiscountCode = customer.findDiscountCodeByCode(discountCode);
-            double tempPrice = customer.getCart().calculateTotalPrice();
-             double tempTotalPriceAfterDiscount = tempPrice * (thisDiscountCode.getDiscountPercentage());
-            if (tempTotalPriceAfterDiscount > thisDiscountCode.getMaxDiscount()) {
-                tempTotalPriceAfterDiscount = thisDiscountCode.getMaxDiscount();
-            }
-            customer.getCart().setTotalPriceAfterDiscount(tempTotalPriceAfterDiscount);
-            customer.useDiscountCode(thisDiscountCode);
-        }
+            customer.useDiscountCode(discountCode);
     }
 
     public int itemNumber(){
@@ -92,18 +83,26 @@ public class CartController {
     }
 
     public static class NoLoggedInPersonException extends Exception {
-        String message;
+        public NoLoggedInPersonException(String message) {
+            super(message);
+        }
     }
 
     public static class AccountIsNotCustomerException extends Exception {
-        String message;
+        public AccountIsNotCustomerException(String message) {
+            super(message);
+        }
     }
 
     public static class WrongDiscountCode extends Exception {
-        String message;
+        public WrongDiscountCode(String message) {
+            super(message);
+        }
     }
 
     public static class NotEnoughCreditMoney extends Exception{
-        String message;
+        public NotEnoughCreditMoney(String message) {
+            super(message);
+        }
     }
 }
