@@ -53,6 +53,10 @@ public class DiscountCode {
         return code;
     }
 
+    public double getPriceAfterDiscountCode(double price){
+        return price*(1-discountPercentage/100);
+    }
+
     public void setCode(String code) {
         this.code = code;
     }

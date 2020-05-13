@@ -10,9 +10,8 @@ import java.util.regex.Pattern;
 
 public class ViewProductMenu extends Menu {
     Product product;
-    public ViewProductMenu(Menu parent,Product product){
+    public ViewProductMenu(Menu parent){
         super("View Product",parent);
-        this.product = product;
         subMenus.put(1,getDigestMenu());
         subMenus.put(2,getAddToCartMenu());
         subMenus.put(3,getCommentMenu());
@@ -24,9 +23,13 @@ public class ViewProductMenu extends Menu {
     }
 
     @Override
-    public void show() {
-        showProductDigest();
-        super.show();
+    public void execute() {
+        System.out.println("Please enter product id:");
+        String id = getValidProductId();
+        if(id.equals(".."))
+            return;
+        product = ProductController.searchProduct(id);
+        super.execute();
     }
 
     public void showProductDigest(){

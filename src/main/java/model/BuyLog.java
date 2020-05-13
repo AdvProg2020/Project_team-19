@@ -1,6 +1,7 @@
 package model;
 
 import controller.Database;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -14,19 +15,28 @@ public class BuyLog {
     private LocalDateTime date;
     private double paymentAmount;
     private double discountCodeAmount;
-    private HashMap< Product,ProductStateInCart > tradedProductList;
+    private ArrayList<OwnedProduct> products;
     private boolean reachedBuyer;
 
-    public BuyLog(String logID, LocalDateTime date, double paymentAmount, double discountCodeAmount, HashMap<Product,ProductStateInCart> tradedProductList, boolean reachedBuyer) throws IOException {
-        this.logID = logID;
+    public BuyLog( LocalDateTime date, double paymentAmount, double discountCodeAmount, HashMap<Product,HashMap<Salesperson,ProductStateInCart>> tradedProductList, boolean reachedBuyer) throws IOException {
+        this.logID = RandomStringUtils.random(4, true, true);
         this.date = date;
         this.paymentAmount = paymentAmount;
         this.discountCodeAmount = discountCodeAmount;
-        this.tradedProductList = tradedProductList;
         this.reachedBuyer = reachedBuyer;
+        products = new ArrayList<>();
+        for (Product product : tradedProductList.keySet()) {
+            for (ProductStateInCart value : tradedProductList.get(product).values()) {
+                products.add(new OwnedProduct(value,product));
+            }
+        }
     }
 
     public boolean isThereProduct(Product product){
-        return tradedProductList.containsKey(product);
+        for (OwnedProduct ownedProduct : products) {
+            if(product.equals(ownedProduct.getProduct()))
+                return true;
+        }
+        return false;
     }
 }

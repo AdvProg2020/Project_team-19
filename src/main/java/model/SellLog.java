@@ -1,6 +1,7 @@
 package model;
 
 import controller.Database;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -44,8 +45,8 @@ public class SellLog {
         return transmitted;
     }
 
-    public SellLog(String logID, LocalDateTime date, double deliveredAmount, double discountAmount, Product product, Customer buyer, boolean transmitted, int count) throws IOException {
-        this.logID = logID;
+    public SellLog( LocalDateTime date, double deliveredAmount, double discountAmount, Product product, Customer buyer, boolean transmitted, int count) throws IOException {
+        this.logID = RandomStringUtils.random(4, true, true);
         this.date = date;
         this.deliveredAmount = deliveredAmount;
         this.discountAmount = discountAmount;

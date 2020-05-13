@@ -22,7 +22,7 @@ public class purchaseTest {
         salesperson.addToOfferedProducts(product2,5,2000);
         customer.getCart().addProduct(product1,salesperson);
         customer.getCart().addProduct(product2,salesperson);
-        customer.getCart().setProductCount(product1,3);
+        customer.getCart().setProductCount(product1,salesperson,3);
         Cart.purchase(customer);
     }
 }

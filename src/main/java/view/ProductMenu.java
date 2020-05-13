@@ -11,8 +11,9 @@ public class ProductMenu extends Menu {
     public ProductMenu ( Menu parent ) {
         super ("Product Menu" , parent);
         subMenus.put(1, new SearchMenu(this));
-        subMenus.put(2, getHelpMenu(this));
-        subMenus.put(3,getCompareTwoProductsMenu());
+        subMenus.put(2,new ViewProductMenu(this));
+        subMenus.put(3, getHelpMenu(this));
+        subMenus.put(4,getCompareTwoProductsMenu());
     }
 
 
@@ -31,6 +32,8 @@ public class ProductMenu extends Menu {
             this.parentMenu.execute();
         }
     }
+
+
 
     public Menu getCompareTwoProductsMenu(){
         return new Menu("compare two products",this) {
