@@ -22,11 +22,11 @@ public class DiscountMenu extends Menu {
         return new Menu ( "Offs",this ) {
             @Override
             public void show () {
-                for (Discount discount : DiscountController.allDiscounts) {
+                for (Discount discount : DiscountController.getAllDiscounts ()) {
                     List<String> headersList = Arrays.asList("Product ID", "Name" , "Price Before Off", "Price After Off");
                     List < List <String>> rowsList = new ArrayList <> (  );
                     for (Product product : discount.getProducts ( )) {
-                        for (OwnedProduct ownedProduct : ProductController.getProductsOfProduct(product)) {
+                        for (OwnedProduct ownedProduct : ProductController.getInstance ().getProductsOfProduct(product)) {
                             if (product.equals ( ownedProduct.getProduct () )) {
                                 List <String> row = new ArrayList <> ( 4 );
                                 row.add ( product.getID () );

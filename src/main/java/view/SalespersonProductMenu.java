@@ -1,9 +1,9 @@
 package view;
 
+import controller.PersonController;
+import model.Product;
 import model.Salesperson;
 import model.SellLog;
-
-import static controller.PersonController.getLoggedInPerson;
 
 public class SalespersonProductMenu extends Menu {
     public SalespersonProductMenu(Menu parent){
@@ -89,7 +89,7 @@ public class SalespersonProductMenu extends Menu {
                     productID = getValidProductId ();
                     if (productID.equals ( BACK_BUTTON ))
                         break;
-                    Salesperson salesperson = (Salesperson) getLoggedInPerson ();
+                    Salesperson salesperson = (Salesperson) PersonController.getInstance ().getLoggedInPerson ();
                     for (SellLog sellLog : salesperson.getSellLogs ( )) {
                         if (sellLog.getProduct ().getID ().equals ( productID ))
                             System.out.println ( sellLog.getBuyer ().getUsername () );

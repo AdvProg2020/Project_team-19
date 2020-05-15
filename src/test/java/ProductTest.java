@@ -15,8 +15,8 @@ import static controller.CategoryController.rootCategories;
 
 public class ProductTest {
     @Test
-    public void filterByPropertyTest () throws IOException {
-        Category category = new Category(true, "labaniat", null);
+    public void filterByPropertyTest () {
+        Category category = new Category("labaniat", null, new HashSet <> (  ));
         HashSet<String> fields = new HashSet<>();
         fields.add("color");
         fields.add("size");
@@ -28,10 +28,10 @@ public class ProductTest {
         properties2.put("color", "white");
         properties2.put("size", "small");
 
-        Product product1 = new Product("1", "panir", "lighvan",
+        Product product1 = new Product( "panir", "lighvan",
                  category.getName(), properties1, false);
 
-        Product product2 = new Product("2", "shir", "mihan",
+        Product product2 = new Product( "shir", "mihan",
                 category.getName(), properties2, false);
 
         ArrayList<Product> products = new ArrayList<>();
@@ -47,7 +47,7 @@ public class ProductTest {
 
     @Test
     public void filterByPriceTest () throws IOException {
-        Category category = new Category(true, "labaniat", null);
+        Category category = new Category("labaniat", null, new HashSet <> (  ));
         HashSet<String> fields = new HashSet<>();
         fields.add("color");
         fields.add("size");
@@ -76,11 +76,11 @@ public class ProductTest {
         ArrayList<Salesperson> owners2 = new ArrayList<>();
         owners2.add(seller2);
 
-        Product product1 = new Product("1", "panir", "lighvan",
+        Product product1 = new Product("panir", "lighvan",
                  category.getName(), properties1, false);
 
 
-        Product product2 = new Product("2", "shir", "mihan",
+        Product product2 = new Product( "shir", "mihan",
                  category.getName(), properties2, false);
 
 
@@ -98,15 +98,15 @@ public class ProductTest {
         category.setProductList(products);
 
 
-        System.out.println(ProductController.filterOwnedProductByPrice(500, 2200, product1));
-        System.out.println(ProductController.filterACategoryByPrice(500, 2200, category));
+        System.out.println(ProductController.getInstance ().filterOwnedProductByPrice(500, 2200, product1));
+        System.out.println(ProductController.getInstance ().filterACategoryByPrice(500, 2200, category));
         Product.stock.clear();
 
     }
 
     @Test
     public void sortByPrice() throws IOException {
-        Category category = new Category(true, "labaniat", null);
+        Category category = new Category("labaniat", null, new HashSet <> (  ));
         HashSet<String> fields = new HashSet<>();
         fields.add("color");
         fields.add("size");
@@ -135,11 +135,11 @@ public class ProductTest {
         ArrayList<Salesperson> owners2 = new ArrayList<>();
         owners2.add(seller2);
 
-        Product product1 = new Product("1", "panir", "lighvan",
+        Product product1 = new Product("panir", "lighvan",
                  category.getName(), properties1, false);
 
 
-        Product product2 = new Product("2", "shir", "mihan",
+        Product product2 = new Product( "shir", "mihan",
                  category.getName(), properties2, false);
 
 
@@ -156,7 +156,7 @@ public class ProductTest {
 
         category.setProductList(products);
 
-        Iterator iterator = ProductController.sortProductByPrice(product1).iterator();
+        Iterator iterator = ProductController.getInstance ().sortProductByPrice(product1).iterator();
         while (iterator.hasNext())
             System.out.println(iterator.next());
     }
@@ -164,7 +164,7 @@ public class ProductTest {
     @Test
     public void sortTest() throws IOException {
 
-        Category category = new Category(true, "labaniat", null);
+        Category category = new Category("labaniat", null, new HashSet <> (  ));
         HashSet<String> fields = new HashSet<>();
         fields.add("color");
         fields.add("size");
@@ -176,16 +176,16 @@ public class ProductTest {
         properties2.put("color", "white");
         properties2.put("size", "small");
 
-        Product product1 = new Product("1", "panir", "lighvan",
+        Product product1 = new Product( "panir", "lighvan",
                 category.getName(), properties1, true);
 
-        Product product2 = new Product("2", "shir", "mihan",
+        Product product2 = new Product( "shir", "mihan",
                 category.getName(), properties2, true);
 
-        Product product3 = new Product("3", "abt", "mihan",
+        Product product3 = new Product( "abt", "mihan",
                 category.getName(), properties1, true);
 
-        Product product4 = new Product("4", "panir", "ab",
+        Product product4 = new Product( "panir", "ab",
                 category.getName(), properties2, true);
 
         ArrayList<Product> products = new ArrayList<>();

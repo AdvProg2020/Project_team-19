@@ -130,7 +130,7 @@ public class ManageDiscountCodeMenu extends Menu {
     public void showAllDiscountCodesTable() {
         helpMessage = "";
         String onFormat = "|%-55s|";
-        for (DiscountCode discountCode : DiscountCodeController.getInstance().allDiscountCodes) {
+        for (DiscountCode discountCode : DiscountCodeController.getInstance().getAllDiscountCodes ()) {
             System.out.println(String.format("%s",STRAIGHT_LINE));
             System.out.println(String.format(onFormat, "Code: "+ discountCode.getCode()));
             System.out.println(String.format("%s",STRAIGHT_LINE));

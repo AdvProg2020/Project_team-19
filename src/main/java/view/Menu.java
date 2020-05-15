@@ -87,9 +87,12 @@ public abstract class Menu {
             @Override
             public void execute() {
                 String input;
-                while (!input.equals ( BACK_BUTTON )) {
+                while (true) {
                     input = scanner.nextLine ( );
-                    System.out.println ( "chizi zadi?" );
+                    if (!input.equals ( BACK_BUTTON ))
+                        System.out.println ( "chizi zadi?" );
+                    else
+                        break;
                 }
             }
         };
@@ -147,7 +150,7 @@ public abstract class Menu {
         String input;
         do {
             input = scanner.nextLine();
-            check = salesperson.getDiscountById(input) != null;
+            check = salesperson.getDiscountWithIdSpecificSalesperson(input) != null;
             if (!check) {
                 System.out.println("You do not have such discount. Please enter discount id again:");
             }
@@ -159,12 +162,13 @@ public abstract class Menu {
     public static class WrongMenuNumberException extends Exception {
         String massage;
 
-        public WrongMenuNumberException(int most) {
+        public WrongMenuNumberException ( int most ) {
             massage = "Your input number must be between 1 to" + most;
         }
+    }
 
     protected Menu getLogoutMenu() {
-        return new Menu("Logout",this) {
+        return new Menu ("Logout",this) {
             @Override
             public void show() {
                 System.out.println ( "Press 1 to logout" );
@@ -177,7 +181,7 @@ public abstract class Menu {
                 while (true) {
                     input = scanner.nextLine ( );
                     if ( input.equals ( "1" ) ) {
-                        PersonController.logOut ( );
+                        PersonController.getInstance ().logOut ( );
                         break;
                     }
                     if ( input.equals ( BACK_BUTTON ) )

@@ -5,9 +5,6 @@ import controller.PersonController;
 import controller.ProductController;
 import model.*;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class ViewProductMenu extends Menu {
     Product product;
     boolean productIsSet = false;
@@ -164,7 +161,7 @@ public class ViewProductMenu extends Menu {
     }
 
     public Salesperson getValidSeller(String username) {
-        Salesperson salesperson = (Salesperson) PersonController.getInstance().findPersonByUsername(username);
+        Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername (username);
         if (ProductController.getInstance().doesSellerHasProduct(product, salesperson))
             return salesperson;
         else return null;

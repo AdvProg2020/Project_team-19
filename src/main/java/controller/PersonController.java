@@ -61,10 +61,10 @@ public class PersonController {
     }
 
     public boolean isTherePersonByUsername(String username) {
-        return findPersonByUsername(username) != null;
+        return getPersonByUsername (username) != null;
     }
 
-    public Person findPersonByUsername(String username) {
+    public Person getPersonByUsername ( String username) {
         for (Person person : allPersons) {
             if (person.getUsername().equals(username))
                 return person;
@@ -84,7 +84,7 @@ public class PersonController {
         } else if (!checkPassword(password, username)) {
             throw new WrongPasswordException("Incorrect password");
         } else {
-            loggedInPerson = findPersonByUsername(username);
+            loggedInPerson = getPersonByUsername (username);
             if (isLoggedInPersonCustomer()) {
                 CartController.getInstance().setLoggedInPersonCart();
             }
@@ -97,7 +97,7 @@ public class PersonController {
     }
 
     public boolean checkPassword(String password, String username) throws WrongPasswordException {
-        if (!findPersonByUsername(username).getPassword().equals(password))
+        if (!getPersonByUsername (username).getPassword().equals(password))
             throw new WrongPasswordException("Incorrect password");
         return true;
     }

@@ -35,10 +35,10 @@ public class ManageUsersMenu extends Menu {
                     input = scanner.nextLine ();
                     if (input.equals ( BACK_BUTTON ))
                         break;
-                    else if ( !PersonController.isTherePersonByUsername ( input ) )
+                    else if ( !PersonController.getInstance ().isTherePersonByUsername ( input ) )
                         System.out.println ( "This username doesn't exist." );
                     else {
-                        System.out.println ( PersonController.getPersonByUsername ( input ).getPersonalInfo () );
+                        System.out.println ( PersonController.getInstance ().getPersonByUsername ( input ).getPersonalInfo () );
                         System.out.println ( "You just spied on someone successfully." );
                     }
 
@@ -61,12 +61,12 @@ public class ManageUsersMenu extends Menu {
                     input = scanner.nextLine ();
                     if (input.equals ( BACK_BUTTON ))
                         break;
-                    else if ( !PersonController.isTherePersonByUsername ( input ) )
+                    else if ( !PersonController.getInstance ().isTherePersonByUsername ( input ) )
                         System.out.println ( "This username doesn't exist." );
                     else {
-                        Person person = PersonController.getPersonByUsername ( input );
+                        Person person = PersonController.getInstance ().getPersonByUsername ( input );
                         try {
-                            PersonController.removePersonFromAllPersons ( person );
+                            PersonController.getInstance ().removePersonFromAllPersons ( person );
                             System.out.println ( "Removed successfully." );
                         } catch (IOException e) {
                             e.printStackTrace ( );

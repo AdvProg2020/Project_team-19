@@ -4,8 +4,6 @@ import controller.PersonController;
 import model.Salesperson;
 import model.SellLog;
 
-import static controller.PersonController.getLoggedInPerson;
-
 public class SalespersonMenu extends Menu {
     public SalespersonMenu ( Menu parent ) {
         super ( "Salesperson Menu" , parent );
@@ -35,7 +33,7 @@ public class SalespersonMenu extends Menu {
         return new Menu ( "Show Company Information" , this ) {
             @Override
             public void show () {
-                Salesperson thisGuy = (Salesperson) getLoggedInPerson ( );
+                Salesperson thisGuy = (Salesperson) PersonController.getInstance ().getLoggedInPerson ( );
                 System.out.println (
                         "Company : " + thisGuy.getPersonInfo ( ).get ( "company" ) + "\n" +
                                 "Dar Surate Vjud Sayere Moshakhsat :\n" + thisGuy.getPersonInfo ( ).get ( "dar surate vjud sayere moshakhsat" ) );
@@ -53,7 +51,7 @@ public class SalespersonMenu extends Menu {
         return new Menu ( "Show Balance" , this ) {
             @Override
             public void show () {
-                System.out.println ( "Your balance is : " + ((Salesperson) getLoggedInPerson ( )).getCredit ( ) );
+                System.out.println ( "Your balance is : " + ((Salesperson)PersonController.getInstance ().getLoggedInPerson ( )).getCredit ( ) );
                 super.show ( );
             }
 
@@ -68,7 +66,7 @@ public class SalespersonMenu extends Menu {
         return new Menu("View Sales History",this) {
             @Override
             public void show() {
-                Salesperson salesperson = (Salesperson) getLoggedInPerson ( );
+                Salesperson salesperson = (Salesperson) PersonController.getInstance ().getLoggedInPerson ( );
                 for (SellLog sellLog : salesperson.getSellLogs ( )) {
                     System.out.println ( sellLog.getEverythingString () );
                     System.out.println ( LINE );

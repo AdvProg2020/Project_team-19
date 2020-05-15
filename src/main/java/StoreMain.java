@@ -9,11 +9,11 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class StoreMain {
-    public static void main ( String[] args ) throws FileNotFoundException {
+    public static void main ( String[] args ) {
         Database.initializeAddress ( );
-        PersonController.initializePersons ();
-        ProductController.initializeProducts ();
-        RequestController.initializeRequests ();
+        PersonController.getInstance ().initializePersons ();
+        ProductController.getInstance ().initializeProducts ();
+        RequestController.getInstance ().initializeRequests ();
         MainMenu mainMenu = new MainMenu ( null );
         Menu.setScanner ( new Scanner ( System.in ) );
         mainMenu.run();

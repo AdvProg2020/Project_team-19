@@ -9,6 +9,7 @@ import static controller.Database.*;
 
 public class DiscountController {
     private static DiscountController single_instance = null;
+    private static ArrayList<Discount> allDiscounts = new ArrayList <> (  );
 
     private DiscountController() {
     }
@@ -24,7 +25,15 @@ public class DiscountController {
         ADD, REMOVE
     }
 
-    public void removeDiscount(Salesperson salesperson, Discount discount) {
+    public static ArrayList < Discount > getAllDiscounts () {
+        for (Person person : PersonController.getInstance().filterByRoll(Salesperson.class)) {
+            Salesperson salesperson = (Salesperson) person;
+            allDiscounts.addAll ( salesperson.getDiscounts ( ) );
+        }
+        return allDiscounts;
+    }
+
+    public void removeDiscount( Salesperson salesperson, Discount discount) {
         salesperson.removeFromDiscounts(discount);
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
     }
@@ -57,11 +66,11 @@ public class DiscountController {
         }
     }
 
-    public Discount getDiscountById(String id) {
+    public Discount getDiscountByIdFromAll ( String id ) {
         for (Person person : PersonController.getInstance().filterByRoll(Salesperson.class)) {
             Salesperson salesperson = (Salesperson) person;
-            if (salesperson.getDiscountById(id) != null)
-                return salesperson.getDiscountById(id);
+            if (salesperson.getDiscountWithIdSpecificSalesperson(id) != null)
+                return salesperson.getDiscountWithIdSpecificSalesperson(id);
         }
         return null;
     }

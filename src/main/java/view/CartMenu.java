@@ -52,7 +52,7 @@ public class CartMenu extends Menu {
                 if (sellerUsername.equals(BACK_BUTTON))
                     return;
                 Product product = ProductController.getInstance().searchProduct(id);
-                CartController.getInstance().setProductCount(product, 1, ((Salesperson) PersonController.getInstance().findPersonByUsername(sellerUsername)));
+                CartController.getInstance().setProductCount(product, 1, ((Salesperson) PersonController.getInstance().getPersonByUsername (sellerUsername)));
             }
         };
     }
@@ -76,7 +76,7 @@ public class CartMenu extends Menu {
                 if (sellerUsername.equals(BACK_BUTTON))
                     return;
                 Product product = ProductController.getInstance().searchProduct(id);
-                CartController.getInstance().setProductCount(product, -1, ((Salesperson) PersonController.getInstance().findPersonByUsername(sellerUsername)));
+                CartController.getInstance().setProductCount(product, -1, ((Salesperson) PersonController.getInstance().getPersonByUsername (sellerUsername)));
             }
         };
     }

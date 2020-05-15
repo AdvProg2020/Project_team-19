@@ -57,10 +57,6 @@ public class Salesperson extends Person {
         return sellLogs;
     }
 
-    public ArrayList < Discount > getDiscounts () {
-        return discounts;
-    }
-
     public Discount getDiscountWithIdSpecificSalesperson (String id) {
         for (Discount discount : discounts) {
             if (discount.getDiscountID ().equals ( id ))

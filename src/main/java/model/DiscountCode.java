@@ -1,10 +1,9 @@
 package model;
 
+import controller.DiscountCodeController;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class DiscountCode {
     private String code;
@@ -23,10 +22,6 @@ public class DiscountCode {
         this.useCounter = useCounter;
     }
 
-    public static ArrayList<DiscountCode> getAllDiscountCodes() {
-        return allDiscountCodes;
-    }
-
     public double getDiscountPercentage() {
         return discountPercentage;
     }
@@ -40,7 +35,7 @@ public class DiscountCode {
     }
 
     public static DiscountCode findDiscountCodeByCode(String code){
-        for (DiscountCode discountCode : allDiscountCodes) {
+        for (DiscountCode discountCode : DiscountCodeController.getInstance ().getAllDiscountCodes ()) {
             if(discountCode.code.equals(code))
                 return discountCode;
         }

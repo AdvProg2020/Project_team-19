@@ -7,8 +7,6 @@ import model.DiscountCode;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static controller.PersonController.increaseCustomerCredit;
-
 public class CustomerMenu extends Menu {
 
     private static HashMap < DiscountCode, Integer > customersDiscountCodes = new HashMap <> ( );

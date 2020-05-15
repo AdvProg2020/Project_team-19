@@ -121,22 +121,20 @@ public class Product {
         this.category = category;
     }
 
-
-    @Override
-    public String toString() {
-        return productID;
-    }
-
     public void changeCount(int count) {
         this.count += count;
     }
 
+    @Override
+    public String toString() { //ToDo ino taqir ddm check knim hmeja ok e
+        return name + " (ID: " + productID + ")";
+    }
+
     public String printProduct() {
-        return "Product : " +
-                ", productID='" + productID + '\'' +
-                ", count=" + count +
-                ", name='" + name + '\'' +
-                ", brand='" + brand + '\'' +
-                '}';
+        return "Product : \n" +
+                "Product ID : " + productID + "\n" +
+                "Count : " + count + "\n" +
+                "Name : " + name + "\n" +
+                "Brand : " + brand;
     }
 }

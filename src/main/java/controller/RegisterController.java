@@ -44,12 +44,8 @@ public class RegisterController {
     }
 
     public void registerManager (HashMap<String, String> personInfo) {
-        try {
-            Manager manager = new Manager(personInfo);
-            firstManagerRegistered = true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Manager manager = new Manager(personInfo);
+        firstManagerRegistered = true;
     }
 
     private String changeTypeToStandardForm (String type) {

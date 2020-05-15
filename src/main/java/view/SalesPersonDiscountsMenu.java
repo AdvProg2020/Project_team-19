@@ -1,9 +1,6 @@
 package view;
 
-import controller.DiscountCodeController;
-import controller.DiscountController;
-import controller.ProductController;
-import controller.RequestController;
+import controller.*;
 import model.*;
 
 import java.time.LocalDateTime;
@@ -98,7 +95,7 @@ public class SalesPersonDiscountsMenu extends Menu {
                     discount = salesperson.getDiscountWithIdSpecificSalesperson ( input );
                     if (input.equals ( BACK_BUTTON ))
                         break;
-                    else if ( Discount.getDiscountByIdFromAll ( input ) == null )
+                    else if ( DiscountController.getInstance ().getDiscountByIdFromAll ( input ) == null )
                         System.out.println ( "This Discount Doesn't Exist." );
                     else if ( discount == null )
                         System.out.println ( "You Don't Own This Discount." );
@@ -134,7 +131,7 @@ public class SalesPersonDiscountsMenu extends Menu {
                 String input = getValidDiscountId(salesperson);
                 if (input.equals(BACK_BUTTON))
                     return;
-                Discount discount = DiscountController.getInstance().getDiscountById(input);
+                Discount discount = salesperson.getDiscountWithIdSpecificSalesperson ( input );
                 do {
                     System.out.println("Which field do you want to edit?");
                     choice = getValidMenuNumber(6);

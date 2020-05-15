@@ -5,8 +5,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import static controller.DiscountController.allDiscounts;
-
 
 public class Discount {
 
@@ -67,14 +65,6 @@ public class Discount {
 
     public void setDiscountPercentage(double discountPercentage) {
         this.discountPercentage = discountPercentage;
-    }
-
-    public static Discount getDiscountByIdFromAll ( String discountID) {
-        for (Discount discount : allDiscounts) {
-            if (discount.getDiscountID().equals(discountID))
-                return discount;
-        }
-        return null;
     }
 
     public double getPriceAfterDiscount(double price) {

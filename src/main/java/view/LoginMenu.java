@@ -267,7 +267,7 @@ public class LoginMenu extends Menu {
     private static void registerTypeErrorHandler(String type) throws Exception {
         if ( !typePattern.matcher ( type ).matches ( ) )
             throw new Exception ("This type isn't valid.");
-        if ( type.equalsIgnoreCase ( "manager" ) && RegisterController.isFirstManagerRegistered () )
+        if ( type.equalsIgnoreCase ( "manager" ) && RegisterController.getInstance ().isFirstManagerRegistered () )
             throw new Exception ( "You can't add a manager. Contact one of the existing managers." );
     }
 
@@ -275,7 +275,7 @@ public class LoginMenu extends Menu {
     public static void registerUsernameErrorHandler(String username) throws Exception{
         if ( !usernamePattern.matcher ( username ).matches ( ) )
             throw new Exception ( "Username should contain more than 3 characters." );
-        if ( PersonController.isTherePersonByUsername ( username ) )
+        if ( PersonController.getInstance ().isTherePersonByUsername ( username ) )
             throw new Exception ( "This dude already exists." );
     }
 

@@ -11,11 +11,11 @@ public class WaguTest {
     public void tableTest() {
         List<String> headersList = Arrays.asList("Product ID", "Name", "Price Before Off", "Price After Off");
         List < List <String>> rowsList = new ArrayList <> (  );
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             List <String> row = new ArrayList <> ( 4 );
             row.add ( "1234" );
             row.add ( "Apple" );
-            row.add ( "5" + " $" );
+            row.add ( "9532153" + " $" );
             row.add ( "4" + " $" );
             rowsList.add ( row );
         }

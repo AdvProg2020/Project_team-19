@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class DiscountCodeController {
     private static DiscountCodeController single_instance = null;
-    public ArrayList<DiscountCode> allDiscountCodes = new ArrayList<>();
+    private static ArrayList<DiscountCode> allDiscountCodes = new ArrayList<>();
 
     private DiscountCodeController() {
     }
