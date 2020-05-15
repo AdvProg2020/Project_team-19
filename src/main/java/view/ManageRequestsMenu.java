@@ -1,57 +1,136 @@
 package view;
 
-import controller.RequestController;
-import model.Request;
+import model.*;
 
-import java.util.List;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import static controller.RequestController.*;
 
 public class ManageRequestsMenu extends Menu {
+
     public ManageRequestsMenu(Menu parent) {
         super("Manage Requests", parent);
-        subMenus.put(1, getShowRequestsMenu());
-        subMenus.put(2, getHelpMenu(this));
+        subMenus.put(1, getShowAllRequestsMenu());
+        subMenus.put(2, getShowSalespersonRequests());
+        subMenus.put(3, getShowProductRequests());
+        subMenus.put(4, getShowDiscountRequests());
+        subMenus.put(5, getAcceptOrDeclineMenu());
+        subMenus.put(6, getHelpMenu(this));
     }
 
-    private Menu getShowRequestsMenu () {
-        return new Menu("Show Requests", this) {
+    private Menu getShowAllRequestsMenu () {
+        return new Menu("Show All Requests", this) {
             @Override
             public void show() {
                 System.out.println(this.getName() + " :");
-                System.out.println(
-                        "1.show all requests\n" +
-                        "2.show salesperson request\n" +
-                        "3.show product requests\n" +
-                        "4.show discount requests");
             }
 
             @Override
             public void execute() {
-                String input = scanner.nextLine();
-                if (input.matches("[1234]")) {
-                    showRequests(RequestController.processGetSpecificRequests(getRequestTypeByInput(input)));
-                }
-                else
-                    System.out.println("Please Enter Valid Number.");
+                showRequests(getSpecificTypeOfRequests(Request.class));
             }
         };
     }
 
-    private RequestController.FilterType getRequestTypeByInput (String input) {
-        if ("1".equals(input)) {
-            return RequestController.FilterType.ALL;
-        } else if ("2".equals(input)) {
-            return RequestController.FilterType.SALESPERSON;
-        } else if ("3".equals(input)) {
-            return RequestController.FilterType.PRODUCT;
-        }
-        return RequestController.FilterType.DISCOUNT;
+    private Menu getShowSalespersonRequests() {
+        return new Menu("Show Salesperson Requests", this) {
+            @Override
+            public void show() {
+                System.out.println(this.getName() + " :");
+            }
+
+            @Override
+            public void execute() {
+                showRequests(getSpecificTypeOfRequests(SalespersonRequest.class));
+            }
+        };
     }
 
-    private void showRequests (List<Request> requests) {
+    private Menu getShowProductRequests() {
+        return new Menu("Show Product Requests", this) {
+            @Override
+            public void show() {
+                System.out.println(this.getName() + " :");
+            }
+
+            @Override
+            public void execute() {
+                showRequests(getSpecificTypeOfRequests(ProductRequest.class));
+            }
+        };
+    }
+
+    private Menu getShowDiscountRequests() {
+        return new Menu("Show Discount Requests", this) {
+            @Override
+            public void show() {
+                System.out.println(this.getName() + " :");
+            }
+
+            @Override
+            public void execute() {
+                showRequests(getSpecificTypeOfRequests(DiscountRequest.class));
+            }
+        };
+    }
+
+    private Menu getAcceptOrDeclineMenu() {
+        return new Menu("Accept Or Decline Menu", this) {
+            @Override
+            public void show() {
+                System.out.println(this.getName() + " :");
+            }
+
+            @Override
+            public void execute() {
+                System.out.println("Enter requestId to see :");
+                String input;
+                Request request;
+                while ((request = Request.getRequestById(input = scanner.nextLine())) == null && !input.equals(".."))
+                    System.out.println("Enter Valid Id :( or \"..\" to Fucking Back");
+                if (input.equals(".."))
+                    return;
+                showSingleRequest(request);
+                System.out.println("Enter 1 to accept, 2 to decline :");
+                input = scanner.nextLine();
+                while (!input.matches("[12]") && !input.equals(".."))
+                    System.out.println("Enter 1 or 2 coskhol or \"..\" to fucking back");
+
+                if (input.equals(".."))
+                    return;
+                if (input.equals("1")) {
+                    try {
+                        acceptRequest(request);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("Accepted.");
+                }
+                else if (input.equals("2")) {
+                    try {
+                        declineRequest(request);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("Declined.");
+                }
+            }
+        };
+    }
+
+    public void showRequests (ArrayList<Request> requests) {
         for (Request request : requests) {
-            System.out.println(request.show());
+            showSingleRequest(request);
+            System.out.println();
         }
     }
 
-
+    public void showSingleRequest(Request request) {
+        System.out.println(LINE);
+        System.out.println(String.format("|%-26s%-18s%-11s|", "", request.getRequestId(), ""));
+        System.out.println(LINE);
+        System.out.println(String.format("%-55s",request.show()));
+        System.out.println(LINE);
+    }
 }

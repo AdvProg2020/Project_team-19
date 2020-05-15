@@ -1,12 +1,10 @@
 package controller;
 
 import model.*;
-import view.CustomerMenu;
-import view.LoginMenu;
-import view.MainMenu;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -44,8 +42,9 @@ public class PersonController {
         allPersons.add(person);
     }
 
-    public static void removePersonFromAllPersons (Person person) {
+    public static void removePersonFromAllPersons (Person person) throws IOException {
         allPersons.remove(person);
+        Database.deleteFile(Database.createPath(getTypeFromList(person.getUsername()),person.getUsername()));
     }
 
     public static boolean isThereLoggedInPerson(){
@@ -53,12 +52,12 @@ public class PersonController {
     }
 
     public static boolean isTherePersonByUsername(String username) {
-        if(findPersonByUsername(username) == null)
+        if( getPersonByUsername (username) == null)
             return false;
         return true;
     }
 
-    public static Person findPersonByUsername (String username){
+    public static Person getPersonByUsername ( String username){
         for (Person person : allPersons) {
             if (person.getUsername().equals(username))
                 return person;
@@ -78,20 +77,19 @@ public class PersonController {
         }else if(!checkPassword(password,username)){
             throw new WrongPasswordException("Incorrect password");
         }else {
-            loggedInPerson = findPersonByUsername(username);
+            loggedInPerson = getPersonByUsername (username);
             if(isLoggedInPersonCustomer()){
                 CartController.getInstance().setLoggedInPersonCart();
             }
-            goToMenu();
         }
     }
 
-    public void LogOut(){
+    public static void logOut(){
         loggedInPerson = null;
     }
 
     public static boolean checkPassword ( String password , String username ) throws WrongPasswordException{
-        if (!findPersonByUsername(username).getPassword().equals(password))
+        if (!getPersonByUsername (username).getPassword().equals(password))
             throw new WrongPasswordException("Incorrect password");
         return true;
     }
@@ -125,11 +123,6 @@ public class PersonController {
 
     public static <T> ArrayList<Person> filterByRoll(Class<T> personType) {
         return allPersons.stream().filter(personType::isInstance).collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private static void goToMenu () {
-//        if (loggedInPerson instanceof Customer)
-//            CustomerMenu
     }
 
     public static String getTypeFromList (String username) {

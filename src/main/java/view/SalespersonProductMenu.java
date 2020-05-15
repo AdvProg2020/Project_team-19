@@ -1,67 +1,20 @@
 package view;
 
+import model.Salesperson;
+import model.SellLog;
+
+import static controller.PersonController.getLoggedInPerson;
+
 public class SalespersonProductMenu extends Menu {
     public SalespersonProductMenu(Menu parent){
         super("Manage Products",parent);
-        subMenus.put(1,new ManageProduct(this));
-        subMenus.put(2,getViewSalesHistory());
-        subMenus.put(3,getAddProductMenu());
-        subMenus.put(4,getShowCategoriesMenu());
-    }
-
-    public Menu getViewSalesHistory(){
-        return new Menu("View Sales History",this) {
-            @Override
-            public void show() {
-                super.show();
-            }
-
-            @Override
-            public void execute() {
-                super.execute();
-            }
-        };
-    }
-
-    public Menu getAddProductMenu(){
-        return new Menu("Add Product",this) {
-            @Override
-            public void show() {
-                super.show();
-            }
-
-            @Override
-            public void execute() {
-                super.execute();
-            }
-        };
-    }
-
-    public Menu getShowCategoriesMenu(){
-        return new Menu("Show Category",this) {
-            @Override
-            public void show() {
-                super.show();
-            }
-
-            @Override
-            public void execute() {
-                super.execute();
-            }
-        };
-    }
-
-
-}
-
-class ManageProduct extends Menu{
-    public ManageProduct(Menu parent){
-        super("Manage Products",parent);
         subMenus.put(1,getViewProductMenu());
-        subMenus.put(2,getEditProductMenu());
-        subMenus.put(3,getRemoveProductMenu());
-        subMenus.put(4,getViewBuyersMenu());
+        subMenus.put(2,getAddProductMenu());
+        subMenus.put(3,getEditProductMenu());
+        subMenus.put(4,getRemoveProductMenu());
+        subMenus.put(5,getViewBuyersMenu());
     }
+
 
     public Menu getViewProductMenu(){
         return new Menu("View Product",this) {
@@ -77,8 +30,8 @@ class ManageProduct extends Menu{
         };
     }
 
-    public Menu getViewBuyersMenu(){
-        return new Menu("View Buyers",this) {
+    public Menu getAddProductMenu(){
+        return new Menu("Add Product",this) {
             @Override
             public void show() {
                 super.show();
@@ -118,4 +71,32 @@ class ManageProduct extends Menu{
             }
         };
     }
+
+    public Menu getViewBuyersMenu(){
+        return new Menu("View Buyers",this) {
+            @Override
+            public void show() {
+                System.out.println ( BACK_HELP );
+                String productID;
+                while (true) {
+                    System.out.print ( "Enter product ID to see customers who bought it : " );
+                    productID = getValidProductId ();
+                    if (productID.equals ( BACK_BUTTON ))
+                        break;
+                    Salesperson salesperson = (Salesperson) getLoggedInPerson ();
+                    for (SellLog sellLog : salesperson.getSellLogs ( )) {
+                        if (sellLog.getProduct ().getID ().equals ( productID ))
+                            System.out.println ( sellLog.getBuyer ().getUsername () );
+                    }
+                }
+            }
+
+            @Override
+            public void execute() {
+                //byd khli bshe chun tu show back capibility drim
+            }
+        };
+    }
+
+
 }

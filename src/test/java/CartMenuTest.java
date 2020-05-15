@@ -2,9 +2,14 @@ import controller.*;
 import model.*;
 import org.junit.Test;
 import view.CartMenu;
+import view.ViewProductMenu;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+
+import static model.Product.stock;
 
 public class CartMenuTest {
     @Test
@@ -70,6 +75,35 @@ public class CartMenuTest {
         System.out.println(customer.getCart().calculateTotalPrice());
         CartController.getInstance().purchase();
 
+    }
+
+    @Test
+    public void showProductDigestTest() throws IOException {
+        Database.initializeAddress();
+        Category category = new Category(true, "labaniat", null);
+        HashSet<String> fields = new HashSet<>();
+        fields.add("color");
+        fields.add("size");
+        category.setPropertyFields(fields);
+        HashMap<String, String> properties1 = new HashMap<>();
+        properties1.put("color", "yellow");
+        properties1.put("size", "big");
+        Product product1 = new Product("100", "panir", "lighvan", category.getName(), properties1);
+
+        HashMap<String, String> personInfo = new HashMap<>();
+        personInfo.put("username", "yeki");
+        personInfo.put("password", "salam");
+        Salesperson seller1 = new Salesperson(personInfo);
+
+        seller1.addToOfferedProducts(product1, 2, 1000);
+
+        ArrayList<Salesperson> sellers = new ArrayList <> ();
+        sellers.add(seller1);
+
+        stock.put(product1, sellers);
+        ViewProductMenu viewProductMenu = new ViewProductMenu ( null );
+        viewProductMenu.setProduct ( product1 );
+        viewProductMenu.showProductDigest();
     }
 
 }

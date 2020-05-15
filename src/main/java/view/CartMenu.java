@@ -53,7 +53,7 @@ public class CartMenu extends Menu {
                 if (sellerUsername.equals(".."))
                     return;
                 Product product = ProductController.searchProduct(id);
-                CartController.getInstance().setProductCount(product, 1,((Salesperson)PersonController.findPersonByUsername(sellerUsername)));
+                CartController.getInstance().setProductCount(product, 1,((Salesperson)PersonController.getPersonByUsername (sellerUsername)));
             }
         };
     }
@@ -77,7 +77,7 @@ public class CartMenu extends Menu {
                 if (sellerUsername.equals(".."))
                     return;
                 Product product = ProductController.searchProduct(id);
-                CartController.getInstance().setProductCount(product, -1,((Salesperson)PersonController.findPersonByUsername(sellerUsername)));
+                CartController.getInstance().setProductCount(product, -1,((Salesperson)PersonController.getPersonByUsername (sellerUsername)));
             }
         };
     }
@@ -88,7 +88,7 @@ public class CartMenu extends Menu {
             @Override
             public void show() {
                 System.out.println("Subtotal(" + CartController.getInstance().itemNumber() + " items): " + CartController.getInstance().calculateTotalPrice() + "Toman");
-                System.out.println("press back to return");
+                System.out.println(BACK_HELP);
             }
 
             @Override
@@ -96,7 +96,7 @@ public class CartMenu extends Menu {
                 String input;
                 do {
                     input = scanner.nextLine();
-                    if (input.equalsIgnoreCase("back")) {
+                    if (input.equals ( BACK_BUTTON )) {
                         return;
                     }
                 } while (true);
@@ -138,7 +138,7 @@ public class CartMenu extends Menu {
         boolean check = false;
         do {
             input = scanner.nextLine();
-            if (input.equals(".."))
+            if (input.equals(BACK_BUTTON))
                 return input;
             if(PersonController.isTherePersonByUsername(input)&&PersonController.checkValidPersonType(input, Salesperson.class)){
                 check = true;

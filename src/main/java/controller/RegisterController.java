@@ -31,7 +31,7 @@ public class RegisterController {
 
     public static void registerSalesperson (HashMap<String, String> personInfo) {
         try {
-            SalespersonRequest request = new SalespersonRequest(personInfo, RandomStringUtils.random ( 4 ) );
+            SalespersonRequest request = new SalespersonRequest(personInfo, RandomStringUtils.random ( 4 , true , true ) );
         } catch (IOException e) {
             e.printStackTrace();
         }

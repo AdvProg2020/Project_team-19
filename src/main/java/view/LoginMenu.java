@@ -19,7 +19,9 @@ public class LoginMenu extends Menu {
         FIRST_NAME ( "first name" ),
         LAST_NAME ( "last name" ),
         EMAIL ("email"),
-        PHONE ("phone number");
+        PHONE ("phone number"),
+        COMPANY ("company"),
+        SAYERE_MOSHAKHASAT ("dar surate vjud sayere moshakhsat");
 
         public final String label;
 
@@ -28,17 +30,17 @@ public class LoginMenu extends Menu {
         }
     }
 
-    private static final Pattern typePattern = Pattern.compile ( "Customer|Salesperson|Manager" , Pattern.CASE_INSENSITIVE );
+    public static final Pattern typePattern = Pattern.compile ( "Customer|Salesperson|Manager" , Pattern.CASE_INSENSITIVE );
     // username : more than 3 chars
-    private static final Pattern usernamePattern = Pattern.compile ( "\\w{3,}" );
+    public static final Pattern usernamePattern = Pattern.compile ( "\\w{3,}" );
     // password : more than 8 chars, hatman ydune char o ydune capital o ydune adad
-    private static final Pattern passwordPattern = Pattern.compile ( "(?=\\w*[0-9])(?=\\w*[a-z])(?=\\w*[A-Z])\\w{8,}" );
+    public static final Pattern passwordPattern = Pattern.compile ( "(?=\\w*[0-9])(?=\\w*[a-z])(?=\\w*[A-Z])\\w{8,}" );
     // name : can have spaces
-    private static final Pattern namePattern = Pattern.compile ( "([a-zA-Z0-9]+ )*[a-zA-Z0-9]+" );
+    public static final Pattern namePattern = Pattern.compile ( "([a-zA-Z0-9]+ )*[a-zA-Z0-9]+" );
     // email : blank@blank.blank
-    private static final Pattern emailPattern = Pattern.compile ( "\\w+@\\w+\\.\\w+" );
+    public static final Pattern emailPattern = Pattern.compile ( "\\w+@\\w+\\.\\w+" );
     // phone : only number
-    private static final Pattern phonePattern = Pattern.compile ( "[0-9]+" );
+    public static final Pattern phonePattern = Pattern.compile ( "[0-9]+" );
 
     private static String usernameInstance;
 
@@ -47,16 +49,17 @@ public class LoginMenu extends Menu {
     private static final String CREATE_ACCOUNT_HELP = "Enter type and username in the order shown below :" + "\n" + "create account [type] [username]";
     private static final String LOGIN_HELP = "You can login with your username by typing :" + "\n" + "login [username]";
 
-    public static final Pattern[] patternArray = {passwordPattern , namePattern , namePattern , emailPattern , phonePattern};
+    public static final Pattern[] patternArray = {passwordPattern , namePattern , namePattern , emailPattern , phonePattern, namePattern};
 
-    public static final String[] informationArray = {PASSWORD.label , FIRST_NAME.label , LAST_NAME.label , EMAIL.label , PHONE.label};
+    public static final String[] informationArray = {PASSWORD.label , FIRST_NAME.label , LAST_NAME.label , EMAIL.label , PHONE.label, COMPANY.label};
 
     public static final String[] helpArray = {
             "Your password should be more than 8 characters and should contain at least 1 small letter, 1 capital letter, and 1 number." ,
             "Pardon me " + usernameInstance + " but that definitely isn't how your first name is written." ,
             usernameInstance + " is that seriously your last name?" ,
             "Enter a valid email address " + usernameInstance + ". It should be like this : blah@blah.blah" ,
-            "Enter a valid phone number " + usernameInstance + ". You shouldn't put +, I already put that for you >:("}; //ToDo null mide
+            "Enter a valid phone number " + usernameInstance + ". You shouldn't put +, I already put that for you",
+            "Enter a valid company name. It can only contain alphanumerics."}; //ToDo null mide
 
 
     public LoginMenu ( Menu parent ) {
@@ -161,7 +164,7 @@ public class LoginMenu extends Menu {
         } while ( !check );
     }
 
-    private void getUsernameForLogin() {
+    private void getUsernameForLogin() { //ToDo bd az password tze mifhme username qalate
         Pattern loginPattern = Pattern.compile ( "login (\\w+)" );
         boolean check;
         Matcher inputsMatcher;
@@ -206,6 +209,7 @@ public class LoginMenu extends Menu {
                 registerUsernameErrorHandler ( username );
                 System.out.println ( "Yaaay! It was successful! Now enter your information to complete the registration process." );
                 usernameInstance = username;
+                typeInstance = type;
                 personInfo.put ( "type" , type );
                 personInfo.put ( "username" , username );
                 return true;
@@ -237,7 +241,7 @@ public class LoginMenu extends Menu {
         }
     }
 
-    private void getPasswordTillEnd () {
+    public void getPasswordTillEnd () {
         String input;
         //ToDo Test This. az password ta akhare.
         for (int i = 0; i < 5; i++) {
@@ -250,9 +254,17 @@ public class LoginMenu extends Menu {
             }
             personInfo.put ( informationArray[i] , input );
         }
+        if (typeInstance.equalsIgnoreCase ( "salesperson" )) {
+            System.out.println ( "Enter " + informationArray[5] );
+            input = getValidInput ( patternArray[5] , 5 );
+            personInfo.put ( informationArray[5] , input );
+            System.out.println ( "Enter " + SAYERE_MOSHAKHASAT.label );
+            input = scanner.nextLine ();
+            personInfo.put ( SAYERE_MOSHAKHASAT.label , input );
+        }
     }
 
-    private void registerTypeErrorHandler(String type) throws Exception {
+    private static void registerTypeErrorHandler(String type) throws Exception {
         if ( !typePattern.matcher ( type ).matches ( ) )
             throw new Exception ("This type isn't valid.");
         if ( type.equalsIgnoreCase ( "manager" ) && RegisterController.isFirstManagerRegistered () )
@@ -260,7 +272,7 @@ public class LoginMenu extends Menu {
     }
 
 
-    private void registerUsernameErrorHandler(String username) throws Exception{
+    public static void registerUsernameErrorHandler(String username) throws Exception{
         if ( !usernamePattern.matcher ( username ).matches ( ) )
             throw new Exception ( "Username should contain more than 3 characters." );
         if ( PersonController.isTherePersonByUsername ( username ) )

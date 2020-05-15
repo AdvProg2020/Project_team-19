@@ -1,13 +1,10 @@
 package model;
 
-import controller.Database;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
 import static controller.DiscountController.*;
-import static controller.RequestController.allRequests;
-import static model.Discount.getDiscountById;
+import static model.Discount.getDiscountByIdFromAll;
 
 public class DiscountRequest extends Request {
     private Salesperson salesperson;
@@ -38,7 +35,7 @@ public class DiscountRequest extends Request {
                 editDiscount();
                 break;
             case DELETE:
-                removeDiscount(salesperson, getDiscountById(discountID));
+                removeDiscount(salesperson, getDiscountByIdFromAll (discountID));
                 break;
         }
     }
@@ -51,7 +48,7 @@ public class DiscountRequest extends Request {
 
 
     private void editDiscount() {   //havaset bashe inja cizi be products add ya remove nemishe
-        Discount discount = getDiscountById(discountID);
+        Discount discount = getDiscountByIdFromAll (discountID);
         assert discount != null;
         discount.setDiscountPercentage(discountPercentage);
         discount.setEndTime(endTime);

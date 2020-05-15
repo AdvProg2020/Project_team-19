@@ -49,7 +49,7 @@ public class Discount {
         this.discountPercentage = discountPercentage;
     }
 
-    public static Discount getDiscountById(String discountID) {
+    public static Discount getDiscountByIdFromAll ( String discountID) {
         for (Discount discount : allDiscounts) {
             if (discount.getDiscountID().equals(discountID))
                 return discount;
@@ -61,4 +61,26 @@ public class Discount {
         return price * (1 - discountPercentage / 100);
     }
 
+    @Override
+    public String toString () {
+        StringBuilder string = new StringBuilder ( "Discount ID : " + discountID + "\n" +
+                "Products : \n" );
+        for (Product product : products) {
+            string.append ( product ).append ( " | " );
+        }
+        string.append ( "\n" );
+        string.append ( "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014" +
+                "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014" +
+                "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014" );
+        string.append ( "\n" );
+        string.append ( "Start Time : " )
+                .append ( startTime )
+                .append ( "\n" )
+                .append ( "End Time : " )
+                .append ( endTime )
+                .append ( "\n" )
+                .append ( "Discount Percentage : " )
+                .append ( discountPercentage );
+        return string.toString ();
+    }
 }

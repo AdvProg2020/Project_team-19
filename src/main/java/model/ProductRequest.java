@@ -43,7 +43,7 @@ public class ProductRequest extends Request {
     @Override
     public String show() {
         //ba tavajoh be salighe avazesh konim
-        return getRequestId();
+        return getRequestId() + " " + salesperson.getUsername () + " " + this.getRequestState () + " " + price + amount;
     }
 
     private void changeState() {

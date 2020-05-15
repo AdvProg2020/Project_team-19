@@ -18,7 +18,7 @@ public class BuyLog {
     private ArrayList<OwnedProduct> products;
     private boolean reachedBuyer;
 
-    public BuyLog( LocalDateTime date, double paymentAmount, double discountCodeAmount, HashMap<Product,HashMap<Salesperson,ProductStateInCart>> tradedProductList, boolean reachedBuyer) throws IOException {
+    public BuyLog( LocalDateTime date, double paymentAmount, double discountCodeAmount, HashMap<Product,HashMap<Salesperson,ProductStateInCart>> tradedProductList, boolean reachedBuyer) {
         this.logID = RandomStringUtils.random(4, true, true);
         this.date = date;
         this.paymentAmount = paymentAmount;
@@ -38,5 +38,24 @@ public class BuyLog {
                 return true;
         }
         return false;
+    }
+
+    public String getLogID () {
+        return logID;
+    }
+
+    public String getEverythingString () {
+        return "Log ID : " + logID + "\n" +
+                "Date : " + date + "\n" +
+                "Payment Amount : " + paymentAmount + "\n" +
+                "Discount Code Amount : " + discountCodeAmount + "\n" +
+                "Products : " + products + "\n" +
+                "Reached Buyer : " + reachedBuyer;
+    }
+
+    @Override
+    public String toString () {
+        return "Log ID : " + logID + "\n" +
+                "Date : " + date;
     }
 }

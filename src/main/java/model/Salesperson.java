@@ -49,7 +49,27 @@ public class Salesperson extends Person {
         this.credit = credit;
     }
 
-    public void setProductDiscountState(Product product, Discount discount) {
+    public double getCredit () {
+        return credit;
+    }
+
+    public ArrayList < SellLog > getSellLogs () {
+        return sellLogs;
+    }
+
+    public ArrayList < Discount > getDiscounts () {
+        return discounts;
+    }
+
+    public Discount getDiscountWithIdSpecificSalesperson (String id) {
+        for (Discount discount : discounts) {
+            if (discount.getDiscountID ().equals ( id ))
+                return discount;
+        }
+        return null;
+    }
+
+    public void setProductDiscountState( Product product, Discount discount) {
         offeredProducts.get(product).setDiscount(discount);
     }
 

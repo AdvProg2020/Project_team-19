@@ -1,7 +1,6 @@
 package model;
 
 import controller.Database;
-import controller.PersonController;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,6 +9,7 @@ import java.util.HashMap;
 public class Customer extends Person {
     private ArrayList<BuyLog> buyLogs;
     private HashMap<DiscountCode,Integer> discountCodes;
+    private HashMap<Product,Integer> productsWithScore;
     private double credit;
     private Cart cart;
 
@@ -18,6 +18,7 @@ public class Customer extends Person {
         super (personInfo);
         discountCodes = new HashMap<DiscountCode, Integer>();
         buyLogs = new ArrayList<BuyLog>();
+        productsWithScore = new HashMap <> (  );
         Database.saveToFile(this,Database.createPath("customers",personInfo.get("username")));
         cart = new Cart();
     }
@@ -79,6 +80,10 @@ public class Customer extends Person {
         buyLogs.add(buyLog);
     }
 
+    public void addToProductWithScore(Product product, Integer score) {
+        productsWithScore.put ( product , score );
+    }
+
     public ArrayList < BuyLog > getBuyLogs () {
         return buyLogs;
     }
@@ -93,6 +98,22 @@ public class Customer extends Person {
 
     public HashMap < DiscountCode, Integer > getDiscountCodes () {
         return discountCodes;
+    }
+
+    public BuyLog findBuyLogById(String id){
+        for (BuyLog buyLog : buyLogs) {
+            if(buyLog.getLogID().equals(id))
+                return buyLog;
+        }
+        return null;
+    }
+
+    public void setScore(Product product,int score){ //ToDo GIJ SHODM
+        //TODO set score in product
+//        int n = product.getAmountOfScores ();
+//        product.setAmountOfScores ( n+1 );
+//        product.setAverageScore (  );
+//        productsWithScore.put ( product , (int) ((n * product.getAverageScore () + score)/(n+1)) );
     }
 
 

@@ -19,6 +19,7 @@ public class Product {
     private String category;
     private String description;
     private double averageScore;
+    private int amountOfScores;
     private double averagePrice;
     private double leastPrice;
     private ArrayList<Comment> comments;
@@ -53,6 +54,18 @@ public class Product {
         return averageScore;
     }
 
+    public void setAverageScore ( double averageScore ) {
+        this.averageScore = averageScore;
+    }
+
+    public int getAmountOfScores () {
+        return amountOfScores;
+    }
+
+    public void setAmountOfScores ( int amountOfScores ) {
+        this.amountOfScores = amountOfScores;
+    }
+
     public String getBrand() {
         return brand;
     }
@@ -77,7 +90,7 @@ public class Product {
         return leastPrice;
     }
 
-    public void addComment(Comment comment){
+    public void addComment( Comment comment){
         comments.add(comment);
     }
 
@@ -100,18 +113,16 @@ public class Product {
         this.name = name;
     }
 
-
     @Override
-    public String toString() {
-        return productID;
+    public String toString() { //ToDo ino taqir ddm check knim hmeja ok e
+        return name + " (ID: " + productID + ")";
     }
 
     public String printProduct() {
-        return "Product : " +
-                ", productID='" + productID + '\'' +
-                ", count=" + count +
-                ", name='" + name + '\'' +
-                ", brand='" + brand + '\'' +
-                '}';
+        return "Product : \n" +
+                "Product ID : " + productID + "\n" +
+                "Count : " + count + "\n" +
+                "Name : " + name + "\n" +
+                "Brand : " + brand;
     }
 }

@@ -18,7 +18,7 @@ public class ProductController {
     public static ArrayList<Product> currentProducts = new ArrayList<>();
 
     public static void initializeProducts() throws FileNotFoundException {
-        for (File file : Database.returnListOfFiles(address.get("product"))) {
+        for (File file : Database.returnListOfFiles(address.get("products"))) {
             allProducts.add((Product) Database.read(Product.class, file.getAbsolutePath()));
         }
     }

@@ -1,6 +1,8 @@
 package view;
 
+import controller.PersonController;
 import controller.ProductController;
+import controller.RegisterController;
 
 import java.util.HashMap;
 import java.util.Scanner;
@@ -13,6 +15,11 @@ public abstract class Menu {
     static Scanner scanner;
     protected String helpMessage;
     static final String BACK_BUTTON = "..";
+    static final String LINE = "+\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014" +
+            "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014" +
+            "+" +
+            "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014" +
+            "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014+";
     static final String BACK_HELP = "You can type \"..\" to cancel the process";
     static boolean BACK_PRESSED;
 
@@ -69,9 +76,7 @@ public abstract class Menu {
             @Override
             public void execute() {
                 String input = scanner.nextLine();
-                if (input.equalsIgnoreCase("..")) {
-                    return;
-                } else
+                while (!input.equals ( BACK_BUTTON ))
                     System.out.println("chizi zadi?");
             }
         };
@@ -119,6 +124,30 @@ public abstract class Menu {
 
         }while (!check);
         return input;
+    }
+
+    protected Menu getLogoutMenu() {
+        return new Menu("Logout",this) {
+            @Override
+            public void show() {
+                System.out.println ( "Press 1 to logout" );
+                System.out.println ( BACK_HELP );
+            }
+
+            @Override
+            public void execute() {
+                String input;
+                while (true) {
+                    input = scanner.nextLine ( );
+                    if ( input.equals ( "1" ) ) {
+                        PersonController.logOut ( );
+                        break;
+                    }
+                    if ( input.equals ( BACK_BUTTON ) )
+                        break;
+                }
+            }
+        };
     }
 
     @Override

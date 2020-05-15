@@ -44,6 +44,10 @@ abstract public class Person {
         return personInfo.get ( "type" );
     }
 
+    public HashMap < String, String > getPersonInfo () {
+        return personInfo;
+    }
+
     public String getPersonalInfo() {
         return "Username : " + personInfo.get ( USERNAME.label ) + "\n" +
                 "Password : " + "********** (I'm just kidding bro this is just some stars)\n" +

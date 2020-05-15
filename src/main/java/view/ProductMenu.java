@@ -27,7 +27,7 @@ public class ProductMenu extends Menu {
     @Override
     public void execute() {
         String input = scanner.nextLine();
-        if (input.equalsIgnoreCase("back")) {
+        if (input.equals ( BACK_BUTTON )) {
             this.parentMenu.show();
             this.parentMenu.execute();
         }
@@ -36,7 +36,7 @@ public class ProductMenu extends Menu {
 
 
     public Menu getCompareTwoProductsMenu(){
-        return new Menu("compare two products",this) {
+        return new Menu("Compare two products",this) {
             @Override
             public void show() {
 
@@ -44,9 +44,9 @@ public class ProductMenu extends Menu {
 
             @Override
             public void execute() {
-                System.out.println("please enter first product's id:");
+                System.out.println("Please enter first product's id:");
                 String id1 = getValidProductId();
-                System.out.println("please enter second product's id:");
+                System.out.println("Please enter second product's id:");
                 String id2 = getValidProductId();
                 compareTwoProducts(ProductController.searchProduct(id1),ProductController.searchProduct(id2));
             }

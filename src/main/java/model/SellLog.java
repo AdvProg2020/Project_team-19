@@ -17,6 +17,17 @@ public class SellLog {
     private Customer buyer;
     private boolean transmitted;
 
+    public SellLog( LocalDateTime date, double deliveredAmount, double discountAmount, Product product, Customer buyer, boolean transmitted, int count) throws IOException {
+        this.logID = RandomStringUtils.random(4, true, true);
+        this.date = date;
+        this.deliveredAmount = deliveredAmount;
+        this.discountAmount = discountAmount;
+        this.product = product;
+        this.buyer = buyer;
+        this.count = count;
+        this.transmitted = transmitted;
+    }
+
     public double getDeliveredAmount() {
         return deliveredAmount;
     }
@@ -45,14 +56,20 @@ public class SellLog {
         return transmitted;
     }
 
-    public SellLog( LocalDateTime date, double deliveredAmount, double discountAmount, Product product, Customer buyer, boolean transmitted, int count) throws IOException {
-        this.logID = RandomStringUtils.random(4, true, true);
-        this.date = date;
-        this.deliveredAmount = deliveredAmount;
-        this.discountAmount = discountAmount;
-        this.product = product;
-        this.buyer = buyer;
-        this.count = count;
-        this.transmitted = transmitted;
+    public String getEverythingString () {
+        return "Log ID : " + logID + "\n" +
+                "Date : " + date + "\n" +
+                "Delivered Amount : " + deliveredAmount + "\n" +
+                "Discount Amount : " + discountAmount + "\n" +
+                "Product : " + product.getName () + "\n" +
+                "Count : " + count + "\n" +
+                "Buyer : " + buyer.getUsername () + "\n" +
+                "Transmitted(T/F) : " + transmitted ;
+    }
+
+    @Override
+    public String toString () {
+        return "Log ID : " + logID + "\n" +
+                "Date : " + date;
     }
 }
