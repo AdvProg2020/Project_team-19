@@ -24,7 +24,6 @@ public class CartMenu extends Menu {
             @Override
             public void show() {
                 showCartTable();
-                super.show ();
             }
 
             @Override
@@ -38,22 +37,22 @@ public class CartMenu extends Menu {
         return new Menu("Increase Product", this) {
             @Override
             public void show() {
-                System.out.println(this.getName()); //ToDo
+                super.show();
             }
 
             @Override
             public void execute() {
+                System.out.println("you can enter '..' to return.");
                 System.out.println("Please enter product id:");
-                System.out.println ("Or you can type .. if you want to surrender." );
                 String id = getValidProductId();
-                if (id.equals ( BACK_BUTTON ))
+                if (id.equals(BACK_BUTTON))
                     return;
                 System.out.println("Please enter salesperson's username:");
                 String sellerUsername = getValidSellerUsername();
-                if (sellerUsername.equals(".."))
+                if (sellerUsername.equals(BACK_BUTTON))
                     return;
-                Product product = ProductController.searchProduct(id);
-                CartController.getInstance().setProductCount(product, 1,((Salesperson)PersonController.getPersonByUsername (sellerUsername)));
+                Product product = ProductController.getInstance().searchProduct(id);
+                CartController.getInstance().setProductCount(product, 1, ((Salesperson) PersonController.getInstance().findPersonByUsername(sellerUsername)));
             }
         };
     }
@@ -62,22 +61,22 @@ public class CartMenu extends Menu {
         return new Menu("Decrease Product", this) {
             @Override
             public void show() {
-                System.out.println(this.getName()); //ToDo
+                super.show();
             }
 
             @Override
             public void execute() {
+                System.out.println("you can enter '..' to return.");
                 System.out.println("Please enter product id:");
-                System.out.println ("Or you can type '..' if you want to surrender." );
                 String id = getValidProductId();
-                if (id.equals ( BACK_BUTTON ))
+                if (id.equals(BACK_BUTTON))
                     return;
                 System.out.println("Please enter salesperson's username:");
                 String sellerUsername = getValidSellerUsername();
-                if (sellerUsername.equals(".."))
+                if (sellerUsername.equals(BACK_BUTTON))
                     return;
-                Product product = ProductController.searchProduct(id);
-                CartController.getInstance().setProductCount(product, -1,((Salesperson)PersonController.getPersonByUsername (sellerUsername)));
+                Product product = ProductController.getInstance().searchProduct(id);
+                CartController.getInstance().setProductCount(product, -1, ((Salesperson) PersonController.getInstance().findPersonByUsername(sellerUsername)));
             }
         };
     }
@@ -88,7 +87,7 @@ public class CartMenu extends Menu {
             @Override
             public void show() {
                 System.out.println("Subtotal(" + CartController.getInstance().itemNumber() + " items): " + CartController.getInstance().calculateTotalPrice() + "Toman");
-                System.out.println(BACK_HELP);
+                System.out.println("press back to return");
             }
 
             @Override
@@ -96,7 +95,7 @@ public class CartMenu extends Menu {
                 String input;
                 do {
                     input = scanner.nextLine();
-                    if (input.equals ( BACK_BUTTON )) {
+                    if (input.equalsIgnoreCase("back")) {
                         return;
                     }
                 } while (true);
@@ -107,47 +106,41 @@ public class CartMenu extends Menu {
     public void showCartTable() {
         helpMessage = "shows products and their detailed information in cart";
         Cart cart = CartController.getInstance().getCart();
-        String firstRowFormat = "|%-50s|%-50s|";
-        String secondRowFormat = "|%-20s||%-15s|%-15s|%-31s|%-15s|";
+        String firstRowFormat = "|%-27s|%-27s|";
+        String onFormat = "|%-55s|";
         for (Product product : cart.getProducts().keySet()) {
-            System.out.println(String.format("%s", "-------------------------------------------------------------------------------------"));
-            System.out.println(String.format(firstRowFormat, "product ID", "product Name"));
-            System.out.println(String.format("%s", "-------------------------------------------------------------------------------------"));
-            System.out.println(String.format(firstRowFormat, product.getID(), product.getName()));
+            System.out.println(String.format("%s", LINE));
+            System.out.println(String.format(firstRowFormat, "product ID: " + product.getID(), "product Name: " + product.getName()));
+            System.out.println(String.format("%s", LINE));
+            System.out.println(String.format(onFormat, "Order Details"));
+            System.out.println(String.format("%s", STRAIGHT_LINE));
             for (Salesperson salesperson : cart.getProducts().get(product).keySet()) {
-                System.out.println(String.format("%s", "-------------------------------------------------------------------------------------"));
-                System.out.println(String.format(secondRowFormat,"seller","count", "product price", "price after discount", "total price"));
-                System.out.println(String.format("%s", "-------------------------------------------------------------------------------------"));
+                System.out.println(String.format(onFormat, "seller: " + salesperson.getUsername()));
+                System.out.println(String.format(onFormat, "count: " + cart.getProducts().get(product).get(salesperson).getCount()));
+                System.out.println(String.format(onFormat, "product price: " + cart.getProducts().get(product).get(salesperson).getPrice()));
                 if (cart.getProducts().get(product).get(salesperson).isInDiscount())
-                    System.out.println(String.format(secondRowFormat, salesperson.getUsername(),cart.getProducts().get(product).get(salesperson).getPrice(), cart.getProducts().get(product).get(salesperson).getPriceAfterDiscount(), cart.getProducts().get(product).get(salesperson).getFinalPrice()));
-                else
-                    System.out.println(String.format(secondRowFormat, salesperson.getUsername(),cart.getProducts().get(product).get(salesperson).getPrice(), "product is not in discount", cart.getProducts().get(product).get(salesperson).getFinalPrice()));
-                System.out.println(String.format("%s", "-------------------------------------------------------------------------------------"));
-
-
+                    System.out.println(String.format(onFormat, "price after discount" + cart.getProducts().get(product).get(salesperson).getPriceAfterDiscount()));
+                System.out.println(String.format(onFormat, "total price:" + cart.getProducts().get(product).get(salesperson).getFinalPrice()));
+                System.out.println(String.format("%s", STRAIGHT_LINE));
             }
+            System.out.println("\n");
         }
-        System.out.println(String.format("%s", "-------------------------------------------------------------------------------------"));
-
-
-
     }
 
-    public String getValidSellerUsername(){
+    public String getValidSellerUsername() {
         String input;
         boolean check = false;
         do {
             input = scanner.nextLine();
-            if (input.equals(BACK_BUTTON))
+            if (input.equals(".."))
                 return input;
-            if(PersonController.isTherePersonByUsername(input)&&PersonController.checkValidPersonType(input, Salesperson.class)){
+            if (PersonController.getInstance().isTherePersonByUsername(input) && PersonController.getInstance().checkValidPersonType(input, Salesperson.class)) {
                 check = true;
-            }else {
+            } else {
                 System.out.println("the username is not valid.");
             }
 
-        }while(!check);
+        } while (!check);
         return input;
     }
-
 }

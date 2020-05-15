@@ -5,81 +5,81 @@ import controller.PersonController;
 import controller.ProductController;
 import model.*;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class ViewProductMenu extends Menu {
     Product product;
-    private static final String LINE = "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014" +
-            "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014" +
-            "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014" +
-            "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014" +
-            "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014";
+    boolean productIsSet = false;
 
-    private static final String LINE2 = "+\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014" +
-            "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014" +
-            "+" +
-            "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014" +
-            "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014+";
-
-    public ViewProductMenu(Menu parent){
-        super("View Product",parent);
-        subMenus.put(1,getDigestMenu());
-        subMenus.put(2,getAddToCartMenu());
-        subMenus.put(3,getCommentMenu());
-        subMenus.put(4,getCompareMenu());
+    public ViewProductMenu(Menu parent) {
+        super("View Product", parent);
+        subMenus.put(1, getDigestMenu());
+        subMenus.put(2, getAddToCartMenu());
+        subMenus.put(3, getCommentMenu());
+        subMenus.put(4, getCompareMenu());
     }
 
     public void setProduct(Product product) {
         this.product = product;
     }
 
+    public void setProductIsSet(boolean productIsSet) {
+        this.productIsSet = productIsSet;
+    }
+
     @Override
     public void execute() {
-        System.out.println("Please enter product id:");
-        String id = getValidProductId();
-        if(id.equals(BACK_BUTTON))
-            return;
-        product = ProductController.searchProduct(id);
+        if (!productIsSet) {
+            System.out.println("Please enter product id:");
+            String id = getValidProductId();
+            if (id.equals(".."))
+                return;
+            product = ProductController.getInstance().searchProduct(id);
+            productIsSet = true;
+        }
         super.execute();
     }
 
-    public void showProductDigest(){
+
+    public static void showProductDigest(Product product) {
         String firstTableFormat = "|%-36s|%-38s|";
         String sellersTableFormat = "|%-30s|%-30s|%-30s|";
         System.out.println(String.format("%s", LINE));
-        System.out.println(String.format(firstTableFormat,"product ID","product Name"));
+        System.out.println(String.format(firstTableFormat, "product ID", "product Name"));
         System.out.println(String.format("%s", LINE));
-        System.out.println(String.format(firstTableFormat,product.getID(),product.getName()));
+        System.out.println(String.format(firstTableFormat, product.getID(), product.getName()));
         System.out.println(String.format("%s", LINE));
-        System.out.println(String.format(firstTableFormat,"product average score",product.getAverageScore()));
+        System.out.println(String.format(firstTableFormat, "product average score", product.getAverageScore()));
         System.out.println(String.format("%s", LINE));
-        System.out.println(String.format(firstTableFormat,product.getID(),product.getName()));
+        System.out.println(String.format(firstTableFormat, product.getID(), product.getName()));
         System.out.println(String.format("%s", LINE));
-        System.out.println(String.format(firstTableFormat,"property","value"));
+        System.out.println(String.format(firstTableFormat, "property", "value"));
         for (String s : product.getProperties().keySet()) {
             System.out.println(String.format("%s", LINE));
-            System.out.println(String.format(firstTableFormat,s ,product.getProperties().get(s) ));
+            System.out.println(String.format(firstTableFormat, s, product.getProperties().get(s)));
         }
         System.out.println(String.format("%s", LINE));
         System.out.println();
         System.out.println("all salesperson");
-        for (OwnedProduct ownedProduct : ProductController.getProductsOfProduct(product)) {
+        for (OwnedProduct ownedProduct : ProductController.getInstance().getProductsOfProduct(product)) {
             System.out.println(String.format("%s", LINE));
-            if(ownedProduct.getSalesperson().isInDiscount(product))
-            {
-                System.out.println(String.format("%s %s %20s %s %20s %s %20s","|",ownedProduct.getSellerName() , "|",ownedProduct.getPrice(),"|",ownedProduct.getSalesperson().getDiscountPrice(product),"|"));
+            if (ownedProduct.getSalesperson().isInDiscount(product)) {
+                System.out.println(String.format("%s %s %20s %s %20s %s %20s", "|", ownedProduct.getSellerName(), "|", ownedProduct.getPrice(), "|", ownedProduct.getSalesperson().getDiscountPrice(product), "|"));
 
-            }else
-                System.out.println(String.format("%s %s %20s %s %20s %s %20s","|",ownedProduct.getSellerName() , "|",ownedProduct.getPrice(),"|","","|"));
+            } else
+                System.out.println(String.format("%s %s %20s %s %20s %s %20s", "|", ownedProduct.getSellerName(), "|", ownedProduct.getPrice(), "|", "", "|"));
         }
         System.out.println(String.format("%s", LINE));
 
     }
 
-    private Menu getDigestMenu(){
-        return new Menu("Product Digest",this){
+    private Menu getDigestMenu() {
+        return new Menu("Product Digest", this) {
             @Override
             public void show() {
-                showProductDigest ();
-                super.show ();
+                showProductDigest(product);
+                super.show();
             }
 
             @Override
@@ -130,19 +130,19 @@ public class ViewProductMenu extends Menu {
             @Override
             public void execute() {
                 String id = getValidProductId();
-                Product product2 = ProductController.searchProduct(id);
-                ProductMenu.compareTwoProducts(product,product2);
+                Product product2 = ProductController.getInstance().searchProduct(id);
+                ProductMenu.compareTwoProducts(product, product2);
                 System.out.println(BACK_HELP);
             }
         };
     }
 
-    public Menu getCommentMenu(){
-        return new Menu("Comments",this) {
+    public Menu getCommentMenu() {
+        return new Menu("Comments", this) {
             @Override
             public void show() {
                 for (Comment comment : product.getComments()) {
-                    if (comment.isCommentVerified()){
+                    if (comment.isCommentVerified()) {
                         showComment(comment);
                     }
                 }
@@ -154,46 +154,45 @@ public class ViewProductMenu extends Menu {
             @Override
             public void execute() {
                 String num = getValidMenuNumber(2);
-                if(num.equals("1")){
-                    buildComment((Customer)PersonController.getLoggedInPerson());
-                }else {
+                if (num.equals("1")) {
+                    buildComment((Customer) PersonController.getInstance().getLoggedInPerson());
+                } else {
                     return;
                 }
             }
         };
     }
 
-    public Salesperson getValidSeller(String username){
-        Salesperson salesperson = (Salesperson) PersonController.getPersonByUsername (username);
-        if(ProductController.doesSellerHasProduct(product,salesperson))
+    public Salesperson getValidSeller(String username) {
+        Salesperson salesperson = (Salesperson) PersonController.getInstance().findPersonByUsername(username);
+        if (ProductController.getInstance().doesSellerHasProduct(product, salesperson))
             return salesperson;
         else return null;
     }
 
 
-    public void showComment(Comment comment){
-        System.out.println("commenter: "+comment.getCommenter().getUsername());
+    public void showComment(Comment comment) {
+        System.out.println("commenter: " + comment.getCommenter().getUsername());
         System.out.println(comment.getDateTime());
-        if(comment.isBought())
-        {
+        if (comment.isBought()) {
             System.out.println("This user has bought this product");
-        }else {
+        } else {
             System.out.println("This user has not bought this product");
         }
-        System.out.println("Comment title: "+comment.getTitle()+"\n");
-        System.out.println("Content: "+comment.getCommentString());
+        System.out.println("Comment title: " + comment.getTitle() + "\n");
+        System.out.println("Content: " + comment.getCommentString());
     }
 
-    public void buildComment( Customer customer){
+    public void buildComment(Customer customer) {
         System.out.println("please enter your comment title or enter \"..\" to return to previous menu: ");
         String commentTitle = scanner.nextLine();
         System.out.println("please enter your comment or enter \"..\" to return to previous menu: ");
         String string = scanner.nextLine();
-        if(string.equalsIgnoreCase("..")){
+        if (string.equals(BACK_BUTTON)) {
             return;
-        }else {
-            Comment newComment = new Comment(true,customer,string,commentTitle);
-            if(customer.isProductBought(product)){
+        } else {
+            Comment newComment = new Comment(true, customer, string, commentTitle);
+            if (customer.isProductBought(product)) {
                 newComment.setBought(true);
             }
             product.addComment(newComment);

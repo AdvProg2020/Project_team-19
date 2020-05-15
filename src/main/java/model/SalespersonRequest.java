@@ -1,27 +1,31 @@
 package model;
 
+import controller.Database;
 import controller.RequestController;
 
-import java.io.IOException;
 import java.util.HashMap;
+
+import static controller.Database.*;
+import static controller.RequestController.allRequests;
 
 
 public class SalespersonRequest extends Request {
-    private HashMap < String, String > personInfo;
+    private HashMap<String, String> personInfo;
 
-    public SalespersonRequest ( HashMap < String, String > personInfo , String requestId ) throws IOException {
-        super ( requestId , null );
+    public SalespersonRequest(HashMap<String, String> personInfo) {
+        super(null);
         this.personInfo = personInfo;
+        Database.saveToFile(this, createPath("salesperson_requests", this.getRequestId()));
+        allRequests.add(this);
     }
 
     @Override
-    public void doThis () {
-        RequestController.addSalesPerson ( personInfo );
+    public void doThis() {
+        RequestController.getInstance().addSalesPerson(personInfo);
     }
 
     @Override
-    public String show () {
-        //ba tavajoh be saligh etaghireah bedim
-        return personInfo.get ( "username" ) + " for salesperson" + "\n" + "request id = " + getRequestId ( );
+    public String show() {
+        return personInfo.get("username") + " want to be a poor seller";
     }
 }

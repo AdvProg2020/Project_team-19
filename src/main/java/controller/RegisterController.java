@@ -1,15 +1,25 @@
 package controller;
 
 import model.*;
-import org.apache.commons.lang3.RandomStringUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
 
 public class RegisterController {
     private static boolean firstManagerRegistered = false;
+    private static RegisterController single_instance = null;
 
-    public static void register (HashMap<String, String> personInfo) {
+    private RegisterController() {
+    }
+
+    public static RegisterController getInstance() {
+        if (single_instance == null)
+            single_instance = new RegisterController();
+
+        return single_instance;
+    }
+
+    public void register (HashMap<String, String> personInfo) {
         personInfo.put ( "type" , changeTypeToStandardForm ( personInfo.get ( "type" ) ) );
         if (personInfo.get("type").equals("customer")) {
             registerCustomer(personInfo);
@@ -20,33 +30,20 @@ public class RegisterController {
         }
     }
 
-    public static void registerCustomer (HashMap<String, String> personInfo) {
+    public void registerCustomer (HashMap<String, String> personInfo) {
         Customer newCustomer = null;
-        try {
-            newCustomer = new Customer(personInfo);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        newCustomer = new Customer(personInfo);
     }
 
-    public static void registerSalesperson (HashMap<String, String> personInfo) {
-        try {
-            SalespersonRequest request = new SalespersonRequest(personInfo, RandomStringUtils.random ( 4 , true , true ) );
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-//        taeed modir va ...
+    public void registerSalesperson (HashMap<String, String> personInfo) {
+        SalespersonRequest request = new SalespersonRequest(personInfo);
     }
 
-    public static boolean isFirstManagerRegistered() {
+    public boolean isFirstManagerRegistered() {
         return firstManagerRegistered;
     }
 
-    public static void setFirstManagerRegistered ( boolean firstManagerRegistered ) {
-        RegisterController.firstManagerRegistered = firstManagerRegistered;
-    }
-
-    public static void registerManager ( HashMap<String, String> personInfo) {
+    public void registerManager (HashMap<String, String> personInfo) {
         try {
             Manager manager = new Manager(personInfo);
             firstManagerRegistered = true;
@@ -55,7 +52,7 @@ public class RegisterController {
         }
     }
 
-    private static String changeTypeToStandardForm (String type) {
+    private String changeTypeToStandardForm (String type) {
         if (type.equalsIgnoreCase ( "customer" ))
             return "customer";
         if (type.equalsIgnoreCase ( "salesperson" ))

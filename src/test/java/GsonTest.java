@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import static controller.ProductController.allProducts;
 
@@ -58,20 +59,18 @@ public class GsonTest {
 
     @Test
     public void testForGSONObjInObj () throws IOException {
-        Category category = new Category(true, "labaniat", null);
+
         HashMap<String, String> properties1 = new HashMap<>();
         properties1.put("color", "yellow");
         properties1.put("size", "big");
-
-        Product product = new Product("1", "panir", "lighvan",
-                 category.getName(), properties1);
+        Category category = new Category("labaniat", null, new HashSet<>());
+        Product product = new Product( "panir", "lighvan",
+                 category.getName(), properties1, false);
 
         //aval properties category ro comment kon bad test kon
-        try {
+
             Database.write(product, "C:\\Users\\HAMID\\Desktop\\yalda.json");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
 
     }
 
@@ -91,16 +90,16 @@ public class GsonTest {
 
     @Test
     public void appendFile() throws IOException {
-        Category category = new Category(true, "labaniat", null);
         HashMap<String, String> properties1 = new HashMap<>();
         properties1.put("color", "yellow");
         properties1.put("size", "big");
+        Category category = new Category("labaniat", null, new HashSet<>());
 
-        Product product = new Product("1", "panir", "lighvan",
-                category.getName(), properties1);
+        Product product = new Product("panir", "lighvan",
+                category.getName(), properties1, false);
 
-        Product product1 = new Product("2", "shir", "mihan", category.getName(),
-                properties1);
+        Product product1 = new Product("shir", "mihan", category.getName(),
+                properties1, false);
         //Database.writeAppend(product, "C:\\Users\\HAMID\\Desktop\\Product.json");
         System.out.println(Database.read(Product.class, "C:\\Users\\HAMID\\Desktop\\Product.json"));
     }
@@ -115,11 +114,11 @@ public class GsonTest {
     @Test
     public void edit() throws IOException {
         Database.initializeAddress();
-        Category category = new Category(true, "labaniat", null);
+        Category category = new Category("labaniat", null, new HashSet<>());
         HashMap<String, String> properties1 = new HashMap<>();
         properties1.put("color", "yellow");
-        Product product = new Product("new", "panir", "lighvan",
-                category.getName(), properties1);
+        Product product = new Product( "panir", "lighvan",
+                category.getName(), properties1, false);
         product.setName("shiiir");
         Database.editInFile(product, "products", product.getID());
     }

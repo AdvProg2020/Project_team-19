@@ -48,12 +48,18 @@ public class SalespersonProductMenu extends Menu {
         return new Menu("Edit Product",this) {
             @Override
             public void show() {
-                super.show();
+                System.out.println(this.getName() + " :");
+
             }
 
             @Override
             public void execute() {
-                super.execute();
+                System.out.println("Enter product id :");
+                String input = getValidProductId();
+                if (input.equals(BACK_BUTTON))
+                    return;
+                Product product = Product.getProductById(input);
+                System.out.println();
             }
         };
     }

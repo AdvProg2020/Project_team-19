@@ -1,23 +1,22 @@
 package model;
 
-import controller.ProductController;
-
 public class ProductStateInCart {
     int count;
     Salesperson salesperson;
     boolean inDiscount;
     private Product product;
-    public ProductStateInCart(int count, Salesperson salesperson,Product product) {
+
+    public ProductStateInCart(int count, Salesperson salesperson, Product product) {
         this.product = product;
         this.count = count;
         this.salesperson = salesperson;
     }
 
 
-    public double getTotalPrice(){
-        if(inDiscount){
-            return getPriceAfterDiscount()*count;
-        }else return getPrice()*count;
+    public double getTotalPrice() {
+        if (inDiscount) {
+            return getPriceAfterDiscount() * count;
+        } else return getPrice() * count;
     }
 
     public boolean isInDiscount() {
@@ -28,8 +27,8 @@ public class ProductStateInCart {
         return salesperson.getDiscountPrice(product);
     }
 
-    public double getFinalPrice(){
-        if(inDiscount)
+    public double getFinalPrice() {
+        if (inDiscount)
             return count * getPriceAfterDiscount();
         return count * getPrice();
     }
@@ -49,6 +48,4 @@ public class ProductStateInCart {
     public void setCount(int count) {
         this.count = count;
     }
-
-
 }

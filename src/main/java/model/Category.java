@@ -2,24 +2,22 @@ package model;
 
 import java.util.*;
 
-import static controller.CategoryController.rootCategories;
+import static controller.CategoryController.*;
 
 public class Category {
 
     private boolean isLeaf;
     private String name;
     private Category parent;
-    private Set<Category> children;
+    private LinkedList<Category> children;
     private HashSet<String> propertyFields;
     private ArrayList<Product> productList;
-    private static Category current;
-    private static Category tempCurrent;
 
-    public Category(boolean isLeaf, String name, Category parent) {
-        this.isLeaf = isLeaf;
-
-        if (parent == null)
+    public Category( String name, Category parent,HashSet<String> properties) {
+        this.isLeaf = true;
+        if (parent == null) {
             rootCategories.add(this);
+        }
         this.name = name;
 
         this.parent = parent;
@@ -27,7 +25,8 @@ public class Category {
         if (parent != null)
             parent.children.add(this);
 
-        this.children = new LinkedHashSet<>();
+        this.propertyFields = new HashSet<>(properties);
+        this.children = new LinkedList<>();
         this.productList = new ArrayList<>();
     }
 
@@ -37,20 +36,6 @@ public class Category {
 
     public void setProductList(ArrayList<Product> productList) {
         this.productList = productList;
-    }
-
-
-    public static boolean childExists (String name) {
-        return findCategoryByName(name)!=null;
-    }
-
-    public static Category findCategoryByName(String name){
-        for (Category child : current.children) {
-            if (child.name.equals ( name )) {
-                return child;
-            }
-        }
-        return null;
     }
 
     public HashSet<String> getPropertyFields() {
@@ -97,8 +82,20 @@ public class Category {
         return isLeaf;
     }
 
-    public Set<Category> getChildren() {
+    public LinkedList<Category> getChildren() {
         return children;
+    }
+
+    public Category getParent() {
+        return parent;
+    }
+
+    public void setParent(Category parent) {
+        this.parent = parent;
+    }
+
+    public void setLeaf(boolean leaf) {
+        isLeaf = leaf;
     }
 
     @Override

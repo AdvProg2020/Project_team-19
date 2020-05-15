@@ -1,6 +1,7 @@
 package model;
 
 import controller.Database;
+import controller.PersonController;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,40 +15,44 @@ public class Customer extends Person {
     private Cart cart;
 
 
-    public Customer(HashMap<String, String> personInfo) throws IOException {
-        super (personInfo);
+    public Customer(HashMap<String, String> personInfo) {
+        super(personInfo);
         discountCodes = new HashMap<DiscountCode, Integer>();
         buyLogs = new ArrayList<BuyLog>();
         productsWithScore = new HashMap <> (  );
-        Database.saveToFile(this,Database.createPath("customers",personInfo.get("username")));
+        Database.saveToFile(this, Database.createPath("customers", personInfo.get("username")));
         cart = new Cart();
     }
 
-    public DiscountCode findDiscountCodeByCode(String code){
+    public DiscountCode findDiscountCodeByCode(String code) {
         for (DiscountCode discountCode : discountCodes.keySet()) {
-            if(discountCode.getCode().equals(code))
+            if (discountCode.getCode().equals(code))
                 return discountCode;
         }
         return null;
     }
 
-    public void setCartAfterLogin(Cart cart){
+    public void setCartAfterLogin(Cart cart) {
         cart.setCartAfterLogIn(cart);
     }
 
-    public boolean isThereDiscountCodeByCode(String code){
-        return findDiscountCodeByCode(code)!=null;
+    public boolean isThereDiscountCodeByCode(String code) {
+        return findDiscountCodeByCode(code) != null;
     }
 
     public Cart getCart() {
         return cart;
     }
 
+    public void removeDiscountCode(DiscountCode discountCode) {
+        discountCodes.remove(discountCode);
+    }
 
-    public void useDiscountCode(DiscountCode discountCode){
+
+    public void useDiscountCode(DiscountCode discountCode) {
         cart.useDiscountCode(discountCode);
-        discountCodes.put(discountCode,discountCodes.get(discountCode)-1);
-        if(discountCodes.get(discountCode)==0){
+        discountCodes.put(discountCode, discountCodes.get(discountCode) - 1);
+        if (discountCodes.get(discountCode) == 0) {
             discountCodes.remove(discountCode);
         }
     }
@@ -88,21 +93,29 @@ public class Customer extends Person {
         return buyLogs;
     }
 
-    public void updateHistory () {
+    public void updateHistory() {
 
     }
 
-    public void increaseCredit (double amount) {
+    public void addDiscountCode(DiscountCode discountCode, int counter) {
+        if (discountCodes.containsKey(discountCode)) {
+            discountCodes.put(discountCode, discountCodes.get(discountCode) + counter);
+        } else {
+            discountCodes.put(discountCode, counter);
+        }
+    }
+
+    public void increaseCredit(double amount) {
         credit += amount;
     }
 
-    public HashMap < DiscountCode, Integer > getDiscountCodes () {
+    public HashMap<DiscountCode, Integer> getDiscountCodes() {
         return discountCodes;
     }
 
-    public BuyLog findBuyLogById(String id){
+    public BuyLog findBuyLogById(String id) {
         for (BuyLog buyLog : buyLogs) {
-            if(buyLog.getLogID().equals(id))
+            if (buyLog.getLogID().equals(id))
                 return buyLog;
         }
         return null;
@@ -118,4 +131,3 @@ public class Customer extends Person {
 
 
 }
-

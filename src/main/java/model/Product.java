@@ -1,11 +1,14 @@
 package model;
 
+import controller.CategoryController;
 import controller.Database;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static controller.CategoryController.*;
 import static controller.ProductController.allProducts;
 
 public class Product {
@@ -14,29 +17,40 @@ public class Product {
     private HashMap<String, String> properties;
     private String productID;
     private int count;
+    private int seen;
     private String name;
     private String brand;
     private String category;
     private String description;
     private double averageScore;
-    private int amountOfScores;
     private double averagePrice;
     private double leastPrice;
     private ArrayList<Comment> comments;
 
-    public Product(String productID, String name, String brand, String category,
-                   HashMap<String, String> properties) throws IOException {
+    public Product(String name, String brand, String category,
+                   HashMap<String, String> properties, boolean temp) {
 
-        this.productID = productID;
+        this.productID = RandomStringUtils.random(4, true, true);
         this.name = name;
         this.brand = brand;
         this.category = category;
         this.count = 0;
+        this.seen = 0;
         this.properties = properties;
-        Database.saveToFile(this, Database.createPath("products", productID));
-        allProducts.add(this);
+        if (!temp) {
+            Database.saveToFile(this, Database.createPath("products", productID));
+            allProducts.add(this);
+        }
     }
 
+
+    public void increaseSeen() {
+        this.seen += 1;
+    }
+
+    public int getSeen() {
+        return seen;
+    }
 
     public boolean isAvailable() {
         return count > 0;
@@ -54,18 +68,6 @@ public class Product {
         return averageScore;
     }
 
-    public void setAverageScore ( double averageScore ) {
-        this.averageScore = averageScore;
-    }
-
-    public int getAmountOfScores () {
-        return amountOfScores;
-    }
-
-    public void setAmountOfScores ( int amountOfScores ) {
-        this.amountOfScores = amountOfScores;
-    }
-
     public String getBrand() {
         return brand;
     }
@@ -74,8 +76,8 @@ public class Product {
         return productID;
     }
 
-    public String getCategory() {
-        return category;
+    public Category getCategory() {
+        return CategoryController.getInstance().getCategoryByName(category, rootCategories);
     }
 
     public ArrayList<Comment> getComments() {
@@ -90,7 +92,7 @@ public class Product {
         return leastPrice;
     }
 
-    public void addComment( Comment comment){
+    public void addComment(Comment comment) {
         comments.add(comment);
     }
 
@@ -103,26 +105,38 @@ public class Product {
     }
 
     public void edit(String name, String brand, String category, HashMap<String, String> properties) {
+        getCategory().removeProduct(this);
         this.name = name;
         this.brand = brand;
         this.category = category;
-        this.properties = properties;
+        this.properties = new HashMap<>(properties);
+        getCategory().addProduct(this);
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+
     @Override
-    public String toString() { //ToDo ino taqir ddm check knim hmeja ok e
-        return name + " (ID: " + productID + ")";
+    public String toString() {
+        return productID;
+    }
+
+    public void changeCount(int count) {
+        this.count += count;
     }
 
     public String printProduct() {
-        return "Product : \n" +
-                "Product ID : " + productID + "\n" +
-                "Count : " + count + "\n" +
-                "Name : " + name + "\n" +
-                "Brand : " + brand;
+        return "Product : " +
+                ", productID='" + productID + '\'' +
+                ", count=" + count +
+                ", name='" + name + '\'' +
+                ", brand='" + brand + '\'' +
+                '}';
     }
 }

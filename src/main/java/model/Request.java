@@ -1,10 +1,9 @@
 package model;
 
-import controller.Database;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.io.IOException;
 
-import static controller.RequestController.allRequests;
 
 public abstract class Request {
     public enum RequestState {
@@ -14,11 +13,9 @@ public abstract class Request {
     private String requestId;
     private RequestState requestState;
 
-    public Request(String requestId, RequestState requestState) throws IOException {
-        this.requestId = requestId;
+    public Request(RequestState requestState) {
+        this.requestId = RandomStringUtils.random(4, true, true);
         this.requestState = requestState;
-        Database.saveToFile(this, Database.createPath("requests", requestId));
-        allRequests.add(this);
     }
 
     public RequestState getRequestState() {
@@ -29,17 +26,9 @@ public abstract class Request {
         return requestId;
     }
 
-    public abstract void doThis() throws IOException;
+    public abstract void doThis();
 
     public abstract String show();
-
-    public static Request getRequestById(String requestId) {
-        for (Request request : allRequests) {
-            if (request.getRequestId().equals(requestId))
-                return request;
-        }
-        return null;
-    }
 
     @Override
     public String toString() {

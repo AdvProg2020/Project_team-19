@@ -18,7 +18,7 @@ public class Comment {
     LocalDateTime dateTime;
     VerifiedState state;
 
-    public Comment(boolean isBought, Customer commenter, String commentString,String title) {
+    public Comment(boolean isBought, Customer commenter, String commentString, String title) {
         commentId = UUID.randomUUID().toString();
         this.isBought = isBought;
         this.commenter = commenter;
@@ -50,7 +50,7 @@ public class Comment {
         return state;
     }
 
-    public boolean isCommentVerified(){
+    public boolean isCommentVerified() {
         return state.equals(VerifiedState.VERIFIED);
     }
 

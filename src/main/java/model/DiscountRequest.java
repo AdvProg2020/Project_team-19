@@ -1,67 +1,74 @@
 package model;
 
+import controller.Database;
+import controller.DiscountController;
+
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import static controller.DiscountController.*;
-import static model.Discount.getDiscountByIdFromAll;
+import static controller.RequestController.allRequests;
 
 public class DiscountRequest extends Request {
     private Salesperson salesperson;
-    private String discountID;
+    private Discount discount;
     private ArrayList<Product> products;
-    private String startTime; //we can use "new java.util.Date()" that gives the exact time
-    private String endTime;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private double discountPercentage;
 
-    public DiscountRequest(String requestId, String discountID, ArrayList<Product> products, String startTime,
-                           String endTime, double discountPercentage, RequestState requestState, Salesperson salesperson) throws IOException {
-        super(requestId, requestState);
-        this.discountID = discountID;
+    public DiscountRequest(Discount discount, ArrayList<Product> products, LocalDateTime startTime,
+                           LocalDateTime endTime, double discountPercentage, Salesperson salesperson) {
+        super(RequestState.EDIT);
+        this.discount = discount;
         this.products = products;
         this.startTime = startTime;
         this.endTime = endTime;
         this.discountPercentage = discountPercentage;
         this.salesperson = salesperson;
+        save();
+    }
+
+    public DiscountRequest(Discount discount, Salesperson salesperson) {
+        super(RequestState.DELETE);
+        this.discount = discount;
+        this.salesperson = salesperson;
+        save();
+    }
+
+    public DiscountRequest(ArrayList<Product> products, LocalDateTime startTime, LocalDateTime endTime, double discountPercentage, Salesperson salesperson) {
+        super(RequestState.ADD);
+        this.products = products;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.discountPercentage = discountPercentage;
+        this.salesperson = salesperson;
+        save();
+    }
+
+    private void save() {
+        Database.saveToFile(this, Database.createPath("discount_requests", this.getRequestId()));
+        allRequests.add(this);
     }
 
     @Override
     public void doThis() {
         switch (getRequestState()) {
             case ADD:
-                addDiscount(salesperson, new Discount(discountID, startTime, endTime, discountPercentage, products));
+                DiscountController.getInstance().addDiscount(salesperson, new Discount(startTime, endTime, discountPercentage, products));
                 break;
             case EDIT:
-                editDiscount();
+                DiscountController.getInstance().editDiscount(discountPercentage, startTime, endTime, products, discount, salesperson);
                 break;
             case DELETE:
-                removeDiscount(salesperson, getDiscountByIdFromAll (discountID));
+                DiscountController.getInstance().removeDiscount(salesperson, discount);
                 break;
         }
     }
 
     @Override
     public String show() {
-        //ba tavajoh be salighe avazesh konim
-        return getRequestId();
-    }
-
-
-    private void editDiscount() {   //havaset bashe inja cizi be products add ya remove nemishe
-        Discount discount = getDiscountByIdFromAll (discountID);
-        assert discount != null;
-        discount.setDiscountPercentage(discountPercentage);
-        discount.setEndTime(endTime);
-        discount.setStartTime(startTime);
-        discount.setProducts(products);
-        //...
-        System.out.println("edit discount");
-    }
-
-    @Override
-    public String toString() {
-        return "DiscountRequest{" +
-                "discountID='" + discountID + '\'' +
-                '}';
+        return salesperson.getUsername() + " want to put " + products + " in discount " + "(" + discountPercentage + "%"
+                + ")" + ": " + discount.getDiscountID() + " from " + startTime + " to" + endTime;
     }
 }

@@ -17,7 +17,7 @@ public class SellLog {
     private Customer buyer;
     private boolean transmitted;
 
-    public SellLog( LocalDateTime date, double deliveredAmount, double discountAmount, Product product, Customer buyer, boolean transmitted, int count) throws IOException {
+    public SellLog( LocalDateTime date, double deliveredAmount, double discountAmount, Product product, Customer buyer, boolean transmitted, int count) {
         this.logID = RandomStringUtils.random(4, true, true);
         this.date = date;
         this.deliveredAmount = deliveredAmount;

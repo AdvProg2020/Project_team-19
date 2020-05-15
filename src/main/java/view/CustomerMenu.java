@@ -12,7 +12,7 @@ import static controller.PersonController.increaseCustomerCredit;
 public class CustomerMenu extends Menu {
 
     private static HashMap < DiscountCode, Integer > customersDiscountCodes = new HashMap <> ( );
-    private static Customer thisGuy = (Customer) PersonController.getLoggedInPerson ( );
+    private static Customer thisGuy = (Customer) PersonController.getInstance().getLoggedInPerson ( );
 
     public CustomerMenu ( Menu parent ) {
         super ( "Customer Menu" , parent );
@@ -22,7 +22,8 @@ public class CustomerMenu extends Menu {
         subMenus.put ( 4 , new CustomerOrdersMenu ( this ) );
         subMenus.put ( 5 , getViewDiscountCodesMenu ( ) );
         subMenus.put ( 6 , getViewBalanceMenu ( ) );
-        subMenus.put ( 7 , getLogoutMenu ( ) );
+        subMenus.put ( 7 , getIncreaseCreditMenu ( ) );
+        subMenus.put ( 8 , getLogoutMenu ( ) );
     }
 
     @Override
@@ -52,6 +53,31 @@ public class CustomerMenu extends Menu {
         };
     }
 
+    public Menu getIncreaseCreditMenu() {
+        return new Menu("Increase Balance Menu", this) {
+            @Override
+            public void show() {
+                System.out.println(this.getName() + " :");
+            }
+
+            @Override
+            public void execute() {
+                if (!PersonController.getInstance().checkValidPersonType(thisGuy.getUsername(), Customer.class)) {
+                    System.out.println("You Should Be A Customer.");
+                    return;
+                }
+                String input;
+                System.out.println("Enter Amount You Want to Add to Your Credit :");
+                while(!(input = scanner.nextLine()).matches("\\d+(.\\d+)?") && !input.equals(".."))
+                    System.out.println("Enter Valid Credit or \"..\" to Back");
+                if (input.equals(".."))
+                    return;
+
+                PersonController.getInstance().increaseCustomerCredit(thisGuy, Double.parseDouble(input));
+            }
+        };
+    }
+
     public Menu getViewDiscountCodesMenu () {
         return new Menu ( "View Discount Codes" , this ) {
             @Override
@@ -62,30 +88,6 @@ public class CustomerMenu extends Menu {
 
             @Override
             public void execute () {
-            }
-        };
-    }
-
-    public Menu getIncreaseCreditMenu () {
-        return new Menu ( "Increase Balance Menu" , this ) {
-            @Override
-            public void show () {
-                System.out.println ( this.getName ( ) + " :" );
-            }
-
-            @Override
-            public void execute () {
-                if ( !PersonController.checkValidPersonType ( thisGuy.getUsername ( ) , Customer.class ) ) {
-                    System.out.println ( "You should be a customer." );
-                    return;
-                }
-                String input;
-                System.out.println ( "Enter amount you want to add to your credit :" );
-                while ( !(input = scanner.nextLine ( )).matches ( "\\d+(.\\d+)?" ) && !input.equals ( BACK_BUTTON ) )
-                    System.out.println ( "Enter valid credit or \"..\" to back" );
-                if ( input.equals ( BACK_BUTTON ) )
-                    return;
-                increaseCustomerCredit ( thisGuy , Double.parseDouble ( input ) );
             }
         };
     }

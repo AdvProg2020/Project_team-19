@@ -3,7 +3,6 @@ package controller;
 import model.*;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -12,52 +11,60 @@ import java.util.stream.Collectors;
 public class PersonController {
     public static ArrayList<Person> allPersons = new ArrayList<>();
     private static Person loggedInPerson = null;
+    private static PersonController single_instance = null;
 
-    public static void initializePersons() throws FileNotFoundException {
+    private PersonController() {
+    }
+
+    public static PersonController getInstance() {
+        if (single_instance == null)
+            single_instance = new PersonController();
+
+        return single_instance;
+    }
+
+    public void initializePersons() {
         for (File file : Database.returnListOfFiles(Database.address.get("customers"))) {
-            allPersons.add((Customer) Database.read(Customer.class,file.getAbsolutePath()));
+            allPersons.add((Customer) Database.read(Customer.class, file.getAbsolutePath()));
         }
         for (File file : Database.returnListOfFiles(Database.address.get("managers"))) {
-            allPersons.add((Manager) Database.read(Manager.class,file.getAbsolutePath()));
-            RegisterController.setFirstManagerRegistered ( true );
+            allPersons.add((Manager) Database.read(Manager.class, file.getAbsolutePath()));
         }
         for (File file : Database.returnListOfFiles(Database.address.get("salespersons"))) {
-            allPersons.add((Salesperson) Database.read(Salesperson.class,file.getAbsolutePath()));
+            allPersons.add((Salesperson) Database.read(Salesperson.class, file.getAbsolutePath()));
         }
     }
 
-    public static <T> boolean checkValidPersonType(String username, Class<T> personType){
+    public <T> boolean checkValidPersonType(String username, Class<T> personType) {
         for (Person person : filterByRoll(personType)) {
-            if(person.getUsername().equals(username))
+            if (person.getUsername().equals(username))
                 return true;
         }
         return false;
     }
 
-    public static void increaseCustomerCredit(Customer customer, double credit) {
+    public void increaseCustomerCredit(Customer customer, double credit) {
         customer.increaseCredit(credit);
     }
 
-    public static void addPerson (Person person) {
+    public void addPerson(Person person) {
         allPersons.add(person);
     }
 
-    public static void removePersonFromAllPersons (Person person) throws IOException {
+    public void removePersonFromAllPersons(Person person) throws IOException {
         allPersons.remove(person);
-        Database.deleteFile(Database.createPath(getTypeFromList(person.getUsername()),person.getUsername()));
+        Database.deleteFile(Database.createPath(getTypeFromList(person.getUsername()), person.getUsername()));
     }
 
-    public static boolean isThereLoggedInPerson(){
-        return loggedInPerson!=null;
+    public boolean isThereLoggedInPerson() {
+        return loggedInPerson != null;
     }
 
-    public static boolean isTherePersonByUsername(String username) {
-        if( getPersonByUsername (username) == null)
-            return false;
-        return true;
+    public boolean isTherePersonByUsername(String username) {
+        return findPersonByUsername(username) != null;
     }
 
-    public static Person getPersonByUsername ( String username){
+    public Person findPersonByUsername(String username) {
         for (Person person : allPersons) {
             if (person.getUsername().equals(username))
                 return person;
@@ -65,72 +72,79 @@ public class PersonController {
         return null;
     }
 
-    public void editPersonalInfo(String filedName,String newValue){
-        loggedInPerson.setField(filedName,newValue);
+    public void editPersonalInfo(String filedName, String newValue) {
+        loggedInPerson.setField(filedName, newValue);
     }
 
-    public static void login(String username,String password) throws Exception{
-        if ( !Pattern.compile ( "\\w{3,}" ).matcher ( username ).matches ( ) ) //ToDo put this in view
-            throw new Exception ( "Username should contain more than 3 characters." );
-        else if(!isTherePersonByUsername(username)){
+    public void login(String username, String password) throws Exception {
+        if (!Pattern.compile("\\w{3,}").matcher(username).matches()) //ToDo put this in view
+            throw new Exception("Username should contain more than 3 characters.");
+        else if (!isTherePersonByUsername(username)) {
             throw new UsernameNotFoundException("This username does not exist");
-        }else if(!checkPassword(password,username)){
+        } else if (!checkPassword(password, username)) {
             throw new WrongPasswordException("Incorrect password");
-        }else {
-            loggedInPerson = getPersonByUsername (username);
-            if(isLoggedInPersonCustomer()){
+        } else {
+            loggedInPerson = findPersonByUsername(username);
+            if (isLoggedInPersonCustomer()) {
                 CartController.getInstance().setLoggedInPersonCart();
             }
+            goToMenu();
         }
     }
 
-    public static void logOut(){
+    public void logOut() {
         loggedInPerson = null;
     }
 
-    public static boolean checkPassword ( String password , String username ) throws WrongPasswordException{
-        if (!getPersonByUsername (username).getPassword().equals(password))
+    public boolean checkPassword(String password, String username) throws WrongPasswordException {
+        if (!findPersonByUsername(username).getPassword().equals(password))
             throw new WrongPasswordException("Incorrect password");
         return true;
     }
 
-    public static class UsernameNotFoundException extends Exception{
-        UsernameNotFoundException ( String message ) {
-            super ( message );
+    public static class UsernameNotFoundException extends Exception {
+        UsernameNotFoundException(String message) {
+            super(message);
         }
     }
 
-    public static class WrongPasswordException extends Exception{
-        public WrongPasswordException ( String message ) {
-            super ( message );
+    public static class WrongPasswordException extends Exception {
+        public WrongPasswordException(String message) {
+            super(message);
         }
     }
 
-    public static Person getLoggedInPerson() {
+    public Person getLoggedInPerson() {
         return loggedInPerson;
     }
 
-    public static void setLoggedInPerson(Person loggedInPerson) {
+    public void setLoggedInPerson(Person loggedInPerson) {
         PersonController.loggedInPerson = loggedInPerson;
-        if(isLoggedInPersonCustomer()){
+        if (isLoggedInPersonCustomer()) {
             CartController.getInstance().setLoggedInPersonCart();
         }
     }
 
-    public static boolean isLoggedInPersonCustomer(){
+    public boolean isLoggedInPersonCustomer() {
         return loggedInPerson instanceof Customer;
     }
 
-    public static <T> ArrayList<Person> filterByRoll(Class<T> personType) {
+    public <T> ArrayList<Person> filterByRoll(Class<T> personType) {
         return allPersons.stream().filter(personType::isInstance).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public static String getTypeFromList (String username) {
+    private static void goToMenu() {
+//        if (loggedInPerson instanceof Customer)
+//            CustomerMenu
+    }
+
+    public String getTypeFromList(String username) {
         for (Person person : allPersons) {
-            if (person.getUsername ().equals ( username ))
-                return person.getType ();
+            if (person.getUsername().equals(username))
+                return person.getType();
         }
         return null;
     }
 }
+
 

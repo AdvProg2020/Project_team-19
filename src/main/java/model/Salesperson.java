@@ -78,10 +78,17 @@ public class Salesperson extends Person {
     }
 
     public void removeFromDiscounts(Discount discount) {
+        for (Product product : discount.getProducts()) {
+            offeredProducts.get(product).removeFromDiscount();
+        }
         discounts.remove(discount);
     }
 
-    public void addToDiscounts(Discount discount) {
+    public ArrayList<Discount> getDiscounts() {
+        return discounts;
+    }
+
+    public void addToDiscounts(Discount discount) { //TODO check here
         discounts.add(discount);
     }
 
@@ -113,6 +120,10 @@ public class Salesperson extends Person {
     public double discountAmount(Product product){
        // return offeredProducts.get(product).discount
         return 1;
+    }
+
+    public int getProductAmount(Product product) {
+        return offeredProducts.get(product).getAmount();
     }
 }
 

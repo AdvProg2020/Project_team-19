@@ -1,11 +1,9 @@
 package view;
 
+import controller.RequestController;
 import model.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
-
-import static controller.RequestController.*;
 
 public class ManageRequestsMenu extends Menu {
 
@@ -28,7 +26,7 @@ public class ManageRequestsMenu extends Menu {
 
             @Override
             public void execute() {
-                showRequests(getSpecificTypeOfRequests(Request.class));
+                showRequests(RequestController.getInstance().getSpecificTypeOfRequests(Request.class));
             }
         };
     }
@@ -42,7 +40,7 @@ public class ManageRequestsMenu extends Menu {
 
             @Override
             public void execute() {
-                showRequests(getSpecificTypeOfRequests(SalespersonRequest.class));
+                showRequests(RequestController.getInstance().getSpecificTypeOfRequests(SalespersonRequest.class));
             }
         };
     }
@@ -56,7 +54,7 @@ public class ManageRequestsMenu extends Menu {
 
             @Override
             public void execute() {
-                showRequests(getSpecificTypeOfRequests(ProductRequest.class));
+                showRequests(RequestController.getInstance().getSpecificTypeOfRequests(ProductRequest.class));
             }
         };
     }
@@ -70,7 +68,7 @@ public class ManageRequestsMenu extends Menu {
 
             @Override
             public void execute() {
-                showRequests(getSpecificTypeOfRequests(DiscountRequest.class));
+                showRequests(RequestController.getInstance().getSpecificTypeOfRequests(DiscountRequest.class));
             }
         };
     }
@@ -87,7 +85,7 @@ public class ManageRequestsMenu extends Menu {
                 System.out.println("Enter requestId to see :");
                 String input;
                 Request request;
-                while ((request = Request.getRequestById(input = scanner.nextLine())) == null && !input.equals(".."))
+                while ((request = RequestController.getInstance().getRequestById(input = scanner.nextLine())) == null && !input.equals(".."))
                     System.out.println("Enter Valid Id :( or \"..\" to Fucking Back");
                 if (input.equals(".."))
                     return;
@@ -100,19 +98,11 @@ public class ManageRequestsMenu extends Menu {
                 if (input.equals(".."))
                     return;
                 if (input.equals("1")) {
-                    try {
-                        acceptRequest(request);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    RequestController.getInstance().acceptRequest(request);
                     System.out.println("Accepted.");
                 }
                 else if (input.equals("2")) {
-                    try {
-                        declineRequest(request);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    RequestController.getInstance().declineRequest(request);
                     System.out.println("Declined.");
                 }
             }

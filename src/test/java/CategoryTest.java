@@ -9,31 +9,43 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import static controller.CategoryController.rootCategories;
+
 public class CategoryTest {
 
     @Test
     public void checkValidCategoryTest (  ) {
-        Category food = new Category ( true , "Food" , null );
-        Category sweet = new Category ( false , "Sweet" , food );
-        Category bitter = new Category ( false , "Bitter" , food );
-        Category sour = new Category ( false , "Sour" , food );
-        Category aSweet = new Category ( false , "A" , sweet );
-        Category bSweet = new Category ( false , "B" , sweet );
-        Category aBitter = new Category ( false , "A" , bitter );
-        Category cBitter = new Category ( false , "C" , bitter );
-        Category bSour = new Category ( false , "B" , sour );
-        Category cSour = new Category ( false , "C" , sour );
+        Category food = new Category ( "Food" , null , new HashSet<>());
+        Category sweet = new Category (  "Sweet" , food , new HashSet<>());
+        Category bitter = new Category ( "Bitter" , food, new HashSet<>() );
+        Category sour = new Category ("Sour" , food, new HashSet<>() );
+        Category aSweet = new Category (  "A" , sweet, new HashSet<>() );
+        Category bSweet = new Category ( "B" , sweet , new HashSet<>());
+        Category aBitter = new Category (  "A" , bitter, new HashSet<>() );
+        Category cBitter = new Category (  "C" , bitter, new HashSet<>() );
+        Category bSour = new Category (  "B" , sour, new HashSet<>() );
+        Category cSour = new Category (  "C" , sour , new HashSet<>());
 
        // Assert.assertEquals ( false , Category.checkValidCategory ( "Food/Sweet/C" ) );
 
     }
 
     @Test
+    public void checkGetCategory() {
+        Category food = new Category ( "Food" , null, new HashSet<>() );
+        Category sweet = new Category (  "Sweet" , food , new HashSet<>());
+        Category bitter = new Category (  "Bitter" , food , new HashSet<>());
+        Category sour = new Category (  "Sour" , sweet , new HashSet<>());
+        rootCategories.add(food);
+        Assert.assertEquals(sour, CategoryController.getInstance().getCategoryByName("Sour", rootCategories));
+    }
+
+    @Test
     public void checkViewCategory() throws IOException {
-        Category food = new Category ( false, "Food" , null );
-        Category sweet = new Category ( false , "Sweet" , food );
-        Category bitter = new Category ( true , "Bitter" , food );
-        Category sour = new Category ( true , "Sour" , sweet );
+        Category food = new Category ( "Food" , null, new HashSet<>() );
+        Category sweet = new Category (  "Sweet" , food , new HashSet<>());
+        Category bitter = new Category (  "Bitter" , food , new HashSet<>());
+        Category sour = new Category (  "Sour" , sweet , new HashSet<>());
 
         HashSet<String> fields = new HashSet<>();
         fields.add("color");
@@ -47,12 +59,12 @@ public class CategoryTest {
         properties2.put("size", "small");
 
 
-        Product product1 = new Product("1", "panir", "lighvan",
-                bitter.getName(), properties1);
+        Product product1 = new Product( "panir", "lighvan",
+                bitter.getName(), properties1,false);
 
 
-        Product product2 = new Product("2", "shir", "mihan",
-                bitter.getName(), properties2);
+        Product product2 = new Product( "shir", "mihan",
+                bitter.getName(), properties2,false);
 
         ArrayList<Product> products = new ArrayList<>();
         products.add(product1);
@@ -60,6 +72,6 @@ public class CategoryTest {
 
         bitter.setProductList(products);
         sour.setProductList(products);
-        CategoryController.viewAllCategories();
+        //CategoryController.viewAllCategories();
     }
 }

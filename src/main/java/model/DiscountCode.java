@@ -1,19 +1,21 @@
 package model;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DiscountCode {
-    public static ArrayList<DiscountCode> allDiscountCodes = new ArrayList<DiscountCode>();
     private String code;
-    private String startTime;
-    private String endTime;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private double discountPercentage;
     private double maxDiscount; //maximum amount
     private int useCounter;
 
-    public DiscountCode(String code, String startTime, String endTime, double discountPercentage, double maxDiscount, int useCounter, ArrayList<Customer> customerList) {
-        this.code = code;
+    public DiscountCode(LocalDateTime startTime, LocalDateTime endTime, double discountPercentage, double maxDiscount, int useCounter) {
+        this.code = RandomStringUtils.random(4, true, true);
         this.startTime = startTime;
         this.endTime = endTime;
         this.discountPercentage = discountPercentage;
@@ -53,19 +55,27 @@ public class DiscountCode {
         return code;
     }
 
-    public double getPriceAfterDiscountCode(double price){
-        return price*(1-discountPercentage/100);
+    public double getPriceAfterDiscountCode(double price) {
+        return price * (1 - discountPercentage / 100);
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 
     public void setCode(String code) {
         this.code = code;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 

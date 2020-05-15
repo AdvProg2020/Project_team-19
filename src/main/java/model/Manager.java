@@ -14,7 +14,7 @@ import java.util.LinkedList;
 public class Manager extends Person  {
     public static ArrayList<Manager> managers = new ArrayList <> (  );
 
-    public Manager(HashMap<String, String> personInfo) throws IOException {
+    public Manager(HashMap<String, String> personInfo) {
         super(personInfo);
         managers.add(this);
         Database.saveToFile(this,Database.createPath("managers", personInfo.get("username")));

@@ -98,7 +98,7 @@ public class LoginMenu extends Menu {
 
                 //ToDo write on Database
                 if (!BACK_PRESSED) {
-                    RegisterController.register ( personInfo );
+                    RegisterController.getInstance().register ( personInfo );
 
                     System.out.println ( "A verification code has been sent to your email." );
                     System.out.println ( "Just kidding lmao" );
@@ -190,7 +190,7 @@ public class LoginMenu extends Menu {
         } while ( !check );
 
         usernameInstance = username;
-        typeInstance = PersonController.getTypeFromList(username);
+        typeInstance = PersonController.getInstance().getTypeFromList(username);
 
     }
 
@@ -231,7 +231,7 @@ public class LoginMenu extends Menu {
         else {
             try {
                 username = inputsMatcher.group ( 1 );
-                PersonController.login ( username , password );
+                PersonController.getInstance().login ( username , password );
                 System.out.println ( "Yaaay! It was successful! Welcome to our app " + username + " :D" );
                 return true;
             } catch (Exception e) {

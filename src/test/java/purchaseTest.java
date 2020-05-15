@@ -15,14 +15,14 @@ public class purchaseTest {
         HashMap<String,String> Info = new HashMap<>();
         Customer customer = new Customer(Info);
         customer.setCredit(100000);
-        Product product1 = new Product("1","lip stick","beauty","",Info);
-        Product product2 = new Product("2","comb","beauty","",Info);
+        Product product1 = new Product("lip stick","beauty","",Info, false);
+        Product product2 = new Product("comb","beauty","",Info, false);
         Salesperson salesperson = new Salesperson(Info);
         salesperson.addToOfferedProducts(product1,5,5000);
         salesperson.addToOfferedProducts(product2,5,2000);
         customer.getCart().addProduct(product1,salesperson);
         customer.getCart().addProduct(product2,salesperson);
-        customer.getCart().setProductCount(product1,salesperson,3);
+       // customer.getCart().setProductCount(product1,3);
         Cart.purchase(customer);
     }
 }

@@ -3,27 +3,42 @@ package controller;
 import model.*;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
+import static controller.Database.*;
 import static model.Product.getProductById;
 import static model.Product.stock;
-import static controller.Database.address;
 
 public class ProductController {
     public static ArrayList<Product> allProducts = new ArrayList<>();
     public static ArrayList<Product> currentProducts = new ArrayList<>();
+    private static ProductController single_instance = null;
 
-    public static void initializeProducts() throws FileNotFoundException {
-        for (File file : Database.returnListOfFiles(address.get("products"))) {
+    private ProductController() {
+    }
+
+    public static ProductController getInstance() {
+        if (single_instance == null)
+            single_instance = new ProductController();
+
+        return single_instance;
+    }
+
+    public void initializeProducts() {
+        for (File file : Database.returnListOfFiles(address.get("product"))) {
             allProducts.add((Product) Database.read(Product.class, file.getAbsolutePath()));
         }
     }
 
-    public static boolean isThereProductById(String productID)  {
+    public void setCurrentProducts(ArrayList<Product> currentProducts) {
+        ProductController.currentProducts = currentProducts;
+    }
+
+    public boolean isThereProductById(String productID)  {
         return searchProduct(productID)!=null;
     }
 
@@ -31,7 +46,7 @@ public class ProductController {
         public String message="No product with such id";
     }
 
-    public static Product searchProduct(String productID) {
+    public Product searchProduct(String productID) {
         for (Product product : currentProducts) {
             if (product.getID().equals(productID))
                 return product;
@@ -39,32 +54,29 @@ public class ProductController {
         return null;
     }
 
-    public static void addExistProduct(Product product, Salesperson salesperson, int amount, double price) throws IOException {
-        if (stock.get(product) != null)
-            stock.get(product).add(salesperson);
-        else {
-            ArrayList<Salesperson> sellers = new ArrayList<>();
-            sellers.add(salesperson);
-            stock.put(product, sellers);
-        }
+    public void addExistProduct(Product product, Salesperson salesperson, int amount, double price) {
+        stock.get(product).add(salesperson);
         salesperson.addToOfferedProducts(product, amount, price);
-
-        Database.editInFile(salesperson, "salespersons", salesperson.getUsername());
+        product.changeCount(amount);
+        saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
+        saveToFile(stock, address.get("stock"));
     }
 
-    public static void addNewProduct(Product product, Salesperson salesperson, int amount, double price) {
+    public void addNewProduct(Product product, Salesperson salesperson, int amount, double price) {
         ArrayList<Salesperson> sellers = new ArrayList<>();
         sellers.add(salesperson);
 
         stock.put(product, sellers);
         allProducts.add(product);
         salesperson.addToOfferedProducts(product, amount, price);
+        product.changeCount(amount);
 
-        //new file
-        //be file ham add mikonim to stock
+        Database.write(product, Database.createPath("products", product.getID()));
+        saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
+        saveToFile(stock, address.get("stock"));
     }
 
-    public static void addProduct(Product product, Salesperson salesperson, int amount, double price) throws IOException {
+    public void addProduct(Product product, Salesperson salesperson, int amount, double price) {
         if (getProductById(product.getID()) != null)
             addExistProduct(product, salesperson, amount, price);
 
@@ -74,33 +86,65 @@ public class ProductController {
     }
 
 
-    public static void editProduct(Product product, Salesperson salesperson, int amount, double price) throws IOException {
+    public void editProduct(Product product, Salesperson salesperson, int amount, double price,
+                                   String category, String name, String brand, HashMap<String, String>properties) {
         salesperson.editProduct(product, price, amount);
-        Database.editInFile(salesperson, "salespersons", salesperson.getUsername());
-
-        //TODO edit stock file
+        product.edit(category, name, brand, properties);
+        editInFile(salesperson, "salespersons", salesperson.getUsername());
+        saveToFile(stock, address.get("stock"));
     }
 
-    public static void removeProduct(Product product, Salesperson salesperson) throws IOException {
+    public void removeProduct(Product product, Salesperson salesperson)  {
         allProducts.remove(product);
         stock.get(product).remove(salesperson);
         salesperson.removeFromOfferedProducts(product);
 
-        //TODo edit stock file
-        Database.deleteFile(Database.createPath("products", product.getID()));
+        saveToFile(stock, address.get("stock"));
+        try {
+            deleteFile(Database.createPath("products", product.getID()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static ArrayList<Product> filterByField(String fieldName, String property, Category category) {
-        return category.getProductList().stream().filter(product -> product.getProperties().get(fieldName).
-                equals(property)).collect(Collectors.toCollection(ArrayList::new));
+    public ArrayList<Product> filterByField(String fieldName, String property, ArrayList<Product> products) {
+        return products.stream().filter(product -> {
+            if (product.getProperties().containsKey(fieldName))
+                return product.getProperties().get(fieldName).equals(property);
+            else
+                return false;
+        }).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public static ArrayList<OwnedProduct> filterOwnedProductByPrice(double lowPrice, double highPrice, Product product) {
+    public ArrayList<Product> filterByName(String productName, ArrayList<Product> products) {
+        return products.stream().filter(product -> product.getName().equals(productName)).
+                collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public ArrayList<Product> filterByBrand(String brandName, ArrayList<Product> products) {
+        return products.stream().filter(product -> product.getBrand().equals(brandName)).
+                collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public ArrayList<Product> filterByCategory(String categoryName, ArrayList<Product> products) {
+        return products.stream().filter(product -> product.getCategory().equals(categoryName)).
+                collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public ArrayList<OwnedProduct> filterByPrice(double lowPrice, double highPrice) {
+        ArrayList<OwnedProduct> products = new ArrayList<>();
+        for (Product product : currentProducts) {
+            products.addAll(filterOwnedProductByPrice(lowPrice, highPrice, product));
+        }
+        return products;
+    }
+
+    public ArrayList<OwnedProduct> filterOwnedProductByPrice(double lowPrice, double highPrice, Product product) {
         return getProductsOfProduct(product).stream().filter(ownedProduct -> ownedProduct.getPrice() <= highPrice &&
                 ownedProduct.getPrice() >= lowPrice).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public static ArrayList<Product> filterACategoryByPrice(double lowPrice, double highPrice, Category category) {
+    public ArrayList<Product> filterACategoryByPrice(double lowPrice, double highPrice, Category category) {
         return category.getProductList().stream().filter(product -> {
             for (Salesperson salesperson : stock.get(product)) {
                 if (salesperson.getProductPrice(product) >= lowPrice && salesperson.getProductPrice(product) <= highPrice)
@@ -110,11 +154,11 @@ public class ProductController {
         }).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public static ArrayList<Product> filterByExisting(Category category) {
-        return category.getProductList().stream().filter(Product::isAvailable).collect(Collectors.toCollection(ArrayList::new));
+    public ArrayList<Product> filterByExisting(ArrayList<Product> products) {
+        return products.stream().filter(Product::isAvailable).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public static ArrayList<OwnedProduct> getProductsOfProduct(Product product) {
+    public ArrayList<OwnedProduct> getProductsOfProduct(Product product) {
         ArrayList<OwnedProduct> productList = new ArrayList<>();
 
         for (Salesperson salesperson : stock.get(product)) {
@@ -124,7 +168,7 @@ public class ProductController {
         return productList;
     }
 
-    public static boolean doesSellerHasProduct(Product product, Salesperson salesperson){
+    public boolean doesSellerHasProduct(Product product, Salesperson salesperson){
         for (OwnedProduct ownedProduct : getProductsOfProduct(product)) {
             if(ownedProduct.getSalesperson().equals(salesperson))
                 return true;
@@ -132,18 +176,20 @@ public class ProductController {
         return false;
     }
 
-    public static ArrayList<OwnedProduct> sortProductByPrice(Product product) {
+    public ArrayList<OwnedProduct> sortProductByPrice(Product product) {
         ArrayList<OwnedProduct> sortedProducts = getProductsOfProduct(product);
 
         sortedProducts.sort(new SortByPrice());
         return sortedProducts;
     }
 
-    public static ArrayList<Product> sortProductByAverageScore(Category category) {
-        ArrayList<Product> sortedProducts = category.getProductList();
-
-        sortedProducts.sort(new SortByAverageScore());
-        return sortedProducts;
+    public void sortProduct(ArrayList<Product> products, boolean averageScore,
+                                   boolean name, boolean brand) {
+        SortProduct sortProduct = new SortProduct();
+        sortProduct.setAverageScore(averageScore);
+        sortProduct.setName(name);
+        sortProduct.setBrand(brand);
+        products.sort(sortProduct);
     }
 }
 
@@ -151,22 +197,43 @@ class SortByPrice implements Comparator<OwnedProduct> {
 
     @Override
     public int compare(OwnedProduct product1, OwnedProduct product2) {
-        if (product1.getPrice() != product2.getPrice())
-            return (int) (product1.getPrice() - product2.getPrice());
+        if (product1.getPriceForShow() != product2.getPriceForShow())
+            return (int) (product1.getPriceForShow() - product2.getPriceForShow());
         else
-            return product1.getSalesperson().getUsername().compareTo(product2.getSalesperson().getUsername());
+            return product1.getSellerName().compareTo(product2.getSellerName());
     }
 }
 
-class SortByAverageScore implements Comparator<Product> {
+class SortProduct implements Comparator<Product> {
+
+    private boolean averageScore = false;
+    private boolean name = false;
+    private boolean brand = false;
+
+
+    public void setAverageScore(boolean averageScore) {
+        this.averageScore = averageScore;
+    }
+
+    public void setName(boolean name) {
+        this.name = name;
+    }
+
+    public void setBrand(boolean brand) {
+        this.brand = brand;
+    }
 
     @Override
     public int compare(Product product1, Product product2) {
-        if (product1.getAverageScore() != product2.getAverageScore())
+
+        if (averageScore && product1.getAverageScore() != product2.getAverageScore())
             return (int) (product1.getAverageScore() - product2.getAverageScore());
-        else if (!product1.getName().equals(product2.getName()))
+        else if (name && !product1.getName().equals(product2.getName()))
             return product1.getName().compareTo(product2.getName());
-        else
+        else if (brand && !product1.getBrand().equals(product2.getBrand()))
             return product1.getBrand().compareTo(product2.getBrand());
+        else
+            return product1.getSeen() - product2.getSeen();
+
     }
 }

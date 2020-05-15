@@ -3,11 +3,15 @@ import model.Category;
 import model.Product;
 import model.Salesperson;
 import org.junit.Test;
+import view.SortingMenu;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+
+import static controller.CategoryController.rootCategories;
 
 public class ProductTest {
     @Test
@@ -25,10 +29,10 @@ public class ProductTest {
         properties2.put("size", "small");
 
         Product product1 = new Product("1", "panir", "lighvan",
-                 category.getName(), properties1);
+                 category.getName(), properties1, false);
 
         Product product2 = new Product("2", "shir", "mihan",
-                category.getName(), properties2);
+                category.getName(), properties2, false);
 
         ArrayList<Product> products = new ArrayList<>();
         products.add(product1);
@@ -36,7 +40,8 @@ public class ProductTest {
 
         category.setProductList(products);
 
-        System.out.println(ProductController.filterByField("color", "yellow", category).get(0).equals(product1));
+        rootCategories.addAll(category.getChildren());
+        //System.out.println(ProductController.filterByField("color", "yellow").get(0).equals(product1));
 
     }
 
@@ -72,11 +77,11 @@ public class ProductTest {
         owners2.add(seller2);
 
         Product product1 = new Product("1", "panir", "lighvan",
-                 category.getName(), properties1);
+                 category.getName(), properties1, false);
 
 
         Product product2 = new Product("2", "shir", "mihan",
-                 category.getName(), properties2);
+                 category.getName(), properties2, false);
 
 
         seller1.addToOfferedProducts(product1, 2, 2000);
@@ -131,11 +136,11 @@ public class ProductTest {
         owners2.add(seller2);
 
         Product product1 = new Product("1", "panir", "lighvan",
-                 category.getName(), properties1);
+                 category.getName(), properties1, false);
 
 
         Product product2 = new Product("2", "shir", "mihan",
-                 category.getName(), properties2);
+                 category.getName(), properties2, false);
 
 
         seller1.addToOfferedProducts(product1, 2, 2500);
@@ -154,5 +159,43 @@ public class ProductTest {
         Iterator iterator = ProductController.sortProductByPrice(product1).iterator();
         while (iterator.hasNext())
             System.out.println(iterator.next());
+    }
+
+    @Test
+    public void sortTest() throws IOException {
+
+        Category category = new Category(true, "labaniat", null);
+        HashSet<String> fields = new HashSet<>();
+        fields.add("color");
+        fields.add("size");
+        category.setPropertyFields(fields);
+        HashMap<String, String> properties1 = new HashMap<>();
+        properties1.put("color", "yellow");
+        properties1.put("size", "big");
+        HashMap<String ,String> properties2 = new HashMap<>();
+        properties2.put("color", "white");
+        properties2.put("size", "small");
+
+        Product product1 = new Product("1", "panir", "lighvan",
+                category.getName(), properties1, true);
+
+        Product product2 = new Product("2", "shir", "mihan",
+                category.getName(), properties2, true);
+
+        Product product3 = new Product("3", "abt", "mihan",
+                category.getName(), properties1, true);
+
+        Product product4 = new Product("4", "panir", "ab",
+                category.getName(), properties2, true);
+
+        ArrayList<Product> products = new ArrayList<>();
+        products.add(product1);
+        products.add(product2);
+        products.add(product3);
+        products.add(product4);
+
+        SortingMenu sm = new SortingMenu(null);
+        sm.setProducts(products);
+        sm.getSortByBrandMenu().run();
     }
 }

@@ -16,7 +16,7 @@ public class productMenuTest {
     @Test
     public void viewProductTest() throws IOException {
         Database.initializeAddress();
-        Category category = new Category(true, "labaniat", null);
+        Category category = new Category("labaniat", null, new HashSet<>());
         HashSet<String> fields = new HashSet<>();
         fields.add("color");
         fields.add("size");
@@ -28,7 +28,7 @@ public class productMenuTest {
         properties2.put("color", "white");
         properties2.put("size", "small");
 
-        Product product1 = new Product("1", "panir", "lighvan", category.getName(), properties1);
+        Product product1 = new Product( "panir", "lighvan", category.getName(), properties1, false);
         ProductController.allProducts.add(product1);
         ProductMenu productMenu = new ProductMenu(null);
         ViewProductMenu viewProductMenu = new ViewProductMenu(null);

@@ -1,8 +1,12 @@
 package model;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static controller.DiscountController.allDiscounts;
+
 
 public class Discount {
 
@@ -10,19 +14,23 @@ public class Discount {
         BUILD_IN_PROGRESS, EDIT_IN_PROGRESS, VERIFIED
     }
 
-    private String discountID;
+    private final String discountID;
     private ArrayList<Product> products;
-    private String startTime; //we can use "new java.util.Date()" that gives the exact time
-    private String endTime;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private double discountPercentage;
 
-    public Discount(String discountID, String startTime, String endTime, double discountPercentage,
+    public Discount(LocalDateTime startTime, LocalDateTime endTime, double discountPercentage,
                     ArrayList<Product> products) {
-        this.discountID = discountID;
+        this.discountID = RandomStringUtils.random(4,true,true);
         this.startTime = startTime;
         this.endTime = endTime;
         this.discountPercentage = discountPercentage;
         this.products = products;
+    }
+
+    public boolean checkDiscountEndTime(){
+        return endTime.isBefore(LocalDateTime.now());
     }
 
     public String getDiscountID() {
@@ -33,11 +41,23 @@ public class Discount {
         return products;
     }
 
-    public void setStartTime(String startTime) {
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public double getDiscountPercentage() {
+        return discountPercentage;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 
