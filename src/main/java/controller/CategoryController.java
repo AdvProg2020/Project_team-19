@@ -9,10 +9,10 @@ import static controller.Database.*;
 
 public class CategoryController {
     private static CategoryController single_instance = null;
-    public static LinkedList<Category> rootCategories = new LinkedList<>();
+    public static ArrayList<Category> rootCategories = new ArrayList<>();
 
     private CategoryController() {
-        rootCategories = new LinkedList<>();
+        rootCategories = new ArrayList<>();
     }
 
     public static CategoryController getInstance() {
@@ -23,15 +23,29 @@ public class CategoryController {
     }
 
     public void initializeRootCategories() {
-        rootCategories.add((Category) read(LinkedList.class, address.get("root_categories")));
+        rootCategories = Database.handleJsonArray(address.get("root_categories"));
+        for (Category rootCategory : rootCategories) {
+            rootCategory.setParent(null);
+            setParents(rootCategory);
+        }
     }
 
-    public Category getCategoryByName(String categoryName, LinkedList<Category> categories) {
+    public void setParents(Category category){
+        for (Category child : category.getChildren()) {
+            child.setParent(category);
+            if(!child.getChildren().isEmpty())
+                setParents(child);
+        }
+    }
+
+    public Category getCategoryByName(String categoryName, ArrayList<Category> categories) {
         for (Category category : categories) {
             if (category.getName().equals(categoryName))
                 return category;
             if (category.getChildren().size() > 0) {
-                return getCategoryByName(categoryName, category.getChildren());
+                Category category1 = getCategoryByName(categoryName, category.getChildren());
+                if( category1!= null)
+                return category1;
             }
         }
         return null;
@@ -48,29 +62,17 @@ public class CategoryController {
 
     public boolean isCategoryEmpty(Category category) {
         for (Category child : category.getChildren()) {
-            if (child.getIsLeaf())
+            if (child.isLeaf())
                 return child.getProductList() == null;
             return isCategoryEmpty(child);
         }
         return true;
     }
 
-    public void addCategory(Category category, Category parent) {
-        if (parent.getIsLeaf()) {
-            for (Product product : parent.getProductList()) {
-                category.addProduct(product);
-            }
-            for (Product product : parent.getProductList()) {
-                product.setCategory(category.getName());
-            }
-            parent.getProductList().clear();
-            saveToFile(rootCategories, address.get("root_categories"));
-        }
-    }
 
-    public void addCategoryForMenu(String name, Category parent, HashSet<String> properties) {
-        Category category = new Category(name, parent, properties);
-        addCategory(category, parent);
+    public void addCategory(String name, Category parent, HashSet<String> properties) {
+        new Category(name, parent, properties);
+        saveToFile(rootCategories, address.get("root_categories"));
     }
 
     public void editCategory(String name, Category category, Category parent, HashSet<String> addProperties, HashSet<String> removeProperties, boolean root) {
@@ -97,9 +99,9 @@ public class CategoryController {
     }
 
     public void changeParent(Category category, Category newParent) {
-        addCategory(category, newParent);
         removeCategory(category.getParent(), category);
         category.setParent(newParent);
+        saveToFile(rootCategories, address.get("root_categories"));
     }
 
 }

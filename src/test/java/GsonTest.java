@@ -1,9 +1,11 @@
 import com.google.gson.reflect.TypeToken;
 import controller.Database;
+import controller.ProductController;
 import model.Category;
 import model.Product;
 import org.junit.Test;
 
+import javax.xml.crypto.Data;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -56,9 +58,15 @@ public class GsonTest {
         }
     }
 
+    @Test
+    public void stock() {
+        Database.initializeAddress();
+        ProductController.getInstance().initializeStock();
+
+    }
 
     @Test
-    public void testForGSONObjInObj () throws IOException {
+    public void testForGSONObjInObj () {
 
         HashMap<String, String> properties1 = new HashMap<>();
         properties1.put("color", "yellow");
@@ -89,7 +97,7 @@ public class GsonTest {
     }
 
     @Test
-    public void appendFile() throws IOException {
+    public void appendFile() {
         HashMap<String, String> properties1 = new HashMap<>();
         properties1.put("color", "yellow");
         properties1.put("size", "big");
@@ -112,7 +120,7 @@ public class GsonTest {
     }
 
     @Test
-    public void edit() throws IOException {
+    public void edit()  {
         Database.initializeAddress();
         Category category = new Category("labaniat", null, new HashSet<>());
         HashMap<String, String> properties1 = new HashMap<>();

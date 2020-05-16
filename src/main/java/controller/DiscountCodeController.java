@@ -44,6 +44,27 @@ public class DiscountCodeController {
         }
     }
 
+    public void checkDiscountCodeEndTime(){
+        for (DiscountCode discountCode : allDiscountCodes) {
+            if (discountCode.getEndTime().isAfter(LocalDateTime.now())){
+                removeDiscountCode(discountCode);
+            }
+        }
+    }
+
+    public void addNewDiscountCode(LocalDateTime start,LocalDateTime end,double percentage,double max,int useCounter,ArrayList<Person> people){
+        DiscountCode discountCode = new DiscountCode(start,end,percentage,max,useCounter);
+        for (Person person : people) {
+            if(((Customer) person).getDiscountCodes().containsKey(discountCode)){
+                ((Customer) person).getDiscountCodes().put(discountCode,(((Customer) person).getDiscountCodes().get(discountCode)+useCounter));
+            }else
+            ((Customer) person).getDiscountCodes().put(discountCode,useCounter);
+            Database.saveToFile(person,Database.createPath("customers",person.getUsername()));
+        }
+        allDiscountCodes.add(discountCode);
+        Database.saveToFile(allDiscountCodes,Database.createPath("discount_codes",discountCode.getCode()));
+    }
+
     public void editDiscountCode(DiscountCode discountCode, int field, String newValue) {
         switch (field) {
             case 1:
@@ -60,7 +81,20 @@ public class DiscountCodeController {
                 break;
             case 5:
                 discountCode.setUseCounter(Integer.parseInt(newValue));
+            case 6:
+                addToCustomer(discountCode,(Customer)PersonController.getInstance().getPersonByUsername(newValue));
+            case 7:
+                removeFromCustomer(discountCode,(Customer)PersonController.getInstance().getPersonByUsername(newValue));
+
         }
+    }
+
+    public void addToCustomer(DiscountCode discountCode,Customer customer){
+        customer.getDiscountCodes().put(discountCode,discountCode.getUseCounter());
+    }
+
+    public void removeFromCustomer(DiscountCode discountCode,Customer customer){
+        customer.getDiscountCodes().remove(discountCode);
     }
 
     public String changeDateTimeToString(LocalDateTime time) {

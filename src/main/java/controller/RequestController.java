@@ -46,7 +46,12 @@ public class RequestController {
         request.doThis();
         allRequests.remove(request);
         try {
-            deleteFile(createPath("requests", request.getRequestId()));
+            if (request instanceof DiscountRequest)
+                deleteFile(createPath("discount_requests", request.getRequestId()));
+            else if (request instanceof ProductRequest)
+                deleteFile(createPath("product_requests", request.getRequestId()));
+            else if (request instanceof SalespersonRequest)
+                deleteFile(createPath("salesperson_requests", request.getRequestId()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -55,7 +60,12 @@ public class RequestController {
     public void declineRequest(Request request) {
         allRequests.remove(request);
         try {
-            deleteFile(createPath("requests", request.getRequestId()));
+            if (request instanceof DiscountRequest)
+                deleteFile(createPath("discount_requests", request.getRequestId()));
+            else if (request instanceof ProductRequest)
+                deleteFile(createPath("product_requests", request.getRequestId()));
+            else if (request instanceof SalespersonRequest)
+                deleteFile(createPath("salesperson_requests", request.getRequestId()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -84,20 +94,21 @@ public class RequestController {
         new ProductRequest(salesperson, getProductById(productId));
     }
 
-    public void addProductRequest(Double price, Integer amount, Salesperson salesperson, String productId
+    public void addProductRequest(Double price, Integer amount, Salesperson salesperson
             , String category, String name, String brand, HashMap<String, String> properties) {
-        Product product;
-        if (productId == null)
-            product = new Product(name, brand, category, properties, true);
-        else
-            product = getProductById(productId);
 
+        Product product = new Product(name, brand, category, properties, true);
         new ProductRequest(price, amount, salesperson, product);
     }
 
-    public void editProductRequest(Double price, Integer amount, Salesperson salesperson, String productId
+    public void editProductRequest(String price, String amount, Salesperson salesperson, String productID
             , String category, String name, String brand, HashMap<String, String> properties) {
-        new ProductRequest(price, amount, salesperson, category, name, brand, properties, getProductById(productId));
+
+        Product product = ProductController.getInstance().searchProduct(productID);
+        double pr = (price == null) ? salesperson.getProductPrice(product) : Double.parseDouble(price);
+        int am = (amount == null) ? salesperson.getProductAmount(product) : Integer.parseInt(amount);
+
+        new ProductRequest(pr, am, salesperson, category, name, brand, properties, product);
     }
 
     public void deleteDiscountRequest(Discount discount, Salesperson salesperson) {

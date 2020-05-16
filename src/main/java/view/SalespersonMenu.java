@@ -1,10 +1,12 @@
 package view;
 
 import controller.PersonController;
+import model.Product;
 import model.Salesperson;
 import model.SellLog;
 
 public class SalespersonMenu extends Menu {
+    Salesperson salesperson = (Salesperson) PersonController.getInstance ().getLoggedInPerson ( );
     public SalespersonMenu ( Menu parent ) {
         super ( "Salesperson Menu" , parent );
         subMenus.put ( 1 , new PersonalInfoMenu ( this ) );
@@ -12,7 +14,7 @@ public class SalespersonMenu extends Menu {
         subMenus.put ( 3 , new SalespersonProductMenu ( this ) );
         subMenus.put ( 4 , new SalesPersonDiscountsMenu ( this ) );
         subMenus.put ( 5 , getViewSalesHistory ( ) );
-        subMenus.put ( 6 , getShowCategoriesMenu ( ) );
+        subMenus.put ( 6 , getCategoryMenu(this) );
         subMenus.put ( 7 , getShowBalanceMenu () );
         subMenus.put ( 8 , getLogoutMenu ( ) );
 
@@ -33,10 +35,9 @@ public class SalespersonMenu extends Menu {
         return new Menu ( "Show Company Information" , this ) {
             @Override
             public void show () {
-                Salesperson thisGuy = (Salesperson) PersonController.getInstance ().getLoggedInPerson ( );
                 System.out.println (
-                        "Company : " + thisGuy.getPersonInfo ( ).get ( "company" ) + "\n" +
-                                "Dar Surate Vjud Sayere Moshakhsat :\n" + thisGuy.getPersonInfo ( ).get ( "dar surate vjud sayere moshakhsat" ) );
+                        "Company : " + salesperson.getPersonInfo ( ).get ( "company" ) + "\n" +
+                                "Dar Surate Vjud Sayere Moshakhsat :\n" + salesperson.getPersonInfo ( ).get ( "dar surate vjud sayere moshakhsat" ) );
                 super.show ( );
             }
 
@@ -66,25 +67,10 @@ public class SalespersonMenu extends Menu {
         return new Menu("View Sales History",this) {
             @Override
             public void show() {
-                Salesperson salesperson = (Salesperson) PersonController.getInstance ().getLoggedInPerson ( );
                 for (SellLog sellLog : salesperson.getSellLogs ( )) {
                     System.out.println ( sellLog.getEverythingString () );
                     System.out.println ( LINE );
                 }
-                super.show();
-            }
-
-            @Override
-            public void execute() {
-                super.execute();
-            }
-        };
-    }
-
-    public Menu getShowCategoriesMenu(){
-        return new Menu("Show Category",this) {
-            @Override
-            public void show() {
                 super.show();
             }
 

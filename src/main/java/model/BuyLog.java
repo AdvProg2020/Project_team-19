@@ -15,7 +15,7 @@ public class BuyLog {
     private LocalDateTime date;
     private double paymentAmount;
     private double discountCodeAmount;
-    private ArrayList<OwnedProduct> products;
+    private HashMap<Product,ArrayList<String>> products;
     private boolean reachedBuyer;
 
     public BuyLog( LocalDateTime date, double paymentAmount, double discountCodeAmount, HashMap<Product,HashMap<Salesperson,ProductStateInCart>> tradedProductList, boolean reachedBuyer) {
@@ -24,17 +24,26 @@ public class BuyLog {
         this.paymentAmount = paymentAmount;
         this.discountCodeAmount = discountCodeAmount;
         this.reachedBuyer = reachedBuyer;
-        products = new ArrayList<>();
+        products = new HashMap<>();
         for (Product product : tradedProductList.keySet()) {
+            ArrayList<String> strings= new ArrayList<>();
+            String state ;
             for (ProductStateInCart value : tradedProductList.get(product).values()) {
-                products.add(new OwnedProduct(value,product));
+                state = "seller:"+value.getSalesperson().getUsername()+"\n"
+                        +"count: "+value.count+"\n"
+                        +"price: "+value.getPrice()+"\n";
+                if(value.isInDiscount())
+                    state += "price after discount: "+value.getPriceAfterDiscount()+"\n";
+                state+= "total: "+value.getTotalPrice();
+                strings.add(state);
             }
+            products.put(product,strings);
         }
     }
 
     public boolean isThereProduct(Product product){
-        for (OwnedProduct ownedProduct : products) {
-            if(product.equals(ownedProduct.getProduct()))
+        for (Product product1: products.keySet()) {
+            if(product.equals(product1))
                 return true;
         }
         return false;
@@ -49,7 +58,6 @@ public class BuyLog {
                 "Date : " + date + "\n" +
                 "Payment Amount : " + paymentAmount + "\n" +
                 "Discount Code Amount : " + discountCodeAmount + "\n" +
-                "Products : " + products + "\n" +
                 "Reached Buyer : " + reachedBuyer;
     }
 

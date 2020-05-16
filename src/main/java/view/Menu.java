@@ -2,6 +2,7 @@ package view;
 
 import controller.CategoryController;
 import controller.ProductController;
+import model.Category;
 import model.Product;
 import model.Salesperson;
 
@@ -14,6 +15,10 @@ import controller.RegisterController;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+
+import static controller.CategoryController.rootCategories;
+import static view.ProductMenu.viewAllCategories;
+import static view.ProductMenu.viewCategory;
 
 public abstract class Menu {
     private String name;
@@ -32,7 +37,6 @@ public abstract class Menu {
             "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014+";
 
     static final String BACK_HELP = "You can type \"..\" to cancel the process";
-    static boolean BACK_PRESSED;
     protected String helpMessage;
 
     public Menu(String name, Menu parentMenu) {
@@ -72,6 +76,30 @@ public abstract class Menu {
             nextMenu = subMenus.get ( chosenMenu );
         nextMenu.run ( );
         this.run ();
+    }
+
+    public Menu getCategoryMenu(Menu parent) {
+        return new Menu("Category Menu", parent) {
+            @Override
+            public void show() {
+                System.out.println(this.getName());
+                viewAllCategories();
+            }
+
+            @Override
+            public void execute() {
+                String input;
+                do {
+                    System.out.println("Enter category name you want to see or \"..\" to return :");
+                    input = getValidCategoryName();
+                    if (input.equals(BACK_BUTTON))
+                        return;
+                    Category category = CategoryController.getInstance().getCategoryByName(input, rootCategories);
+                    assert category != null;
+                    viewCategory(category);
+                } while (true);
+            }
+        };
     }
 
     protected Menu getHelpMenu(Menu parent) {
@@ -132,14 +160,14 @@ public abstract class Menu {
 
     public String getValidMenuNumber(int most) {
         String menuNum;
-        Pattern numPattern = Pattern.compile("[0-9]");
+        Pattern numPattern = Pattern.compile("[0-9]+");
         boolean check = false;
         do {
             menuNum = scanner.nextLine();
             if (numPattern.matcher(menuNum).matches() && Integer.parseInt(menuNum) <= most) {
                 check = true;
             } else {
-                System.out.println("Your input number must be between 1 to" + most);
+                System.out.println("Your input number must be between 1 to " + most);
             }
         } while (!check);
         return menuNum;
@@ -159,13 +187,27 @@ public abstract class Menu {
         return input;
     }
 
-    public static class WrongMenuNumberException extends Exception {
-        String massage;
+    public String getValidProductId(Salesperson salesperson) {
+        boolean check;
+        String input;
+        do {
+            input = scanner.nextLine();
+            if (input.equals(BACK_BUTTON))
+                break;
+            check= ProductController.getInstance().isThereProductById(input);
+            if (!check) {
+                System.out.println("There is no product with such id. Please enter id again:");
+                continue;
+            }
+            check = ProductController.getInstance().doesSellerHasProduct(ProductController.getInstance().searchProduct(input),salesperson) ;
+            if (!check) {
+                System.out.println("You do not have such product. Please enter discount id again:");
+            }
 
-        public WrongMenuNumberException ( int most ) {
-            massage = "Your input number must be between 1 to" + most;
-        }
+        } while (!check);
+        return input;
     }
+
 
     protected Menu getLogoutMenu() {
         return new Menu ("Logout",this) {
@@ -207,14 +249,28 @@ public abstract class Menu {
         return input;
     }
 
+    public String getValidCustomer() {
+        boolean check;
+        String input;
+        do {
+            input = scanner.nextLine();
+            if (input.equals(BACK_BUTTON ))
+                return input;
+            check = PersonController.getInstance().isLoggedInPersonCustomer();
+            if (!check) {
+                System.out.println("There is no customer with that username. Please enter username again:");
+            }
 
+        } while (!check);
+        return input;
+    }
 
     public String getValidCategoryName() {
         boolean check;
         String input;
         do {
             input = scanner.nextLine();
-            if (input.equals(BACK_BUTTON))
+            if (input.equals(BACK_BUTTON )||input.equalsIgnoreCase("root"))
                 return input;
             check = CategoryController.getInstance().getCategoryByName(input, CategoryController.rootCategories) != null;
             if (!check) {
@@ -242,20 +298,31 @@ public abstract class Menu {
         return num;
     }
 
-    public String getValidDataTim() {
-        System.out.println("year:");
+    public String getValidDateTime () {
+        System.out.print("Year : ");
         String year = getValidMenuNumber(2025);
-        System.out.println("month:");
+        System.out.print("Month : ");
         String month = getValidMenuNumber(12);
-        System.out.println("day");
+        System.out.print("Day : ");
         String day = getValidMenuNumber(31);
-        System.out.println("hour");
-        String hour = getValidMenuNumber(12);
-        System.out.println("minute");
+        System.out.print("Hour : ");
+        String hour = getValidMenuNumber(24);
+        System.out.print("Minute : ");
         String minute = getValidMenuNumber(59);
 
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return LocalDateTime.of(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day), Integer.parseInt(hour), Integer.parseInt(minute)).format(format);
+    }
+
+    public String assertDeletion(){
+        boolean check;
+        String input;
+        do {
+            System.out.println("Are you sure you want to remove?(Y|N)");
+            input = scanner.nextLine ( );
+            check = (input.equalsIgnoreCase("y")||input.equalsIgnoreCase("n"));
+        }while (!check);
+        return input;
     }
 
     @Override

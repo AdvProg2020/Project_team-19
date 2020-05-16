@@ -2,8 +2,14 @@ package controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
+import model.Category;
+import model.Product;
+import model.Salesperson;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -21,8 +27,8 @@ public class Database {
         address.put("salespersons", databaseAddress + File.separator + "persons" + File.separator + "salespersons");
         address.put("products", databaseAddress + File.separator + "products");
         address.put("discount_codes", databaseAddress + File.separator + "discount_codes");
-        address.put("stock.json", databaseAddress);
-        address.put("root_categories.json", databaseAddress);
+        address.put("stock", databaseAddress + File.separator + "stock.json");
+        address.put("root_categories", databaseAddress+ File.separator +"root_categories.json");
         address.put("product_requests", databaseAddress + File.separator + "requests" + File.separator + "product_requests");
         address.put("discount_requests", databaseAddress + File.separator + "requests" + File.separator + "discount_requests");
         address.put("salesperson_requests", databaseAddress + File.separator + "requests" + File.separator + "salesperson_requests");
@@ -96,25 +102,33 @@ public class Database {
 
     }
 
-    public static ArrayList<String> handleJsonArray(String filedName, String address) throws IOException {
-        JsonReader reader = new JsonReader(new FileReader(address));
-        ArrayList<String> arrayList = new ArrayList<>();
-        reader.beginArray();
-        while (true) {
-            JsonToken token = reader.peek();
+    public static ArrayList<Category> handleJsonArray(String address) {
+        ArrayList<Category> patterns = new ArrayList<>();
+        Gson gson = new Gson();
+        JsonParser jsonParser = new JsonParser();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(address));
+            JsonElement jsonElement = jsonParser.parse(br);
+            Type arrayListType = new TypeToken<ArrayList<Category>>(){}.getType();
+            ArrayList<Category> temp = gson.fromJson(jsonElement, arrayListType);
+            if (temp != null)
+                return temp;
+            return new ArrayList <> (  );
 
-            if (token.equals(JsonToken.END_ARRAY)) {
-                reader.endArray();
-                break;
-            } else if (token.equals(JsonToken.BEGIN_OBJECT)) {
-                arrayList.add(handleJsonObject(reader, filedName));
-            } else if (token.equals(JsonToken.END_OBJECT)) {
-                reader.endObject();
-            } else {
-                reader.skipValue();
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return arrayList;
+        return patterns;
+
+    }
+
+    public static HashMap<Product, ArrayList<Salesperson>> handleHashMap(String address) {
+        HashMap<Product, ArrayList<Salesperson>> employeeMap = new HashMap<>();
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(employeeMap);
+        Type type = new TypeToken<HashMap<Product, ArrayList<Salesperson>>>() {
+        }.getType();
+        return gson.fromJson(jsonString, type);
     }
 
     public static String createPath(String keyPath, String name) {

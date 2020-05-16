@@ -11,11 +11,12 @@ import java.util.stream.Collectors;
 
 import static controller.Database.*;
 import static model.Product.getProductById;
-import static model.Product.stock;
 
 public class ProductController {
     public static ArrayList<Product> allProducts = new ArrayList<>();
     public static ArrayList<Product> currentProducts = new ArrayList<>();
+    public static HashMap<Product, ArrayList<Salesperson>> stock = new HashMap<>();
+
     private static ProductController single_instance = null;
 
     private ProductController() {
@@ -29,9 +30,13 @@ public class ProductController {
     }
 
     public void initializeProducts() {
-        for (File file : Database.returnListOfFiles(address.get("product"))) {
+        for (File file : Database.returnListOfFiles(address.get("products"))) {
             allProducts.add((Product) Database.read(Product.class, file.getAbsolutePath()));
         }
+    }
+
+    public void initializeStock() {
+        stock = Database.handleHashMap(address.get("stock"));
     }
 
     public void setCurrentProducts(ArrayList<Product> currentProducts) {
@@ -57,7 +62,6 @@ public class ProductController {
     public void addExistProduct(Product product, Salesperson salesperson, int amount, double price) {
         stock.get(product).add(salesperson);
         salesperson.addToOfferedProducts(product, amount, price);
-        product.changeCount(amount);
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
         saveToFile(stock, address.get("stock"));
     }
@@ -69,12 +73,15 @@ public class ProductController {
         stock.put(product, sellers);
         allProducts.add(product);
         salesperson.addToOfferedProducts(product, amount, price);
-        product.changeCount(amount);
+        product.getCategory().addProduct(product);
 
         Database.write(product, Database.createPath("products", product.getID()));
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
         saveToFile(stock, address.get("stock"));
+        saveToFile(CategoryController.rootCategories,address.get("root_category"));
     }
+
+
 
     public void addProduct(Product product, Salesperson salesperson, int amount, double price) {
         if (getProductById(product.getID()) != null)
@@ -89,8 +96,11 @@ public class ProductController {
     public void editProduct(Product product, Salesperson salesperson, int amount, double price,
                                    String category, String name, String brand, HashMap<String, String>properties) {
         salesperson.editProduct(product, price, amount);
+        product.getCategory().removeProduct(product);
         product.edit(category, name, brand, properties);
-        editInFile(salesperson, "salespersons", salesperson.getUsername());
+        product.getCategory().addProduct(product);
+        saveToFile(salesperson, createPath("salesperson", salesperson.getUsername()));
+        saveToFile(CategoryController.rootCategories,address.get("root_category"));
         saveToFile(stock, address.get("stock"));
     }
 
@@ -98,13 +108,33 @@ public class ProductController {
         allProducts.remove(product);
         stock.get(product).remove(salesperson);
         salesperson.removeFromOfferedProducts(product);
+        CartController.getInstance().removeProduct(product,salesperson);
+        saveToFile(CategoryController.rootCategories,address.get("root_category"));
+        saveToFile(stock, address.get("stock"));
+    }
 
+    public void removeProductForManager(Product product) {
+        product.getCategory().removeProduct(product);
+        for (Person salesperson : PersonController.getInstance().filterByRoll(Salesperson.class)) {
+            removeProduct(product, (Salesperson) salesperson);
+        }
+        CartController.getInstance().removeProduct(product);
+        saveToFile(CategoryController.rootCategories,address.get("root_category"));
         saveToFile(stock, address.get("stock"));
         try {
             deleteFile(Database.createPath("products", product.getID()));
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isProductAvailable(Product product){
+        for (Salesperson salesperson : stock.get(product)) {
+            if(salesperson.getProductAmount(product)>0){
+                return true;
+            }
+        }
+        return false;
     }
 
     public ArrayList<Product> filterByField(String fieldName, String property, ArrayList<Product> products) {
@@ -127,7 +157,7 @@ public class ProductController {
     }
 
     public ArrayList<Product> filterByCategory(String categoryName, ArrayList<Product> products) {
-        return products.stream().filter(product -> product.getCategory().equals(categoryName)).
+        return products.stream().filter(product -> product.getCategory().getName().equals(categoryName)).
                 collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -155,7 +185,7 @@ public class ProductController {
     }
 
     public ArrayList<Product> filterByExisting(ArrayList<Product> products) {
-        return products.stream().filter(Product::isAvailable).collect(Collectors.toCollection(ArrayList::new));
+        return products.stream().filter(this::isProductAvailable).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public ArrayList<OwnedProduct> getProductsOfProduct(Product product) {

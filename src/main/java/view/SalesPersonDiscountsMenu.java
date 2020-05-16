@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class SalesPersonDiscountsMenu extends Menu {
-    private Salesperson salesperson;
+     Salesperson salesperson = (Salesperson) PersonController.getInstance ().getLoggedInPerson ( );
 
     public SalesPersonDiscountsMenu(Menu parent) {
         super("Discounts Menu", parent);
@@ -34,12 +34,12 @@ public class SalesPersonDiscountsMenu extends Menu {
                 String input;
                 String choice;
                 System.out.println("1. Start Time");
-                input = getValidDataTim();
+                input = getValidDateTime();
                 if (input.equals(BACK_BUTTON))
                     return;
                 start = DiscountCodeController.getInstance().changeStringTDataTime(input);
                 System.out.println("2. End Time");
-                input = getValidDataTim();
+                input = getValidDateTime();
                 if (input.equals(BACK_BUTTON))
                     return;
                 end = DiscountCodeController.getInstance().changeStringTDataTime(input);
@@ -56,6 +56,7 @@ public class SalesPersonDiscountsMenu extends Menu {
                     add.add(ProductController.getInstance().searchProduct(id));
                 }
                 RequestController.getInstance().addDiscountRequest(add, start, end, percentage, salesperson);
+                System.out.println("Successful.");
             }
         };
     }
@@ -137,10 +138,10 @@ public class SalesPersonDiscountsMenu extends Menu {
                     choice = getValidMenuNumber(6);
                     switch (Integer.parseInt(choice)) {
                         case 1:
-                            start = DiscountCodeController.getInstance().changeStringTDataTime(getValidDataTim());
+                            start = DiscountCodeController.getInstance().changeStringTDataTime(getValidDateTime());
                             break;
                         case 2:
-                            end = DiscountCodeController.getInstance().changeStringTDataTime(getValidDataTim());
+                            end = DiscountCodeController.getInstance().changeStringTDataTime(getValidDateTime());
                             break;
                         case 3:
                             percentage = Double.parseDouble(getValidDouble(100));

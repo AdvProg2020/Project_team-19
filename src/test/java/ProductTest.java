@@ -88,8 +88,8 @@ public class ProductTest {
         seller2.addToOfferedProducts(product1, 4, 2500);
         seller2.addToOfferedProducts(product2, 3, 1000);
 
-        Product.stock.put(product1, owners1);
-        Product.stock.put(product2, owners2);
+       // Product.stock.put(product1, owners1);
+      //  Product.stock.put(product2, owners2);
 
         ArrayList<Product> products = new ArrayList<>();
         products.add(product1);
@@ -100,7 +100,7 @@ public class ProductTest {
 
         System.out.println(ProductController.getInstance ().filterOwnedProductByPrice(500, 2200, product1));
         System.out.println(ProductController.getInstance ().filterACategoryByPrice(500, 2200, category));
-        Product.stock.clear();
+       // Product.stock.clear();
 
     }
 
@@ -147,8 +147,8 @@ public class ProductTest {
         seller2.addToOfferedProducts(product1, 4, 2000);
         seller2.addToOfferedProducts(product2, 3, 1000);
 
-        Product.stock.put(product1, owners1);
-        Product.stock.put(product2, owners2);
+      //  Product.stock.put(product1, owners1);
+     //   Product.stock.put(product2, owners2);
 
         ArrayList<Product> products = new ArrayList<>();
         products.add(product1);

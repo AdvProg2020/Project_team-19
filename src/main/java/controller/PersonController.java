@@ -76,19 +76,10 @@ public class PersonController {
         loggedInPerson.setField(filedName, newValue);
     }
 
-    public void login(String username, String password) throws Exception {
-        if (!Pattern.compile("\\w{3,}").matcher(username).matches()) //ToDo put this in view
-            throw new Exception("Username should contain more than 3 characters.");
-        else if (!isTherePersonByUsername(username)) {
-            throw new UsernameNotFoundException("This username does not exist");
-        } else if (!checkPassword(password, username)) {
-            throw new WrongPasswordException("Incorrect password");
-        } else {
-            loggedInPerson = getPersonByUsername (username);
-            if (isLoggedInPersonCustomer()) {
-                CartController.getInstance().setLoggedInPersonCart();
-            }
-            goToMenu();
+    public void login(String username) {
+        loggedInPerson = getPersonByUsername (username);
+        if (isLoggedInPersonCustomer()) {
+            CartController.getInstance().setLoggedInPersonCart();
         }
     }
 
