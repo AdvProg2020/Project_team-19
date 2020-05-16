@@ -10,7 +10,7 @@ public class Category {
 
     private boolean isLeaf;
     private String name;
-    transient private Category parent;
+    private transient Category parent;
     private ArrayList<Category> children;
     private HashSet<String> propertyFields;
     private ArrayList<Product> productList;
@@ -84,7 +84,7 @@ public class Category {
         return name;
     }
 
-    public boolean isLeaf () {
+    public boolean isLeaf() {
         return isLeaf;
     }
 

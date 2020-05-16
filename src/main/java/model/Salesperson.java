@@ -80,6 +80,12 @@ public class Salesperson extends Person {
         discounts.remove(discount);
     }
 
+    public void setProductsDiscountState(Discount discount,boolean state){
+        for (Product product : discount.getProducts()) {
+            offeredProducts.get(product).setInDiscount(state);
+        }
+    }
+
     public ArrayList<Discount> getDiscounts() {
         return discounts;
     }
@@ -167,6 +173,10 @@ class ProductState {
     public void removeFromDiscount(){
         discount = null;
         inDiscount = false;
+    }
+
+    public void setInDiscount(boolean inDiscount) {
+        this.inDiscount = inDiscount;
     }
 
     public boolean isInDiscount() {

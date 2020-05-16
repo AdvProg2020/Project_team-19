@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class CustomerMenu extends Menu {
 
-    private static HashMap < DiscountCode, Integer > customersDiscountCodes = new HashMap <> ( );
+    private HashMap < DiscountCode, Integer > customersDiscountCodes = new HashMap <> ( );
     private Customer customer = (Customer) PersonController.getInstance().getLoggedInPerson ( );
 
     public CustomerMenu ( Menu parent ) {

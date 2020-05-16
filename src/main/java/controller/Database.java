@@ -39,15 +39,10 @@ public class Database {
             GsonBuilder builder = new GsonBuilder().setLenient().enableComplexMapKeySerialization();
             Gson gson = builder.create();
             BufferedReader bufferedReader = new BufferedReader(new FileReader(address));
-            Object obj = gson.fromJson(bufferedReader, typeOfT);
-            bufferedReader.close();
-            return obj;
+            return gson.fromJson(bufferedReader, typeOfT);
         } catch (FileNotFoundException e) {
             throw new RuntimeException();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return null;
     }
 
     public static <T> void write(T obj, String address) {
@@ -107,15 +102,15 @@ public class Database {
 
     }
 
-    public static <T> ArrayList<T> handleJsonArray(String address) {
-        ArrayList<T> patterns = new ArrayList<>();
+    public static ArrayList<Category> handleJsonArray(String address) {
+        ArrayList<Category> patterns = new ArrayList<>();
         Gson gson = new Gson();
         JsonParser jsonParser = new JsonParser();
         try {
             BufferedReader br = new BufferedReader(new FileReader(address));
             JsonElement jsonElement = jsonParser.parse(br);
-            Type arrayListType = new TypeToken<ArrayList<Category>>(){}.getType(); //ToDo inja ro bhshun bgm
-            ArrayList<T> temp = gson.fromJson(jsonElement, arrayListType);
+            Type arrayListType = new TypeToken<ArrayList<Category>>(){}.getType();
+            ArrayList<Category> temp = gson.fromJson(jsonElement, arrayListType);
             if (temp != null)
                 return temp;
             return new ArrayList <> (  );
@@ -125,6 +120,15 @@ public class Database {
         }
         return patterns;
 
+    }
+
+    public static HashMap<Product, ArrayList<Salesperson>> handleHashMap(String address) {
+        HashMap<Product, ArrayList<Salesperson>> employeeMap = new HashMap<>();
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(employeeMap);
+        Type type = new TypeToken<HashMap<Product, ArrayList<Salesperson>>>() {
+        }.getType();
+        return gson.fromJson(jsonString, type);
     }
 
     public static HashMap<Product, ArrayList<Salesperson>> handleHashMap (String address) { //ToDo emt nshde, version qbli tu discord, yalda zde

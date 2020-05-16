@@ -8,12 +8,13 @@ import java.util.HashSet;
 
 import static controller.CategoryController.*;
 
-public class ManageCategoriesMenu extends Menu { //TODO ghatan check she
+public class ManageCategoriesMenu extends Menu {
     public ManageCategoriesMenu(Menu parent) {
-        super("Manage Categories Menu", parent);
-        subMenus.put(1, getAddMenu());
-        subMenus.put(2, getEditMenu());
-        subMenus.put(3, getRemoveMenu());
+        super("Manage Categories", parent);
+        subMenus.put(1, getCategoryMenu(this));
+        subMenus.put(2, getAddMenu());
+        subMenus.put(3, getEditMenu());
+        subMenus.put(4, getRemoveMenu());
     }
 
     public Menu getAddMenu() {
@@ -28,15 +29,22 @@ public class ManageCategoriesMenu extends Menu { //TODO ghatan check she
                 Category parent;
                 HashSet<String> addProperties = new HashSet<>();
                 String input;
-                System.out.println("Enter Category Name To Add");
-                input = scanner.nextLine ();
+                System.out.print("Enter Category Name To Add : ");
+                while (CategoryController.getInstance().getCategoryByName(input = scanner.nextLine(), rootCategories) != null
+                && !input.equals(BACK_BUTTON)) {
+                    System.out.print("Already Exists. Try Another : ");
+                }
                 if (input.equals(BACK_BUTTON))
                     return;
                 String input2;
-                System.out.println("Enter Parent Category Name or Enter \"root\" If It Does Not Have Any:");
+                System.out.print("Enter Parent Category Name or Enter \"root\" If It Does Not Have Any : ");
+                do {
                 input2 = getValidCategoryName();
                 if (input2.equals(BACK_BUTTON))
                     return;
+                if(!CategoryController.getInstance().getCategoryByName(input2,rootCategories).getProductList().isEmpty()){
+                    System.out.println("This Category Has Products. Choose A Parent Category.");}
+                }while (!CategoryController.getInstance().getCategoryByName(input2,rootCategories).getProductList().isEmpty());
                 String field;
                 while (true) {
                     System.out.println ( "Enter Field Or \"..\" To Continue:" );
@@ -51,7 +59,8 @@ public class ManageCategoriesMenu extends Menu { //TODO ghatan check she
                 else
                     parent = CategoryController.getInstance().getCategoryByName(input2, rootCategories);
 
-                CategoryController.getInstance().addCategory (input,parent,addProperties);
+                CategoryController.getInstance().addCategory(input,parent,addProperties);
+                System.out.println("Successful.");
             }
         };
     }
@@ -70,45 +79,50 @@ public class ManageCategoriesMenu extends Menu { //TODO ghatan check she
                 Category parent = null;
                 HashSet<String> addProperties = new HashSet<>();
                 HashSet<String> removeProperties = new HashSet<>();
-                System.out.println("Please the name the name of category you want to edit: ");
+                System.out.println("Please Enter The Name Of Category You Want To Edit: ");
                 String input = getValidCategoryName();
                 if (input.equals(BACK_BUTTON))
                     return;
                 Category category = CategoryController.getInstance().getCategoryByName(input, rootCategories);
-                System.out.println("1.Edit name:\n" +
-                        "2.Edit Parent:\n");
+                System.out.println("1. Edit Name:\n" +
+                        "2. Edit Parent:");
                 if(category.isLeaf ()){
                     System.out.println("3. Add Property:");
                     System.out.println("4. Remove Property:");
-                    System.out.println("5. Confirm Edit:");
+                    System.out.println("5. Confirm Edit.");
                 }else
-                    System.out.println("3. Confirm Edit:");
+                    System.out.println("3. Confirm Edit.");
                 do {
                     System.out.println("Which field do you want to edit?");
-                    input = getValidMenuNumber(category.isLeaf ()?3:2);
+                    input = getValidMenuNumber(category.isLeaf ()?3:5);
                     switch (Integer.parseInt(input)) {
                         case 1:
-                            System.out.println("Enter new category name:");
+                            System.out.print("Enter New Category Name : ");
                             name = scanner.nextLine();
                             break;
                         case 2:
+                            System.out.print("Enter New Parent Category Name : ");
                             String parentName = getValidCategoryName();
                             if(parentName.equalsIgnoreCase("root")){
                                 isRoot = true;
                                 continue;
                             }
                             parent = CategoryController.getInstance().getCategoryByName(parentName,rootCategories);
+                            if(!parent.getProductList().isEmpty()) {
+                                System.out.println("This Category Has Products. Choose A Parent Category.");
+                                parent = null;
+                            }
                             break;
                         case 3:
-                            System.out.println("Enter field:");
+                            System.out.print("Enter Field : ");
                             String field = scanner.nextLine();
                             addProperties.add(field);
                             break;
                         case 4:
-                            System.out.println("Enter field:");
+                            System.out.print("Enter Field : ");
                             field = scanner.nextLine();
                             if(!category.getPropertyFields().contains(field)){
-                                System.out.println("This category does not have such property.");
+                                System.out.println("This Category Does Not Have Such Property.");
                                 continue;
                             }
                             removeProperties.add(field);
@@ -117,6 +131,7 @@ public class ManageCategoriesMenu extends Menu { //TODO ghatan check she
 
                 } while (!(input.equals(category.isLeaf () ?"3":"5")));
                 CategoryController.getInstance().editCategory(name,category,parent,addProperties,removeProperties,isRoot);
+                System.out.println("Successful.");
             }
         };
     }
@@ -131,16 +146,17 @@ public class ManageCategoriesMenu extends Menu { //TODO ghatan check she
             @Override
             public void execute() {
                 String input;
-                System.out.println("Enter category name you want to remove");
+                System.out.println("Enter Category Name You Want To Remove :");
                 input = getValidCategoryName();
                 if (input.equals(BACK_BUTTON))
                     return;
                 Category category = CategoryController.getInstance().getCategoryByName(input, rootCategories);
                 if(!CategoryController.getInstance().isCategoryEmpty(category)) {
-                    System.out.println("There are products in this category's subcategories.Please empty them at first.");
+                    System.out.println("There Are Products In This Category's Subcategories.Please Empty Them At First.");
                     return;
                 }
                 CategoryController.getInstance().removeCategory(category.getParent(), category);
+                System.out.println("Successful.");
             }
         };
     }

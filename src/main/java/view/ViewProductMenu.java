@@ -62,10 +62,10 @@ public class ViewProductMenu extends Menu {
         for (OwnedProduct ownedProduct : ProductController.getInstance().getProductsOfProduct(product)) {
             System.out.println(String.format("%s", LINE));
             if (ownedProduct.getSalesperson().isInDiscount(product)) {
-                System.out.println(String.format("%s %s %20s %s %20s %s %20s", "|", ownedProduct.getSellerName(), "|", ownedProduct.getPrice(), "|", ownedProduct.getSalesperson().getDiscountPrice(product), "|"));
+                System.out.println(String.format(sellersTableFormat, "|", ownedProduct.getSellerName(), "|", ownedProduct.getPrice(), "|", ownedProduct.getSalesperson().getDiscountPrice(product), "|"));
 
             } else
-                System.out.println(String.format("%s %s %20s %s %20s %s %20s", "|", ownedProduct.getSellerName(), "|", ownedProduct.getPrice(), "|", "", "|"));
+                System.out.println(String.format(sellersTableFormat , "|", ownedProduct.getSellerName(), "|", ownedProduct.getPrice(), "|", "", "|"));
         }
         System.out.println(String.format("%s", LINE));
 
@@ -153,8 +153,6 @@ public class ViewProductMenu extends Menu {
                 String num = getValidMenuNumber(2);
                 if (num.equals("1")) {
                     buildComment((Customer) PersonController.getInstance().getLoggedInPerson());
-                } else {
-                    return;
                 }
             }
         };
@@ -185,9 +183,7 @@ public class ViewProductMenu extends Menu {
         String commentTitle = scanner.nextLine();
         System.out.println("please enter your comment or enter \"..\" to return to previous menu: ");
         String string = scanner.nextLine();
-        if (string.equals(BACK_BUTTON)) {
-            return;
-        } else {
+        if (!string.equals(BACK_BUTTON)) {
             Comment newComment = new Comment(true, customer, string, commentTitle);
             if (customer.isProductBought(product)) {
                 newComment.setBought(true);

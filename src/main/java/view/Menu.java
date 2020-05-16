@@ -2,11 +2,10 @@ package view;
 
 import controller.CategoryController;
 import controller.ProductController;
+import model.Category;
 import model.Product;
 import model.Salesperson;
 
-import java.awt.*;
-import java.awt.event.InputEvent;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import controller.PersonController;
@@ -15,6 +14,10 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+
+import static controller.CategoryController.rootCategories;
+import static view.ProductMenu.viewAllCategories;
+import static view.ProductMenu.viewCategory;
 
 public abstract class Menu {
     private String name;
@@ -72,6 +75,30 @@ public abstract class Menu {
             nextMenu = subMenus.get ( chosenMenu );
         nextMenu.run ( );
         this.run ();
+    }
+
+    public Menu getCategoryMenu(Menu parent) {
+        return new Menu("Category Menu", parent) {
+            @Override
+            public void show() {
+                System.out.println(this.getName());
+                viewAllCategories();
+            }
+
+            @Override
+            public void execute() {
+                String input;
+                do {
+                    System.out.println("Enter category name you want to see or \"..\" to return :");
+                    input = getValidCategoryName();
+                    if (input.equals(BACK_BUTTON))
+                        return;
+                    Category category = CategoryController.getInstance().getCategoryByName(input, rootCategories);
+                    assert category != null;
+                    viewCategory(category);
+                } while (true);
+            }
+        };
     }
 
     protected Menu getHelpMenu(Menu parent) {
@@ -206,7 +233,21 @@ public abstract class Menu {
         return input;
     }
 
+    public String getValidCustomer() {
+        boolean check;
+        String input;
+        do {
+            input = scanner.nextLine();
+            if (input.equals(BACK_BUTTON ))
+                return input;
+            check = PersonController.getInstance().isLoggedInPersonCustomer();
+            if (!check) {
+                System.out.println("There is no customer with that username. Please enter username again:");
+            }
 
+        } while (!check);
+        return input;
+    }
 
     public String getValidCategoryName() {
         boolean check;

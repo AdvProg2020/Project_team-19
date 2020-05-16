@@ -31,7 +31,7 @@ public class ManagerMenu extends Menu {
         return new Menu ( "Manage All Products" , this ) {
             @Override
             public void show () {
-
+                fancyTitle();
             }
 
             @Override

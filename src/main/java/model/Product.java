@@ -15,7 +15,6 @@ public class Product {
 
     private HashMap<String, String> properties;
     private String productID;
-    private int count;
     private int seen;
     private String name;
     private String brand;
@@ -33,7 +32,6 @@ public class Product {
         this.name = name;
         this.brand = brand;
         this.category = category;
-        this.count = 0;
         this.seen = 0;
         this.properties = properties;
         if (!temp) {
@@ -41,7 +39,6 @@ public class Product {
             allProducts.add(this);
         }
     }
-
 
     public void increaseSeen() {
         this.seen += 1;
@@ -51,9 +48,6 @@ public class Product {
         return seen;
     }
 
-    public boolean isAvailable() {
-        return count > 0;
-    }
 
     public HashMap<String, String> getProperties() {
         return properties;
@@ -120,9 +114,6 @@ public class Product {
         this.category = category;
     }
 
-    public void changeCount(int count) {
-        this.count += count;
-    }
 
     @Override
     public String toString() { //ToDo ino taqir ddm check knim hmeja ok e
@@ -132,7 +123,6 @@ public class Product {
     public String printProduct() {
         return "Product : \n" +
                 "Product ID : " + productID + "\n" +
-                "Count : " + count + "\n" +
                 "Name : " + name + "\n" +
                 "Brand : " + brand;
     }

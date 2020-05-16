@@ -1,12 +1,13 @@
 package view;
 
 import controller.PersonController;
+import model.Product;
 import model.Salesperson;
 import model.SellLog;
 
 public class SalespersonMenu extends Menu {
 
-    private Salesperson salesperson = (Salesperson) PersonController.getInstance ().getLoggedInPerson ();
+    Salesperson salesperson = (Salesperson) PersonController.getInstance ().getLoggedInPerson ();
 
     public SalespersonMenu ( Menu parent ) {
         super ( "Salesperson Menu" , parent );
@@ -15,7 +16,7 @@ public class SalespersonMenu extends Menu {
         subMenus.put ( 3 , new SalespersonProductMenu ( this ) );
         subMenus.put ( 4 , new SalespersonDiscountsMenu ( this ) );
         subMenus.put ( 5 , getViewSalesHistory ( ) );
-        subMenus.put ( 6 , getShowCategoriesMenu ( ) );
+        subMenus.put ( 6 , getCategoryMenu(this) );
         subMenus.put ( 7 , getShowBalanceMenu () );
         subMenus.put ( 8 , getLogoutMenu ( ) );
 
@@ -72,20 +73,6 @@ public class SalespersonMenu extends Menu {
                     System.out.println ( sellLog.getEverythingString () );
                     System.out.println ( LINE );
                 }
-                super.show();
-            }
-
-            @Override
-            public void execute() {
-                super.execute();
-            }
-        };
-    }
-
-    public Menu getShowCategoriesMenu(){
-        return new Menu("Show Category",this) {
-            @Override
-            public void show() {
                 super.show();
             }
 

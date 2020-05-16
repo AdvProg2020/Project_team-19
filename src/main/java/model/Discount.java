@@ -8,6 +8,10 @@ import java.util.ArrayList;
 
 public class Discount {
 
+    public void removeProduct(Product product) {
+        products.remove(product);
+    }
+
     public enum DiscountState {
         BUILD_IN_PROGRESS, EDIT_IN_PROGRESS, VERIFIED
     }
@@ -28,7 +32,11 @@ public class Discount {
     }
 
     public boolean checkDiscountEndTime(){
-        return endTime.isBefore(LocalDateTime.now());
+        return endTime.isAfter(LocalDateTime.now());
+    }
+
+    public boolean checkDiscountStartTime(){
+        return startTime.isBefore(LocalDateTime.now());
     }
 
     public String getDiscountID() {

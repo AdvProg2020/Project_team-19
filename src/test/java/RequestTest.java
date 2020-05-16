@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import static controller.ProductController.stock;
 
 public class RequestTest {
     @Test
@@ -39,7 +38,7 @@ public class RequestTest {
         Product product = new Product("panir", "lighvan",
                 category.getName(), properties1, false);
 
-        stock.put(product, new ArrayList<>());
+        //stock.put(product, new ArrayList<>());
         HashMap<String, String> personInfo = new HashMap<>();
         personInfo.put("username", "yeki");
         personInfo.put("password", "salam");
@@ -60,7 +59,7 @@ public class RequestTest {
         Product product = new Product( "panir", "lighvan",
                 category.getName(), properties1, true);
 
-        stock.put(product, new ArrayList<>());
+        //stock.put(product, new ArrayList<>());
         HashMap<String, String> personInfo = new HashMap<>();
         personInfo.put("username", "yeki");
         personInfo.put("password", "salam");
@@ -82,7 +81,7 @@ public class RequestTest {
         Product product = new Product( "panir", "lighvan",
                 category.getName(), properties1, true);
 
-        stock.put(product, new ArrayList<>());
+       // stock.put(product, new ArrayList<>());
         HashMap<String, String> personInfo = new HashMap<>();
         personInfo.put("username", "yeki");
         personInfo.put("password", "salam");

@@ -65,7 +65,7 @@ public class CartMenuTest {
         ArrayList<Salesperson> sellers = new ArrayList<>();
         sellers.add(seller1);
 
-//        stock.put(product1, sellers);
+        //stock.put(product1, sellers);
         //showProductDigest(product1);
     }
 

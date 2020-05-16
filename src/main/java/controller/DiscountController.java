@@ -36,7 +36,9 @@ public class DiscountController {
     public void removeDiscount( Salesperson salesperson, Discount discount) {
         salesperson.removeFromDiscounts(discount);
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
+        saveToFile(ProductController.stock, address.get("stock"));
     }
+
 
     public void addDiscount(Salesperson salesperson, Discount discount) {
         salesperson.addToDiscounts(discount);//TODO CHECK
@@ -79,10 +81,14 @@ public class DiscountController {
         for (Person person : PersonController.getInstance().filterByRoll(Salesperson.class)) {
             Salesperson salesperson = (Salesperson) person;
             for (Discount discount : salesperson.getDiscounts()) {
-                if (!discount.checkDiscountEndTime()) {
+                if (discount.checkDiscountEndTime()&&discount.checkDiscountStartTime()){
+                   salesperson.setProductsDiscountState(discount,true);
+                } else{
+                    salesperson.setProductsDiscountState(discount,false);
+                    if (!discount.checkDiscountEndTime()) {
                     removeDiscount(salesperson, discount);
                 }
-            }
+            }}
         }
     }
 }

@@ -12,34 +12,12 @@ public class ProductMenu extends Menu {
     public ProductMenu ( Menu parent ) {
         super ("Product Menu" , parent);
         //TODO set current products -> all products
-        subMenus.put(1, getCategoryMenu());
+        subMenus.put(1, getCategoryMenu(this));
         subMenus.put(2, new ViewProductMenu(this));
         subMenus.put(3, getCompareTwoProductsMenu());
         subMenus.put(4, new FilteringMenu(this));
         subMenus.put(5, getSearchMenu());
         subMenus.put(6, getHelpMenu(this));
-    }
-
-    public Menu getCategoryMenu() {
-        return new Menu("Category Menu", this) {
-            @Override
-            public void show() {
-                fancyTitle ();
-                viewAllCategories();
-            }
-
-            @Override
-            public void execute() {
-                String input;
-                input = getValidCategoryName();
-                if(input.equals(BACK_BUTTON)){
-                    return;
-                }
-                Category category = CategoryController.getInstance().getCategoryByName(input, rootCategories);
-                assert category != null;
-                viewCategory(category);
-            }
-        };
     }
 
     public Menu getCompareTwoProductsMenu(){

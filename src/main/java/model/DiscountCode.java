@@ -14,7 +14,7 @@ public class DiscountCode {
     private int useCounter;
 
     public DiscountCode(LocalDateTime startTime, LocalDateTime endTime, double discountPercentage, double maxDiscount, int useCounter) {
-        this.code = RandomStringUtils.random(4, true, true);
+        this.code = RandomStringUtils.random(8, true, true);
         this.startTime = startTime;
         this.endTime = endTime;
         this.discountPercentage = discountPercentage;

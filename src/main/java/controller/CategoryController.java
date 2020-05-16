@@ -45,7 +45,7 @@ public class CategoryController {
             if (category.getChildren().size() > 0) {
                 Category category1 = getCategoryByName(categoryName, category.getChildren());
                 if( category1!= null)
-                    return category1;
+                return category1;
             }
         }
         return null;
@@ -70,7 +70,7 @@ public class CategoryController {
     }
 
 
-    public void addCategory ( String name, Category parent, HashSet<String> properties) {
+    public void addCategory(String name, Category parent, HashSet<String> properties) {
         new Category(name, parent, properties);
         saveToFile(rootCategories, address.get("root_categories"));
     }

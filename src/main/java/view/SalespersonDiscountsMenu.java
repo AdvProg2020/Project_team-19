@@ -55,6 +55,7 @@ public class SalespersonDiscountsMenu extends Menu {
                     addArray.add(ProductController.getInstance().searchProduct(id));
                 }
                 RequestController.getInstance().addDiscountRequest(addArray, start, end, percentage, salesperson);
+                System.out.println("Successful.");
             }
         };
     }

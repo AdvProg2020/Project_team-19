@@ -87,7 +87,6 @@ public class Cart {
     public void purchaseForSalesperson() throws IOException {
         for (Product product : products.keySet()) {
             for (Salesperson salesperson : products.get(product).keySet()) {
-                product.changeCount(-products.get(product).get(salesperson).getCount());
                 int count = products.get(product).get(salesperson).count;
                 salesperson.addSellLogAndPurchase(new SellLog(LocalDateTime.now(),
                         salesperson.getProductPrice(product) * count,
