@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import static model.Product.stock;
-
 public class CartMenuTest {
     @Test
     public void viewCartTest() throws IOException {
@@ -67,7 +65,7 @@ public class CartMenuTest {
         ArrayList<Salesperson> sellers = new ArrayList<>();
         sellers.add(seller1);
 
-        stock.put(product1, sellers);
+//        stock.put(product1, sellers);
         //showProductDigest(product1);
     }
 

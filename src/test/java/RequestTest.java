@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import static model.Product.stock;
+import static controller.ProductController.stock;
 
 public class RequestTest {
     @Test

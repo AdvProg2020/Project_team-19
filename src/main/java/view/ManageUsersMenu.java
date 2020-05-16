@@ -1,7 +1,6 @@
 package view;
 
 import controller.PersonController;
-import controller.RegisterController;
 import model.Manager;
 import model.Person;
 
@@ -12,7 +11,7 @@ import static view.LoginMenu.*;
 
 public class ManageUsersMenu extends Menu {
 
-    private HashMap < String, String > personInfo;
+    private HashMap < String, String > personInfo = new HashMap <> (  );
 
     public ManageUsersMenu(Menu parent){
         super("Manage Users",parent);
@@ -89,27 +88,27 @@ public class ManageUsersMenu extends Menu {
             public void execute() {
                 String username;
                 while (true) {
-                    System.out.print ( "Enter username : " );
+                    System.out.print ( "Enter Username : " );
                     username = scanner.nextLine ();
                     if (username.equals ( BACK_BUTTON ))
                         return;
                     try {
-                        LoginMenu.registerUsernameErrorHandler ( username );
+                        LoginMenu.usernameErrorHandler ( username , State.REGISTER );
                         personInfo.put ( "username" , username );
                         personInfo.put ( "type" , "manager" );
                         String input;
                         for (int i = 0; i < 5; i++) {
-                            System.out.println ( "Enter " + informationArray[i] );
+                            System.out.print ( "Enter " + informationArray[i] + " : " );
                             input = getValidInput ( patternArray[i] , i );
                             if (input.equals ( BACK_BUTTON )) {
                                 personInfo.clear ();
-                                BACK_PRESSED = true;
                                 return;
                             }
                             personInfo.put ( informationArray[i] , input );
                         }
                         new Manager(personInfo);
                         System.out.println ( "Manager Created." );
+                        break;
                     } catch (Exception e) {
                         System.out.println ( e.getMessage () );
                     }

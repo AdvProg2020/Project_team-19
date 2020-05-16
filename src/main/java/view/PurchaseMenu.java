@@ -21,8 +21,7 @@ public class PurchaseMenu extends Menu {
         return new Menu("Receiver Information",this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " :" + "\n" +
-                        "Enter \"..\" to Back");
+                fancyTitle ();
             }
 
             @Override

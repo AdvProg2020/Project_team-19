@@ -21,7 +21,7 @@ public class ManageRequestsMenu extends Menu {
         return new Menu("Show All Requests", this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " :");
+                fancyTitle ();
             }
 
             @Override
@@ -35,7 +35,7 @@ public class ManageRequestsMenu extends Menu {
         return new Menu("Show Salesperson Requests", this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " :");
+                fancyTitle ();
             }
 
             @Override
@@ -49,7 +49,7 @@ public class ManageRequestsMenu extends Menu {
         return new Menu("Show Product Requests", this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " :");
+                fancyTitle ();
             }
 
             @Override
@@ -63,7 +63,7 @@ public class ManageRequestsMenu extends Menu {
         return new Menu("Show Discount Requests", this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " :");
+                fancyTitle ();
             }
 
             @Override
@@ -77,7 +77,7 @@ public class ManageRequestsMenu extends Menu {
         return new Menu("Accept Or Decline Menu", this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " :");
+                fancyTitle ();
             }
 
             @Override
@@ -120,7 +120,7 @@ public class ManageRequestsMenu extends Menu {
         System.out.println(LINE);
         System.out.println(String.format("|%-26s%-18s%-11s|", "", request.getRequestId(), ""));
         System.out.println(LINE);
-        System.out.println(String.format("%-55s",request.show()));
+        System.out.println(String.format("%s%-44s","Message : ", request.show()));
         System.out.println(LINE);
     }
 }

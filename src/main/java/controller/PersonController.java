@@ -72,23 +72,10 @@ public class PersonController {
         return null;
     }
 
-    public void editPersonalInfo(String filedName, String newValue) {
-        loggedInPerson.setField(filedName, newValue);
-    }
-
-    public void login(String username, String password) throws Exception {
-        if (!Pattern.compile("\\w{3,}").matcher(username).matches()) //ToDo put this in view
-            throw new Exception("Username should contain more than 3 characters.");
-        else if (!isTherePersonByUsername(username)) {
-            throw new UsernameNotFoundException("This username does not exist");
-        } else if (!checkPassword(password, username)) {
-            throw new WrongPasswordException("Incorrect password");
-        } else {
-            loggedInPerson = getPersonByUsername (username);
-            if (isLoggedInPersonCustomer()) {
-                CartController.getInstance().setLoggedInPersonCart();
-            }
-            goToMenu();
+    public void login(String username) {
+        loggedInPerson = getPersonByUsername (username);
+        if (isLoggedInPersonCustomer()) {
+            CartController.getInstance().setLoggedInPersonCart();
         }
     }
 
@@ -96,16 +83,9 @@ public class PersonController {
         loggedInPerson = null;
     }
 
-    public boolean checkPassword(String password, String username) throws WrongPasswordException {
+    public void checkPassword(String password, String username) throws WrongPasswordException {
         if (!getPersonByUsername (username).getPassword().equals(password))
             throw new WrongPasswordException("Incorrect password");
-        return true;
-    }
-
-    public static class UsernameNotFoundException extends Exception {
-        UsernameNotFoundException(String message) {
-            super(message);
-        }
     }
 
     public static class WrongPasswordException extends Exception {
@@ -118,24 +98,12 @@ public class PersonController {
         return loggedInPerson;
     }
 
-    public void setLoggedInPerson(Person loggedInPerson) {
-        PersonController.loggedInPerson = loggedInPerson;
-        if (isLoggedInPersonCustomer()) {
-            CartController.getInstance().setLoggedInPersonCart();
-        }
-    }
-
     public boolean isLoggedInPersonCustomer() {
         return loggedInPerson instanceof Customer;
     }
 
     public <T> ArrayList<Person> filterByRoll(Class<T> personType) {
         return allPersons.stream().filter(personType::isInstance).collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private static void goToMenu() {
-//        if (loggedInPerson instanceof Customer)
-//            CustomerMenu
     }
 
     public String getTypeFromList(String username) {

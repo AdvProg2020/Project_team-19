@@ -3,10 +3,7 @@ package view;
 import controller.CategoryController;
 import controller.ProductController;
 import model.Category;
-import model.OwnedProduct;
 import model.Product;
-
-import java.util.regex.Pattern;
 
 import static controller.CategoryController.rootCategories;
 
@@ -15,47 +12,29 @@ public class ProductMenu extends Menu {
     public ProductMenu ( Menu parent ) {
         super ("Product Menu" , parent);
         //TODO set current products -> all products
-        subMenus.put(1, getCompareTwoProductsMenu());
-        subMenus.put(2, getCategoryMenu());
-        subMenus.put(3, new FilteringMenu(this));
-        subMenus.put(4, getSearchMenu());
-        subMenus.put(5, getHelpMenu(this));
-    }
-
-
-    @Override
-    public void show() {
-        System.out.println(this.getName() +" :");
-        //show all products
-        //show all categories
-    }
-
-    @Override
-    public void execute() {
-        String input = scanner.nextLine();
-        if (input.equalsIgnoreCase("back")) {
-            this.parentMenu.show();
-            this.parentMenu.execute();
-        }
+        subMenus.put(1, getCategoryMenu());
+        subMenus.put(2, new ViewProductMenu(this));
+        subMenus.put(3, getCompareTwoProductsMenu());
+        subMenus.put(4, new FilteringMenu(this));
+        subMenus.put(5, getSearchMenu());
+        subMenus.put(6, getHelpMenu(this));
     }
 
     public Menu getCategoryMenu() {
         return new Menu("Category Menu", this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " : \n All Categories:");
+                fancyTitle ();
                 viewAllCategories();
             }
 
             @Override
             public void execute() {
-                boolean check;
                 String input;
-                do {
-                    System.out.println("Enter A Category Name to See It! :");
-                    input = scanner.nextLine();
-                    check = (CategoryController.getInstance().getCategoryByName(input, rootCategories) != null);
-                } while (!check);
+                input = getValidCategoryName();
+                if(input.equals(BACK_BUTTON)){
+                    return;
+                }
                 Category category = CategoryController.getInstance().getCategoryByName(input, rootCategories);
                 assert category != null;
                 viewCategory(category);
@@ -64,7 +43,7 @@ public class ProductMenu extends Menu {
     }
 
     public Menu getCompareTwoProductsMenu(){
-        return new Menu("compare two products",this) {
+        return new Menu("Compare Two Products",this) {
             @Override
             public void show() {
 
@@ -74,8 +53,12 @@ public class ProductMenu extends Menu {
             public void execute() {
                 System.out.println("please enter first product's id:");
                 String id1 = getValidProductId();
+                if(id1.equals(BACK_BUTTON))
+                    return;
                 System.out.println("please enter second product's id:");
                 String id2 = getValidProductId();
+                if(id2.equals(BACK_BUTTON))
+                    return;
                 compareTwoProducts(ProductController.getInstance().searchProduct(id1),ProductController.getInstance().searchProduct(id2));
             }
         };
@@ -92,16 +75,16 @@ public class ProductMenu extends Menu {
         System.out.println(String.format(threePartRowFormat,"current available price",product1.getLeastPrice(),product2.getLeastPrice()));
         System.out.println(String.format("%s", "----------------------------------------------------------------------------"));
         System.out.println(String.format(threePartRowFormat,"sellers' average price",product1.getAverageScore(),product2.getAveragePrice()));
-            for (String s : product1.getProperties().keySet()) {
-                if(product2.getProperties().containsKey(s)){
-                    System.out.println(String.format("%s", "----------------------------------------------------------------------------"));
-                    System.out.println(String.format(threePartRowFormat,s,product1.getProperties().get(s),product2.getProperties().get(s)));
-                }
+        for (String s : product1.getProperties().keySet()) {
+            if(product2.getProperties().containsKey(s)){
+                System.out.println(String.format("%s", "----------------------------------------------------------------------------"));
+                System.out.println(String.format(threePartRowFormat,s,product1.getProperties().get(s),product2.getProperties().get(s)));
             }
+        }
     }
 
     public static void viewCategoryRecursively(Category category, int root) {
-        if (category.getIsLeaf())
+        if (category.isLeaf ())
             return;
 
         for (Category child : category.getChildren()) {
@@ -111,16 +94,20 @@ public class ProductMenu extends Menu {
                 else
                     System.out.print("    ");
             }
-            if (child.getIsLeaf())
-                System.out.printf("\u2514\u2014\u2014\u2014%s\n", child.getName() + " : " + child.getProductList());
-            else
-                System.out.printf("\u2514\u2014\u2014\u2014%s\n", child.getName());
+            System.out.printf ( "\u2514\u2014\u2014\u2014%s" , child.getName ( ) );
+            if (child.isLeaf () && child.getProductList ().size () != 0) {
+                System.out.print (" : " );
+                for (Product product : child.getProductList ( )) {
+                    System.out.print ( product + " | " );
+                }
+            }
+            System.out.println ( );
             viewCategoryRecursively(child, root + 2);
         }
     }
 
     public static void viewCategory(Category category) {
-        System.out.println(category.getName() + " :");
+        System.out.println(category.getName());
         viewCategoryRecursively(category, 0);
     }
 

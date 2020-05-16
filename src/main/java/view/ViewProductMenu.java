@@ -90,7 +90,7 @@ public class ViewProductMenu extends Menu {
         return new Menu ( "Add to cart" , this ) {
             @Override
             public void show () {
-                System.out.println ( this.getName () + " :" );
+                fancyTitle ();
             }
 
             @Override

@@ -45,8 +45,10 @@ public class PersonalInfoMenu extends Menu {
                 System.out.println ( "3. Last Name" );
                 System.out.println ( "4. Email" );
                 System.out.println ( "5. Phone Number" );
-                if ( thisGuy instanceof Salesperson )
+                if ( thisGuy instanceof Salesperson ) {
                     System.out.println ( "6. Company" );
+                    System.out.println ( "7. Dar Surate Vjud Sayere Moshakhsat" );
+                }
                 System.out.println ( "Which field do you want to edit?" );
             }
 
@@ -54,7 +56,7 @@ public class PersonalInfoMenu extends Menu {
             public void execute() { //ToDo mitune bre tu menu, submenus bzrim
                 int chosenMenu;
                 if ( thisGuy instanceof Salesperson )
-                    chosenMenu = Integer.parseInt ( getValidMenuNumber ( 6 ) );
+                    chosenMenu = Integer.parseInt ( getValidMenuNumber ( 7 ) );
                 else
                     chosenMenu = Integer.parseInt ( getValidMenuNumber ( 5 ) );
 

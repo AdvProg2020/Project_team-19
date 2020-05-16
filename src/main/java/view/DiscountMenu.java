@@ -15,7 +15,7 @@ public class DiscountMenu extends Menu {
     public DiscountMenu(Menu parent) {
         super("Discount Menu", parent);
         subMenus.put ( 1 , getDiscountMenu() );
-//        subMenus.put ( 2 , getShowProductMenu(this) ); //ToDo fk knm zdin shma
+        subMenus.put ( 2 , getShowProductMenu() ); //ToDo fk knm zdin shma
     }
 
     public Menu getDiscountMenu() {
@@ -60,6 +60,27 @@ public class DiscountMenu extends Menu {
             }
         };
     }
+
+    public Menu getShowProductMenu() {
+        return new Menu ( "Show Product Menu" , this ) {
+            @Override
+            public void show () {
+                System.out.println ( "Enter Product ID To See The Product Menu : " );
+            }
+
+            @Override
+            public void execute () {
+                String productId = DiscountMenu.this.getValidProductId ();
+                if (productId.equals ( BACK_BUTTON ))
+                    return;
+                ViewProductMenu viewProductMenu = new ViewProductMenu ( this );
+                viewProductMenu.setProduct ( Product.getProductById ( productId ) );
+                viewProductMenu.run ();
+            }
+        };
+    }
+
+
 
 //    public void showProductDigest() {
 //        String firstTableFormat = "|%-36s|%-38s|";

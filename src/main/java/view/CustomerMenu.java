@@ -4,13 +4,12 @@ import controller.PersonController;
 import model.Customer;
 import model.DiscountCode;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CustomerMenu extends Menu {
 
     private static HashMap < DiscountCode, Integer > customersDiscountCodes = new HashMap <> ( );
-    private static Customer thisGuy = (Customer) PersonController.getInstance().getLoggedInPerson ( );
+    private Customer customer = (Customer) PersonController.getInstance().getLoggedInPerson ( );
 
     public CustomerMenu ( Menu parent ) {
         super ( "Customer Menu" , parent );
@@ -41,7 +40,7 @@ public class CustomerMenu extends Menu {
             public void show () {
                 //ToDo htmn customer bshe vqti b inja mirse, k exception nkhorim
                 System.out.println ( "Your balance is :" );
-                System.out.println ( thisGuy.getCredit ( ) );
+                System.out.println ( customer.getCredit ( ) );
             }
 
             @Override
@@ -55,12 +54,12 @@ public class CustomerMenu extends Menu {
         return new Menu("Increase Balance Menu", this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " :");
+                fancyTitle ();
             }
 
             @Override
             public void execute() {
-                if (!PersonController.getInstance().checkValidPersonType(thisGuy.getUsername(), Customer.class)) {
+                if (!PersonController.getInstance().checkValidPersonType( customer.getUsername(), Customer.class)) {
                     System.out.println("You Should Be A Customer.");
                     return;
                 }
@@ -71,7 +70,7 @@ public class CustomerMenu extends Menu {
                 if (input.equals(".."))
                     return;
 
-                PersonController.getInstance().increaseCustomerCredit(thisGuy, Double.parseDouble(input));
+                PersonController.getInstance().increaseCustomerCredit( customer , Double.parseDouble(input));
             }
         };
     }
@@ -80,7 +79,7 @@ public class CustomerMenu extends Menu {
         return new Menu ( "View Discount Codes" , this ) {
             @Override
             public void show () {
-                customersDiscountCodes = thisGuy.getDiscountCodes ( ); //in khat tu execute bud vli fk knm intorie
+                customersDiscountCodes = customer.getDiscountCodes ( ); //in khat tu execute bud vli fk knm intorie
                 customersDiscountCodes.forEach ( ( key , value ) -> System.out.println ( key + "\n" + "Value of hashmap : " + value ) );
             }
 
@@ -88,10 +87,6 @@ public class CustomerMenu extends Menu {
             public void execute () {
             }
         };
-    }
-
-    public void show () {
-        System.out.println ( this.getName ( ) + " :" );
     }
 
 }

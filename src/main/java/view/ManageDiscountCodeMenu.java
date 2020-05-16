@@ -61,11 +61,11 @@ public class ManageDiscountCodeMenu extends Menu {
                     choice = getValidMenuNumber(6);
                     switch (Integer.parseInt(choice)){
                         case 1:
-                            String time = getValidDataTim();
+                            String time = getValidDateTime ();
                             DiscountCodeController.getInstance().editDiscountCode(discountCode,1,time);
                             break;
                         case 2:
-                            time = getValidDataTim();
+                            time = getValidDateTime ();
                             DiscountCodeController.getInstance().editDiscountCode(discountCode,2,time);
                             break;
                         case 3:

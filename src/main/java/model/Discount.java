@@ -71,6 +71,10 @@ public class Discount {
         return price * (1 - discountPercentage / 100);
     }
 
+    public void removeProduct(Product product) {
+        products.remove(product);
+    }
+
     @Override
     public String toString () {
         StringBuilder string = new StringBuilder ( "Discount ID : " + discountID + "\n" +

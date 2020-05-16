@@ -2,8 +2,14 @@ package controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
+import model.Category;
+import model.Product;
+import model.Salesperson;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -21,8 +27,8 @@ public class Database {
         address.put("salespersons", databaseAddress + File.separator + "persons" + File.separator + "salespersons");
         address.put("products", databaseAddress + File.separator + "products");
         address.put("discount_codes", databaseAddress + File.separator + "discount_codes");
-        address.put("stock.json", databaseAddress);
-        address.put("root_categories.json", databaseAddress);
+        address.put("stock", databaseAddress + File.separator + "stock.json");
+        address.put("root_categories", databaseAddress + File.separator + "root_categories.json");
         address.put("product_requests", databaseAddress + File.separator + "requests" + File.separator + "product_requests");
         address.put("discount_requests", databaseAddress + File.separator + "requests" + File.separator + "discount_requests");
         address.put("salesperson_requests", databaseAddress + File.separator + "requests" + File.separator + "salesperson_requests");
@@ -33,10 +39,15 @@ public class Database {
             GsonBuilder builder = new GsonBuilder().setLenient().enableComplexMapKeySerialization();
             Gson gson = builder.create();
             BufferedReader bufferedReader = new BufferedReader(new FileReader(address));
-            return gson.fromJson(bufferedReader, typeOfT);
+            Object obj = gson.fromJson(bufferedReader, typeOfT);
+            bufferedReader.close();
+            return obj;
         } catch (FileNotFoundException e) {
             throw new RuntimeException();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 
     public static <T> void write(T obj, String address) {
@@ -96,25 +107,43 @@ public class Database {
 
     }
 
-    public static ArrayList<String> handleJsonArray(String filedName, String address) throws IOException {
-        JsonReader reader = new JsonReader(new FileReader(address));
-        ArrayList<String> arrayList = new ArrayList<>();
-        reader.beginArray();
-        while (true) {
-            JsonToken token = reader.peek();
+    public static <T> ArrayList<T> handleJsonArray(String address) {
+        ArrayList<T> patterns = new ArrayList<>();
+        Gson gson = new Gson();
+        JsonParser jsonParser = new JsonParser();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(address));
+            JsonElement jsonElement = jsonParser.parse(br);
+            Type arrayListType = new TypeToken<ArrayList<Category>>(){}.getType(); //ToDo inja ro bhshun bgm
+            ArrayList<T> temp = gson.fromJson(jsonElement, arrayListType);
+            if (temp != null)
+                return temp;
+            return new ArrayList <> (  );
 
-            if (token.equals(JsonToken.END_ARRAY)) {
-                reader.endArray();
-                break;
-            } else if (token.equals(JsonToken.BEGIN_OBJECT)) {
-                arrayList.add(handleJsonObject(reader, filedName));
-            } else if (token.equals(JsonToken.END_OBJECT)) {
-                reader.endObject();
-            } else {
-                reader.skipValue();
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return arrayList;
+        return patterns;
+
+    }
+
+    public static HashMap<Product, ArrayList<Salesperson>> handleHashMap (String address) { //ToDo emt nshde, version qbli tu discord, yalda zde
+        HashMap<Product, ArrayList<Salesperson>> patterns = new HashMap <> (  );
+        Gson gson = new Gson();
+        JsonParser jsonParser = new JsonParser ();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(address));
+            JsonElement jsonElement = jsonParser.parse(br);
+            Type hashMapType = new TypeToken<HashMap<Product, ArrayList<Salesperson>>>(){}.getType();
+            HashMap<Product, ArrayList<Salesperson>> temp = gson.fromJson(jsonElement, hashMapType );
+            if (temp != null)
+                return temp;
+            return new HashMap <> (  );
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return patterns;
     }
 
     public static String createPath(String keyPath, String name) {
@@ -129,8 +158,7 @@ public class Database {
     public static boolean deleteFile(String fileAddress) throws IOException {
         File file = new File(fileAddress);
         if (!file.createNewFile()) {
-            file.delete();
-            return true;
+            return file.delete();
         } else {
             return false;
         }

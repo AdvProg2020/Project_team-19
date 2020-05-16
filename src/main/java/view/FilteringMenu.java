@@ -7,6 +7,8 @@ import model.Product;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static controller.ProductController.currentProducts;
+
 public class FilteringMenu extends Menu {
     protected ArrayList<Product> products = new ArrayList<>();
     protected HashMap<FilterName, ArrayList<String>> filters = new HashMap<>();
@@ -24,14 +26,14 @@ public class FilteringMenu extends Menu {
         subMenus.put(5, getFilterByField());
         subMenus.put(6, getFilterByPrice());
         subMenus.put(7, getShowCurrentFilters());
-        subMenus.put(8, getDisableFilter());  //TODO hashmap tekrari zakhire nemikone
+        subMenus.put(8, getDisableFilter());
     }
 
     private Menu getFilterByName() {
         return new Menu("Filter By Name", this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " :");
+                fancyTitle ();
             }
 
             @Override
@@ -43,7 +45,9 @@ public class FilteringMenu extends Menu {
                 else
                     System.out.println("Nothing Found :(");
 
-                filters.put(FilterName.NAME, new ArrayList<>());
+                ArrayList<String> inputs = new ArrayList<>();
+                inputs.add(input);
+                filters.put(FilterName.NAME, inputs);
             }
         };
     }
@@ -52,7 +56,7 @@ public class FilteringMenu extends Menu {
         return new Menu("Filter By Brand", this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " :");
+                fancyTitle ();
             }
 
             @Override
@@ -64,8 +68,9 @@ public class FilteringMenu extends Menu {
                 else
                     System.out.println("Nothing Found :(");
 
-                filters.put(FilterName.BRAND, new ArrayList<>());
-
+                ArrayList<String> inputs = new ArrayList<>();
+                inputs.add(input);
+                filters.put(FilterName.BRAND, inputs);
             }
         };
     }
@@ -74,7 +79,7 @@ public class FilteringMenu extends Menu {
         return new Menu("Filter By Category", this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " :");
+                fancyTitle ();
             }
 
             @Override
@@ -86,7 +91,9 @@ public class FilteringMenu extends Menu {
                 else
                     System.out.println("Nothing Found :(");
 
-                filters.put(FilterName.CATEGORY, new ArrayList<>());
+                ArrayList<String> inputs = new ArrayList<>();
+                inputs.add(input);
+                filters.put(FilterName.CATEGORY, inputs);
             }
         };
     }
@@ -95,7 +102,7 @@ public class FilteringMenu extends Menu {
         return new Menu("Filter By Existing", this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " :");
+                fancyTitle ();
             }
 
             @Override
@@ -114,7 +121,7 @@ public class FilteringMenu extends Menu {
         return new Menu("Filter By Price", this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " :");
+                fancyTitle ();
             }
 
             @Override
@@ -141,7 +148,7 @@ public class FilteringMenu extends Menu {
         return new Menu("Filter By Field", this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " :");
+                fancyTitle ();
             }
 
             @Override
@@ -168,7 +175,7 @@ public class FilteringMenu extends Menu {
         return new Menu("Disable Filter", this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " :");
+                fancyTitle ();
             }
 
             @Override
@@ -183,7 +190,7 @@ public class FilteringMenu extends Menu {
 
                 filters.remove(FilterName.values()[Integer.parseInt(input)]);
                 //BAYAD GHABLESH SET SHE PRODUCTS IN MNU BAR ASAS HAR MENU EE KE TOSHE
-
+                filterByExistingFilters();
             }
         };
     }
@@ -192,7 +199,7 @@ public class FilteringMenu extends Menu {
         return new Menu("Current Filters", this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " :");
+                fancyTitle ();
             }
 
             @Override
@@ -209,26 +216,27 @@ public class FilteringMenu extends Menu {
         this.products = products;
     }
 
-//    private void filterByExistingFilters(String input1, String input2) {
-//        for (FilterName filter : filters) {
-//            setCurrentProducts(filterByType(filter, input1, input2));
-//        }
-//    }
+    private void filterByExistingFilters() {
+        products = currentProducts;
+        for (FilterName filter : filters.keySet()) {
+            products = filterByType(filter, products);
+        }
+    }
 
-//    private ArrayList<Product> filterByType(FilterName filterName, String input1, String input2) {
-//        switch (filterName) {
-//            case NAME:
-//                return filterByName(input1);
-//            case BRAND:
-//                return filterByBrand(input1);
-//            case CATEGORY:
-//                return filterByCategory(input1);
-//            case FIELD:
-//                return filterByField(input1, input2);
-//            case AVAILABLE:
-//                return filterByExisting();
-//            default:
-//                return currentProducts;
-//        }
-//    }
+    private ArrayList<Product> filterByType(FilterName filterName, ArrayList<Product> products) {
+        switch (filterName) {
+            case NAME:
+                return ProductController.getInstance().filterByName(filters.get(filterName).get(0), products);
+            case BRAND:
+                return ProductController.getInstance().filterByBrand(filters.get(filterName).get(0), products);
+            case CATEGORY:
+                return ProductController.getInstance().filterByCategory(filters.get(filterName).get(0), products);
+            case FIELD:
+                return ProductController.getInstance().filterByField(filters.get(filterName).get(0), filters.get(filterName).get(1), products);
+            case AVAILABLE:
+                return ProductController.getInstance().filterByExisting(products);
+            default:
+                return currentProducts;
+        }
+    }
 }

@@ -12,7 +12,6 @@ import static controller.CategoryController.*;
 import static controller.ProductController.allProducts;
 
 public class Product {
-    public static HashMap<Product, ArrayList<Salesperson>> stock = new HashMap<>();
 
     private HashMap<String, String> properties;
     private String productID;

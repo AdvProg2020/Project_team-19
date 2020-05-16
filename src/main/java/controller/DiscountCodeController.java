@@ -80,4 +80,12 @@ public class DiscountCodeController {
     public boolean isThereDiscountCodeByCode(String code) {
         return findDiscountCodeByCode(code) != null;
     }
+
+    public void checkDiscountCodeEndTime(){
+        for (DiscountCode discountCode : allDiscountCodes) {
+            if (discountCode.getEndTime().isAfter(LocalDateTime.now())){
+                removeDiscountCode(discountCode);
+            }
+        }
+    }
 }

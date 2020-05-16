@@ -6,10 +6,10 @@ import model.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class SalesPersonDiscountsMenu extends Menu {
+public class SalespersonDiscountsMenu extends Menu {
     private Salesperson salesperson;
 
-    public SalesPersonDiscountsMenu(Menu parent) {
+    public SalespersonDiscountsMenu ( Menu parent) {
         super("Discounts Menu", parent);
         subMenus.put(1, getAddDiscountMenu());
         subMenus.put(2, getViewDiscountMenu());
@@ -21,7 +21,7 @@ public class SalesPersonDiscountsMenu extends Menu {
         return new Menu("Add Discount", this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " :");
+                fancyTitle ();
             }
 
             @Override
@@ -29,17 +29,15 @@ public class SalesPersonDiscountsMenu extends Menu {
                 LocalDateTime start;
                 LocalDateTime end;
                 Double percentage;
-                ArrayList<Product> add = new ArrayList<>();
-                ArrayList<Product> remove = new ArrayList<>();
+                ArrayList<Product> addArray = new ArrayList<>();
                 String input;
-                String choice;
                 System.out.println("1. Start Time");
-                input = getValidDataTim();
+                input = getValidDateTime ();
                 if (input.equals(BACK_BUTTON))
                     return;
                 start = DiscountCodeController.getInstance().changeStringTDataTime(input);
                 System.out.println("2. End Time");
-                input = getValidDataTim();
+                input = getValidDateTime ();
                 if (input.equals(BACK_BUTTON))
                     return;
                 end = DiscountCodeController.getInstance().changeStringTDataTime(input);
@@ -48,14 +46,15 @@ public class SalesPersonDiscountsMenu extends Menu {
                 if (input.equals(BACK_BUTTON))
                     return;
                 percentage = Double.parseDouble(input);
-                System.out.println("4. Add Product");
-                System.out.println("Enter the product number you want to add:");
-                int num = Integer.parseInt(getValidMenuNumber(Integer.MAX_VALUE));
-                for (int i = 0; i < num; i++) {
+                System.out.println("4. Add Product (Press .. When Done)");
+                while (true) {
+                    System.out.println ( "Enter Product ID : " );
                     String id = getValidProductId();
-                    add.add(ProductController.getInstance().searchProduct(id));
+                    if (id.equals ( BACK_BUTTON ))
+                        break;
+                    addArray.add(ProductController.getInstance().searchProduct(id));
                 }
-                RequestController.getInstance().addDiscountRequest(add, start, end, percentage, salesperson);
+                RequestController.getInstance().addDiscountRequest(addArray, start, end, percentage, salesperson);
             }
         };
     }
@@ -69,10 +68,11 @@ public class SalesPersonDiscountsMenu extends Menu {
 
             @Override
             public void execute() {
-                String input = getValidDiscountId(salesperson);
-                if (input.equals(BACK_BUTTON))
+                String discountId = getValidDiscountId(salesperson);
+                if (discountId.equals(BACK_BUTTON))
                     return;
-                DiscountCode discountCode = DiscountCodeController.getInstance().findDiscountCodeByCode(input);
+                Discount discount = DiscountController.getInstance ().getDiscountByIdFromAll ( discountId );
+                DiscountController.getInstance ().removeDiscount ( salesperson , discount );
             }
         };
     }
@@ -82,7 +82,7 @@ public class SalesPersonDiscountsMenu extends Menu {
             @Override
             public void show() {
                 System.out.println ( BACK_HELP );
-                System.out.println ( "Enter Discount ID To View" );
+                System.out.print ( "Enter Discount ID To View : " );
             }
 
             @Override
@@ -95,10 +95,14 @@ public class SalesPersonDiscountsMenu extends Menu {
                     discount = salesperson.getDiscountWithIdSpecificSalesperson ( input );
                     if (input.equals ( BACK_BUTTON ))
                         break;
-                    else if ( DiscountController.getInstance ().getDiscountByIdFromAll ( input ) == null )
+                    else if ( DiscountController.getInstance ().getDiscountByIdFromAll ( input ) == null ) {
                         System.out.println ( "This Discount Doesn't Exist." );
-                    else if ( discount == null )
+                        System.out.print ( "Enter Discount ID To View : " );
+                    }
+                    else if ( discount == null ) {
                         System.out.println ( "You Don't Own This Discount." );
+                        System.out.print ( "Enter Discount ID To View : " );
+                    }
                     else
                         System.out.println ( discount );
                 }
@@ -137,10 +141,10 @@ public class SalesPersonDiscountsMenu extends Menu {
                     choice = getValidMenuNumber(6);
                     switch (Integer.parseInt(choice)) {
                         case 1:
-                            start = DiscountCodeController.getInstance().changeStringTDataTime(getValidDataTim());
+                            start = DiscountCodeController.getInstance().changeStringTDataTime( getValidDateTime ());
                             break;
                         case 2:
-                            end = DiscountCodeController.getInstance().changeStringTDataTime(getValidDataTim());
+                            end = DiscountCodeController.getInstance().changeStringTDataTime( getValidDateTime ());
                             break;
                         case 3:
                             percentage = Double.parseDouble(getValidDouble(100));

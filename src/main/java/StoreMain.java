@@ -1,11 +1,7 @@
-import controller.Database;
-import controller.PersonController;
-import controller.ProductController;
-import controller.RequestController;
+import controller.*;
 import view.MainMenu;
 import view.Menu;
 
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class StoreMain {
@@ -14,6 +10,8 @@ public class StoreMain {
         PersonController.getInstance ().initializePersons ();
         ProductController.getInstance ().initializeProducts ();
         RequestController.getInstance ().initializeRequests ();
+        CategoryController.getInstance ().initializeRootCategories ();
+        ProductController.getInstance ().initializeStock ();
         MainMenu mainMenu = new MainMenu ( null );
         Menu.setScanner ( new Scanner ( System.in ) );
         mainMenu.run();

@@ -1,5 +1,7 @@
 package model;
 
+import controller.CategoryController;
+
 import java.util.*;
 
 import static controller.CategoryController.*;
@@ -8,8 +10,8 @@ public class Category {
 
     private boolean isLeaf;
     private String name;
-    private Category parent;
-    private LinkedList<Category> children;
+    transient private Category parent;
+    private ArrayList<Category> children;
     private HashSet<String> propertyFields;
     private ArrayList<Product> productList;
 
@@ -22,13 +24,17 @@ public class Category {
 
         this.parent = parent;
 
-        if (parent != null)
+        if (parent != null) {
             parent.children.add(this);
+            parent.setLeaf(false);
+        }
 
         this.propertyFields = new HashSet<>(properties);
-        this.children = new LinkedList<>();
+        this.children = new ArrayList<>();
         this.productList = new ArrayList<>();
     }
+
+
 
     public void setPropertyFields(HashSet<String> propertyFields) {
         this.propertyFields = propertyFields;
@@ -78,19 +84,19 @@ public class Category {
         return name;
     }
 
-    public boolean getIsLeaf() {
+    public boolean isLeaf () {
         return isLeaf;
     }
 
-    public LinkedList<Category> getChildren() {
+    public ArrayList<Category> getChildren() {
         return children;
     }
 
-    public Category getParent() {
+    public Category getParent () {
         return parent;
     }
 
-    public void setParent(Category parent) {
+    public void setParent ( Category parent ) {
         this.parent = parent;
     }
 

@@ -1,9 +1,6 @@
 package model;
 
 import controller.Database;
-import view.LoginMenu;
-
-import java.io.IOException;
 import java.util.HashMap;
 
 import static controller.PersonController.allPersons;

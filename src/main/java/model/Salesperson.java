@@ -89,6 +89,9 @@ public class Salesperson extends Person {
     }
 
     public void removeFromOfferedProducts(Product offeredProduct) {
+        if (offeredProducts.get(offeredProduct).isInDiscount()) {
+            offeredProducts.get(offeredProduct).getDiscount().removeProduct(offeredProduct);
+        }
         offeredProducts.remove(offeredProduct);
     }
 
