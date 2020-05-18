@@ -3,10 +3,16 @@ package view;
 import controller.*;
 import model.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import static controller.CategoryController.rootCategories;
 
+import model.wagu.Block;
+import model.wagu.Board;
+import model.wagu.Table;
 import org.apache.commons.lang3.RandomStringUtils;
 
 public class SalespersonProductMenu extends Menu {
@@ -27,7 +33,7 @@ public class SalespersonProductMenu extends Menu {
         return new Menu ("View All Products", this ) {
             @Override
             public void show () {
-                System.out.println ( salesperson.getAllProducts () );
+                System.out.println ( getAllProducts ( salesperson ) );
                 super.show ();
             }
 
@@ -244,5 +250,28 @@ public class SalespersonProductMenu extends Menu {
 
     public void setSalesperson(Salesperson salesperson) {
         this.salesperson = salesperson;
+    }
+
+    private static String getAllProducts( Salesperson salesperson) {
+        List <String> headersList = Arrays.asList("Product Name", "Product State");
+        List < List <String>> rowsList = new ArrayList <> (  );
+        for (Product product : salesperson.getOfferedProducts ( ).keySet ( )) {
+            List <String> row = new ArrayList <> ( 2 );
+            row.add ( product.getName() );
+            row.add ( salesperson.getProductState ( product ) );
+            rowsList.add ( row );
+        }
+        if (salesperson.getOfferedProducts().size () == 0)
+            return "You Currently Have No Products";
+        Board board = new Board (75);
+        Table table = new Table (board, 75, headersList, rowsList);
+        List<Integer> colAlignList = Arrays.asList(
+                Block.DATA_CENTER,
+                Block.DATA_CENTER);
+        table.setColAlignsList(colAlignList);
+        Block tableBlock = table.tableToBlocks();
+        board.setInitialBlock(tableBlock);
+        board.build();
+        return board.getPreview();
     }
 }

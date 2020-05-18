@@ -22,6 +22,7 @@ import static view.ProductMenu.viewCategory;
 public abstract class Menu {
     private String name;
     Menu parentMenu;
+    public static Menu mainMenu;
     protected HashMap<Integer, Menu> subMenus;
     static Scanner scanner;
     static final String BACK_BUTTON = "..";
@@ -67,7 +68,7 @@ public abstract class Menu {
 
     public void execute () {
         Menu nextMenu = null;
-        int chosenMenu = Integer.parseInt ( getValidMenuNumber ( subMenus.size () + 2 ) );
+        int chosenMenu = Integer.parseInt ( getValidMenuNumber ( 1,subMenus.size () + 2 ) );
         if ( chosenMenu == subMenus.size ( ) + 1) {
             nextMenu = new UserMenu ( this );
         } else if ( chosenMenu == subMenus.size ( ) + 2 ) {
@@ -346,7 +347,7 @@ public abstract class Menu {
 
     void eachUserExecuteMenu () {
         Menu nextMenu;
-        int chosenMenu = Integer.parseInt ( getValidMenuNumber ( subMenus.size () + 1 ) );
+        int chosenMenu = Integer.parseInt ( getValidMenuNumber ( 1,subMenus.size () + 1 ) );
         if ( chosenMenu == subMenus.size ( ) + 1 ) {
             return;
         } else

@@ -216,12 +216,6 @@ public class ProductController {
         return productList;
     }
 
-    public void removeSellerInStock(Salesperson salesperson){
-        for (Product product : stock.keySet()) {
-            stock.get(product).remove(salesperson);
-        }
-    }
-
     public boolean doesSellerHasProduct(Product product, Salesperson salesperson){
         for (OwnedProduct ownedProduct : getProductsOfProduct(product)) {
             if(ownedProduct.getSalesperson().equals(salesperson))

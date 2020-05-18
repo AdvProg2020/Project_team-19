@@ -1,5 +1,6 @@
 package view;
 
+import controller.CartController;
 import controller.PersonController;
 import controller.ProductController;
 import model.Manager;

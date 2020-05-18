@@ -153,28 +153,10 @@ public class Salesperson extends Person {
         return offeredProducts.get(product.getID()).getAmount();
     }
 
-    public String getAllProducts() {
-        List <String> headersList = Arrays.asList("Product Name", "Product State");
-        List < List <String>> rowsList = new ArrayList <> (  );
-        offeredProducts.forEach ( (key,value) -> {
-            List <String> row = new ArrayList <> ( 2 );
-            row.add ( key.toString () );
-            row.add ( value.getProductState ().label );
-            rowsList.add ( row );
-        } );
-        if (offeredProducts.size () == 0)
-            return "You Currently Have No Products";
-        Board board = new Board (75);
-        Table table = new Table (board, 75, headersList, rowsList);
-        List<Integer> colAlignList = Arrays.asList(
-                Block.DATA_CENTER,
-                Block.DATA_CENTER);
-        table.setColAlignsList(colAlignList);
-        Block tableBlock = table.tableToBlocks();
-        board.setInitialBlock(tableBlock);
-        board.build();
-        return board.getPreview();
+    public String getProductState (Product product) {
+        return offeredProducts.get ( product.getID () ).getProductState ().label;
     }
+
 }
 
 class ProductState {

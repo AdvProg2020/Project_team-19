@@ -3,11 +3,13 @@ package view;
 import controller.ProductController;
 import model.Category;
 import model.Product;
+import model.Salesperson;
 import model.wagu.Block;
 import model.wagu.Board;
 import model.wagu.Table;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
