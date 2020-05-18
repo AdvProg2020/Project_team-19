@@ -24,14 +24,13 @@ public class CustomerMenu extends Menu {
     }
 
     @Override
+    public void show () {
+        eachUserShowMenu ();
+    }
+
+    @Override
     public void execute () { //ToDo add this to customer and salesperson and manager
-        Menu nextMenu;
-        int chosenMenu = Integer.parseInt ( getValidMenuNumber ( subMenus.size ( ) + 1 ) );
-        if ( chosenMenu == subMenus.size ( ) + 1 ) {
-            nextMenu = this.parentMenu.parentMenu;
-        } else
-            nextMenu = subMenus.get ( chosenMenu );
-        nextMenu.run ( );
+        eachUserExecuteMenu ();
     }
 
     public Menu getViewBalanceMenu () {

@@ -44,14 +44,6 @@ public class DiscountCodeController {
         }
     }
 
-    public void checkDiscountCodeEndTime(){
-        for (DiscountCode discountCode : allDiscountCodes) {
-            if (discountCode.getEndTime().isAfter(LocalDateTime.now())){
-                removeDiscountCode(discountCode);
-            }
-        }
-    }
-
     public void addNewDiscountCode(LocalDateTime start,LocalDateTime end,double percentage,double max,int useCounter,ArrayList<Person> people){
         DiscountCode discountCode = new DiscountCode(start,end,percentage,max,useCounter);
         for (Person person : people) {

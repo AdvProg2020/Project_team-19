@@ -1,8 +1,11 @@
 package view;
 
+import controller.CartController;
 import controller.PersonController;
+import controller.ProductController;
 import model.Manager;
 import model.Person;
+import model.Salesperson;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,13 +18,27 @@ public class ManageUsersMenu extends Menu {
 
     public ManageUsersMenu(Menu parent){
         super("Manage Users",parent);
-        subMenus.put(1,getViewUserMenu());
-        subMenus.put(2,getDeleteUserMenu());
-        subMenus.put(3,getCreateManagerProfileMenu());
+        subMenus.put(1,getViewAllUsersMenu());
+        subMenus.put(2,getViewUserMenu());
+        subMenus.put(3,getDeleteUserMenu());
+        subMenus.put(4,getCreateManagerProfileMenu());
+    }
+
+    public Menu getViewAllUsersMenu(){
+        return new Menu("View All Users",this) {
+            @Override
+            public void show() {
+                System.out.println ( PersonController.getInstance ().getEveryone () );
+            }
+
+            @Override
+            public void execute() {
+            }
+        };
     }
 
     public Menu getViewUserMenu(){
-        return new Menu("View User",this) {
+        return new Menu("View A Specific User",this) {
             @Override
             public void show() {
                 System.out.println("Enter username or back to return");
@@ -65,6 +82,10 @@ public class ManageUsersMenu extends Menu {
                     else {
                         Person person = PersonController.getInstance ().getPersonByUsername ( input );
                         try {
+                            if (person instanceof Salesperson ) {
+                                CartController.getInstance ( ).removeSeller ( (Salesperson) person );
+                                ProductController.getInstance ().removeSellerInStock ( (Salesperson) person );
+                            }
                             PersonController.getInstance ().removePersonFromAllPersons ( person );
                             System.out.println ( "Removed successfully." );
                         } catch (IOException e) {

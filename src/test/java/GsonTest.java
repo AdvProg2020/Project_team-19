@@ -128,6 +128,6 @@ public class GsonTest {
         Product product = new Product( "panir", "lighvan",
                 category.getName(), properties1, false);
         product.setName("shiiir");
-        Database.editInFile(product, "products", product.getID());
+//        Database.editInFile(product, "products", product.getID());
     }
 }

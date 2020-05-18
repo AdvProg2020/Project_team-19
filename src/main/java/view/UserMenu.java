@@ -22,21 +22,17 @@ public class UserMenu extends Menu {
         if ( loggedInPerson == null ) {
             LoginMenu loginMenu = new LoginMenu ( this );
             loginMenu.run ();
-            this.run ();
         }
         else {
             if (loggedInPerson instanceof Manager ) {
                 ManagerMenu managerMenu = new ManagerMenu ( this );
                 managerMenu.run();
-                this.run ();
             } else if (loggedInPerson instanceof Salesperson ) {
                 SalespersonMenu salespersonMenu = new SalespersonMenu ( this );
                 salespersonMenu.run();
-                this.run ();
             } else {
                 CustomerMenu customerMenu = new CustomerMenu ( this );
                 customerMenu.run ();
-                this.run ();
             }
         }
     }

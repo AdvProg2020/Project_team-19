@@ -31,7 +31,7 @@ public class ManageCategoriesMenu extends Menu {
                 String input;
                 System.out.print("Enter Category Name To Add : ");
                 while (CategoryController.getInstance().getCategoryByName(input = scanner.nextLine(), rootCategories) != null
-                && !input.equals(BACK_BUTTON)) {
+                        && !input.equals(BACK_BUTTON)) {
                     System.out.print("Already Exists. Try Another : ");
                 }
                 if (input.equals(BACK_BUTTON))
@@ -39,12 +39,20 @@ public class ManageCategoriesMenu extends Menu {
                 String input2;
                 System.out.print("Enter Parent Category Name or Enter \"root\" If It Does Not Have Any : ");
                 do {
-                input2 = getValidCategoryName();
-                if (input2.equals(BACK_BUTTON))
-                    return;
-                if(!CategoryController.getInstance().getCategoryByName(input2,rootCategories).getProductList().isEmpty()){
-                    System.out.println("This Category Has Products. Choose A Parent Category.");}
-                }while (!CategoryController.getInstance().getCategoryByName(input2,rootCategories).getProductList().isEmpty());
+                    input2 = getValidCategoryName();
+                    if (input2.equals(BACK_BUTTON))
+                        return;
+                    if (input2.equalsIgnoreCase("root")) {
+                        break;
+                    }
+                    if(!CategoryController.getInstance().getCategoryByName(input2,rootCategories).getProductList().isEmpty()){
+                        System.out.println("This Category Has Products. Choose A Parent Category.");}
+                } while (!CategoryController.getInstance().getCategoryByName(input2,rootCategories).getProductList().isEmpty());
+                if (input2.equalsIgnoreCase("root")) {
+                    parent = null;
+                } else {
+                    parent = CategoryController.getInstance().getCategoryByName(input2, rootCategories);
+                }
                 String field;
                 while (true) {
                     System.out.println ( "Enter Field Or \"..\" To Continue:" );
@@ -53,11 +61,6 @@ public class ManageCategoriesMenu extends Menu {
                         break;
                     addProperties.add ( field );
                 }
-
-                if(input2.equalsIgnoreCase("root"))
-                    parent = null;
-                else
-                    parent = CategoryController.getInstance().getCategoryByName(input2, rootCategories);
 
                 CategoryController.getInstance().addCategory(input,parent,addProperties);
                 System.out.println("Successful.");
@@ -94,7 +97,7 @@ public class ManageCategoriesMenu extends Menu {
                     System.out.println("3. Confirm Edit.");
                 do {
                     System.out.println("Which field do you want to edit?");
-                    input = getValidMenuNumber(category.isLeaf ()?3:5);
+                    input = getValidMenuNumber(category.isLeaf ()? 5 : 3);
                     switch (Integer.parseInt(input)) {
                         case 1:
                             System.out.print("Enter New Category Name : ");
@@ -114,6 +117,7 @@ public class ManageCategoriesMenu extends Menu {
                             }
                             break;
                         case 3:
+                            if (!category.isLeaf()) break;
                             System.out.print("Enter Field : ");
                             String field = scanner.nextLine();
                             addProperties.add(field);
@@ -129,7 +133,7 @@ public class ManageCategoriesMenu extends Menu {
                             break;
                     }
 
-                } while (!(input.equals(category.isLeaf () ?"3":"5")));
+                } while (!(input.equals(category.isLeaf () ?"5":"3")));
                 CategoryController.getInstance().editCategory(name,category,parent,addProperties,removeProperties,isRoot);
                 System.out.println("Successful.");
             }

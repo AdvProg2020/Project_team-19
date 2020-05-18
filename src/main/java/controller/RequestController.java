@@ -72,12 +72,8 @@ public class RequestController {
     }
 
     public void addSalesPerson(HashMap<String, String> personInfo) {
-        try {
-            Salesperson salesperson = new Salesperson(personInfo);
-            PersonController.getInstance().addPerson(salesperson);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Salesperson salesperson = new Salesperson(personInfo);
+        PersonController.getInstance().addPerson(salesperson);
     }
 
     public ArrayList<Request> filterByState(Request.RequestState requestState) {

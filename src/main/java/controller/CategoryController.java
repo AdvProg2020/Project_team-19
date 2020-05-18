@@ -59,11 +59,10 @@ public class CategoryController {
         saveToFile(rootCategories, address.get("root_categories"));
     }
 
-
     public boolean isCategoryEmpty(Category category) {
         for (Category child : category.getChildren()) {
             if (child.isLeaf())
-                return child.getProductList() == null;
+                return child.getProductList().isEmpty();
             return isCategoryEmpty(child);
         }
         return true;
@@ -93,14 +92,19 @@ public class CategoryController {
             changeParent(category, parent);
 
         if (parent == null && root) {
+            changeParent(category, null);
             rootCategories.add(category);
-            saveToFile(rootCategories, address.get("root_categories"));
         }
+        saveToFile(rootCategories, address.get("root_categories"));
     }
 
     public void changeParent(Category category, Category newParent) {
         removeCategory(category.getParent(), category);
         category.setParent(newParent);
+        if (newParent != null) {
+            newParent.getChildren().add(category);
+            newParent.setLeaf(false);
+        }
         saveToFile(rootCategories, address.get("root_categories"));
     }
 

@@ -2,10 +2,16 @@ package model;
 
 
 import controller.Database;
+import controller.ProductController;
+import model.wagu.Block;
+import model.wagu.Board;
+import model.wagu.Table;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class Salesperson extends Person {
     private ArrayList<SellLog> sellLogs;
@@ -14,7 +20,7 @@ public class Salesperson extends Person {
     private double credit;
 
 
-    public Salesperson(HashMap<String, String> personInfo) throws IOException {
+    public Salesperson(HashMap<String, String> personInfo) {
         super(personInfo);
         sellLogs = new ArrayList<>();
         offeredProducts = new HashMap<>();
@@ -130,11 +136,42 @@ public class Salesperson extends Person {
     public int getProductAmount(Product product) {
         return offeredProducts.get(product).getAmount();
     }
+
+    public String getAllProducts() {
+        List <String> headersList = Arrays.asList("Product Name", "Product State");
+        List < List <String>> rowsList = new ArrayList <> (  );
+        offeredProducts.forEach ( (key,value) -> {
+            List <String> row = new ArrayList <> ( 2 );
+            row.add ( key.toString () );
+            row.add ( value.getProductState ().label );
+            rowsList.add ( row );
+        } );
+        if (offeredProducts.size () == 0)
+            return "You Currently Have No Products";
+        Board board = new Board (75);
+        Table table = new Table (board, 75, headersList, rowsList);
+        List<Integer> colAlignList = Arrays.asList(
+                Block.DATA_CENTER,
+                Block.DATA_CENTER);
+        table.setColAlignsList(colAlignList);
+        Block tableBlock = table.tableToBlocks();
+        board.setInitialBlock(tableBlock);
+        board.build();
+        return board.getPreview();
+    }
 }
 
 class ProductState {
     public enum State {
-        BUILD_IN_PROGRESS, EDIT_IN_PROGRESS, VERIFIED
+        BUILD_IN_PROGRESS ("Build In Progress"),
+        EDIT_IN_PROGRESS ("Edit In Progress"),
+        VERIFIED ("Verified");
+
+        public final String label;
+
+        State (String label) {
+            this.label = label;
+        }
     }
 
     private Discount discount;
@@ -194,5 +231,6 @@ class ProductState {
     public void setState(State productState) {
         this.productState = productState;
     }
+
 }
 

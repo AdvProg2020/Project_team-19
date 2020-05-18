@@ -8,10 +8,6 @@ import java.util.ArrayList;
 
 public class Discount {
 
-    public void removeProduct(Product product) {
-        products.remove(product);
-    }
-
     public enum DiscountState {
         BUILD_IN_PROGRESS, EDIT_IN_PROGRESS, VERIFIED
     }

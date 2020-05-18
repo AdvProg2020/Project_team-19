@@ -36,7 +36,16 @@ public class ProductController {
     }
 
     public void initializeStock() {
-        stock = Database.handleHashMap(address.get("stock"));
+        stock = new HashMap<>();
+        for (Product product : allProducts) {
+            stock.put(product,new ArrayList<>());
+        }
+        for (Person person : PersonController.getInstance().filterByRoll(Salesperson.class)) {
+            Salesperson salesperson = (Salesperson) person;
+            for (Product product : salesperson.getOfferedProducts().keySet()) {
+                stock.get(product).add(salesperson);
+            }
+        }
     }
 
     public void setCurrentProducts(ArrayList<Product> currentProducts) {
@@ -81,7 +90,11 @@ public class ProductController {
         saveToFile(CategoryController.rootCategories,address.get("root_categories"));
     }
 
-
+    public void removeSellerInStock(Salesperson salesperson){
+        for (Product product : stock.keySet()) {
+            stock.get(product).remove(salesperson);
+        }
+    }
 
     public void addProduct(Product product, Salesperson salesperson, int amount, double price) {
         if (getProductById(product.getID()) != null)

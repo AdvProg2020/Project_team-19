@@ -23,22 +23,6 @@ public class CartController {
         return single_instance;
     }
 
-    public void removeProduct(Product product){
-        for (Person person : PersonController.getInstance().filterByRoll(Customer.class)) {
-            Customer customer = (Customer) person;
-            customer.getCart().getProducts().remove(product);
-        }
-    }
-
-    public void removeProduct(Product product,Salesperson salesperson){
-        for (Person person : PersonController.getInstance().filterByRoll(Customer.class)) {
-            Customer customer = (Customer) person;
-            if(customer.getCart().getProducts().containsKey(product)){
-                customer.getCart().getProducts().get(product).remove(salesperson);
-            }
-        }
-    }
-
     public void addProduct(Product product, Salesperson salesperson) {
         if (PersonController.getInstance().isThereLoggedInPerson() && PersonController.getInstance().isLoggedInPersonCustomer()) {
             Customer customer = (Customer) PersonController.getInstance().getLoggedInPerson();
@@ -84,10 +68,13 @@ public class CartController {
         }
     }
 
+
+
     public void removeProduct(Product product){
         for (Person person : PersonController.getInstance().filterByRoll(Customer.class)) {
             Customer customer = (Customer) person;
             customer.getCart().getProducts().remove(product);
+            Database.saveToFile(customer,Database.createPath("customers",customer.getUsername()));
         }
     }
 
@@ -96,7 +83,14 @@ public class CartController {
             Customer customer = (Customer) person;
             if(customer.getCart().getProducts().containsKey(product)){
                 customer.getCart().getProducts().get(product).remove(salesperson);
+                Database.saveToFile(customer,Database.createPath("customers",customer.getUsername()));
             }
+        }
+    }
+
+    public void removeSeller(Salesperson salesperson){
+        for (Product product : salesperson.getOfferedProducts().keySet()) {
+            removeProduct(product,salesperson);
         }
     }
 
