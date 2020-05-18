@@ -23,7 +23,7 @@ public class ProductMenu extends Menu {
         subMenus.put(3, getCompareTwoProductsMenu());
         subMenus.put(4, new FilteringMenu(this));
         subMenus.put(5, getSearchMenu());
-        subMenus.put(6, getHelpMenu(this));
+
     }
 
     public Menu getCompareTwoProductsMenu(){

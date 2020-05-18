@@ -57,7 +57,7 @@ public class Database {
         }
     }
 
-    public static <T> void editInFile(T obj, String keyPath, String fileName) {
+    public static <T> void editInFile(T obj, String keyPath, String fileName) { //ToDo estfde nmishe
         try {
             String filePath = createPath(keyPath, fileName);
             deleteFile(filePath);
@@ -92,7 +92,6 @@ public class Database {
         return patterns;
 
     }
-
 
     public static HashMap<Product, ArrayList<Salesperson>> handleHashMap (String address) { //ToDo emt nshde, version qbli tu discord, yalda zde
         HashMap<Product, ArrayList<Salesperson>> patterns = new HashMap <> (  );

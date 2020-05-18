@@ -35,7 +35,7 @@ public class ViewProductMenu extends Menu {
         if (!productIsSet) {
             System.out.println("Please enter product id:");
             String id = getValidProductId();
-            if (id.equals(".."))
+            if (id.equals(BACK_BUTTON))
                 return;
             product = ProductController.getInstance().getProductById(id);
             productIsSet = true;

@@ -15,15 +15,31 @@ public class SalespersonProductMenu extends Menu {
 
     public SalespersonProductMenu(Menu parent) {
         super("Manage Products", parent);
-        subMenus.put(1, getViewProductMenu());
-        subMenus.put(2, getAddProductMenu());
-        subMenus.put(3, getEditProductMenu());
-        subMenus.put(4, getRemoveProductMenu());
-        subMenus.put(5, getViewBuyersMenu());
+        subMenus.put(1, getViewAllProductsMenu());
+        subMenus.put(2, getViewProductMenu());
+        subMenus.put(3, getAddProductMenu());
+        subMenus.put(4, getEditProductMenu());
+        subMenus.put(5, getRemoveProductMenu());
+        subMenus.put(6, getViewBuyersMenu());
+    }
+
+    public Menu getViewAllProductsMenu () {
+        return new Menu ("View All Products", this ) {
+            @Override
+            public void show () {
+                System.out.println ( salesperson.getAllProducts () );
+                super.show ();
+            }
+
+            @Override
+            public void execute () {
+                super.execute ( );
+            }
+        };
     }
 
     public Menu getViewProductMenu() {
-        return new Menu("View Product", this) {
+        return new Menu("View A Specific Product", this) {
 
             @Override
             public void show () {

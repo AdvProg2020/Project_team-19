@@ -6,11 +6,8 @@ import model.Category;
 import model.Product;
 import model.Salesperson;
 
-import java.awt.*;
-import java.awt.event.InputEvent;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
 import controller.PersonController;
 import org.apache.commons.lang3.StringUtils;
 
@@ -56,35 +53,42 @@ public abstract class Menu {
     }
 
     public void show() {
-        System.out.println(this.name + ":");
+        fancyTitle ();
         for (Integer menuNum : subMenus.keySet()) {
             System.out.println(menuNum + ". " + subMenus.get(menuNum).getName());
         }
-        if (this.parentMenu != null)
-            System.out.println((subMenus.size() + 1) + ". Back");
+        System.out.println ( (subMenus.size ( ) + 1) + ". User Menu" );
+        if ( this.parentMenu != null )
+            System.out.println ( (subMenus.size ( ) + 2) + ". Back" );
         else
-            System.out.println((subMenus.size() + 1) + ". Exit");
+            System.out.println ( (subMenus.size ( ) + 2) + ". Exit" );
+        System.out.println ( "?. Help" );
     }
 
-    public void execute() {
+    public void execute () {
         Menu nextMenu = null;
-        int chosenMenu = Integer.parseInt(getValidMenuNumber(1,subMenus.size() + 1));
-        if (chosenMenu == subMenus.size() + 1) {
-            if (this.parentMenu == null)
-                System.exit(1);
+        int chosenMenu = Integer.parseInt ( getValidMenuNumber ( subMenus.size () + 2 ) );
+        if ( chosenMenu == subMenus.size ( ) + 1) {
+            nextMenu = new UserMenu ( this );
+        } else if ( chosenMenu == subMenus.size ( ) + 2 ) {
+            if ( this.parentMenu == null )
+                System.exit ( 1 );
             else
                 return;
+        } else if ( chosenMenu == subMenus.size () + 3) {
+            nextMenu = getHelpMenu ( this );
         } else
-            nextMenu = subMenus.get(chosenMenu);
-        nextMenu.run();
-        this.run();
+            nextMenu = subMenus.get ( chosenMenu );
+        assert nextMenu != null;
+        nextMenu.run ( );
+        this.run ( );
     }
 
     public Menu getCategoryMenu(Menu parent) {
         return new Menu("Category Menu", parent) {
             @Override
             public void show() {
-                fancyTitle();
+                fancyTitle ();
                 viewAllCategories();
             }
 
@@ -118,9 +122,9 @@ public abstract class Menu {
             public void execute() {
                 String input;
                 while (true) {
-                    input = scanner.nextLine();
-                    if (!input.equals(BACK_BUTTON))
-                        System.out.println("chizi zadi?");
+                    input = scanner.nextLine ( );
+                    if (!input.equals ( BACK_BUTTON ))
+                        System.out.println ( "chizi zadi?" );
                     else
                         break;
                 }
@@ -132,7 +136,7 @@ public abstract class Menu {
         return new Menu("Search", this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " :");
+                fancyTitle ();
             }
 
             @Override
@@ -162,6 +166,8 @@ public abstract class Menu {
         boolean check = false;
         do {
             menuNum = scanner.nextLine();
+            if (menuNum.equals ( "?" ))
+                return String.valueOf ( most + 1 );
             if (numPattern.matcher(menuNum).matches() && Integer.parseInt(menuNum) <= most&& Integer.parseInt(menuNum)>=min) {
                 check = true;
             } else {
@@ -186,7 +192,7 @@ public abstract class Menu {
     }
 
     protected Menu getLogoutMenu() {
-        return new Menu("Logout", this) {
+        return new Menu ("Logout",this) {
             @Override
             public void show() {
 
@@ -194,7 +200,7 @@ public abstract class Menu {
 
             @Override
             public void execute() {
-                PersonController.getInstance().logOut();
+                PersonController.getInstance ().logOut ( );
             }
         };
     }
@@ -204,7 +210,7 @@ public abstract class Menu {
         String input;
         do {
             input = scanner.nextLine();
-            if (input.equals(BACK_BUTTON))
+            if (input.equals ( BACK_BUTTON ))
                 break;
             check = ProductController.getInstance().isThereProductById(input);
             if (!check) {
@@ -220,9 +226,9 @@ public abstract class Menu {
         String input;
         do {
             input = scanner.nextLine();
-            if (input.equals(BACK_BUTTON))
+            if (input.equals ( BACK_BUTTON ))
                 break;
-            check = ProductController.getInstance().isThereProductById(input);
+            check= ProductController.getInstance().isThereProductById(input);
             if (!check) {
                 System.out.println("There is no product with such id. Please enter id again:");
                 continue;
@@ -241,7 +247,7 @@ public abstract class Menu {
         String input;
         do {
             input = scanner.nextLine();
-            if (input.equals(BACK_BUTTON))
+            if (input.equals(BACK_BUTTON ))
                 return input;
             check = PersonController.getInstance().isLoggedInPersonCustomer();
             if (!check) {
@@ -257,7 +263,7 @@ public abstract class Menu {
         String input;
         do {
             input = scanner.nextLine();
-            if (input.equals(BACK_BUTTON) || input.equalsIgnoreCase("root"))
+            if (input.equals(BACK_BUTTON) || input.equalsIgnoreCase ( "root" ))
                 return input;
             check = CategoryController.getInstance().getCategoryByName(input, CategoryController.rootCategories) != null;
             if (!check) {
@@ -311,28 +317,52 @@ public abstract class Menu {
         return LocalDateTime.of(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day), Integer.parseInt(hour), Integer.parseInt(minute)).format(format);
     }
 
-    public String assertDeletion() {
+    public String assertDeletion(){
         boolean check;
         String input;
         do {
             System.out.println("Are you sure you want to remove?(Y|N)");
-            input = scanner.nextLine();
-            check = (input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n"));
-        } while (!check);
+            input = scanner.nextLine ( );
+            check = (input.equalsIgnoreCase("y")||input.equalsIgnoreCase("n"));
+        }while (!check);
         return input;
     }
 
-    protected void fancyTitle() {
+    protected void fancyTitle () {
         System.out.printf("\u2014\u2014\u2014|%s|\u2014\u2014\u2014\n",
-                StringUtils.center(this.getName(), 10));
+                StringUtils.center(this.getName(), 10) );
     }
 
-    public static void clearScreen(int x, int y) throws AWTException {
-        Robot bot = new Robot();
-        bot.mouseMove(x, y);
-        bot.mousePress(InputEvent.BUTTON1_MASK);
-        bot.mouseRelease(InputEvent.BUTTON1_MASK);
+    void eachUserShowMenu () {
+        fancyTitle ();
+        for (Integer menuNum : subMenus.keySet()) {
+            System.out.println(menuNum + ". " + subMenus.get(menuNum).getName());
+        }
+        if ( this.parentMenu != null )
+            System.out.println ( (subMenus.size ( ) + 1) + ". Back" );
+        else
+            System.out.println ( (subMenus.size ( ) + 1) + ". Exit" );
     }
+
+    void eachUserExecuteMenu () {
+        Menu nextMenu;
+        int chosenMenu = Integer.parseInt ( getValidMenuNumber ( subMenus.size () + 1 ) );
+        if ( chosenMenu == subMenus.size ( ) + 1 ) {
+            return;
+        } else
+            nextMenu = subMenus.get ( chosenMenu );
+        assert nextMenu != null;
+        nextMenu.run ( );
+        if (!(this instanceof LoginMenu))
+            this.run ();
+    }
+
+//    public static void clearScreen(int x, int y) throws AWTException {
+//        Robot bot = new Robot();
+//        bot.mouseMove(x, y);
+//        bot.mousePress( InputEvent.BUTTON1_MASK);
+//        bot.mouseRelease(InputEvent.BUTTON1_MASK);
+//    }
 
     @Override
     public String toString() {

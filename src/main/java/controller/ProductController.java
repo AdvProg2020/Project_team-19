@@ -89,7 +89,11 @@ public class ProductController {
         saveToFile(CategoryController.rootCategories,address.get("root_categories"));
     }
 
-
+    public void removeSellerInStock(Salesperson salesperson){
+        for (Product product : stock.keySet()) {
+            stock.get(product).remove(salesperson);
+        }
+    }
 
     public void addProduct(Product product, Salesperson salesperson, int amount, double price) {
         if (getProductById(product.getID()) != null)

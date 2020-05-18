@@ -56,7 +56,7 @@ public class DiscountMenu extends Menu {
 
             @Override
             public void execute () {
-                super.execute ( );
+
             }
         };
     }
