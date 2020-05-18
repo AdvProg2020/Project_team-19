@@ -73,35 +73,6 @@ public class Database {
         Database.write(object, address);
     }
 
-    public static String handleJsonObject(JsonReader reader, String wantedFieldName) {
-        try {
-            reader.beginObject();
-            String fieldName = null;
-
-            while (reader.hasNext()) {
-                JsonToken token = reader.peek();
-
-                if (token.equals(JsonToken.END_OBJECT)) {
-                    reader.endObject();
-                } else {
-                    if (token.equals(JsonToken.NAME)) {
-                        fieldName = reader.nextName();
-                    }
-                    if (wantedFieldName.equals(fieldName)) {
-                        reader.peek();
-                        return reader.nextString();
-                    } else
-                        reader.skipValue();
-                }
-            }
-            return null;
-
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
-
-    }
-
     public static ArrayList<Category> handleJsonArray(String address) {
         ArrayList<Category> patterns = new ArrayList<>();
         Gson gson = new Gson();
@@ -122,14 +93,6 @@ public class Database {
 
     }
 
-    public static HashMap<Product, ArrayList<Salesperson>> handleHashMap(String address) {
-        HashMap<Product, ArrayList<Salesperson>> employeeMap = new HashMap<>();
-        Gson gson = new Gson();
-        String jsonString = gson.toJson(employeeMap);
-        Type type = new TypeToken<HashMap<Product, ArrayList<Salesperson>>>() {
-        }.getType();
-        return gson.fromJson(jsonString, type);
-    }
 
     public static HashMap<Product, ArrayList<Salesperson>> handleHashMap (String address) { //ToDo emt nshde, version qbli tu discord, yalda zde
         HashMap<Product, ArrayList<Salesperson>> patterns = new HashMap <> (  );
@@ -165,6 +128,36 @@ public class Database {
             return file.delete();
         } else {
             return false;
+        }
+    }
+
+    public static void createDatabase() {
+        createFolder(System.getProperty("user.dir") + File.separator + "database");
+        createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "persons");
+        createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "persons" + File.separator + "salespersons");
+        createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "persons" + File.separator + "customers");
+        createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "persons" + File.separator + "managers");
+        createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "requests");
+        createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "requests" + File.separator + "salesperson_requests");
+        createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "requests" + File.separator + "product_requests");
+        createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "requests" + File.separator + "discount_requests");
+        createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "discount_codes");
+        createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "products");
+        createFile(System.getProperty("user.dir") + File.separator + "database" + File.separator + "stock.json");
+        createFile(System.getProperty("user.dir") + File.separator + "database" + File.separator + "root_categories.json");
+    }
+
+    public static void createFolder(String path) {
+        File file = new File(path);
+        file.mkdir();
+    }
+
+    public static void createFile(String path) {
+        File file = new File(path);
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

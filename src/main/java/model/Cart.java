@@ -78,13 +78,13 @@ public class Cart {
 
     public static void purchase(Customer customer) throws IOException {
         customer.setCredit(customer.getCredit() - customer.getCart().totalPrice);
-        BuyLog buyLog = new BuyLog(LocalDateTime.now(), customer.getCart().totalPrice, customer.getCart().discountAmount, customer.getCart().getProducts(), false);
+        BuyLog buyLog = new BuyLog(LocalDateTime.now(), customer.getCart().totalPrice, customer.getCart().getTotalPriceAfterDiscountCode(), customer.getCart().getProducts(), false);
         customer.addToBuyLogs(buyLog);
         customer.getCart().purchaseForSalesperson();
         customer.getCart().cleanAfterPurchase();
     }
 
-    public void purchaseForSalesperson() throws IOException {
+    public void purchaseForSalesperson(){
         for (Product product : products.keySet()) {
             for (Salesperson salesperson : products.get(product).keySet()) {
                 int count = products.get(product).get(salesperson).count;

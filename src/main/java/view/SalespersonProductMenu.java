@@ -3,19 +3,11 @@ package view;
 import controller.*;
 import model.*;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 import static controller.CategoryController.rootCategories;
-import controller.*;
-import model.*;
+
 import org.apache.commons.lang3.RandomStringUtils;
-
-import java.util.HashMap;
-
-import static controller.CategoryController.rootCategories;
 
 public class SalespersonProductMenu extends Menu {
 
@@ -45,9 +37,10 @@ public class SalespersonProductMenu extends Menu {
                 input = getValidProductId(salesperson);
                 if (input.equals(BACK_BUTTON))
                     return;
-                Product product = ProductController.getInstance().searchProduct(input);
+                Product product = ProductController.getInstance().getProductById(input);
                 ViewProductMenu viewProductMenu = new ViewProductMenu(this);
                 viewProductMenu.setProduct(product);
+                viewProductMenu.run();
             }
         };
     }
@@ -101,7 +94,7 @@ public class SalespersonProductMenu extends Menu {
                 if (price.equals(BACK_BUTTON))
                     return;
                 System.out.print("Enter Product Amount : ");
-                String amount = getValidMenuNumber(Integer.MAX_VALUE);
+                String amount = getValidMenuNumber(0,Integer.MAX_VALUE);
                 if (amount.equals(BACK_BUTTON))
                     return;
                 String input;
@@ -110,20 +103,19 @@ public class SalespersonProductMenu extends Menu {
                     System.out.print("Enter Product Category : ");
                     if ((category = CategoryController.getInstance().getCategoryByName(input = scanner.nextLine(), rootCategories)) == null
                             && !input.equals(BACK_BUTTON)) {
-                        System.out.println ( "Enter A Valid Category Name" );
+                        System.out.println ( "Enter a valid category name :" );
                         continue;
                     }
-                    assert category != null;
+                    if (input.equals(BACK_BUTTON))
+                        return;
                     if ( !category.isLeaf ( ) ) {
-                        System.out.println ( "This Is A Parent Category. Enter A Subcategory." );
+                        System.out.println ( "This is a parent category. Enter a subcategory." );
                         continue;
                     }
                     break;
                 }
 
 
-                if (input.equals(BACK_BUTTON))
-                    return;
 
                 HashMap<String, String> properties = new HashMap<>();
 
@@ -132,6 +124,7 @@ public class SalespersonProductMenu extends Menu {
                     properties.put(field, scanner.nextLine());
                 }
                 RequestController.getInstance().addProductRequest(Double.parseDouble(price), Integer.parseInt(amount), salesperson, input, name, brand, properties);
+                System.out.println("Request for product " + RequestController.getInstance().getProductID() + " successfully sent.");
             }
         };
     }
@@ -163,7 +156,7 @@ public class SalespersonProductMenu extends Menu {
 
                 do {
                     System.out.println("Which field do you want to edit ?");
-                    choice = getValidMenuNumber(5);
+                    choice = getValidMenuNumber(0,5);
                     switch (Integer.parseInt(choice)) {
                         case 1:
                             System.out.println("Enter product name :");
@@ -201,7 +194,7 @@ public class SalespersonProductMenu extends Menu {
                                 return;
                         case 6:
                             System.out.println("Enter amount :");
-                            amount = getValidMenuNumber(Integer.MAX_VALUE);
+                            amount = getValidMenuNumber(0,Integer.MAX_VALUE);
                             if (amount.equals(BACK_BUTTON))
                                 return;
                     }

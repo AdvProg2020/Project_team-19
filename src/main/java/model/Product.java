@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 import static controller.CategoryController.*;
 import static controller.ProductController.allProducts;
+import static controller.ProductController.stock;
 
 public class Product {
 
@@ -26,7 +27,7 @@ public class Product {
     private ArrayList<Comment> comments;
 
     public Product(String name, String brand, String category,
-                   HashMap<String, String> properties, boolean temp) {
+                   HashMap<String, String> properties) {
 
         this.productID = RandomStringUtils.random(4, true, true);
         this.name = name;
@@ -34,10 +35,10 @@ public class Product {
         this.category = category;
         this.seen = 0;
         this.properties = properties;
-        if (!temp) {
-            Database.saveToFile(this, Database.createPath("products", productID));
-            allProducts.add(this);
-        }
+        this.comments = new ArrayList<>();
+        allProducts.add(this);
+        Database.saveToFile(this, Database.createPath("products", productID));
+
     }
 
     public void increaseSeen() {
@@ -82,19 +83,17 @@ public class Product {
     }
 
     public double getLeastPrice() {
-        return leastPrice;
+        double minPrice = stock.get(this).get(0).getProductPrice(this);
+        for (Salesperson salesperson : stock.get(this)) {
+            if (salesperson.getProductPrice(this) <= minPrice) {
+                minPrice = salesperson.getProductPrice(this);
+            }
+        }
+        return minPrice;
     }
 
     public void addComment(Comment comment) {
         comments.add(comment);
-    }
-
-    public static Product getProductById(String productID) {
-        for (Product product : allProducts) {
-            if (product.getID().equals(productID))
-                return product;
-        }
-        return null;
     }
 
     public void edit(String name, String brand, String category, HashMap<String, String> properties) {

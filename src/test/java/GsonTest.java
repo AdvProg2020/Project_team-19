@@ -73,7 +73,7 @@ public class GsonTest {
         properties1.put("size", "big");
         Category category = new Category("labaniat", null, new HashSet<>());
         Product product = new Product( "panir", "lighvan",
-                 category.getName(), properties1, false);
+                 category.getName(), properties1);
 
         //aval properties category ro comment kon bad test kon
 
@@ -104,10 +104,10 @@ public class GsonTest {
         Category category = new Category("labaniat", null, new HashSet<>());
 
         Product product = new Product("panir", "lighvan",
-                category.getName(), properties1, false);
+                category.getName(), properties1);
 
         Product product1 = new Product("shir", "mihan", category.getName(),
-                properties1, false);
+                properties1);
         //Database.writeAppend(product, "C:\\Users\\HAMID\\Desktop\\Product.json");
         System.out.println(Database.read(Product.class, "C:\\Users\\HAMID\\Desktop\\Product.json"));
     }
@@ -126,7 +126,7 @@ public class GsonTest {
         HashMap<String, String> properties1 = new HashMap<>();
         properties1.put("color", "yellow");
         Product product = new Product( "panir", "lighvan",
-                category.getName(), properties1, false);
+                category.getName(), properties1);
         product.setName("shiiir");
         Database.editInFile(product, "products", product.getID());
     }

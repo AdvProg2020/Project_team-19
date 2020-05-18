@@ -8,12 +8,13 @@ import java.util.TimerTask;
 
 public class StoreMain {
     public static void main ( String[] args ) {
+        Database.createDatabase();
         Database.initializeAddress ( );
         CategoryController.getInstance().initializeRootCategories();
-        ProductController.getInstance ().initializeStock ();
         PersonController.getInstance ().initializePersons ();
         ProductController.getInstance ().initializeProducts ();
         RequestController.getInstance ().initializeRequests ();
+        ProductController.getInstance ().initializeStock ();
         MainMenu mainMenu = new MainMenu ( null );
         Menu.setScanner ( new Scanner ( System.in ) );
         mainMenu.run();

@@ -27,6 +27,7 @@ public class CartController {
         for (Person person : PersonController.getInstance().filterByRoll(Customer.class)) {
             Customer customer = (Customer) person;
             customer.getCart().getProducts().remove(product);
+            Database.saveToFile(customer,Database.createPath("customers",customer.getUsername()));
         }
     }
 
@@ -35,7 +36,14 @@ public class CartController {
             Customer customer = (Customer) person;
             if(customer.getCart().getProducts().containsKey(product)){
                 customer.getCart().getProducts().get(product).remove(salesperson);
+                Database.saveToFile(customer,Database.createPath("customers",customer.getUsername()));
             }
+        }
+    }
+
+    public void removeSeller(Salesperson salesperson){
+        for (Product product : salesperson.getOfferedProducts().keySet()) {
+            removeProduct(product,salesperson);
         }
     }
 
@@ -79,31 +87,17 @@ public class CartController {
                 throw new NotEnoughCreditMoney("Your balance is not enough" + "\n" + "Please increase your credit.");
             } else {
                 Cart.purchase(customer);
-                saveToFile(customer, createPath("customer", customer.getUsername()));
+                saveToFile(customer, createPath("customers", customer.getUsername()));
             }
         }
     }
 
-    public void removeProduct(Product product){
-        for (Person person : PersonController.getInstance().filterByRoll(Customer.class)) {
-            Customer customer = (Customer) person;
-            customer.getCart().getProducts().remove(product);
-        }
-    }
-
-    public void removeProduct(Product product,Salesperson salesperson){
-        for (Person person : PersonController.getInstance().filterByRoll(Customer.class)) {
-            Customer customer = (Customer) person;
-            if(customer.getCart().getProducts().containsKey(product)){
-                customer.getCart().getProducts().get(product).remove(salesperson);
-            }
-        }
-    }
 
     public void manageDiscountCode(DiscountCode discountCode) {
         Customer customer = (Customer) PersonController.getInstance().getLoggedInPerson();
         customer.useDiscountCode(discountCode);
-        saveToFile(customer, createPath("customer", customer.getUsername()));
+        customer.getCart().setTotalPriceAfterDiscountCode(discountCode.getPriceAfterDiscountCode(customer.getCart().calculateTotalPrice()));
+        saveToFile(customer, createPath("customers", customer.getUsername()));
     }
 
     public int itemNumber() {
@@ -112,6 +106,7 @@ public class CartController {
         }
         return tempCart.getProducts().size();
     }
+
 
     public Cart getCart() {
         if (PersonController.getInstance().isThereLoggedInPerson() && PersonController.getInstance().isLoggedInPersonCustomer()) {

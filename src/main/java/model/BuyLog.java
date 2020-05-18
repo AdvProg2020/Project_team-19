@@ -15,7 +15,7 @@ public class BuyLog {
     private LocalDateTime date;
     private double paymentAmount;
     private double discountCodeAmount;
-    private HashMap<Product,ArrayList<String>> products;
+    private HashMap<String,ArrayList<String>> products;
     private boolean reachedBuyer;
 
     public BuyLog( LocalDateTime date, double paymentAmount, double discountCodeAmount, HashMap<Product,HashMap<Salesperson,ProductStateInCart>> tradedProductList, boolean reachedBuyer) {
@@ -37,13 +37,13 @@ public class BuyLog {
                 state+= "total: "+value.getTotalPrice();
                 strings.add(state);
             }
-            products.put(product,strings);
+            products.put(product.getID(),strings);
         }
     }
 
     public boolean isThereProduct(Product product){
-        for (Product product1: products.keySet()) {
-            if(product.equals(product1))
+        for (String productId: products.keySet()) {
+            if(product.getID().equals(productId))
                 return true;
         }
         return false;

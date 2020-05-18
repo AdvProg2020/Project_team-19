@@ -38,7 +38,7 @@ public class DiscountCodeController {
     public void removeDiscountCode(DiscountCode discountCode) {
         for (Person person : PersonController.getInstance().filterByRoll(Customer.class)) {
             Customer customer = (Customer) person;
-            if (customer.findDiscountCodeByCode(discountCode.getCode()) != null) {
+            if (customer.isThereDiscountCodeByCode(discountCode.getCode())) {
                 customer.removeDiscountCode(discountCode);
             }
         }
@@ -52,8 +52,9 @@ public class DiscountCodeController {
         }
     }
 
-    public void addNewDiscountCode(LocalDateTime start,LocalDateTime end,double percentage,double max,int useCounter,ArrayList<Person> people){
+    public DiscountCode addNewDiscountCode(LocalDateTime start,LocalDateTime end,double percentage,double max,int useCounter,ArrayList<Person> people){
         DiscountCode discountCode = new DiscountCode(start,end,percentage,max,useCounter);
+        if(people!=null)
         for (Person person : people) {
             if(((Customer) person).getDiscountCodes().containsKey(discountCode)){
                 ((Customer) person).getDiscountCodes().put(discountCode,(((Customer) person).getDiscountCodes().get(discountCode)+useCounter));
@@ -63,6 +64,7 @@ public class DiscountCodeController {
         }
         allDiscountCodes.add(discountCode);
         Database.saveToFile(allDiscountCodes,Database.createPath("discount_codes",discountCode.getCode()));
+        return discountCode;
     }
 
     public void editDiscountCode(DiscountCode discountCode, int field, String newValue) {
@@ -90,7 +92,7 @@ public class DiscountCodeController {
     }
 
     public void addToCustomer(DiscountCode discountCode,Customer customer){
-        customer.getDiscountCodes().put(discountCode,discountCode.getUseCounter());
+        customer.addDiscountCode(discountCode,discountCode.getUseCounter());
     }
 
     public void removeFromCustomer(DiscountCode discountCode,Customer customer){
@@ -115,11 +117,4 @@ public class DiscountCodeController {
         return findDiscountCodeByCode(code) != null;
     }
 
-    public void checkDiscountCodeEndTime(){
-        for (DiscountCode discountCode : allDiscountCodes) {
-            if (discountCode.getEndTime().isAfter(LocalDateTime.now())){
-                removeDiscountCode(discountCode);
-            }
-        }
-    }
 }

@@ -41,11 +41,12 @@ public class DiscountController {
 
 
     public void addDiscount(Salesperson salesperson, Discount discount) {
-        salesperson.addToDiscounts(discount);//TODO CHECK
+        discount.setDiscountState(Discount.DiscountState.VERIFIED);
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
     }
 
     public void editDiscount(double discountPercentage, LocalDateTime startTime, LocalDateTime endTime, ArrayList<Product> products, Discount discount, Salesperson salesperson) {
+        discount.setDiscountState(Discount.DiscountState.VERIFIED);
         discount.setDiscountPercentage(discountPercentage);
         discount.setEndTime(endTime);
         discount.setStartTime(startTime);
@@ -53,7 +54,6 @@ public class DiscountController {
         for (Product product : products) {
             salesperson.setProductDiscountState(product, discount);
         }
-        //TODO need to check products?
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
     }
 
@@ -71,8 +71,9 @@ public class DiscountController {
     public Discount getDiscountByIdFromAll ( String id ) {
         for (Person person : PersonController.getInstance().filterByRoll(Salesperson.class)) {
             Salesperson salesperson = (Salesperson) person;
-            if (salesperson.getDiscountWithIdSpecificSalesperson(id) != null)
+            if (salesperson.getDiscountWithIdSpecificSalesperson(id) != null) {
                 return salesperson.getDiscountWithIdSpecificSalesperson(id);
+            }
         }
         return null;
     }

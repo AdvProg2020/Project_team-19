@@ -12,7 +12,6 @@ public class CategoryController {
     public static ArrayList<Category> rootCategories = new ArrayList<>();
 
     private CategoryController() {
-        rootCategories = new ArrayList<>();
     }
 
     public static CategoryController getInstance() {
@@ -33,15 +32,16 @@ public class CategoryController {
     public void setParents(Category category){
         for (Category child : category.getChildren()) {
             child.setParent(category);
-            if(!child.getChildren().isEmpty())
+            if (!child.getChildren().isEmpty())
                 setParents(child);
         }
     }
 
     public Category getCategoryByName(String categoryName, ArrayList<Category> categories) {
         for (Category category : categories) {
-            if (category.getName().equals(categoryName))
+            if (category.getName().equals(categoryName)) {
                 return category;
+            }
             if (category.getChildren().size() > 0) {
                 Category category1 = getCategoryByName(categoryName, category.getChildren());
                 if( category1!= null)
@@ -63,7 +63,7 @@ public class CategoryController {
     public boolean isCategoryEmpty(Category category) {
         for (Category child : category.getChildren()) {
             if (child.isLeaf())
-                return child.getProductList() == null;
+                return child.getProductList().isEmpty();
             return isCategoryEmpty(child);
         }
         return true;
@@ -88,19 +88,24 @@ public class CategoryController {
             for (String removeProperty : removeProperties) {
                 category.removeProperty(removeProperty);
             }
-
+        System.out.println(parent);
         if (parent != null)
             changeParent(category, parent);
 
         if (parent == null && root) {
+            changeParent(category,null);
             rootCategories.add(category);
-            saveToFile(rootCategories, address.get("root_categories"));
         }
+        saveToFile(rootCategories, address.get("root_categories"));
     }
 
     public void changeParent(Category category, Category newParent) {
         removeCategory(category.getParent(), category);
         category.setParent(newParent);
+        if(newParent!=null) {
+            newParent.getChildren().add(category);
+            newParent.setLeaf(false);
+        }
         saveToFile(rootCategories, address.get("root_categories"));
     }
 

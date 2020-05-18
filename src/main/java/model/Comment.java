@@ -1,5 +1,7 @@
 package model;
 
+import controller.PersonController;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -11,7 +13,7 @@ public class Comment {
     }
 
     boolean isBought;
-    Customer commenter;
+    String commenterUsername;
     String title;
     String commentString;
     String commentId;
@@ -21,13 +23,13 @@ public class Comment {
     public Comment(boolean isBought, Customer commenter, String commentString, String title) {
         commentId = UUID.randomUUID().toString();
         this.isBought = isBought;
-        this.commenter = commenter;
+        this.commenterUsername = commenter.getUsername();
         this.title = title;
         this.commentString = commentString;
     }
 
     public Customer getCommenter() {
-        return commenter;
+        return (Customer) PersonController.getInstance().getPersonByUsername(commenterUsername);
     }
 
     public boolean isBought() {

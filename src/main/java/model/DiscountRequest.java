@@ -2,6 +2,8 @@ package model;
 
 import controller.Database;
 import controller.DiscountController;
+import controller.PersonController;
+import controller.ProductController;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -10,9 +12,9 @@ import java.util.ArrayList;
 import static controller.RequestController.allRequests;
 
 public class DiscountRequest extends Request {
-    private Salesperson salesperson;
-    private Discount discount;
-    private ArrayList<Product> products;
+    private String salespersonUsername;
+    private String discountId;
+    private ArrayList<String> productIds;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private double discountPercentage;
@@ -20,29 +22,29 @@ public class DiscountRequest extends Request {
     public DiscountRequest(Discount discount, ArrayList<Product> products, LocalDateTime startTime,
                            LocalDateTime endTime, double discountPercentage, Salesperson salesperson) {
         super(RequestState.EDIT);
-        this.discount = discount;
-        this.products = products;
+        this.discountId = discount.getDiscountID();
+        productIds = new ArrayList<>();
+        for (Product product : products) {
+            productIds.add(product.getID());
+        }
         this.startTime = startTime;
         this.endTime = endTime;
         this.discountPercentage = discountPercentage;
-        this.salesperson = salesperson;
+        this.salespersonUsername = salesperson.getUsername();
         save();
     }
 
-    public DiscountRequest(Discount discount, Salesperson salesperson) {
-        super(RequestState.DELETE);
-        this.discount = discount;
-        this.salesperson = salesperson;
-        save();
-    }
-
-    public DiscountRequest(ArrayList<Product> products, LocalDateTime startTime, LocalDateTime endTime, double discountPercentage, Salesperson salesperson) {
-        super(RequestState.ADD);
-        this.products = products;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.discountPercentage = discountPercentage;
-        this.salesperson = salesperson;
+    public DiscountRequest(Discount discount, Salesperson salesperson, RequestState requestState) {
+        super(requestState);
+        productIds = new ArrayList<>();
+        for (Product product : discount.getProducts()) {
+            productIds.add(product.getID());
+        }
+        this.discountId = discount.getDiscountID();
+        this.salespersonUsername = salesperson.getUsername();
+        this.startTime = discount.getStartTime();
+        this.endTime = discount.getEndTime();
+        this.discountPercentage = discount.getDiscountPercentage();
         save();
     }
 
@@ -51,24 +53,37 @@ public class DiscountRequest extends Request {
         allRequests.add(this);
     }
 
+    public ArrayList<Product> getProducts(){
+        ArrayList<Product> products = new ArrayList<>();
+        if(!productIds.isEmpty())
+        for (String productId : productIds) {
+            products.add(ProductController.getInstance().getProductById(productId));
+        }
+        return products;
+    }
+
+
     @Override
     public void doThis() {
         switch (getRequestState()) {
             case ADD:
-                DiscountController.getInstance().addDiscount(salesperson, new Discount(startTime, endTime, discountPercentage, products));
+                DiscountController.getInstance().addDiscount((Salesperson) PersonController.getInstance().getPersonByUsername(salespersonUsername), DiscountController.getInstance().getDiscountByIdFromAll(discountId));
                 break;
             case EDIT:
-                DiscountController.getInstance().editDiscount(discountPercentage, startTime, endTime, products, discount, salesperson);
+                DiscountController.getInstance().editDiscount(discountPercentage, startTime, endTime, getProducts(), DiscountController.getInstance().getDiscountByIdFromAll(discountId), (Salesperson) PersonController.getInstance().getPersonByUsername(salespersonUsername));
                 break;
             case DELETE:
-                DiscountController.getInstance().removeDiscount(salesperson, discount);
+                DiscountController.getInstance().removeDiscount((Salesperson) PersonController.getInstance().getPersonByUsername(salespersonUsername), DiscountController.getInstance().getDiscountByIdFromAll(discountId));
                 break;
         }
     }
 
     @Override
     public String show() {
-        return salesperson.getUsername() + " want to put " + products + " in discount " + "(" + discountPercentage + "%"
-                + ")" + ": " + discount.getDiscountID() + " from " + startTime + " to" + endTime;
+        if (getRequestState().equals(RequestState.DELETE))
+            return salespersonUsername + " want to delete " + discountId + " .";
+        return salespersonUsername + " want to put " + getProducts() + " in discount " + "(" + discountPercentage + "%"
+                + ")" + ": " + discountId + " \nfrom " + startTime + " to " + endTime + " .";
+
     }
 }

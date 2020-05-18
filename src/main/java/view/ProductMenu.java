@@ -1,9 +1,15 @@
 package view;
 
-import controller.CategoryController;
 import controller.ProductController;
 import model.Category;
 import model.Product;
+import model.wagu.Block;
+import model.wagu.Board;
+import model.wagu.Table;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 import static controller.CategoryController.rootCategories;
 
@@ -37,28 +43,47 @@ public class ProductMenu extends Menu {
                 String id2 = getValidProductId();
                 if(id2.equals(BACK_BUTTON))
                     return;
-                compareTwoProducts(ProductController.getInstance().searchProduct(id1),ProductController.getInstance().searchProduct(id2));
+                compareTwoProducts(ProductController.getInstance().getProductById(id1),ProductController.getInstance().getProductById(id2));
             }
         };
     }
 
     public static void compareTwoProducts(Product product1,Product product2){
-        String firstRowFormat = "|%-36s|%-38s|";
-        String threePartRowFormat = "|%-30s|%-30s|%-30s|";
-        System.out.println(String.format("%s", "----------------------------------------------------------------------------"));
-        System.out.println(String.format(firstRowFormat,product1.getName(),product2.getName()));
-        System.out.println(String.format("%s", "----------------------------------------------------------------------------"));
-        System.out.println(String.format(threePartRowFormat,"average score",product1.getAverageScore(),product2.getAverageScore()));
-        System.out.println(String.format("%s", "----------------------------------------------------------------------------"));
-        System.out.println(String.format(threePartRowFormat,"current available price",product1.getLeastPrice(),product2.getLeastPrice()));
-        System.out.println(String.format("%s", "----------------------------------------------------------------------------"));
-        System.out.println(String.format(threePartRowFormat,"sellers' average price",product1.getAverageScore(),product2.getAveragePrice()));
+        ArrayList<Product> products = new ArrayList<>();
+        products.add(product1);
+        products.add(product2);
+        HashSet<String> sameProperties = new HashSet<>();
         for (String s : product1.getProperties().keySet()) {
-            if(product2.getProperties().containsKey(s)){
-                System.out.println(String.format("%s", "----------------------------------------------------------------------------"));
-                System.out.println(String.format(threePartRowFormat,s,product1.getProperties().get(s),product2.getProperties().get(s)));
-            }
+            if (product2.getProperties().containsKey(s))
+                sameProperties.add(s);
         }
+        List<String> headersList = new ArrayList<>();
+        headersList.add("ID");headersList.add("Name");headersList.add("Brand");headersList.add("Category");headersList.add("Least Price");
+        headersList.addAll(sameProperties);
+        List<List<String>> rowsList = new ArrayList<>();
+        for (Product product : products) {
+            List<String> row = new ArrayList<>(sameProperties.size() + 5);
+            row.add(product.getID());
+            row.add(product.getName());
+            row.add(product.getBrand());
+            row.add(product.getCategory().getName());
+            row.add(product.getLeastPrice() + "$");
+            for (String sameProperty : sameProperties) {
+                row.add(product.getProperties().get(sameProperty));
+            }
+            rowsList.add(row);
+        }
+        Board board = new Board(75);
+        Table table = new Table(board, 75, headersList, rowsList);
+        List<Integer> colAlignList = new ArrayList<>();
+        for (int i = 0; i < sameProperties.size() + 5; i++)
+            colAlignList.add(Block.DATA_CENTER);
+        table.setColAlignsList(colAlignList);
+        Block tableBlock = table.tableToBlocks();
+        board.setInitialBlock(tableBlock);
+        board.build();
+        String tableString = board.getPreview();
+        System.out.println(tableString);
     }
 
     public static void viewCategoryRecursively(Category category, int root) {
@@ -85,7 +110,14 @@ public class ProductMenu extends Menu {
     }
 
     public static void viewCategory(Category category) {
-        System.out.println(category.getName());
+        System.out.print(category.getName());
+        if (!category.getProductList().isEmpty()) {
+            System.out.print(" : ");
+            for (Product product : category.getProductList()) {
+                System.out.print(product + " | ");
+            }
+        }
+        System.out.println();
         viewCategoryRecursively(category, 0);
     }
 

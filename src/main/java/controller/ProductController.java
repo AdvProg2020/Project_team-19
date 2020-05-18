@@ -10,12 +10,11 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import static controller.Database.*;
-import static model.Product.getProductById;
 
 public class ProductController {
     public static ArrayList<Product> allProducts = new ArrayList<>();
     public static ArrayList<Product> currentProducts = new ArrayList<>();
-    public static HashMap<Product, ArrayList<Salesperson>> stock = new HashMap<>();
+    public static HashMap<Product, ArrayList<Salesperson>> stock;
 
     private static ProductController single_instance = null;
 
@@ -30,13 +29,22 @@ public class ProductController {
     }
 
     public void initializeProducts() {
-        for (File file : Database.returnListOfFiles(address.get("products"))) {
-            allProducts.add((Product) Database.read(Product.class, file.getAbsolutePath()));
+        for (File file : Database.returnListOfFiles(Database.address.get("products"))) {
+            allProducts.add( (Product)Database.read(Product.class, file.getAbsolutePath()));
         }
     }
 
     public void initializeStock() {
-        stock = Database.handleHashMap(address.get("stock"));
+        stock = new HashMap<>();
+        for (Product product : allProducts) {
+            stock.put(product,new ArrayList<>());
+        }
+        for (Person person : PersonController.getInstance().filterByRoll(Salesperson.class)) {
+            Salesperson salesperson = (Salesperson) person;
+            for (Product product : salesperson.getOfferedProducts().keySet()) {
+                stock.get(product).add(salesperson);
+            }
+        }
     }
 
     public void setCurrentProducts(ArrayList<Product> currentProducts) {
@@ -44,15 +52,15 @@ public class ProductController {
     }
 
     public boolean isThereProductById(String productID)  {
-        return searchProduct(productID)!=null;
+        return getProductById(productID)!=null;
     }
 
     public static class WrongProductIdException extends Exception{
         public String message="No product with such id";
     }
 
-    public Product searchProduct(String productID) {
-        for (Product product : currentProducts) {
+    public Product getProductById(String productID) {
+        for (Product product : allProducts) {
             if (product.getID().equals(productID))
                 return product;
         }
@@ -60,19 +68,19 @@ public class ProductController {
     }
 
     public void addExistProduct(Product product, Salesperson salesperson, int amount, double price) {
-        stock.get(product).add(salesperson);
-        salesperson.addToOfferedProducts(product, amount, price);
+        //stock.get(product).add(salesperson);
+        //salesperson.addToOfferedProducts(product, amount, price);
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
         saveToFile(stock, address.get("stock"));
     }
 
     public void addNewProduct(Product product, Salesperson salesperson, int amount, double price) {
-        ArrayList<Salesperson> sellers = new ArrayList<>();
-        sellers.add(salesperson);
+        //ArrayList<Salesperson> sellers = new ArrayList<>();
+        //sellers.add(salesperson);
 
-        stock.put(product, sellers);
-        allProducts.add(product);
-        salesperson.addToOfferedProducts(product, amount, price);
+        //stock.put(product, sellers);
+        //allProducts.add(product);
+        //salesperson.addToOfferedProducts(product, amount, price);
         product.getCategory().addProduct(product);
 
         Database.write(product, Database.createPath("products", product.getID()));
@@ -100,7 +108,7 @@ public class ProductController {
         product.edit(category, name, brand, properties);
         product.getCategory().addProduct(product);
         saveToFile(salesperson, createPath("salesperson", salesperson.getUsername()));
-        saveToFile(CategoryController.rootCategories,address.get("root_category"));
+        saveToFile(CategoryController.rootCategories,address.get("root_categories"));
         saveToFile(stock, address.get("stock"));
     }
 
@@ -109,17 +117,18 @@ public class ProductController {
         stock.get(product).remove(salesperson);
         salesperson.removeFromOfferedProducts(product);
         CartController.getInstance().removeProduct(product,salesperson);
-        saveToFile(CategoryController.rootCategories,address.get("root_category"));
+        saveToFile(CategoryController.rootCategories,address.get("root_categories"));
         saveToFile(stock, address.get("stock"));
     }
 
     public void removeProductForManager(Product product) {
         product.getCategory().removeProduct(product);
         for (Person salesperson : PersonController.getInstance().filterByRoll(Salesperson.class)) {
+            if(((Salesperson)salesperson).hasProduct(product))
             removeProduct(product, (Salesperson) salesperson);
         }
         CartController.getInstance().removeProduct(product);
-        saveToFile(CategoryController.rootCategories,address.get("root_category"));
+        saveToFile(CategoryController.rootCategories,address.get("root_categories"));
         saveToFile(stock, address.get("stock"));
         try {
             deleteFile(Database.createPath("products", product.getID()));
@@ -169,6 +178,11 @@ public class ProductController {
         return products;
     }
 
+    public ArrayList<Product> filterByPrice(double low, double high, ArrayList<Product> products) {
+        return products.stream().filter(product -> product.getLeastPrice() >= low && product.getLeastPrice() <= high)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
     public ArrayList<OwnedProduct> filterOwnedProductByPrice(double lowPrice, double highPrice, Product product) {
         return getProductsOfProduct(product).stream().filter(ownedProduct -> ownedProduct.getPrice() <= highPrice &&
                 ownedProduct.getPrice() >= lowPrice).collect(Collectors.toCollection(ArrayList::new));
@@ -198,6 +212,12 @@ public class ProductController {
         return productList;
     }
 
+    public void removeSellerInStock(Salesperson salesperson){
+        for (Product product : stock.keySet()) {
+            stock.get(product).remove(salesperson);
+        }
+    }
+
     public boolean doesSellerHasProduct(Product product, Salesperson salesperson){
         for (OwnedProduct ownedProduct : getProductsOfProduct(product)) {
             if(ownedProduct.getSalesperson().equals(salesperson))
@@ -214,11 +234,12 @@ public class ProductController {
     }
 
     public void sortProduct(ArrayList<Product> products, boolean averageScore,
-                            boolean name, boolean brand) {
+                            boolean name, boolean brand, boolean price) {
         SortProduct sortProduct = new SortProduct();
         sortProduct.setAverageScore(averageScore);
         sortProduct.setName(name);
         sortProduct.setBrand(brand);
+        sortProduct.setPrice(price);
         products.sort(sortProduct);
     }
 }
@@ -239,7 +260,7 @@ class SortProduct implements Comparator<Product> {
     private boolean averageScore = false;
     private boolean name = false;
     private boolean brand = false;
-
+    private boolean price = false;
 
     public void setAverageScore(boolean averageScore) {
         this.averageScore = averageScore;
@@ -253,6 +274,10 @@ class SortProduct implements Comparator<Product> {
         this.brand = brand;
     }
 
+    public void setPrice(boolean price) {
+        this.price = price;
+    }
+
     @Override
     public int compare(Product product1, Product product2) {
 
@@ -262,6 +287,8 @@ class SortProduct implements Comparator<Product> {
             return product1.getName().compareTo(product2.getName());
         else if (brand && !product1.getBrand().equals(product2.getBrand()))
             return product1.getBrand().compareTo(product2.getBrand());
+        else if (price && product1.getLeastPrice() != product2.getLeastPrice())
+            return (int) (product1.getLeastPrice() - product2.getLeastPrice());
         else
             return product1.getSeen() - product2.getSeen();
 

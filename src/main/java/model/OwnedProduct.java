@@ -17,7 +17,7 @@ public  class OwnedProduct {
     public OwnedProduct(ProductStateInCart productStateInCart,Product product){
         price = productStateInCart.getPrice();
         this.product = product;
-        salesperson = productStateInCart.salesperson;
+        salesperson = productStateInCart.getSalesperson();
         inDiscount = productStateInCart.inDiscount;
         if(productStateInCart.isInDiscount()){
             priceAfterDiscount = productStateInCart.getPriceAfterDiscount();}

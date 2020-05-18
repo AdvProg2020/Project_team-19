@@ -83,7 +83,7 @@ public class ManageDiscountCodeMenu extends Menu {
                     return;
                 max = Double.parseDouble(input);
                 System.out.println("5. Usage Counter:");
-                input = getValidMenuNumber(Integer.MAX_VALUE);
+                input = getValidMenuNumber(1,Integer.MAX_VALUE);
                 if (input.equals(BACK_BUTTON))
                     return;
                 counter = Integer.parseInt(input);
@@ -123,7 +123,7 @@ public class ManageDiscountCodeMenu extends Menu {
                     return;
                 do {
                     System.out.println ( "Which field do you want to edit?" );
-                    choice = getValidMenuNumber(6);
+                    choice = getValidMenuNumber(1,6);
                     switch (Integer.parseInt(choice)){
                         case 1:
                             System.out.println("Enter new start time:");
@@ -147,7 +147,7 @@ public class ManageDiscountCodeMenu extends Menu {
                             break;
                         case 5:
                             System.out.println("Enter new use counter:");
-                            String num = getValidMenuNumber(Integer.MAX_VALUE);
+                            String num = getValidMenuNumber(1,Integer.MAX_VALUE);
                             DiscountCodeController.getInstance().editDiscountCode(discountCode,5,num);
                             break;
                         case 6:

@@ -1,17 +1,16 @@
 package model;
 
 import controller.Database;
+import controller.PersonController;
 import controller.ProductController;
 
-import java.io.IOException;
 import java.util.HashMap;
 
-import static controller.ProductController.*;
 import static controller.RequestController.allRequests;
 
 public class ProductRequest extends Request {
-    private Salesperson salesperson;
-    private Product product;
+    private String salespersonUsername;
+    private String productId;
     private String category;
     private String name;
     private String brand;
@@ -23,18 +22,18 @@ public class ProductRequest extends Request {
         super(RequestState.ADD);
         this.price = price;
         this.amount = amount;
-        this.salesperson = salesperson;
-        this.product = product;
+        this.salespersonUsername = salesperson.getUsername();
+        this.productId = product.getID();
         save();
     }
 
     public ProductRequest(double price, int amount, Salesperson salesperson, String category, String name
             , String brand, HashMap<String, String> properties, Product product) {
         super(RequestState.EDIT);
-        this.product = product;
+        this.productId = product.getID();
         this.price = price;
         this.amount = amount;
-        this.salesperson = salesperson;
+        this.salespersonUsername = salesperson.getUsername();
         this.category = category;
         this.name = name;
         this.brand = brand;
@@ -44,8 +43,8 @@ public class ProductRequest extends Request {
 
     public ProductRequest(Salesperson salesperson, Product product) {
         super(RequestState.DELETE);
-        this.salesperson = salesperson;
-        this.product = product;
+        this.salespersonUsername = salesperson.getUsername();
+        this.productId = product.getID();
         save();
     }
 
@@ -57,6 +56,8 @@ public class ProductRequest extends Request {
 
     @Override
     public void doThis() {
+        Product product = ProductController.getInstance().getProductById(productId);
+        Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(salespersonUsername);
         switch (getRequestState()) {
             case ADD:
                 ProductController.getInstance().addProduct(product, salesperson, amount, price);
@@ -74,14 +75,22 @@ public class ProductRequest extends Request {
 
     @Override
     public String show() {
-        if (getRequestState() == RequestState.DELETE) {
-            return salesperson.getUsername() + " want to " + this.getRequestState() + " this product : " + product.getID();
+        Product product = ProductController.getInstance().getProductById(productId);
+        Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(salespersonUsername);
+        if (getRequestState().equals(RequestState.DELETE)) {
+            return salespersonUsername + " want to " + this.getRequestState() + " this product : " + productId +
+                    "\nname :" + product.getName() + "\ncategory :" + product.getCategory();
         }
-        return salesperson.getUsername() + " want to " + this.getRequestState() + " this product : " + product.getID() +
-                "\nwith " + price + "$" + " and amount " + amount;
+        return salesperson.getUsername() + " want to "
+                + this.getRequestState() + " this product : "
+                + product.getID() +
+                "\nwith " + price + "$" + " and amount " + amount +
+                "\nname :" + product.getName() + "\ncategory :" + product.getCategory().getName();
     }
 
     private void changeState() {
+        Product product = ProductController.getInstance().getProductById(productId);
+        Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(salespersonUsername);
         salesperson.setProductState(product, ProductState.State.VERIFIED);
     }
 }

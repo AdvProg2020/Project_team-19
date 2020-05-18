@@ -29,14 +29,14 @@ public class productMenuTest {
         properties2.put("color", "white");
         properties2.put("size", "small");
 
-        Product product1 = new Product( "panir", "lighvan", category.getName(), properties1, false);
+        Product product1 = new Product( "panir", "lighvan", category.getName(), properties1);
         ProductController.allProducts.add(product1);
         ProductMenu productMenu = new ProductMenu(null);
         ViewProductMenu viewProductMenu = new ViewProductMenu(null);
     }
 
     @Test
-    public void commentTest() throws IOException, CartController.AccountIsNotCustomerException, CartController.NotEnoughCreditMoney, CartController.NoLoggedInPersonException {
+    public void commentTest()  {
 //        Database.initializeAddress();
 //        Category category = new Category(true, "labaniat", null);
 //        HashSet<String> fields = new HashSet<>();

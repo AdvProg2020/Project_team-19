@@ -68,7 +68,7 @@ public class LoginMenu extends Menu {
     @Override
     public void execute () { //ToDo add this to customer and salesperson and manager
         Menu nextMenu;
-        int chosenMenu = Integer.parseInt ( getValidMenuNumber ( subMenus.size ( ) + 1 ) );
+        int chosenMenu = Integer.parseInt ( getValidMenuNumber (1, subMenus.size ( ) + 1 ) );
         if ( chosenMenu == subMenus.size ( ) + 1 ) {
             nextMenu = this.parentMenu.parentMenu;
         } else
@@ -245,7 +245,7 @@ public class LoginMenu extends Menu {
 
     static void usernameErrorHandler ( String username , State state ) throws Exception {
         if ( !usernamePattern.matcher ( username ).matches ( ) )
-            throw new Exception ( "Username Should Contain More Than 3 Characters." );
+            throw new Exception ( "Username Should Contain More Than 3 Characters And Not Contain Spaces." );
         if ( state.equals ( State.REGISTER ) && PersonController.getInstance ( ).isTherePersonByUsername ( username ) )
             throw new Exception ( "This Dude Already Exists." );
         if ( state.equals ( State.LOGIN ) && !PersonController.getInstance ( ).isTherePersonByUsername ( username ) )

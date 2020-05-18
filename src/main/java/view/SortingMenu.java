@@ -7,13 +7,15 @@ import model.Product;
 import java.util.ArrayList;
 
 import static controller.ProductController.*;
+import static view.ViewProductMenu.showProduct;
 import static view.ViewProductMenu.showProductDigest;
 
 public class SortingMenu extends Menu {
     private ArrayList<Product> products = new ArrayList<>();
     private SortType sortType;
+
     enum SortType {
-        AVERAGE_SCORE, VIEW, NAME, BRAND
+        PRICE, AVERAGE_SCORE, VIEW, NAME, BRAND
     }
 
 
@@ -32,7 +34,7 @@ public class SortingMenu extends Menu {
         this.products = products;
     }
 
-    private Menu getSortByPrice(){
+    private Menu getSortByPrice() {
         return new Menu("Sort By Price", this) {
             @Override
             public void show() {
@@ -41,27 +43,11 @@ public class SortingMenu extends Menu {
 
             @Override
             public void execute() {
-                for (Product product : currentProducts) {
-                    System.out.println(LINE);
-                    System.out.println("Name : " + product.getName() + ", Brand : " + product.getBrand());
-                    showProductsOfProduct(ProductController.getInstance().sortProductByPrice(product));
-                    System.out.println();
-                }
+                sortType = SortType.PRICE;
+                ProductController.getInstance().sortProduct(products, false, false, false, true);
+                showProducts();
             }
         };
-    }
-
-    private void showProductsOfProduct(ArrayList<OwnedProduct> products) {
-        for (OwnedProduct product : products) {
-            showOwnedProduct(product);
-            System.out.println();
-        }
-    }
-
-    private void showOwnedProduct(OwnedProduct product) {
-        System.out.println(LINE);
-        System.out.println(String.format("|%-26s%-18s%-11s|", product.getSellerName(), product.getInDiscount() ? "In Discount" : "No Discount", product.getPriceForShow()));
-        System.out.println(LINE);
     }
 
     private Menu getSortByAverageScore() {
@@ -74,7 +60,7 @@ public class SortingMenu extends Menu {
             @Override
             public void execute() {
                 sortType = SortType.AVERAGE_SCORE;
-                ProductController.getInstance().sortProduct(products, true, false, false);
+                ProductController.getInstance().sortProduct(products, true, false, false, false);
                 showProducts();
             }
         };
@@ -82,7 +68,7 @@ public class SortingMenu extends Menu {
 
     private void showProducts() {
         for (Product product : products) {
-            showProductDigest(product);
+            showProduct(product);
             System.out.println();
         }
     }
@@ -97,7 +83,7 @@ public class SortingMenu extends Menu {
             @Override
             public void execute() {
                 sortType = SortType.VIEW;
-                ProductController.getInstance().sortProduct(products, false, false, false);
+                ProductController.getInstance().sortProduct(products, false, false, false, false);
                 showProducts();
             }
         };
@@ -113,7 +99,7 @@ public class SortingMenu extends Menu {
             @Override
             public void execute() {
                 sortType = SortType.NAME;
-                ProductController.getInstance().sortProduct(products, false, true, false);
+                ProductController.getInstance().sortProduct(products, false, true, false, false);
                 showProducts();
             }
         };
@@ -129,7 +115,7 @@ public class SortingMenu extends Menu {
             @Override
             public void execute() {
                 sortType = SortType.BRAND;
-                ProductController.getInstance().sortProduct(products, false, false, true);
+                ProductController.getInstance().sortProduct(products, false, false, true, false);
                 showProducts();
             }
         };
@@ -159,9 +145,10 @@ public class SortingMenu extends Menu {
             @Override
             public void execute() {
                 products = currentProducts;
-                ProductController.getInstance().sortProduct(products, false, false, false);
+                ProductController.getInstance().sortProduct(products, false, false, false, false);
                 showProducts();
             }
         };
     }
+
 }

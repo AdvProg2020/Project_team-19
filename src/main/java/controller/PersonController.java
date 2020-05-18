@@ -52,8 +52,8 @@ public class PersonController {
     }
 
     public void removePersonFromAllPersons(Person person) throws IOException {
+        Database.deleteFile(Database.createPath(getTypeFromList(person.getUsername())+"s", person.getUsername()));
         allPersons.remove(person);
-        Database.deleteFile(Database.createPath(getTypeFromList(person.getUsername()), person.getUsername()));
     }
 
     public boolean isThereLoggedInPerson() {

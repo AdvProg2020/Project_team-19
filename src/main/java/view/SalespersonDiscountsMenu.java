@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class SalespersonDiscountsMenu extends Menu {
-    private Salesperson salesperson;
+    private Salesperson salesperson = (Salesperson) PersonController.getInstance().getLoggedInPerson();
 
     public SalespersonDiscountsMenu ( Menu parent) {
         super("Discounts Menu", parent);
@@ -52,10 +52,10 @@ public class SalespersonDiscountsMenu extends Menu {
                     String id = getValidProductId();
                     if (id.equals ( BACK_BUTTON ))
                         break;
-                    addArray.add(ProductController.getInstance().searchProduct(id));
+                    addArray.add(ProductController.getInstance().getProductById(id));
                 }
                 RequestController.getInstance().addDiscountRequest(addArray, start, end, percentage, salesperson);
-                System.out.println("Successful.");
+                System.out.println("Request for discount " + RequestController.getInstance().getDiscountID() + " successfully sent.");
             }
         };
     }
@@ -73,7 +73,8 @@ public class SalespersonDiscountsMenu extends Menu {
                 if (discountId.equals(BACK_BUTTON))
                     return;
                 Discount discount = DiscountController.getInstance ().getDiscountByIdFromAll ( discountId );
-                DiscountController.getInstance ().removeDiscount ( salesperson , discount );
+                RequestController.getInstance ().deleteDiscountRequest (discount,  salesperson);
+                System.out.println("Your request has been sent.");
             }
         };
     }
@@ -139,7 +140,7 @@ public class SalespersonDiscountsMenu extends Menu {
                 Discount discount = salesperson.getDiscountWithIdSpecificSalesperson ( input );
                 do {
                     System.out.println("Which field do you want to edit?");
-                    choice = getValidMenuNumber(6);
+                    choice = getValidMenuNumber(1,6);
                     switch (Integer.parseInt(choice)) {
                         case 1:
                             start = DiscountCodeController.getInstance().changeStringTDataTime( getValidDateTime ());
@@ -152,19 +153,19 @@ public class SalespersonDiscountsMenu extends Menu {
                             break;
                         case 4:
                             String id = getValidProductId();
-                            if (!salesperson.hasProduct(ProductController.getInstance().searchProduct(id))) {
+                            if (!salesperson.hasProduct(ProductController.getInstance().getProductById(id))) {
                                 System.out.println("you do not have such product.");
                                 continue;
                             }
-                            add.add(ProductController.getInstance().searchProduct(id));
+                            add.add(ProductController.getInstance().getProductById(id));
                             break;
                         case 5:
                             id = getValidProductId();
-                            if (!salesperson.hasProduct(ProductController.getInstance().searchProduct(id))) {
+                            if (!salesperson.hasProduct(ProductController.getInstance().getProductById(id))) {
                                 System.out.println("you do not have such product.");
                                 continue;
                             }
-                            remove.add(ProductController.getInstance().searchProduct(id));
+                            remove.add(ProductController.getInstance().getProductById(id));
                             break;
                     }
 

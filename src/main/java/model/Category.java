@@ -1,6 +1,7 @@
 package model;
 
 import controller.CategoryController;
+import controller.ProductController;
 
 import java.util.*;
 
@@ -13,7 +14,7 @@ public class Category {
     private transient Category parent;
     private ArrayList<Category> children;
     private HashSet<String> propertyFields;
-    private ArrayList<Product> productList;
+    private ArrayList<String> productList;
 
     public Category( String name, Category parent,HashSet<String> properties) {
         this.isLeaf = true;
@@ -41,7 +42,9 @@ public class Category {
     }
 
     public void setProductList(ArrayList<Product> productList) {
-        this.productList = productList;
+        for (Product product : productList) {
+            this.productList.add(product.getID());
+        }
     }
 
     public HashSet<String> getPropertyFields() {
@@ -49,7 +52,7 @@ public class Category {
     }
 
     public void addProduct(Product product) {
-        this.productList.add(product);
+        this.productList.add(product.getID());
     }
 
     public void addProperty(String property) {
@@ -61,7 +64,7 @@ public class Category {
     }
 
     public void removeProduct(Product product) {
-        this.productList.remove(product);
+        this.productList.remove(product.getID());
     }
 
     public void setName(String name) {
@@ -77,7 +80,11 @@ public class Category {
     }
 
     public ArrayList<Product> getProductList() {
-        return productList;
+        ArrayList<Product> products = new ArrayList<>();
+        for (String s : productList) {
+            products.add(ProductController.getInstance().getProductById(s));
+        }
+        return products;
     }
 
     public String getName() {

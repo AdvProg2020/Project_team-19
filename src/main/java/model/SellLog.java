@@ -1,6 +1,8 @@
 package model;
 
 import controller.Database;
+import controller.PersonController;
+import controller.ProductController;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.io.IOException;
@@ -12,18 +14,18 @@ public class SellLog {
     private LocalDateTime date;
     private double deliveredAmount;
     private double discountAmount;
-    private Product product;
+    private String productId;
     private int count;
-    private Customer buyer;
+    private String buyerUsername;
     private boolean transmitted;
 
-    public SellLog( LocalDateTime date, double deliveredAmount, double discountAmount, Product product, Customer buyer, boolean transmitted, int count) {
+    public SellLog(LocalDateTime date, double deliveredAmount, double discountAmount, Product product, Customer buyer, boolean transmitted, int count) {
         this.logID = RandomStringUtils.random(4, true, true);
         this.date = date;
         this.deliveredAmount = deliveredAmount;
         this.discountAmount = discountAmount;
-        this.product = product;
-        this.buyer = buyer;
+        this.productId = product.getID();
+        this.buyerUsername = buyer.getUsername();
         this.count = count;
         this.transmitted = transmitted;
     }
@@ -41,7 +43,7 @@ public class SellLog {
     }
 
     public Product getProduct() {
-        return product;
+        return ProductController.getInstance().getProductById(productId);
     }
 
     public int getCount() {
@@ -49,26 +51,26 @@ public class SellLog {
     }
 
     public Customer getBuyer() {
-        return buyer;
+        return (Customer) PersonController.getInstance().getPersonByUsername(buyerUsername);
     }
 
     public boolean isTransmitted() {
         return transmitted;
     }
 
-    public String getEverythingString () {
+    public String getEverythingString() {
         return "Log ID : " + logID + "\n" +
                 "Date : " + date + "\n" +
                 "Delivered Amount : " + deliveredAmount + "\n" +
                 "Discount Amount : " + discountAmount + "\n" +
-                "Product : " + product.getName () + "\n" +
+                "Product : " + getProduct().getName() + "\n" +
                 "Count : " + count + "\n" +
-                "Buyer : " + buyer.getUsername () + "\n" +
-                "Transmitted(T/F) : " + transmitted ;
+                "Buyer : " + getBuyer().getUsername() + "\n" +
+                "Transmitted(T/F) : " + transmitted;
     }
 
     @Override
-    public String toString () {
+    public String toString() {
         return "Log ID : " + logID + "\n" +
                 "Date : " + date;
     }

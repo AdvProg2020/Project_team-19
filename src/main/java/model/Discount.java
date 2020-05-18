@@ -1,5 +1,6 @@
 package model;
 
+import controller.ProductController;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.time.LocalDateTime;
@@ -8,19 +9,17 @@ import java.util.ArrayList;
 
 public class Discount {
 
-    public void removeProduct(Product product) {
-        products.remove(product);
-    }
 
     public enum DiscountState {
         BUILD_IN_PROGRESS, EDIT_IN_PROGRESS, VERIFIED
     }
 
     private final String discountID;
-    private ArrayList<Product> products;
+    private ArrayList<String> productIds;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private double discountPercentage;
+    private DiscountState discountState;
 
     public Discount(LocalDateTime startTime, LocalDateTime endTime, double discountPercentage,
                     ArrayList<Product> products) {
@@ -28,7 +27,12 @@ public class Discount {
         this.startTime = startTime;
         this.endTime = endTime;
         this.discountPercentage = discountPercentage;
-        this.products = products;
+        this.productIds = new ArrayList<>();
+        if(!products.isEmpty()){
+            for (Product product : products) {
+                productIds.add(product.getID());
+            }
+        }
     }
 
     public boolean checkDiscountEndTime(){
@@ -44,6 +48,10 @@ public class Discount {
     }
 
     public ArrayList<Product> getProducts() {
+        ArrayList<Product> products = new ArrayList<>();
+        for (String productId : productIds) {
+            products.add(ProductController.getInstance().getProductById(productId));
+        }
         return products;
     }
 
@@ -68,7 +76,12 @@ public class Discount {
     }
 
     public void setProducts(ArrayList<Product> products) {
-        this.products = products;
+        productIds.clear();
+        if(!products.isEmpty()){
+            for (Product product : products) {
+                productIds.add(product.getID());
+            }
+        }
     }
 
     public void setDiscountPercentage(double discountPercentage) {
@@ -80,15 +93,19 @@ public class Discount {
     }
 
     public void removeProduct(Product product) {
-        products.remove(product);
+        productIds.remove(product.getID());
+    }
+
+    public void setDiscountState(DiscountState discountState) {
+        this.discountState = discountState;
     }
 
     @Override
     public String toString () {
         StringBuilder string = new StringBuilder ( "Discount ID : " + discountID + "\n" +
                 "Products : \n" );
-        for (Product product : products) {
-            string.append ( product ).append ( " | " );
+        for (String productId : productIds) {
+            string.append (ProductController.getInstance().getProductById(productId) ).append ( " | " );
         }
         string.append ( "\n" );
         string.append ( "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014" +

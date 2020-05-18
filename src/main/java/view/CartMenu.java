@@ -51,7 +51,7 @@ public class CartMenu extends Menu {
                 String sellerUsername = getValidSellerUsername();
                 if (sellerUsername.equals(BACK_BUTTON))
                     return;
-                Product product = ProductController.getInstance().searchProduct(id);
+                Product product = ProductController.getInstance().getProductById(id);
                 CartController.getInstance().setProductCount(product, 1, ((Salesperson) PersonController.getInstance().getPersonByUsername (sellerUsername)));
             }
         };
@@ -75,7 +75,7 @@ public class CartMenu extends Menu {
                 String sellerUsername = getValidSellerUsername();
                 if (sellerUsername.equals(BACK_BUTTON))
                     return;
-                Product product = ProductController.getInstance().searchProduct(id);
+                Product product = ProductController.getInstance().getProductById(id);
                 CartController.getInstance().setProductCount(product, -1, ((Salesperson) PersonController.getInstance().getPersonByUsername (sellerUsername)));
             }
         };

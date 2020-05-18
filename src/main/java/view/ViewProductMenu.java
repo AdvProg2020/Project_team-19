@@ -4,6 +4,13 @@ import controller.CartController;
 import controller.PersonController;
 import controller.ProductController;
 import model.*;
+import model.wagu.Block;
+import model.wagu.Board;
+import model.wagu.Table;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ViewProductMenu extends Menu {
     Product product;
@@ -19,10 +26,8 @@ public class ViewProductMenu extends Menu {
 
     public void setProduct(Product product) {
         this.product = product;
-    }
-
-    public void setProductIsSet(boolean productIsSet) {
-        this.productIsSet = productIsSet;
+        productIsSet = true;
+        product.increaseSeen();
     }
 
     @Override
@@ -32,7 +37,7 @@ public class ViewProductMenu extends Menu {
             String id = getValidProductId();
             if (id.equals(".."))
                 return;
-            product = ProductController.getInstance().searchProduct(id);
+            product = ProductController.getInstance().getProductById(id);
             productIsSet = true;
         }
         super.execute();
@@ -71,11 +76,39 @@ public class ViewProductMenu extends Menu {
 
     }
 
+    public static void showProduct(Product product) {
+        List<String> headersList = Arrays.asList("Product ID", "Name", "Brand", "Average Score", "Least Price", "Category");
+        List<List<String>> rowsList = new ArrayList<>();
+        List<String> row = new ArrayList<>(6);
+        row.add(product.getID());
+        row.add(product.getName());
+        row.add(product.getBrand());
+        row.add(String.valueOf(product.getAverageScore()));
+        row.add(String.valueOf(product.getLeastPrice()));
+        row.add(product.getCategory().getName());
+        rowsList.add(row);
+        Board board = new Board(75);
+        Table table = new Table(board, 75, headersList, rowsList);
+        List<Integer> colAlignList = Arrays.asList(
+                Block.DATA_CENTER,
+                Block.DATA_CENTER,
+                Block.DATA_CENTER,
+                Block.DATA_CENTER,
+                Block.DATA_CENTER,
+                Block.DATA_CENTER);
+        table.setColAlignsList(colAlignList);
+        Block tableBlock = table.tableToBlocks();
+        board.setInitialBlock(tableBlock);
+        board.build();
+        String tableString = board.getPreview();
+        System.out.println(tableString);
+    }
+
     private Menu getDigestMenu() {
         return new Menu("Product Digest", this) {
             @Override
             public void show() {
-                showProductDigest(product);
+                showProduct(product);
                 super.show();
             }
 
@@ -98,7 +131,7 @@ public class ViewProductMenu extends Menu {
                 boolean check = false;
                 String input;
                 do {
-                    System.out.println("Enter wanted seller's username or press E to return to previous menu :");
+                    System.out.println("Enter wanted seller's username or press \"..\" to return to previous menu :");
                     input = scanner.nextLine();
                     if(input.equals ( BACK_BUTTON )){
                         return;
@@ -127,7 +160,7 @@ public class ViewProductMenu extends Menu {
             @Override
             public void execute() {
                 String id = getValidProductId();
-                Product product2 = ProductController.getInstance().searchProduct(id);
+                Product product2 = ProductController.getInstance().getProductById(id);
                 ProductMenu.compareTwoProducts(product, product2);
                 System.out.println(BACK_HELP);
             }
@@ -137,7 +170,8 @@ public class ViewProductMenu extends Menu {
     public Menu getCommentMenu() {
         return new Menu("Comments", this) {
             @Override
-            public void show() {
+            public void show() {  //ToDo null mide
+
                 for (Comment comment : product.getComments()) {
                     if (comment.isCommentVerified()) {
                         showComment(comment);
@@ -150,7 +184,7 @@ public class ViewProductMenu extends Menu {
 
             @Override
             public void execute() {
-                String num = getValidMenuNumber(2);
+                String num = getValidMenuNumber(1,2);
                 if (num.equals("1")) {
                     buildComment((Customer) PersonController.getInstance().getLoggedInPerson());
                 }

@@ -19,7 +19,7 @@ public class ManagerMenu extends Menu {
     @Override
     public void execute () { //ToDo add this to customer and salesperson and manager
         Menu nextMenu;
-        int chosenMenu = Integer.parseInt ( getValidMenuNumber ( subMenus.size ( ) + 1 ) );
+        int chosenMenu = Integer.parseInt ( getValidMenuNumber ( 1,subMenus.size ( ) + 1 ) );
         if ( chosenMenu == subMenus.size ( ) + 1 ) {
             nextMenu = this.parentMenu.parentMenu;
         } else
@@ -42,7 +42,7 @@ public class ManagerMenu extends Menu {
                 if (id.equals(BACK_BUTTON))
                     return;
                 if (assertDeletion().equals("Y")) {
-                    Product product = ProductController.getInstance().searchProduct(id);
+                    Product product = ProductController.getInstance().getProductById(id);
                     ProductController.getInstance().removeProductForManager(product);
                     System.out.println("Your chosen product has been removed from all sellers.");
                 }

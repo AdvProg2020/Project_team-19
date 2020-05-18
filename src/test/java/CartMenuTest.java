@@ -30,8 +30,8 @@ public class CartMenuTest {
         HashMap<String,String> Info = new HashMap<>();
         Salesperson salesperson = new Salesperson(Info);
 
-        Product product1 = new Product( "panir", "lighvan", category.getName(), properties1, false);
-        Product product2 = new Product( "shir", "mihan", category.getName(), properties2, false);
+        Product product1 = new Product( "panir", "lighvan", category.getName(), properties1);
+        Product product2 = new Product( "shir", "mihan", category.getName(), properties2);
         ProductController.allProducts.add(product1);
         ProductController.allProducts.add(product2);
         salesperson.addToOfferedProducts(product1,5,5000);
@@ -53,7 +53,7 @@ public class CartMenuTest {
         HashMap<String, String> properties1 = new HashMap<>();
         properties1.put("color", "yellow");
         properties1.put("size", "big");
-        Product product1 = new Product("panir", "lighvan", category.getName(), properties1,false);
+        Product product1 = new Product("panir", "lighvan", category.getName(), properties1);
 
         HashMap<String, String> personInfo = new HashMap<>();
         personInfo.put("username", "yeki");

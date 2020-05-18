@@ -22,11 +22,11 @@ abstract public class Person {
         personInfo.put(field, newValue);
         try {
             if ( this instanceof Manager )
-                Database.editInFile ( this , "managers" , getUsername ( ) );
+                Database.saveToFile ( this , Database.createPath("managers", getUsername()));
             else if ( this instanceof Salesperson )
-                Database.editInFile ( this , "salespersons" , getUsername ( ) );
+                Database.saveToFile ( this , Database.createPath("salespersons", getUsername()) );
             else if ( this instanceof Customer )
-                Database.editInFile ( this , "customers" , getUsername ( ) );
+                Database.saveToFile( this , Database.createPath("customers", getUsername()) );
         } catch (Exception e) {
             System.out.println ( "Couldn't save the change to file.\n" + e.getMessage () );
         }
@@ -46,8 +46,18 @@ abstract public class Person {
     }
 
     public String getPersonalInfo() {
+        String type = personInfo.get ( "type" );
+        type = type.substring(0,1).toUpperCase() + type.substring(1).toLowerCase();
+        if (this instanceof Salesperson)
+            return "Username : " + personInfo.get ( USERNAME.label ) + "\n" +
+                    "Type : " + type + "\n" +
+                    "Name : " + personInfo.get ( FIRST_NAME.label ) + " " + personInfo.get ( LAST_NAME.label )+ "\n" +
+                    "Email : " + personInfo.get ( EMAIL.label ) + "\n" +
+                    "Phone Number : " + personInfo.get ( PHONE.label ) + "\n" +
+                    "Company : " + personInfo.get ( COMPANY.label ) + "\n" +
+                    "Dar Surate Vjud Sayere Moshkhsat : " + personInfo.get ( SAYERE_MOSHAKHASAT.label );
         return "Username : " + personInfo.get ( USERNAME.label ) + "\n" +
-                "Password : " + "********** (I'm just kidding bro this is just some stars)\n" +
+                "Type : " + type + "\n" +
                 "Name : " + personInfo.get ( FIRST_NAME.label ) + " " + personInfo.get ( LAST_NAME.label )+ "\n" +
                 "Email : " + personInfo.get ( EMAIL.label ) + "\n" +
                 "Phone Number : " + personInfo.get ( PHONE.label );

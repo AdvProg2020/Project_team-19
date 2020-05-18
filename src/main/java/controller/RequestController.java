@@ -10,11 +10,12 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import static controller.Database.*;
-import static model.Product.getProductById;
 
 public class RequestController {
     public static ArrayList<Request> allRequests = new ArrayList<>();
     private static RequestController single_instance = null;
+    private String productID;
+    private String discountID;
 
     private RequestController() {
     }
@@ -28,6 +29,14 @@ public class RequestController {
 
     public enum FilterType {
         ALL, SALESPERSON, PRODUCT, DISCOUNT
+    }
+
+    public String getProductID() {
+        return productID;
+    }
+
+    public String getDiscountID() {
+        return discountID;
     }
 
     public void initializeRequests() {
@@ -72,12 +81,8 @@ public class RequestController {
     }
 
     public void addSalesPerson(HashMap<String, String> personInfo) {
-        try {
-            Salesperson salesperson = new Salesperson(personInfo);
-            PersonController.getInstance().addPerson(salesperson);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Salesperson salesperson = new Salesperson(personInfo);
+        PersonController.getInstance().addPerson(salesperson);
     }
 
     public ArrayList<Request> filterByState(Request.RequestState requestState) {
@@ -91,37 +96,50 @@ public class RequestController {
     }
 
     public void deleteProductRequest(String productId, Salesperson salesperson) {
-        new ProductRequest(salesperson, getProductById(productId));
+        new ProductRequest(salesperson, ProductController.getInstance().getProductById(productId));
     }
 
     public void addProductRequest(Double price, Integer amount, Salesperson salesperson
             , String category, String name, String brand, HashMap<String, String> properties) {
-
-        Product product = new Product(name, brand, category, properties, true);
+        Product product = new Product(name, brand, category, properties);
+        salesperson.addToOfferedProducts(product, amount, price);
+        salesperson.setBuildInProgress(product);
+        if (ProductController.stock.containsKey(product))
+            ProductController.stock.get(product).add(salesperson);
+        else {
+            ArrayList<Salesperson> salespeople = new ArrayList<>();
+            salespeople.add(salesperson);
+            ProductController.stock.put(product, salespeople);
+        }
+        productID = product.getID();
         new ProductRequest(price, amount, salesperson, product);
     }
 
     public void editProductRequest(String price, String amount, Salesperson salesperson, String productID
             , String category, String name, String brand, HashMap<String, String> properties) {
 
-        Product product = ProductController.getInstance().searchProduct(productID);
+        Product product = ProductController.getInstance().getProductById(productID);
+        salesperson.setEditInProgress(product);
         double pr = (price == null) ? salesperson.getProductPrice(product) : Double.parseDouble(price);
         int am = (amount == null) ? salesperson.getProductAmount(product) : Integer.parseInt(amount);
-
         new ProductRequest(pr, am, salesperson, category, name, brand, properties, product);
     }
 
     public void deleteDiscountRequest(Discount discount, Salesperson salesperson) {
-        new DiscountRequest(discount, salesperson);
+        new DiscountRequest(discount, salesperson, Request.RequestState.DELETE);
     }
 
     public void addDiscountRequest(ArrayList<Product> add, LocalDateTime startTime, LocalDateTime endTime, Double discountPercentage, Salesperson salesperson) {
-
-        new DiscountRequest(add, startTime, endTime, discountPercentage, salesperson);
+        Discount discount = new Discount(startTime, endTime, discountPercentage, add);
+        discount.setDiscountState(Discount.DiscountState.BUILD_IN_PROGRESS);
+        salesperson.addToDiscounts(discount);
+        discountID = discount.getDiscountID();
+        new DiscountRequest(discount, salesperson, Request.RequestState.ADD);
     }
 
     public void editDiscountRequest(Discount discount, ArrayList<Product> add, ArrayList<Product> remove, LocalDateTime startTime,
                                     LocalDateTime endTime, Double discountPercentage, Salesperson salesperson) {
+        discount.setDiscountState(Discount.DiscountState.EDIT_IN_PROGRESS);
         ArrayList<Product> products = discount.getProducts();
 
         if (startTime == null)

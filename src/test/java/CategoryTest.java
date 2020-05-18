@@ -1,8 +1,11 @@
 import controller.CategoryController;
+import controller.Database;
 import model.Category;
 import model.Product;
 import org.junit.Assert;
 import org.junit.Test;
+import view.ProductMenu;
+import view.ViewProductMenu;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,37 +44,38 @@ public class CategoryTest {
     }
 
     @Test
-    public void checkViewCategory() throws IOException {
-//        Category food = new Category ( "Food" , null, new HashSet<>() );
-//        Category sweet = new Category (  "Sweet" , food , new HashSet<>());
-//        Category bitter = new Category (  "Bitter" , food , new HashSet<>());
-//        Category sour = new Category (  "Sour" , sweet , new HashSet<>());
-//
-//        HashSet<String> fields = new HashSet<>();
-//        fields.add("color");
-//        fields.add("size");
-//        bitter.setPropertyFields(fields);
-//        HashMap<String, String> properties1 = new HashMap<>();
-//        properties1.put("color", "yellow");
-//        properties1.put("size", "big");
-//        HashMap<String ,String> properties2 = new HashMap<>();
-//        properties2.put("color", "white");
-//        properties2.put("size", "small");
-//
-//
-//        Product product1 = new Product( "panir", "lighvan",
-//                bitter.getName(), properties1,false);
-//
-//
-//        Product product2 = new Product( "shir", "mihan",
-//                bitter.getName(), properties2,false);
-//
-//        ArrayList<Product> products = new ArrayList<>();
-//        products.add(product1);
-//        products.add(product2);
-//
-//        bitter.setProductList(products);
-//        sour.setProductList(products);
-        //CategoryController.viewAllCategories();
+    public void checkViewCategory()  {
+        Database.initializeAddress();
+        Category food = new Category ( "Food" , null, new HashSet<>() );
+        Category sweet = new Category (  "Sweet" , food , new HashSet<>());
+        Category bitter = new Category (  "Bitter" , food , new HashSet<>());
+        Category sour = new Category (  "Sour" , sweet , new HashSet<>());
+
+        HashSet<String> fields = new HashSet<>();
+        fields.add("color");
+        fields.add("size");
+        bitter.setPropertyFields(fields);
+        HashMap<String, String> properties1 = new HashMap<>();
+        properties1.put("color", "yellow");
+        properties1.put("size", "big");
+        HashMap<String ,String> properties2 = new HashMap<>();
+        properties2.put("color", "white");
+        properties2.put("size", "small");
+
+
+        Product product1 = new Product( "panir", "lighvan",
+                bitter.getName(), properties1);
+
+
+        Product product2 = new Product( "shir", "mihan",
+                bitter.getName(), properties2);
+
+        ArrayList<Product> products = new ArrayList<>();
+        products.add(product1);
+        products.add(product2);
+
+        bitter.setProductList(products);
+        sour.setProductList(products);
+        ProductMenu.viewAllCategories();
     }
 }

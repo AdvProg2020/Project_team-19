@@ -1,7 +1,6 @@
 package view;
 
 import controller.ProductController;
-import model.OwnedProduct;
 import model.Product;
 
 import java.util.ArrayList;
@@ -63,7 +62,7 @@ public class FilteringMenu extends Menu {
             public void execute() {
                 System.out.println("Enter Product Brand :");
                 String input = scanner.nextLine();
-                if ((products = ProductController.getInstance().filterByBrand(input, products)) != null)
+                if (!(products = ProductController.getInstance().filterByBrand(input, products)).isEmpty())
                     System.out.println(products);
                 else
                     System.out.println("Nothing Found :(");
@@ -86,7 +85,7 @@ public class FilteringMenu extends Menu {
             public void execute() {
                 System.out.println("Enter Category Name :");
                 String input = scanner.nextLine();
-                if ((products = ProductController.getInstance().filterByCategory(input, products)) != null)
+                if (!(products = ProductController.getInstance().filterByCategory(input, products)).isEmpty())
                     System.out.println(products);
                 else
                     System.out.println("Nothing Found :(");
@@ -107,7 +106,7 @@ public class FilteringMenu extends Menu {
 
             @Override
             public void execute() {
-                if ((products = ProductController.getInstance().filterByExisting(products)) != null)
+                if (!(products = ProductController.getInstance().filterByExisting(products)).isEmpty())
                     System.out.println(products);
                 else
                     System.out.println("Nothing Found :(");
@@ -127,7 +126,6 @@ public class FilteringMenu extends Menu {
             @Override
             public void execute() {
                 String input1, input2;
-                ArrayList<OwnedProduct> products;
                 System.out.println("Enter Low Price :");
                 while (!(input1 = scanner.nextLine()).matches("\\d+")) {
                     System.out.println("Enter Valid Number -_-");
@@ -136,7 +134,7 @@ public class FilteringMenu extends Menu {
                 while (!(input2 = scanner.nextLine()).matches("\\d+")) {
                     System.out.println("Enter Valid Number -_-");
                 }
-                if ((products = ProductController.getInstance().filterByPrice(Double.parseDouble(input1), Double.parseDouble(input2))).size() > 0)
+                if (!(products = ProductController.getInstance().filterByPrice(Double.parseDouble(input1), Double.parseDouble(input2), products)).isEmpty())
                     System.out.println(products);
                 else
                     System.out.println("Nothing Found :(");
@@ -158,7 +156,7 @@ public class FilteringMenu extends Menu {
                 input1 = scanner.nextLine();
                 System.out.println("Enter Property :");
                 input2 = scanner.nextLine();
-                if ((products = ProductController.getInstance().filterByField(input1, input2, products)) != null)
+                if (!(products = ProductController.getInstance().filterByField(input1, input2, products)).isEmpty())
                     System.out.println(products);
                 else
                     System.out.println("Nothing Found :(");
@@ -182,7 +180,7 @@ public class FilteringMenu extends Menu {
             public void execute() {
                 String input;
                 System.out.println("Enter Filter Number You Want To Disable :");
-                while (!(input = scanner.nextLine()).matches("[12345]") && !input.equals(BACK_BUTTON)){
+                while (!(input = scanner.nextLine()).matches("[123456]") && !input.equals(BACK_BUTTON)){
                     System.out.println("Enter a number between 1-5 or .. to go back");
                 }
                 if (input.equals(BACK_BUTTON))

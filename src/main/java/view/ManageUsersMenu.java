@@ -1,8 +1,10 @@
 package view;
 
+import controller.CartController;
 import controller.PersonController;
 import model.Manager;
 import model.Person;
+import model.Salesperson;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -65,6 +67,8 @@ public class ManageUsersMenu extends Menu {
                     else {
                         Person person = PersonController.getInstance ().getPersonByUsername ( input );
                         try {
+                            if (person instanceof Salesperson)
+                                CartController.getInstance ().removeSeller ( (Salesperson) person );
                             PersonController.getInstance ().removePersonFromAllPersons ( person );
                             System.out.println ( "Removed successfully." );
                         } catch (IOException e) {

@@ -74,7 +74,7 @@ public class DiscountMenu extends Menu {
                 if (productId.equals ( BACK_BUTTON ))
                     return;
                 ViewProductMenu viewProductMenu = new ViewProductMenu ( this );
-                viewProductMenu.setProduct ( Product.getProductById ( productId ) );
+                viewProductMenu.setProduct ( ProductController.getInstance().getProductById ( productId ) );
                 viewProductMenu.run ();
             }
         };
