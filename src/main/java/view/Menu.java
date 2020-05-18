@@ -6,6 +6,8 @@ import model.Category;
 import model.Product;
 import model.Salesperson;
 
+import java.awt.*;
+import java.awt.event.InputEvent;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import controller.PersonController;
@@ -22,7 +24,6 @@ import static view.ProductMenu.viewCategory;
 public abstract class Menu {
     private String name;
     Menu parentMenu;
-    public static Menu mainMenu;
     protected HashMap<Integer, Menu> subMenus;
     static Scanner scanner;
     static final String BACK_BUTTON = "..";
@@ -54,42 +55,35 @@ public abstract class Menu {
     }
 
     public void show() {
-        fancyTitle ();
+        System.out.println(this.name + ":");
         for (Integer menuNum : subMenus.keySet()) {
             System.out.println(menuNum + ". " + subMenus.get(menuNum).getName());
         }
-        System.out.println ( (subMenus.size ( ) + 1) + ". User Menu" );
-        if ( this.parentMenu != null )
-            System.out.println ( (subMenus.size ( ) + 2) + ". Back" );
+        if (this.parentMenu != null)
+            System.out.println((subMenus.size() + 1) + ". Back");
         else
-            System.out.println ( (subMenus.size ( ) + 2) + ". Exit" );
-        System.out.println ( "?. Help" );
+            System.out.println((subMenus.size() + 1) + ". Exit");
     }
 
     public void execute () {
         Menu nextMenu = null;
-        int chosenMenu = Integer.parseInt ( getValidMenuNumber ( 1,subMenus.size () + 2 ) );
-        if ( chosenMenu == subMenus.size ( ) + 1) {
-            nextMenu = new UserMenu ( this );
-        } else if ( chosenMenu == subMenus.size ( ) + 2 ) {
+        int chosenMenu = Integer.parseInt ( getValidMenuNumber ( subMenus.size () + 1 ) );
+        if ( chosenMenu == subMenus.size ( ) + 1 ) {
             if ( this.parentMenu == null )
                 System.exit ( 1 );
             else
                 return;
-        } else if ( chosenMenu == subMenus.size () + 3) {
-            nextMenu = getHelpMenu ( this );
         } else
             nextMenu = subMenus.get ( chosenMenu );
-        assert nextMenu != null;
         nextMenu.run ( );
-        this.run ( );
+        this.run ();
     }
 
     public Menu getCategoryMenu(Menu parent) {
         return new Menu("Category Menu", parent) {
             @Override
             public void show() {
-                fancyTitle ();
+                fancyTitle();
                 viewAllCategories();
             }
 
@@ -137,7 +131,7 @@ public abstract class Menu {
         return new Menu("Search", this) {
             @Override
             public void show() {
-                fancyTitle ();
+                System.out.println(this.getName() + " :");
             }
 
             @Override
@@ -149,7 +143,7 @@ public abstract class Menu {
 
                 Product product;
                 if ((product = ProductController.getInstance().getProductById(input)) != null) {
-                    ViewProductMenu.showProduct(product);
+                    ViewProductMenu.showProductDigest(product);
                 } else
                     System.out.println("Could not find any matches");
             }
@@ -161,15 +155,13 @@ public abstract class Menu {
         this.execute();
     }
 
-    public String getValidMenuNumber(int min, int most) {
+    public String getValidMenuNumber(int most) {
         String menuNum;
         Pattern numPattern = Pattern.compile("[0-9]+");
         boolean check = false;
         do {
             menuNum = scanner.nextLine();
-            if (menuNum.equals ( "?" ))
-                return String.valueOf ( most + 1 );
-            if (numPattern.matcher(menuNum).matches() && Integer.parseInt(menuNum) <= most&& Integer.parseInt(menuNum)>=min) {
+            if (numPattern.matcher(menuNum).matches() && Integer.parseInt(menuNum) <= most) {
                 check = true;
             } else {
                 System.out.println("Your input number must be between 1 to " + most);
@@ -234,7 +226,7 @@ public abstract class Menu {
                 System.out.println("There is no product with such id. Please enter id again:");
                 continue;
             }
-            check = ProductController.getInstance().doesSellerHasProduct(ProductController.getInstance().getProductById(input), salesperson);
+            check = ProductController.getInstance().doesSellerHasProduct(ProductController.getInstance().getProductById(input),salesperson) ;
             if (!check) {
                 System.out.println("You do not have such product. Please enter discount id again:");
             }
@@ -292,27 +284,17 @@ public abstract class Menu {
         return num;
     }
 
-    public String getValidDateTime() {
+    public String getValidDateTime () {
         System.out.print("Year : ");
-        String year = getValidMenuNumber(1,2025);
-        if(year.equals(BACK_BUTTON))
-            return year;
+        String year = getValidMenuNumber(2025);
         System.out.print("Month : ");
-        String month = getValidMenuNumber(1,12);
-        if (month.equals(BACK_BUTTON))
-            return month;
+        String month = getValidMenuNumber(12);
         System.out.print("Day : ");
-        String day = getValidMenuNumber(1,31);
-        if ((day.equals(BACK_BUTTON)))
-            return day;
+        String day = getValidMenuNumber(31);
         System.out.print("Hour : ");
-        String hour = getValidMenuNumber(0,24);
-        if (hour.equals(BACK_BUTTON))
-            return hour;
+        String hour = getValidMenuNumber(24);
         System.out.print("Minute : ");
-        String minute = getValidMenuNumber(0,59);
-        if (minute.equals(BACK_BUTTON))
-            return minute;
+        String minute = getValidMenuNumber(59);
 
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return LocalDateTime.of(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day), Integer.parseInt(hour), Integer.parseInt(minute)).format(format);
@@ -334,36 +316,12 @@ public abstract class Menu {
                 StringUtils.center(this.getName(), 10) );
     }
 
-    void eachUserShowMenu () {
-        fancyTitle ();
-        for (Integer menuNum : subMenus.keySet()) {
-            System.out.println(menuNum + ". " + subMenus.get(menuNum).getName());
-        }
-        if ( this.parentMenu != null )
-            System.out.println ( (subMenus.size ( ) + 1) + ". Back" );
-        else
-            System.out.println ( (subMenus.size ( ) + 1) + ". Exit" );
+    public static void clearScreen(int x, int y) throws AWTException {
+        Robot bot = new Robot();
+        bot.mouseMove(x, y);
+        bot.mousePress( InputEvent.BUTTON1_MASK);
+        bot.mouseRelease(InputEvent.BUTTON1_MASK);
     }
-
-    void eachUserExecuteMenu () {
-        Menu nextMenu;
-        int chosenMenu = Integer.parseInt ( getValidMenuNumber ( 1,subMenus.size () + 1 ) );
-        if ( chosenMenu == subMenus.size ( ) + 1 ) {
-            return;
-        } else
-            nextMenu = subMenus.get ( chosenMenu );
-        assert nextMenu != null;
-        nextMenu.run ( );
-        if (!(this instanceof LoginMenu))
-            this.run ();
-    }
-
-//    public static void clearScreen(int x, int y) throws AWTException {
-//        Robot bot = new Robot();
-//        bot.mouseMove(x, y);
-//        bot.mousePress( InputEvent.BUTTON1_MASK);
-//        bot.mouseRelease(InputEvent.BUTTON1_MASK);
-//    }
 
     @Override
     public String toString() {

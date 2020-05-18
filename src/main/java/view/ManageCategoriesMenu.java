@@ -30,8 +30,8 @@ public class ManageCategoriesMenu extends Menu {
                 HashSet<String> addProperties = new HashSet<>();
                 String input;
                 System.out.print("Enter Category Name To Add : ");
-                while ((CategoryController.getInstance().getCategoryByName(input = scanner.nextLine(), rootCategories) != null
-                        ||  input.equals("\n"))) {
+                while (CategoryController.getInstance().getCategoryByName(input = scanner.nextLine(), rootCategories) != null
+                && !input.equals(BACK_BUTTON)) {
                     System.out.print("Already Exists. Try Another : ");
                 }
                 if (input.equals(BACK_BUTTON))
@@ -39,14 +39,14 @@ public class ManageCategoriesMenu extends Menu {
                 String input2;
                 System.out.print("Enter Parent Category Name or Enter \"root\" If It Does Not Have Any : ");
                 do {
-                    input2 = getValidCategoryName();
-                    if (input2.equals(BACK_BUTTON))
-                        return;
-                    if (input2.equalsIgnoreCase("root")) {
-                        break;
-                    }
-                    if(!CategoryController.getInstance().getCategoryByName(input2,rootCategories).getProductList().isEmpty()){
-                        System.out.println("This Category Has Products. Choose A Parent Category.");}
+                input2 = getValidCategoryName();
+                if (input2.equals(BACK_BUTTON))
+                    return;
+                if (input2.equalsIgnoreCase("root")) {
+                    break;
+                }
+                if(!CategoryController.getInstance().getCategoryByName(input2,rootCategories).getProductList().isEmpty()){
+                    System.out.println("This Category Has Products. Choose A Parent Category.");}
                 } while (!CategoryController.getInstance().getCategoryByName(input2,rootCategories).getProductList().isEmpty());
                 if (input2.equalsIgnoreCase("root")) {
                     parent = null;
@@ -82,7 +82,7 @@ public class ManageCategoriesMenu extends Menu {
                 Category parent = null;
                 HashSet<String> addProperties = new HashSet<>();
                 HashSet<String> removeProperties = new HashSet<>();
-                System.out.println("Please enter the name of category you want to edit: ");
+                System.out.println("Please Enter The Name Of Category You Want To Edit: ");
                 String input = getValidCategoryName();
                 if (input.equals(BACK_BUTTON))
                     return;
@@ -93,11 +93,11 @@ public class ManageCategoriesMenu extends Menu {
                     System.out.println("3. Add Property:");
                     System.out.println("4. Remove Property:");
                     System.out.println("5. Confirm Edit.");
-                }else
+                } else
                     System.out.println("3. Confirm Edit.");
                 do {
                     System.out.println("Which field do you want to edit?");
-                    input = getValidMenuNumber(1,category.isLeaf ()?5:3);
+                    input = getValidMenuNumber(category.isLeaf ()? 5 : 3);
                     switch (Integer.parseInt(input)) {
                         case 1:
                             System.out.print("Enter New Category Name : ");
@@ -117,7 +117,7 @@ public class ManageCategoriesMenu extends Menu {
                             }
                             break;
                         case 3:
-                            if(!category.isLeaf())
+                            if (!category.isLeaf())
                                 break;
                             System.out.print("Enter Field : ");
                             String field = scanner.nextLine();
@@ -151,7 +151,7 @@ public class ManageCategoriesMenu extends Menu {
             @Override
             public void execute() {
                 String input;
-                System.out.println("Enter category name you want to remove :");
+                System.out.println("Enter Category Name You Want To Remove :");
                 input = getValidCategoryName();
                 if (input.equals(BACK_BUTTON))
                     return;

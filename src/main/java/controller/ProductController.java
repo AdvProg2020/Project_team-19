@@ -67,69 +67,96 @@ public class ProductController {
         return null;
     }
 
-    public void addExistProduct(Product product, Salesperson salesperson, int amount, double price) {
-        //stock.get(product).add(salesperson);
-        //salesperson.addToOfferedProducts(product, amount, price);
-        saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
-        saveToFile(stock, address.get("stock"));
+    public void addProduct(Product product, Salesperson salesperson) {
+        if (!product.getCategory().getProductList().contains(product))
+            product.getCategory().addProduct(product);
+        changeStateToVerified(product, salesperson);
+        saveChangesInFileAfterAddProduct(product, salesperson);
     }
 
-    public void addNewProduct(Product product, Salesperson salesperson, int amount, double price) {
-        //ArrayList<Salesperson> sellers = new ArrayList<>();
-        //sellers.add(salesperson);
+    private void changeStateToVerified(Product product, Salesperson salesperson) {
+        salesperson.setVerified(product);
+    }
 
-        //stock.put(product, sellers);
-        //allProducts.add(product);
-        //salesperson.addToOfferedProducts(product, amount, price);
-        product.getCategory().addProduct(product);
-
+    private void saveChangesInFileAfterAddProduct(Product product, Salesperson salesperson) {
         Database.write(product, Database.createPath("products", product.getID()));
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
         saveToFile(stock, address.get("stock"));
         saveToFile(CategoryController.rootCategories,address.get("root_categories"));
     }
 
-    public void removeSellerInStock(Salesperson salesperson){
-        for (Product product : stock.keySet()) {
-            stock.get(product).remove(salesperson);
-        }
-    }
-
-    public void addProduct(Product product, Salesperson salesperson, int amount, double price) {
-        if (getProductById(product.getID()) != null)
-            addExistProduct(product, salesperson, amount, price);
-
-        else
-            addNewProduct(product, salesperson, amount, price);
-
-    }
-
 
     public void editProduct(Product product, Salesperson salesperson, int amount, double price,
                             String category, String name, String brand, HashMap<String, String>properties) {
+
+        changeStateToVerified(product, salesperson);
+        editProductForSeller(product, salesperson, price, amount);
+        editProductInGeneral(product, category, name, brand, properties);
+        changeFilesAfterEditProduct(product, salesperson);
+    }
+
+    private void editProductForSeller(Product product, Salesperson salesperson, double price, int amount) {
         salesperson.editProduct(product, price, amount);
+    }
+
+    private void editProductInGeneral(Product product, String category, String name, String brand, HashMap<String, String>properties) {
         product.getCategory().removeProduct(product);
         product.edit(category, name, brand, properties);
         product.getCategory().addProduct(product);
-        saveToFile(salesperson, createPath("salesperson", salesperson.getUsername()));
+    }
+
+    private void changeFilesAfterEditProduct(Product product, Salesperson salesperson) {
+        saveToFile(product, createPath("products", product.getID()));
+        saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
         saveToFile(CategoryController.rootCategories,address.get("root_categories"));
         saveToFile(stock, address.get("stock"));
     }
 
     public void removeProduct(Product product, Salesperson salesperson)  {
+        removeProductInProgramLists(product, salesperson);
+        changeFilesAfterRemoveProduct(product, salesperson);
+    }
+
+    private void removeProductInProgramLists(Product product, Salesperson salesperson) {
         allProducts.remove(product);
         stock.get(product).remove(salesperson);
         salesperson.removeFromOfferedProducts(product);
         CartController.getInstance().removeProduct(product,salesperson);
+    }
+
+    private void changeFilesAfterRemoveProduct(Product product, Salesperson salesperson) {
         saveToFile(CategoryController.rootCategories,address.get("root_categories"));
+        saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
         saveToFile(stock, address.get("stock"));
+        try {
+            deleteFile(createPath("products", product.getID()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void declineProductRequestForAdd(Product product, Salesperson salesperson) {
+        removeTempProductFromProgram(product, salesperson);
+        changeFilesAfterRemoveProduct(product, salesperson);
+    }
+
+    private void removeTempProductFromProgram(Product product, Salesperson salesperson) {
+        allProducts.remove(product);
+        stock.get(product).remove(salesperson);
+        salesperson.removeFromOfferedProducts(product);
+    }
+
+    public void declineRequestForEditAndRemove(Product product, Salesperson salesperson) {
+        salesperson.setVerified(product);
+        saveToFile(salesperson, Database.createPath("salespersons", salesperson.getUsername()));
     }
 
     public void removeProductForManager(Product product) {
         product.getCategory().removeProduct(product);
         for (Person salesperson : PersonController.getInstance().filterByRoll(Salesperson.class)) {
             if(((Salesperson)salesperson).hasProduct(product))
-            removeProduct(product, (Salesperson) salesperson);
+                removeProduct(product, (Salesperson) salesperson);
+
         }
         CartController.getInstance().removeProduct(product);
         saveToFile(CategoryController.rootCategories,address.get("root_categories"));
@@ -214,6 +241,12 @@ public class ProductController {
         }
 
         return productList;
+    }
+
+    public void removeSellerInStock(Salesperson salesperson){
+        for (Product product : stock.keySet()) {
+            stock.get(product).remove(salesperson);
+        }
     }
 
     public boolean doesSellerHasProduct(Product product, Salesperson salesperson){

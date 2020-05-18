@@ -61,6 +61,8 @@ public class CategoryController {
 
 
     public boolean isCategoryEmpty(Category category) {
+        if (category.isLeaf())
+            return category.getProductList().isEmpty();
         for (Category child : category.getChildren()) {
             if (child.isLeaf())
                 return child.getProductList().isEmpty();

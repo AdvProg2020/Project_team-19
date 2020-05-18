@@ -25,6 +25,10 @@ public class SalespersonRequest extends Request {
     }
 
     @Override
+    public void decline() {
+    }
+
+    @Override
     public String show() {
         return personInfo.get("username") + " want to be a poor seller";
     }

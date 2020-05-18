@@ -56,9 +56,9 @@ public class PersonalInfoMenu extends Menu {
             public void execute() { //ToDo mitune bre tu menu, submenus bzrim
                 int chosenMenu;
                 if ( thisGuy instanceof Salesperson )
-                    chosenMenu = Integer.parseInt ( getValidMenuNumber ( 1,7 ) );
+                    chosenMenu = Integer.parseInt ( getValidMenuNumber ( 7 ) );
                 else
-                    chosenMenu = Integer.parseInt ( getValidMenuNumber ( 1,5 ) );
+                    chosenMenu = Integer.parseInt ( getValidMenuNumber ( 5 ) );
 
                 System.out.println ( "Enter desired value : " );
                 String desiredValue = getValidInput ( patternArray[chosenMenu-1] , chosenMenu-1 );

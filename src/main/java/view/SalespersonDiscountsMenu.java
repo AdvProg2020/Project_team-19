@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class SalespersonDiscountsMenu extends Menu {
-    private Salesperson salesperson = (Salesperson) PersonController.getInstance().getLoggedInPerson();
+    private Salesperson salesperson;
 
     public SalespersonDiscountsMenu ( Menu parent) {
         super("Discounts Menu", parent);
@@ -55,7 +55,7 @@ public class SalespersonDiscountsMenu extends Menu {
                     addArray.add(ProductController.getInstance().getProductById(id));
                 }
                 RequestController.getInstance().addDiscountRequest(addArray, start, end, percentage, salesperson);
-                System.out.println("Request for discount " + RequestController.getInstance().getDiscountID() + " successfully sent.");
+                System.out.println("Successful.");
             }
         };
     }
@@ -73,8 +73,7 @@ public class SalespersonDiscountsMenu extends Menu {
                 if (discountId.equals(BACK_BUTTON))
                     return;
                 Discount discount = DiscountController.getInstance ().getDiscountByIdFromAll ( discountId );
-                RequestController.getInstance ().deleteDiscountRequest (discount,  salesperson);
-                System.out.println("Your request has been sent.");
+                DiscountController.getInstance ().removeDiscount ( salesperson , discount );
             }
         };
     }
@@ -140,7 +139,7 @@ public class SalespersonDiscountsMenu extends Menu {
                 Discount discount = salesperson.getDiscountWithIdSpecificSalesperson ( input );
                 do {
                     System.out.println("Which field do you want to edit?");
-                    choice = getValidMenuNumber(1,6);
+                    choice = getValidMenuNumber(6);
                     switch (Integer.parseInt(choice)) {
                         case 1:
                             start = DiscountCodeController.getInstance().changeStringTDataTime( getValidDateTime ());

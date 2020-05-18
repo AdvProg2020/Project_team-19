@@ -3,13 +3,11 @@ package view;
 import controller.ProductController;
 import model.Category;
 import model.Product;
-import model.Salesperson;
 import model.wagu.Block;
 import model.wagu.Board;
 import model.wagu.Table;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -25,7 +23,7 @@ public class ProductMenu extends Menu {
         subMenus.put(3, getCompareTwoProductsMenu());
         subMenus.put(4, new FilteringMenu(this));
         subMenus.put(5, getSearchMenu());
-
+        subMenus.put(6, getHelpMenu(this));
     }
 
     public Menu getCompareTwoProductsMenu(){
@@ -60,15 +58,14 @@ public class ProductMenu extends Menu {
                 sameProperties.add(s);
         }
         List<String> headersList = new ArrayList<>();
-        headersList.add("ID");headersList.add("Name");headersList.add("Brand");headersList.add("Category");headersList.add("Least Price");
+        headersList.add("ID");headersList.add("Name");headersList.add("Brand");headersList.add("Least Price");
         headersList.addAll(sameProperties);
         List<List<String>> rowsList = new ArrayList<>();
         for (Product product : products) {
-            List<String> row = new ArrayList<>(sameProperties.size() + 5);
+            List<String> row = new ArrayList<>(sameProperties.size() + 4);
             row.add(product.getID());
             row.add(product.getName());
             row.add(product.getBrand());
-            row.add(product.getCategory().getName());
             row.add(product.getLeastPrice() + "$");
             for (String sameProperty : sameProperties) {
                 row.add(product.getProperties().get(sameProperty));
@@ -78,7 +75,7 @@ public class ProductMenu extends Menu {
         Board board = new Board(75);
         Table table = new Table(board, 75, headersList, rowsList);
         List<Integer> colAlignList = new ArrayList<>();
-        for (int i = 0; i < sameProperties.size() + 5; i++)
+        for (int i = 0; i < sameProperties.size() + 4; i++)
             colAlignList.add(Block.DATA_CENTER);
         table.setColAlignsList(colAlignList);
         Block tableBlock = table.tableToBlocks();

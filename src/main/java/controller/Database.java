@@ -34,15 +34,20 @@ public class Database {
         address.put("salesperson_requests", databaseAddress + File.separator + "requests" + File.separator + "salesperson_requests");
     }
 
-    public static <T> Object read(Type typeOfT, String address) {
+    public static <T> Object read(Type typeOfT, String address) { //todo oooooooooooooooo
         try {
             GsonBuilder builder = new GsonBuilder().setLenient().enableComplexMapKeySerialization();
             Gson gson = builder.create();
             BufferedReader bufferedReader = new BufferedReader(new FileReader(address));
-            return gson.fromJson(bufferedReader, typeOfT);
+            Object obj = gson.fromJson(bufferedReader, typeOfT);
+            bufferedReader.close();
+            return obj;
         } catch (FileNotFoundException e) {
             throw new RuntimeException();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 
     public static <T> void write(T obj, String address) {

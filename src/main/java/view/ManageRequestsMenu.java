@@ -91,8 +91,7 @@ public class ManageRequestsMenu extends Menu {
                     return;
                 showSingleRequest(request);
                 System.out.println("Enter 1 to accept, 2 to decline :");
-                input = scanner.nextLine();
-                while (!input.matches("[12]") && !input.equals(".."))
+                while (!(input = scanner.nextLine()).matches("[12]") && !input.equals(".."))
                     System.out.println("Enter 1 or 2 coskhol or \"..\" to fucking back");
 
                 if (input.equals(".."))

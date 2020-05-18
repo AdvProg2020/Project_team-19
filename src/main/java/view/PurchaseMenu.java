@@ -68,7 +68,7 @@ public class PurchaseMenu extends Menu {
                 }
                 System.out.println("Enter discount code:");
                 String code = getDiscountCode();
-                if (code.equals(BACK_BUTTON))
+                if (code.equals(".."))
                     return;
                 CartController.getInstance().manageDiscountCode(DiscountCodeController.getInstance().findDiscountCodeByCode(code));
                 discountCodeIsUsed = true;

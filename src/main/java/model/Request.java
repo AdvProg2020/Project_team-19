@@ -28,6 +28,8 @@ public abstract class Request {
 
     public abstract void doThis();
 
+    public abstract void decline();
+
     public abstract String show();
 
     @Override

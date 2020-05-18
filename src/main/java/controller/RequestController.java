@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import static controller.Database.*;
+import static controller.ProductController.stock;
 
 public class RequestController {
     public static ArrayList<Request> allRequests = new ArrayList<>();
@@ -67,6 +68,7 @@ public class RequestController {
     }
 
     public void declineRequest(Request request) {
+        request.decline();
         allRequests.remove(request);
         try {
             if (request instanceof DiscountRequest)
@@ -102,17 +104,28 @@ public class RequestController {
     public void addProductRequest(Double price, Integer amount, Salesperson salesperson
             , String category, String name, String brand, HashMap<String, String> properties) {
         Product product = new Product(name, brand, category, properties);
+        saveTempProductInProgramLists(product, salesperson, amount, price);
+        saveFileChangesForProductBeforeSendingRequest(product, salesperson);
+        productID = product.getID();
+        new ProductRequest(price, amount, salesperson, product);
+    }
+
+    private void saveTempProductInProgramLists(Product product, Salesperson salesperson, int amount, double price) {
         salesperson.addToOfferedProducts(product, amount, price);
         salesperson.setBuildInProgress(product);
-        if (ProductController.stock.containsKey(product))
-            ProductController.stock.get(product).add(salesperson);
+        if (stock.containsKey(product))
+            stock.get(product).add(salesperson);
         else {
             ArrayList<Salesperson> salespeople = new ArrayList<>();
             salespeople.add(salesperson);
-            ProductController.stock.put(product, salespeople);
+            stock.put(product, salespeople);
         }
-        productID = product.getID();
-        new ProductRequest(price, amount, salesperson, product);
+    }
+
+    private void saveFileChangesForProductBeforeSendingRequest(Product product, Salesperson salesperson) {
+        saveToFile(product, createPath("products", product.getID()));
+        saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
+        saveToFile(stock, address.get("stock"));
     }
 
     public void editProductRequest(String price, String amount, Salesperson salesperson, String productID
@@ -120,6 +133,7 @@ public class RequestController {
 
         Product product = ProductController.getInstance().getProductById(productID);
         salesperson.setEditInProgress(product);
+        saveFileChangesForProductBeforeSendingRequest(product, salesperson);
         double pr = (price == null) ? salesperson.getProductPrice(product) : Double.parseDouble(price);
         int am = (amount == null) ? salesperson.getProductAmount(product) : Integer.parseInt(amount);
         new ProductRequest(pr, am, salesperson, category, name, brand, properties, product);
@@ -131,28 +145,34 @@ public class RequestController {
 
     public void addDiscountRequest(ArrayList<Product> add, LocalDateTime startTime, LocalDateTime endTime, Double discountPercentage, Salesperson salesperson) {
         Discount discount = new Discount(startTime, endTime, discountPercentage, add);
+
         discount.setDiscountState(Discount.DiscountState.BUILD_IN_PROGRESS);
+
         salesperson.addToDiscounts(discount);
+
+        saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
+
         discountID = discount.getDiscountID();
         new DiscountRequest(discount, salesperson, Request.RequestState.ADD);
     }
 
     public void editDiscountRequest(Discount discount, ArrayList<Product> add, ArrayList<Product> remove, LocalDateTime startTime,
                                     LocalDateTime endTime, Double discountPercentage, Salesperson salesperson) {
-        discount.setDiscountState(Discount.DiscountState.EDIT_IN_PROGRESS);
-        ArrayList<Product> products = discount.getProducts();
 
+        discount.setDiscountState(Discount.DiscountState.EDIT_IN_PROGRESS);
+        //serfan bedonim editInProgressE base
+        saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
+
+        ArrayList<Product> products = discount.getProducts();
         if (startTime == null)
             startTime = discount.getStartTime();
         if (endTime == null)
             endTime = discount.getEndTime();
         if (discountPercentage == null)
             discountPercentage = discount.getDiscountPercentage();
-
         products.addAll(add);
         products.removeAll(remove);
 
-        //product haye nahayio bayad bedim besh
         new DiscountRequest(discount, products, startTime, endTime, discountPercentage, salesperson);
     }
 

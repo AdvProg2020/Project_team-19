@@ -184,7 +184,7 @@ public class ViewProductMenu extends Menu {
 
             @Override
             public void execute() {
-                String num = getValidMenuNumber(1,2);
+                String num = getValidMenuNumber(2);
                 if (num.equals("1")) {
                     buildComment((Customer) PersonController.getInstance().getLoggedInPerson());
                 }

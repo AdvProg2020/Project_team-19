@@ -2,6 +2,7 @@ package view;
 
 import controller.PersonController;
 import controller.RegisterController;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.regex.Pattern;
@@ -29,7 +30,7 @@ public class LoginMenu extends Menu {
         }
     }
 
-    public enum State {
+    enum State {
         REGISTER, LOGIN
     }
 
@@ -60,17 +61,19 @@ public class LoginMenu extends Menu {
         super ( "Login Menu" , parent );
         this.subMenus.put ( 1 , getRegisterMenu ( ) );
         this.subMenus.put ( 2 , getLoginMenu ( ) );
+        this.subMenus.put ( 3 , getHelpMenu ( this ) );
         personInfo = new HashMap <> ( );
     }
 
     @Override
-    public void show () {
-        eachUserShowMenu ();
-    }
-
-    @Override
-    public void execute () {
-        eachUserExecuteMenu ();
+    public void execute () { //ToDo add this to customer and salesperson and manager
+        Menu nextMenu;
+        int chosenMenu = Integer.parseInt ( getValidMenuNumber ( subMenus.size ( ) + 1 ) );
+        if ( chosenMenu == subMenus.size ( ) + 1 ) {
+            nextMenu = this.parentMenu.parentMenu;
+        } else
+            nextMenu = subMenus.get ( chosenMenu );
+        nextMenu.run ( );
     }
 
     private Menu getRegisterMenu () {
@@ -232,7 +235,7 @@ public class LoginMenu extends Menu {
         return false;
     }
 
-    public static void typeErrorHandler ( String type ) throws Exception {
+    static void typeErrorHandler ( String type ) throws Exception {
         if ( !typePattern.matcher ( type ).matches ( ) )
             throw new Exception ( "This type isn't valid." );
         if ( type.equalsIgnoreCase ( "manager" ) && RegisterController.getInstance ( ).isFirstManagerRegistered ( ) )
@@ -240,9 +243,9 @@ public class LoginMenu extends Menu {
     }
 
 
-    public static void usernameErrorHandler ( String username , State state ) throws Exception {
+    static void usernameErrorHandler ( String username , State state ) throws Exception {
         if ( !usernamePattern.matcher ( username ).matches ( ) )
-            throw new Exception ( "Username Should Contain More Than 3 Characters And Not Contain Spaces." );
+            throw new Exception ( "Username Should Contain More Than 3 Characters." );
         if ( state.equals ( State.REGISTER ) && PersonController.getInstance ( ).isTherePersonByUsername ( username ) )
             throw new Exception ( "This Dude Already Exists." );
         if ( state.equals ( State.LOGIN ) && !PersonController.getInstance ( ).isTherePersonByUsername ( username ) )
@@ -261,11 +264,4 @@ public class LoginMenu extends Menu {
                 "That's not sayere moshakhsat."};
     }
 
-    public void setPersonInfoProperty ( String key , String value ) {
-        personInfo.put ( key , value );
-    }
-
-    public HashMap < String, String > getPersonInfo () {
-        return personInfo;
-    }
 }

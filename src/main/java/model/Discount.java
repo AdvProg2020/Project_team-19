@@ -96,6 +96,10 @@ public class Discount {
         productIds.remove(product.getID());
     }
 
+    public void setState(DiscountState discountState) {
+        this.discountState = discountState;
+    }
+
     public void setDiscountState(DiscountState discountState) {
         this.discountState = discountState;
     }

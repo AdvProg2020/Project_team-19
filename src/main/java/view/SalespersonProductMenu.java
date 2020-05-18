@@ -116,7 +116,7 @@ public class SalespersonProductMenu extends Menu {
                 if (price.equals(BACK_BUTTON))
                     return;
                 System.out.print("Enter Product Amount : ");
-                String amount = getValidMenuNumber(0,Integer.MAX_VALUE);
+                String amount = getValidMenuNumber(Integer.MAX_VALUE);
                 if (amount.equals(BACK_BUTTON))
                     return;
                 String input;
@@ -151,7 +151,7 @@ public class SalespersonProductMenu extends Menu {
         };
     }
 
-    public Menu getEditProductMenu() {
+    public Menu getEditProductMenu() { //ToDo check ouuuuttttttttttttttttttttt tu vorodi gereftan
         return new Menu("Edit Product", this) {
             @Override
             public void show() {
@@ -174,11 +174,12 @@ public class SalespersonProductMenu extends Menu {
                 String price = null;
                 String amount = null;
 
+                System.out.println("Enter product id you want to see :");
                 String id = getValidProductId(salesperson);
 
                 do {
                     System.out.println("Which field do you want to edit ?");
-                    choice = getValidMenuNumber(0,5);
+                    choice = getValidMenuNumber(7);
                     switch (Integer.parseInt(choice)) {
                         case 1:
                             System.out.println("Enter product name :");
@@ -197,6 +198,8 @@ public class SalespersonProductMenu extends Menu {
                             category = getValidCategoryName();
                             if (category.equals(BACK_BUTTON))
                                 return;
+                            if (!CategoryController.getInstance().isCategoryEmpty(CategoryController.getInstance().getCategoryByName(category, rootCategories)))
+                                System.out.println("There is product in this category. Try another.");
                             break;
                         case 4:
                             System.out.println("Enter field :");
@@ -216,13 +219,14 @@ public class SalespersonProductMenu extends Menu {
                                 return;
                         case 6:
                             System.out.println("Enter amount :");
-                            amount = getValidMenuNumber(0,Integer.MAX_VALUE);
+                            amount = getValidMenuNumber(Integer.MAX_VALUE);
                             if (amount.equals(BACK_BUTTON))
                                 return;
                     }
 
-                } while (!choice.equals("7"));
-
+                } while (!choice.equals("7") && !choice.equals(BACK_BUTTON));
+                if (choice.equals(BACK_BUTTON))
+                    return;
                 System.out.println("Your request will be sent :~");
                 RequestController.getInstance().editProductRequest(price, amount, salesperson, id, category, name, brand, properties);
             }
@@ -258,7 +262,7 @@ public class SalespersonProductMenu extends Menu {
         for (Product product : salesperson.getOfferedProducts ( ).keySet ( )) {
             List <String> row = new ArrayList <> ( 2 );
             row.add ( product.getName() );
-            row.add ( salesperson.getProductState ( product ) );
+            row.add ( salesperson.getProductStateForShow ( product ) );
             rowsList.add ( row );
         }
         if (salesperson.getOfferedProducts().size () == 0)

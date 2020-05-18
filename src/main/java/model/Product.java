@@ -38,7 +38,6 @@ public class Product {
         this.comments = new ArrayList<>();
         allProducts.add(this);
         Database.saveToFile(this, Database.createPath("products", productID));
-
     }
 
     public void increaseSeen() {
@@ -97,12 +96,10 @@ public class Product {
     }
 
     public void edit(String name, String brand, String category, HashMap<String, String> properties) {
-        getCategory().removeProduct(this);
         this.name = name;
         this.brand = brand;
         this.category = category;
         this.properties = new HashMap<>(properties);
-        getCategory().addProduct(this);
     }
 
     public void setName(String name) {
