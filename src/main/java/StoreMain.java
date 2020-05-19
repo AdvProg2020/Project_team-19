@@ -1,12 +1,14 @@
 import controller.*;
 import view.MainMenu;
 import view.Menu;
+import view.UserMenu;
 
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import static view.Menu.mainMenu;
+import static view.Menu.userMenu;
 
 public class StoreMain {
     public static void main ( String[] args ) {
@@ -14,6 +16,7 @@ public class StoreMain {
         StoreMain.manageDiscountCodeTimer ();
         StoreMain.manageDiscountTimer ();
         mainMenu = new MainMenu ( null );
+        userMenu =  new UserMenu(mainMenu);
         Menu.setScanner ( new Scanner ( System.in ) );
         mainMenu.run();
     }
@@ -33,10 +36,10 @@ public class StoreMain {
     public static void initializer(){
         Database.createDatabase ();
         Database.initializeAddress ( );
-        CategoryController.getInstance().initializeRootCategories();
-        ProductController.getInstance ().initializeStock ();
-        PersonController.getInstance ().initializePersons ();
         ProductController.getInstance ().initializeProducts ();
+        CategoryController.getInstance().initializeRootCategories();
+        PersonController.getInstance ().initializePersons ();
+        ProductController.getInstance ().initializeStock ();
         RequestController.getInstance ().initializeRequests ();
     }
 }

@@ -24,11 +24,12 @@ public class CartMenu extends Menu {
             @Override
             public void show() {
                 showCartTable();
+                System.out.println("1. Back");
             }
 
             @Override
             public void execute() {
-                super.execute();
+                getValidMenuNumber(1,1);
             }
         };
     }
@@ -42,17 +43,25 @@ public class CartMenu extends Menu {
 
             @Override
             public void execute() {
+                String sellerUsername;
+                Product product;
                 System.out.println("you can enter '..' to return.");
                 System.out.println("Please enter product id:");
-                String id = getValidProductId();
-                if (id.equals(BACK_BUTTON))
-                    return;
-                System.out.println("Please enter salesperson's username:");
-                String sellerUsername = getValidSellerUsername();
-                if (sellerUsername.equals(BACK_BUTTON))
-                    return;
-                Product product = ProductController.getInstance().getProductById(id);
+                do {
+                    String id = getValidProductId();
+                    if (id.equals(BACK_BUTTON))
+                        return;
+                    product = ProductController.getInstance().getProductById(id);
+                    if(!CartController.getInstance().getCart().getProducts().containsKey(product))
+                        System.out.println("You do not have such product in your cart.");
+                    System.out.println("Please enter salesperson's username:");
+                    sellerUsername = getValidSellerUsername(product);
+                    if (sellerUsername.equals(BACK_BUTTON))
+                        return;
+                    if(ProductController.getInstance().isProductAvailable(product,(Salesperson)PersonController.getInstance().getPersonByUsername(sellerUsername)));
+                }while (!CartController.getInstance().getCart().getProducts().containsKey(product));
                 CartController.getInstance().setProductCount(product, 1, ((Salesperson) PersonController.getInstance().getPersonByUsername (sellerUsername)));
+                System.out.println("Product with id "+product.getID()+" is increased to "+CartController.getInstance().getCart().getProducts().get(product).get((PersonController.getInstance().getPersonByUsername (sellerUsername))).getCount());
             }
         };
     }
@@ -66,17 +75,27 @@ public class CartMenu extends Menu {
 
             @Override
             public void execute() {
+                String sellerUsername = null;
+                Product product;
                 System.out.println("you can enter '..' to return.");
                 System.out.println("Please enter product id:");
-                String id = getValidProductId();
-                if (id.equals(BACK_BUTTON))
-                    return;
-                System.out.println("Please enter salesperson's username:");
-                String sellerUsername = getValidSellerUsername();
-                if (sellerUsername.equals(BACK_BUTTON))
-                    return;
-                Product product = ProductController.getInstance().getProductById(id);
+                do {
+                    String id = getValidProductId();
+                    if (id.equals(BACK_BUTTON))
+                        return;
+                    product = ProductController.getInstance().getProductById(id);
+                    if(!CartController.getInstance().getCart().getProducts().containsKey(product)) {
+                        System.out.println("You do not have such product in your cart.");
+                        continue;
+                    }
+                    System.out.println("Please enter salesperson's username:");
+                    sellerUsername = getValidSellerUsername(product);
+                    if (sellerUsername.equals(BACK_BUTTON))
+                        return;
+                }while (!CartController.getInstance().getCart().getProducts().containsKey(product));
                 CartController.getInstance().setProductCount(product, -1, ((Salesperson) PersonController.getInstance().getPersonByUsername (sellerUsername)));
+                if((PersonController.getInstance().getPersonByUsername (sellerUsername))!= null)
+                System.out.println("Product with id "+product.getID()+" is decreased to "+CartController.getInstance().getCart().getProducts().get(product).get((PersonController.getInstance().getPersonByUsername (sellerUsername))).getCount());
             }
         };
     }
@@ -87,7 +106,7 @@ public class CartMenu extends Menu {
             @Override
             public void show() {
                 System.out.println("Subtotal(" + CartController.getInstance().itemNumber() + " items): " + CartController.getInstance().calculateTotalPrice() + "Toman");
-                System.out.println("press back to return");
+                System.out.println("press \"..\" to return");
             }
 
             @Override
@@ -95,7 +114,7 @@ public class CartMenu extends Menu {
                 String input;
                 do {
                     input = scanner.nextLine();
-                    if (input.equalsIgnoreCase("back")) {
+                    if (input.equalsIgnoreCase(BACK_BUTTON)) {
                         return;
                     }
                 } while (true);
@@ -127,17 +146,19 @@ public class CartMenu extends Menu {
         }
     }
 
-    public String getValidSellerUsername() {
+    public String getValidSellerUsername(Product product) {
         String input;
         boolean check = false;
         do {
             input = scanner.nextLine();
             if (input.equals(".."))
                 return input;
-            if (PersonController.getInstance().isTherePersonByUsername(input) && PersonController.getInstance().checkValidPersonType(input, Salesperson.class)) {
-                check = true;
-            } else {
-                System.out.println("the username is not valid.");
+            if (!(PersonController.getInstance().isTherePersonByUsername(input) && PersonController.getInstance().checkValidPersonType(input, Salesperson.class))) {
+                System.out.println("the username is not valid or is not salesperson.");
+            } else if (!ProductController.getInstance().doesSellerHasProduct(product,(Salesperson)PersonController.getInstance().getPersonByUsername(input))){
+                System.out.println("this product does not have such seller.");
+            }else {
+                check= true;
             }
 
         } while (!check);

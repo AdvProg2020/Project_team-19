@@ -3,6 +3,7 @@ package controller;
 import model.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 import static controller.Database.*;
 
@@ -51,7 +52,7 @@ public class CartController {
         if (PersonController.getInstance().isThereLoggedInPerson() && PersonController.getInstance().isLoggedInPersonCustomer()) {
             Customer customer = (Customer) PersonController.getInstance().getLoggedInPerson();
             customer.getCart().addProduct(product, salesperson);
-            saveToFile(customer, createPath("customer", customer.getUsername()));
+            saveToFile(customer, createPath("customers", customer.getUsername()));
         } else
             tempCart.addProduct(product, salesperson);
     }
@@ -60,13 +61,15 @@ public class CartController {
         if (PersonController.getInstance().isThereLoggedInPerson() && PersonController.getInstance().isLoggedInPersonCustomer()) {
             Customer customer = (Customer) PersonController.getInstance().getLoggedInPerson();
             customer.getCart().setProductCount(product, salesperson, count);
-            saveToFile(customer, createPath("customer", customer.getUsername()));
+            saveToFile(customer, createPath("customers", customer.getUsername()));
         } else
             tempCart.setProductCount(product, salesperson, count);
     }
 
     public void setLoggedInPersonCart() {
         ((Customer) PersonController.getInstance().getLoggedInPerson()).setCartAfterLogin(tempCart);
+        tempCart.cleanAfterPurchase();
+        saveToFile( PersonController.getInstance().getLoggedInPerson(),createPath("customers", PersonController.getInstance().getLoggedInPerson().getUsername()));
     }
 
     public double calculateTotalPrice() {
@@ -86,10 +89,20 @@ public class CartController {
             if (!customer.checkCredit(customer.getCart().calculateTotalPrice())) {
                 throw new NotEnoughCreditMoney("Your balance is not enough" + "\n" + "Please increase your credit.");
             } else {
+                if(customer.getCart().calculateTotalPrice()>1000000){
+                    System.out.println("We got that you are rich. Take this discount and show off less.");
+                    discountCodeForGoodCustomer(customer);
+                }
                 Cart.purchase(customer);
                 saveToFile(customer, createPath("customers", customer.getUsername()));
             }
         }
+    }
+
+    public void discountCodeForGoodCustomer(Customer customer){
+        DiscountCode discountCode = new DiscountCode(LocalDateTime.MIN,LocalDateTime.MAX,10,Double.POSITIVE_INFINITY,1);
+        manageDiscountCode(discountCode);
+        DiscountCodeController.getInstance().removeDiscountCode(discountCode);
     }
 
 

@@ -23,7 +23,7 @@ public class ProductMenu extends Menu {
         subMenus.put(1, getCategoryMenu(this));
         subMenus.put(2, new ViewProductMenu(this));
         subMenus.put(3, getCompareTwoProductsMenu());
-        subMenus.put(4, new FilteringMenu(this));
+        subMenus.put(4, new CartMenu(this));
         subMenus.put(5, getSearchMenu());
 
     }
@@ -61,24 +61,26 @@ public class ProductMenu extends Menu {
         }
         List<String> headersList = new ArrayList<>();
         headersList.add("ID");headersList.add("Name");headersList.add("Brand");headersList.add("Category");headersList.add("Least Price");
+        headersList.add("Average Score");
         headersList.addAll(sameProperties);
         List<List<String>> rowsList = new ArrayList<>();
         for (Product product : products) {
-            List<String> row = new ArrayList<>(sameProperties.size() + 5);
+            List<String> row = new ArrayList<>(sameProperties.size() + 6);
             row.add(product.getID());
             row.add(product.getName());
             row.add(product.getBrand());
             row.add(product.getCategory().getName());
             row.add(product.getLeastPrice() + "$");
+            row.add(String.valueOf(product.getAverageScore()));
             for (String sameProperty : sameProperties) {
                 row.add(product.getProperties().get(sameProperty));
             }
             rowsList.add(row);
         }
-        Board board = new Board(75);
-        Table table = new Table(board, 75, headersList, rowsList);
+        Board board = new Board(90);
+        Table table = new Table(board, 90, headersList, rowsList);
         List<Integer> colAlignList = new ArrayList<>();
-        for (int i = 0; i < sameProperties.size() + 5; i++)
+        for (int i = 0; i < sameProperties.size() + 6; i++)
             colAlignList.add(Block.DATA_CENTER);
         table.setColAlignsList(colAlignList);
         Block tableBlock = table.tableToBlocks();

@@ -18,12 +18,12 @@ public class Customer extends Person {
         discountCodes = new HashMap<>();
         buyLogs = new ArrayList<>();
         productsWithScore = new HashMap<>();
-        Database.saveToFile(this, Database.createPath("customers", personInfo.get("username")));
         cart = new Cart();
+        Database.saveToFile(this, Database.createPath("customers", personInfo.get("username")));
     }
 
     public void setCartAfterLogin(Cart cart) {
-        cart.setCartAfterLogIn(cart);
+        this.cart.setCartAfterLogIn(cart);
     }
 
     public boolean isThereDiscountCodeByCode(String code) {

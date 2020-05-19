@@ -27,7 +27,6 @@ public class Database {
         address.put("salespersons", databaseAddress + File.separator + "persons" + File.separator + "salespersons");
         address.put("products", databaseAddress + File.separator + "products");
         address.put("discount_codes", databaseAddress + File.separator + "discount_codes");
-        address.put("stock", databaseAddress + File.separator + "stock.json");
         address.put("root_categories", databaseAddress + File.separator + "root_categories.json");
         address.put("product_requests", databaseAddress + File.separator + "requests" + File.separator + "product_requests");
         address.put("discount_requests", databaseAddress + File.separator + "requests" + File.separator + "discount_requests");
@@ -62,17 +61,6 @@ public class Database {
         }
     }
 
-    public static <T> void editInFile(T obj, String keyPath, String fileName) { //ToDo estfde nmishe
-        try {
-            String filePath = createPath(keyPath, fileName);
-            deleteFile(filePath);
-
-            String newFilePath = createPath(keyPath, obj.toString());
-            write(obj, newFilePath);
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
-    }
 
     public static <T> void saveToFile(T object, String address) {
         Database.write(object, address);
@@ -96,25 +84,6 @@ public class Database {
         }
         return patterns;
 
-    }
-
-    public static HashMap<Product, ArrayList<Salesperson>> handleHashMap (String address) { //ToDo emt nshde, version qbli tu discord, yalda zde
-        HashMap<Product, ArrayList<Salesperson>> patterns = new HashMap <> (  );
-        Gson gson = new Gson();
-        JsonParser jsonParser = new JsonParser ();
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(address));
-            JsonElement jsonElement = jsonParser.parse(br);
-            Type hashMapType = new TypeToken<HashMap<Product, ArrayList<Salesperson>>>(){}.getType();
-            HashMap<Product, ArrayList<Salesperson>> temp = gson.fromJson(jsonElement, hashMapType );
-            if (temp != null)
-                return temp;
-            return new HashMap <> (  );
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return patterns;
     }
 
     public static String createPath(String keyPath, String name) {
@@ -147,7 +116,6 @@ public class Database {
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "requests" + File.separator + "discount_requests");
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "discount_codes");
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "products");
-        createFile(System.getProperty("user.dir") + File.separator + "database" + File.separator + "stock.json");
         createFile(System.getProperty("user.dir") + File.separator + "database" + File.separator + "root_categories.json");
     }
 

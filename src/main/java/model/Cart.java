@@ -18,8 +18,8 @@ public class Cart {
 
     public void addProduct(Product product, Salesperson salesperson) {
         if (products.containsKey(product)) {
-            if (products.containsKey(salesperson)) {
-                setProductCount(product, salesperson, products.get(product).get(salesperson).count + 1);
+            if (products.get(product).containsKey(salesperson)) {
+                setProductCount(product, salesperson,  1);
             } else {
                 products.get(product).put(salesperson, new ProductStateInCart(1, salesperson, product));
             }
@@ -34,7 +34,7 @@ public class Cart {
         for (Product product : cart.products.keySet()) {
             for (Salesperson salesperson : cart.products.get(product).keySet()) {
                 if (products.containsKey(product)) {
-                    if (cart.products.containsKey(salesperson)) {
+                    if (cart.products.get(product).containsKey(salesperson)) {
                         setProductCount(product, salesperson, cart.products.get(product).get(salesperson).count + products.get(product).get(salesperson).count);
                     } else {
                         products.get(product).put(salesperson, new ProductStateInCart(cart.products.get(product).get(salesperson).count, salesperson, product));
@@ -54,6 +54,11 @@ public class Cart {
 
     public void setProductCount(Product product, Salesperson salesperson, int count) {
         products.get(product).get(salesperson).count += count;
+        if (products.get(product).get(salesperson).getCount()==0){
+            products.get(product).remove(salesperson);
+            if (products.get(product).size()==0)
+                products.remove(product);
+        }
     }
 
     public Cart() {
@@ -76,7 +81,7 @@ public class Cart {
         totalPriceAfterDiscountCode = 0;
     }
 
-    public static void purchase(Customer customer) throws IOException {
+    public static void purchase(Customer customer) {
         customer.setCredit(customer.getCredit() - customer.getCart().totalPrice);
         BuyLog buyLog = new BuyLog(LocalDateTime.now(), customer.getCart().totalPrice, customer.getCart().getTotalPriceAfterDiscountCode(), customer.getCart().getProducts(), false);
         customer.addToBuyLogs(buyLog);

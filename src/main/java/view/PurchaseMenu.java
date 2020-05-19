@@ -80,7 +80,7 @@ public class PurchaseMenu extends Menu {
         return new Menu("Payment",this) {
             @Override
             public void show() {
-                super.show();
+                //super.show();
             }
 
             @Override

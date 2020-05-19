@@ -30,14 +30,14 @@ public class ProductController {
 
     public void initializeProducts() {
         for (File file : Database.returnListOfFiles(Database.address.get("products"))) {
-            allProducts.add( (Product)Database.read(Product.class, file.getAbsolutePath()));
+            allProducts.add((Product) Database.read(Product.class, file.getAbsolutePath()));
         }
     }
 
     public void initializeStock() {
         stock = new HashMap<>();
         for (Product product : allProducts) {
-            stock.put(product,new ArrayList<>());
+            stock.put(product, new ArrayList<>());
         }
         for (Person person : PersonController.getInstance().filterByRoll(Salesperson.class)) {
             Salesperson salesperson = (Salesperson) person;
@@ -51,12 +51,12 @@ public class ProductController {
         ProductController.currentProducts = currentProducts;
     }
 
-    public boolean isThereProductById(String productID)  {
-        return getProductById(productID)!=null;
+    public boolean isThereProductById(String productID) {
+        return getProductById(productID) != null;
     }
 
-    public static class WrongProductIdException extends Exception{
-        public String message="No product with such id";
+    public static class WrongProductIdException extends Exception {
+        public String message = "No product with such id";
     }
 
     public Product getProductById(String productID) {
@@ -81,13 +81,12 @@ public class ProductController {
     private void saveChangesInFileAfterAddProduct(Product product, Salesperson salesperson) {
         Database.write(product, Database.createPath("products", product.getID()));
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
-        saveToFile(stock, address.get("stock"));
-        saveToFile(CategoryController.rootCategories,address.get("root_categories"));
+        saveToFile(CategoryController.rootCategories, address.get("root_categories"));
     }
 
 
     public void editProduct(Product product, Salesperson salesperson, int amount, double price,
-                            String category, String name, String brand, HashMap<String, String>properties) {
+                            String category, String name, String brand, HashMap<String, String> properties) {
 
         changeStateToVerified(product, salesperson);
         editProductForSeller(product, salesperson, price, amount);
@@ -99,7 +98,7 @@ public class ProductController {
         salesperson.editProduct(product, price, amount);
     }
 
-    private void editProductInGeneral(Product product, String category, String name, String brand, HashMap<String, String>properties) {
+    private void editProductInGeneral(Product product, String category, String name, String brand, HashMap<String, String> properties) {
         product.getCategory().removeProduct(product);
         product.edit(category, name, brand, properties);
         product.getCategory().addProduct(product);
@@ -108,11 +107,10 @@ public class ProductController {
     private void changeFilesAfterEditProduct(Product product, Salesperson salesperson) {
         saveToFile(product, createPath("products", product.getID()));
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
-        saveToFile(CategoryController.rootCategories,address.get("root_categories"));
-        saveToFile(stock, address.get("stock"));
+        saveToFile(CategoryController.rootCategories, address.get("root_categories"));
     }
 
-    public void removeProduct(Product product, Salesperson salesperson)  {
+    public void removeProduct(Product product, Salesperson salesperson) {
         removeProductInProgramLists(product, salesperson);
         changeFilesAfterRemoveProduct(product, salesperson);
     }
@@ -121,13 +119,12 @@ public class ProductController {
         allProducts.remove(product);
         stock.get(product).remove(salesperson);
         salesperson.removeFromOfferedProducts(product);
-        CartController.getInstance().removeProduct(product,salesperson);
+        CartController.getInstance().removeProduct(product, salesperson);
     }
 
     private void changeFilesAfterRemoveProduct(Product product, Salesperson salesperson) {
-        saveToFile(CategoryController.rootCategories,address.get("root_categories"));
+        saveToFile(CategoryController.rootCategories, address.get("root_categories"));
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
-        saveToFile(stock, address.get("stock"));
         try {
             deleteFile(createPath("products", product.getID()));
         } catch (IOException e) {
@@ -154,13 +151,12 @@ public class ProductController {
     public void removeProductForManager(Product product) {
         product.getCategory().removeProduct(product);
         for (Person salesperson : PersonController.getInstance().filterByRoll(Salesperson.class)) {
-            if(((Salesperson)salesperson).hasProduct(product))
+            if (((Salesperson) salesperson).hasProduct(product))
                 removeProduct(product, (Salesperson) salesperson);
 
         }
         CartController.getInstance().removeProduct(product);
-        saveToFile(CategoryController.rootCategories,address.get("root_categories"));
-        saveToFile(stock, address.get("stock"));
+        saveToFile(CategoryController.rootCategories, address.get("root_categories"));
         try {
             deleteFile(Database.createPath("products", product.getID()));
         } catch (IOException e) {
@@ -168,11 +164,18 @@ public class ProductController {
         }
     }
 
-    public boolean isProductAvailable(Product product){
+    public boolean isProductAvailable(Product product) {
         for (Salesperson salesperson : stock.get(product)) {
-            if(salesperson.getProductAmount(product)>0){
+            if (salesperson.getProductAmount(product) > 0) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    public boolean isProductAvailable(Product product, Salesperson salesperson) {
+        if (salesperson.getProductAmount(product) > 0) {
+            return true;
         }
         return false;
     }
@@ -243,15 +246,15 @@ public class ProductController {
         return productList;
     }
 
-    public void removeSellerInStock(Salesperson salesperson){
+    public void removeSellerInStock(Salesperson salesperson) {
         for (Product product : stock.keySet()) {
             stock.get(product).remove(salesperson);
         }
     }
 
-    public boolean doesSellerHasProduct(Product product, Salesperson salesperson){
+    public boolean doesSellerHasProduct(Product product, Salesperson salesperson) {
         for (OwnedProduct ownedProduct : getProductsOfProduct(product)) {
-            if(ownedProduct.getSalesperson().equals(salesperson))
+            if (ownedProduct.getSalesperson().equals(salesperson))
                 return true;
         }
         return false;
