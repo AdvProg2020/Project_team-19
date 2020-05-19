@@ -116,19 +116,10 @@ public abstract class Menu {
                 for (Integer submenuNumber : this.parentMenu.subMenus.keySet()) {
                     System.out.println(this.parentMenu.subMenus.get(submenuNumber).toString());
                 }
-                System.out.println("Enter '..' to return");
             }
 
             @Override
             public void execute() {
-                String input;
-                while (true) {
-                    input = scanner.nextLine ( );
-                    if (!input.equals ( BACK_BUTTON ))
-                        System.out.println ( "chizi zadi?" );
-                    else
-                        break;
-                }
             }
         };
     }
@@ -354,7 +345,7 @@ public abstract class Menu {
             nextMenu = subMenus.get ( chosenMenu );
         assert nextMenu != null;
         nextMenu.run ( );
-        if (!(this instanceof LoginMenu))
+        if (!(this instanceof LoginMenu) && PersonController.getInstance ().getLoggedInPerson () != null)
             this.run ();
     }
 

@@ -258,7 +258,7 @@ public class SalespersonProductMenu extends Menu {
         for (Product product : salesperson.getOfferedProducts ( ).keySet ( )) {
             List <String> row = new ArrayList <> ( 2 );
             row.add ( product.getName() );
-            row.add ( salesperson.getProductState ( product ) );
+            row.add ( salesperson.getProductStateForShow ( product ) );
             rowsList.add ( row );
         }
         if (salesperson.getOfferedProducts().size () == 0)

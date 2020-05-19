@@ -14,7 +14,6 @@ public class ManageRequestsMenu extends Menu {
         subMenus.put(3, getShowProductRequests());
         subMenus.put(4, getShowDiscountRequests());
         subMenus.put(5, getAcceptOrDeclineMenu());
-        subMenus.put(6, getHelpMenu(this));
     }
 
     private Menu getShowAllRequestsMenu () {

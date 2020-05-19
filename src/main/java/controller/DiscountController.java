@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static controller.Database.*;
+import static controller.ProductController.stock;
 
 public class DiscountController {
     private static DiscountController single_instance = null;
@@ -33,16 +34,23 @@ public class DiscountController {
         return allDiscounts;
     }
 
-    public void removeDiscount( Salesperson salesperson, Discount discount) {
+    public void declineRequestDiscountForEditAndRemove(Discount discount, Salesperson salesperson) {
+        discount.setDiscountState(Discount.DiscountState.VERIFIED);
+        saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
+        saveToFile(stock, address.get("stock"));
+    }
+
+    public void removeDiscount(Salesperson salesperson, Discount discount) {
         salesperson.removeFromDiscounts(discount);
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
-        saveToFile(ProductController.stock, address.get("stock"));
+        saveToFile(stock, address.get("stock"));
     }
 
 
     public void addDiscount(Salesperson salesperson, Discount discount) {
         discount.setDiscountState(Discount.DiscountState.VERIFIED);
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
+        saveToFile(stock, address.get("stock"));
     }
 
     public void editDiscount(double discountPercentage, LocalDateTime startTime, LocalDateTime endTime, ArrayList<Product> products, Discount discount, Salesperson salesperson) {
@@ -55,6 +63,7 @@ public class DiscountController {
             salesperson.setProductDiscountState(product, discount);
         }
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
+        saveToFile(stock, address.get("stock"));
     }
 
     public void handleProductsInDiscount(ArrayList<Product> products, ArrayList<Product> chosenProducts, EditType editType) {

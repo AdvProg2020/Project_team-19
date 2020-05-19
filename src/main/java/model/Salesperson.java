@@ -2,18 +2,11 @@ package model;
 
 
 import controller.Database;
-import controller.ProductController;
-import model.wagu.Block;
-import model.wagu.Board;
-import model.wagu.Table;
 import controller.DiscountController;
 import controller.ProductController;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 public class Salesperson extends Person {
     private ArrayList<SellLog> sellLogs;
@@ -142,6 +135,10 @@ public class Salesperson extends Person {
         offeredProducts.get(product.getID()).setState(ProductState.State.EDIT_IN_PROGRESS);
     }
 
+    public void setVerified(Product product) {
+        offeredProducts.get(product.getID()).setState(ProductState.State.VERIFIED);
+    }
+
     public double discountAmount(Product product) {
         if (offeredProducts.get(product.getID()).isInDiscount()) { //toDo get DiscountFromALL null mide
             return offeredProducts.get(product.getID()).getDiscount().getDiscountPercentage() * getProductPrice(product);
@@ -153,7 +150,13 @@ public class Salesperson extends Person {
         return offeredProducts.get(product.getID()).getAmount();
     }
 
-    public String getProductState (Product product) {
+
+
+    public ProductState.State getProductState(Product product) {
+        return offeredProducts.get(product.getID()).getProductState();
+    }
+
+    public String getProductStateForShow (Product product) {
         return offeredProducts.get ( product.getID () ).getProductState ().label;
     }
 
@@ -233,5 +236,7 @@ class ProductState {
     public void setProductState(State productState) {
         this.productState = productState;
     }
+
+
 }
 

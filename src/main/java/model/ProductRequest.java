@@ -60,16 +60,25 @@ public class ProductRequest extends Request {
         Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(salespersonUsername);
         switch (getRequestState()) {
             case ADD:
-                ProductController.getInstance().addProduct(product, salesperson, amount, price);
-                changeState();
+                ProductController.getInstance().addProduct(product, salesperson);
                 break;
             case EDIT:
                 ProductController.getInstance().editProduct(product, salesperson, amount, price, category, name, brand, properties);
-                changeState();
                 break;
             case DELETE:
                 ProductController.getInstance().removeProduct(product, salesperson);
                 break;
+        }
+    }
+
+    @Override
+    public void decline() {
+        Product product = ProductController.getInstance().getProductById(productId);
+        Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(salespersonUsername);
+        if (getRequestState() == RequestState.ADD) {
+            ProductController.getInstance().declineProductRequestForAdd(product, salesperson);
+        } else {
+            ProductController.getInstance().declineRequestForEditAndRemove(product, salesperson);
         }
     }
 
@@ -79,18 +88,12 @@ public class ProductRequest extends Request {
         Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(salespersonUsername);
         if (getRequestState().equals(RequestState.DELETE)) {
             return salespersonUsername + " want to " + this.getRequestState() + " this product : " + productId +
-                    "\nname :" + product.getName() + "\ncategory :" + product.getCategory();
+                    "\nname :" + product.getName() + "\ncategory :" + product.getCategory().getName();
         }
         return salesperson.getUsername() + " want to "
                 + this.getRequestState() + " this product : "
                 + product.getID() +
                 "\nwith " + price + "$" + " and amount " + amount +
                 "\nname :" + product.getName() + "\ncategory :" + product.getCategory().getName();
-    }
-
-    private void changeState() {
-        Product product = ProductController.getInstance().getProductById(productId);
-        Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(salespersonUsername);
-        salesperson.setProductState(product, ProductState.State.VERIFIED);
     }
 }

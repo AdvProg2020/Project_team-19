@@ -87,8 +87,8 @@ public class ViewProductMenu extends Menu {
         row.add(String.valueOf(product.getLeastPrice()));
         row.add(product.getCategory().getName());
         rowsList.add(row);
-        Board board = new Board(75);
-        Table table = new Table(board, 75, headersList, rowsList);
+        Board board = new Board(85);  //todo change for kids
+        Table table = new Table(board, 85, headersList, rowsList);
         List<Integer> colAlignList = Arrays.asList(
                 Block.DATA_CENTER,
                 Block.DATA_CENTER,
