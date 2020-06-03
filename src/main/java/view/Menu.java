@@ -330,8 +330,12 @@ public abstract class Menu {
     }
 
     protected void fancyTitle() {
-        System.out.printf("\u2014\u2014\u2014|%s|\u2014\u2014\u2014\n",
-                StringUtils.center(this.getName(), 10));
+        if (this.getName ().length ()%2 == 0)
+            System.out.printf("\u2014\u2014\u2014|%s|\u2014\u2014\u2014\n",
+                    StringUtils.center(this.getName(), 10));
+        else
+            System.out.printf("\u2014\u2014\u2014|%s|\u2014\u2014\u2014\n",
+                    StringUtils.center(this.getName(), 9));
     }
 
     void eachUserShowMenu() {
