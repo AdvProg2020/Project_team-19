@@ -1,15 +1,16 @@
 package model;
 
 import controller.PersonController;
+import controller.ProductController;
 
 public class ProductStateInCart {
     int count;
     String salespersonUsername;
     boolean inDiscount;
-    private Product product;
+    private String productId;
 
     public ProductStateInCart(int count, Salesperson salesperson, Product product) {
-        this.product = product;
+        this.productId = product.getID();
         this.count = count;
         this.salespersonUsername = salesperson.getUsername();
     }
@@ -25,7 +26,7 @@ public class ProductStateInCart {
     }
 
     public double getPriceAfterDiscount() {
-        return ((Salesperson)PersonController.getInstance().getPersonByUsername(salespersonUsername)).getDiscountPrice(product);
+        return ((Salesperson)PersonController.getInstance().getPersonByUsername(salespersonUsername)).getDiscountPrice(getProduct());
     }
 
     public double getFinalPrice() {
@@ -42,8 +43,12 @@ public class ProductStateInCart {
         return (Salesperson)PersonController.getInstance().getPersonByUsername(salespersonUsername);
     }
 
+    public Product getProduct() {
+        return ProductController.getInstance().getProductById(productId);
+    }
+
     public double getPrice() {
-        return ((Salesperson)PersonController.getInstance().getPersonByUsername(salespersonUsername)).getProductPrice(product);
+        return ((Salesperson)PersonController.getInstance().getPersonByUsername(salespersonUsername)).getProductPrice(getProduct());
     }
 
     public void setCount(int count) {

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 import static controller.Database.*;
@@ -47,8 +48,16 @@ public class ProductController {
         }
     }
 
+    public ArrayList<Salesperson> getProductsSellers(Product product) {
+        return stock.get(product);
+    }
+
     public void setCurrentProducts(ArrayList<Product> currentProducts) {
         ProductController.currentProducts = currentProducts;
+    }
+
+    public static ArrayList<Product> getAllProducts() {
+        return allProducts;
     }
 
     public boolean isThereProductById(String productID) {
@@ -57,6 +66,28 @@ public class ProductController {
 
     public static class WrongProductIdException extends Exception {
         public String message = "No product with such id";
+    }
+
+    //todo check she hatman tamam vizhegiaye category ro kala dare:
+    public ArrayList<Product> getSimilarProducts(Product product) {
+        return product.getCategory().getProductList().stream().filter(product1 -> {
+            if (product1.equals(product))
+                return false;
+            for (String field : product.getCategory().getPropertyFields()) {
+                if (product.getProperties().get(field).equals(product1.getProperties().get(field)))
+                    return true;
+            }
+            return false;
+        }).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public double getAveragePrice(Product product) {
+        double price = 0;
+        int size = stock.containsKey(product) ? stock.get(product).size() : 1;
+        for (Salesperson salesperson : stock.get(product)) {
+            price += salesperson.getProductPrice(product);
+        }
+        return price / size;
     }
 
     public Product getProductById(String productID) {
@@ -182,8 +213,8 @@ public class ProductController {
 
     public ArrayList<Product> filterByField(String fieldName, String property, ArrayList<Product> products) {
         return products.stream().filter(product -> {
-            if (product.getProperties().containsKey(fieldName))
-                return product.getProperties().get(fieldName).equals(property);
+            if (!fieldName.isEmpty() && product.getProperties().containsKey(fieldName))
+                return product.getProperties().get(fieldName).startsWith(property);
             else
                 return false;
         }).collect(Collectors.toCollection(ArrayList::new));
@@ -194,9 +225,24 @@ public class ProductController {
                 collect(Collectors.toCollection(ArrayList::new));
     }
 
+    public LinkedList<Product> filterByName(String productName, LinkedList<Product> products) {
+        return products.stream().filter(product -> {
+            if (!productName.isEmpty()) {
+                return product.getName().startsWith(productName);
+            }
+            else
+                return false;
+        }).collect(Collectors.toCollection(LinkedList::new));
+    }
+
     public ArrayList<Product> filterByBrand(String brandName, ArrayList<Product> products) {
         return products.stream().filter(product -> product.getBrand().equals(brandName)).
                 collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public LinkedList<Product> filterByBrand(String brand, LinkedList<Product> products) {
+        return products.stream().filter(product -> product.getBrand().equals(brand)).
+                collect(Collectors.toCollection(LinkedList::new));
     }
 
     public ArrayList<Product> filterByCategory(String categoryName, ArrayList<Product> products) {

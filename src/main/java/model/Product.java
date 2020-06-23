@@ -2,6 +2,7 @@ package model;
 
 import controller.CategoryController;
 import controller.Database;
+import controller.ProductController;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.io.IOException;
@@ -17,10 +18,13 @@ public class Product {
     private HashMap<String, String> properties;
     private String productID;
     private int seen;
+    private int buyersNum;
+    private int totalScore;
     private String name;
     private String brand;
     private String category;
     private String description;
+    private String mediaPath = "";
     private double averageScore;
     private double averagePrice;
     private double leastPrice;
@@ -34,10 +38,44 @@ public class Product {
         this.brand = brand;
         this.category = category;
         this.seen = 0;
+        this.totalScore = 0;
+        this.buyersNum = 0;
         this.properties = properties;
         this.comments = new ArrayList<>();
         allProducts.add(this);
         Database.saveToFile(this, Database.createPath("products", productID));
+    }
+
+    public boolean hasMedia() {
+        return mediaPath.length() != 0;
+    }
+
+    public String getMediaPath() {
+        return mediaPath;
+    }
+
+    public void setMediaPath(String path) {
+        mediaPath = path;
+    }
+
+    public void increaseBuyers() {
+        buyersNum += 1;
+    }
+
+    public void increaseTotalScore(int score) {
+        totalScore += score;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setAverageScore(double averageScore) {
+        this.averageScore = averageScore;
+    }
+
+    public void setProperties(HashMap<String, String> properties) {
+        this.properties = properties;
     }
 
     public void increaseSeen() {
@@ -48,7 +86,6 @@ public class Product {
         return seen;
     }
 
-
     public HashMap<String, String> getProperties() {
         return properties;
     }
@@ -57,8 +94,12 @@ public class Product {
         return name;
     }
 
+    public double getAveragePrice() {
+        return ProductController.getInstance().getAveragePrice(this);
+    }
+
     public double getAverageScore() {
-        return averageScore;
+        return buyersNum != 0 ? (double)totalScore / buyersNum : 0;
     }
 
     public String getBrand() {
@@ -75,10 +116,6 @@ public class Product {
 
     public ArrayList<Comment> getComments() {
         return comments;
-    }
-
-    public double getAveragePrice() {
-        return averagePrice;
     }
 
     public double getLeastPrice() {

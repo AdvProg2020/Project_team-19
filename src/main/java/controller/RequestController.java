@@ -122,6 +122,10 @@ public class RequestController {
         }
     }
 
+    public static ArrayList<Request> getAllRequests() {
+        return allRequests;
+    }
+
     private void saveFileChangesForProductBeforeSendingRequest(Product product, Salesperson salesperson) {
         saveToFile(product, createPath("products", product.getID()));
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));

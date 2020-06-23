@@ -64,7 +64,7 @@ public class Customer extends Person {
 
     public boolean isProductBought(Product product){
         for (BuyLog buyLog : buyLogs) {
-            if(buyLog.isThereProduct(product))
+            if (buyLog.isThereProduct(product))
                 return true;
         }
         return false;

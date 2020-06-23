@@ -1,48 +1,55 @@
 package model;
 
 import controller.PersonController;
+import controller.ProductController;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class Cart {
-    private HashMap<Product, HashMap<Salesperson, ProductStateInCart>> products;
+    private HashMap<String, HashMap<String, ProductStateInCart>> products;
     private double totalPrice;
     private double discountAmount;
     private double totalPriceAfterDiscountCode;
 
     public void setProducts(HashMap<Product, HashMap<Salesperson, ProductStateInCart>> products) {
-        this.products = products;
+        for (Product product : products.keySet()) {
+            this.products.put(product.getID(),new HashMap<>());
+            for (Salesperson salesperson : products.get(product).keySet()) {
+                this.products.get(product.getID()).put(salesperson.getUsername(), products.get(product).get(salesperson));
+            }
+        }
     }
 
     public void addProduct(Product product, Salesperson salesperson) {
-        if (products.containsKey(product)) {
-            if (products.get(product).containsKey(salesperson)) {
+        if (products.containsKey(product.getID())) {
+            if (products.get(product.getID()).containsKey(salesperson.getUsername())) {
                 setProductCount(product, salesperson,  1);
             } else {
-                products.get(product).put(salesperson, new ProductStateInCart(1, salesperson, product));
+                products.get(product.getID()).put(salesperson.getUsername(), new ProductStateInCart(1, salesperson, product));
             }
         } else {
-            HashMap<Salesperson, ProductStateInCart> temp = new HashMap<>();
-            temp.put(salesperson, new ProductStateInCart(1, salesperson, product));
-            products.put(product, temp);
+            HashMap<String , ProductStateInCart> temp = new HashMap<>();
+            temp.put(salesperson.getUsername(), new ProductStateInCart(1, salesperson, product));
+            products.put(product.getID(), temp);
         }
     }
 
     public void setCartAfterLogIn(Cart cart) {
-        for (Product product : cart.products.keySet()) {
-            for (Salesperson salesperson : cart.products.get(product).keySet()) {
-                if (products.containsKey(product)) {
-                    if (cart.products.get(product).containsKey(salesperson)) {
-                        setProductCount(product, salesperson, cart.products.get(product).get(salesperson).count + products.get(product).get(salesperson).count);
+        for (String productId : cart.products.keySet()) {
+            Product product = ProductController.getInstance().getProductById(productId);
+            for (String sellerName : cart.products.get(productId).keySet()) {
+                Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(sellerName);
+                if (products.containsKey(productId)) {
+                    if (cart.products.get(productId).containsKey(sellerName)) {
+                        setProductCount(product, salesperson, cart.products.get(productId).get(sellerName).count + products.get(productId).get(sellerName).count);
                     } else {
-                        products.get(product).put(salesperson, new ProductStateInCart(cart.products.get(product).get(salesperson).count, salesperson, product));
+                        products.get(productId).put(sellerName, new ProductStateInCart(cart.products.get(productId).get(sellerName).count, salesperson, product));
                     }
                 } else {
-                    HashMap<Salesperson, ProductStateInCart> temp = new HashMap<>();
-                    temp.put(salesperson, new ProductStateInCart(cart.products.get(product).get(salesperson).count, salesperson, product));
-                    products.put(product, temp);
+                    HashMap<String , ProductStateInCart> temp = new HashMap<>();
+                    temp.put(sellerName, new ProductStateInCart(cart.products.get(productId).get(sellerName).count, salesperson, product));
+                    products.put(productId, temp);
                 }
             }
         }
@@ -53,11 +60,11 @@ public class Cart {
     }
 
     public void setProductCount(Product product, Salesperson salesperson, int count) {
-        products.get(product).get(salesperson).count += count;
-        if (products.get(product).get(salesperson).getCount()==0){
-            products.get(product).remove(salesperson);
-            if (products.get(product).size()==0)
-                products.remove(product);
+        products.get(product.getID()).get(salesperson.getUsername()).count += count;
+        if (products.get(product.getID()).get(salesperson.getUsername()).getCount()==0){
+            products.get(product.getID()).remove(salesperson.getUsername());
+            if (products.get(product.getID()).size()==0)
+                products.remove(product.getID());
         }
     }
 
@@ -67,8 +74,8 @@ public class Cart {
 
     public double calculateTotalPrice() {
         totalPrice = 0;
-        for (Product product : products.keySet()) {
-            for (Salesperson salesperson : products.get(product).keySet()) {
+        for (String product : products.keySet()) {
+            for (String salesperson : products.get(product).keySet()) {
                 totalPrice += products.get(product).get(salesperson).getTotalPrice();
             }
         }
@@ -90,9 +97,11 @@ public class Cart {
     }
 
     public void purchaseForSalesperson(){
-        for (Product product : products.keySet()) {
-            for (Salesperson salesperson : products.get(product).keySet()) {
-                int count = products.get(product).get(salesperson).count;
+        for (String productId : products.keySet()) {
+            Product product = ProductController.getInstance().getProductById(productId);
+            for (String sellerName : products.get(productId).keySet()) {
+                Salesperson salesperson = (Salesperson)PersonController.getInstance().getPersonByUsername(sellerName);
+                int count = products.get(productId).get(sellerName).count;
                 salesperson.addSellLogAndPurchase(new SellLog(LocalDateTime.now(),
                         salesperson.getProductPrice(product) * count,
                         salesperson.discountAmount(product) * count, product,
@@ -103,7 +112,17 @@ public class Cart {
     }
 
     public HashMap<Product, HashMap<Salesperson, ProductStateInCart>> getProducts() {
-        return products;
+        HashMap<Product, HashMap<Salesperson, ProductStateInCart>> productsInCart = new HashMap<>();
+        for (String productId : products.keySet()) {
+            Product product = ProductController.getInstance().getProductById(productId);
+            productsInCart.put(product, new HashMap<>());
+            for (String sellerName : products.get(productId).keySet()) {
+                Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(sellerName);
+                ProductStateInCart productStateInCart = this.products.get(productId).get(sellerName);
+                productsInCart.get(product).put(salesperson, productStateInCart);
+            }
+        }
+        return productsInCart;
     }
 
     public double getTotalPriceAfterDiscountCode() {
