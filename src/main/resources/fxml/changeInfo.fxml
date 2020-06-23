@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.ChangeInfoController">
+    <children>
+        <ChoiceBox fx:id="field" layoutX="159.0" layoutY="51.0" prefHeight="26.0" prefWidth="282.0" />
+        <TextField fx:id="text" layoutX="159.0" layoutY="123.0" prefHeight="26.0" prefWidth="282.0" promptText="Password" stylesheets="@textField.css" />
+        <PasswordField fx:id="password" layoutX="159.0" layoutY="123.0" prefHeight="26.0" prefWidth="282.0" promptText="Password" stylesheets="@textField.css" />
+        <Button defaultButton="true" layoutX="318.0" layoutY="173.0" mnemonicParsing="false" onAction="#done" prefHeight="26.0" prefWidth="122.0" styleClass="btn" stylesheets="@button.css" text="Done" />
+        <Button fx:id="cancel" cancelButton="true" layoutX="159.0" layoutY="173.0" mnemonicParsing="false" onAction="#cancel" prefHeight="26.0" prefWidth="122.0" styleClass="btn" stylesheets="@button.css" text="Cancel" />
+    </children>
+</AnchorPane>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: #99ddff;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.MainMenuController">
+   <children>
+<!--      <Label alignment="CENTER" layoutX="290.0" layoutY="87.0" styleClass="outline" stylesheets="@titleOutliner.css" text="Main Menu">-->
+<!--      </Label>-->
+      <Label layoutX="225.0" layoutY="82.0" stylesheets="@hover.css" text="The BRUH">
+         <font>
+            <Font name="Stencil" size="70.0" />
+         </font>
+      </Label>
+<!--      <Button fx:id="productMenu" layoutX="275.0" layoutY="333.0" onAction="#" prefHeight="26.0" prefWidth="263.0" style="-fx-background-color: #ffffff;" styleClass="userBtn" stylesheets="@button.css" text="Product Menu">-->
+<!--         <font>-->
+<!--            <Font name="Verdana" size="12.0" />-->
+<!--         </font></Button>-->
+<!--      <Button fx:id="discountMenu" layoutX="275.0" layoutY="386.0" prefHeight="26.0" prefWidth="263.0" style="-fx-background-color: #ffffff;" styleClass="userBtn" stylesheets="@button.css" text="Discount Menu">-->
+<!--         <font>-->
+<!--            <Font name="Verdana" size="12.0" />-->
+<!--         </font></Button>-->
+
+<!--      <Button fx:id="back" cancelButton="true" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" style="-fx-background-color: whitesmoke;" text="Back" />-->
+<!--      <Button fx:id="userMenu" layoutX="690.0" layoutY="180.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="" prefHeight="26.0" prefWidth="94.0" styleClass="userBtn" stylesheets="@button.css" text="User Menu" />-->
+<!--      <Button fx:id="help" layoutX="14.0" layoutY="460.0" mnemonicParsing="false" style="-fx-background-color: whitesmoke;" text="?" />-->
+      <ImageView fx:id="productIcon" fitHeight="150.0" fitWidth="200.0" layoutX="425.0" layoutY="250.0" onMouseClicked="#productAction" pickOnBounds="true" preserveRatio="true" onMousePressed="#productIconBig" onMouseReleased="#productIconSmall">
+         <image>
+            <Image url="@../images/product.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="discountIcon" fitHeight="150.0" fitWidth="200.0" layoutX="217.0" layoutY="250.0" pickOnBounds="true" preserveRatio="true" onMousePressed="#discountIconBig" onMouseReleased="#discountIconSmall">
+         <image>
+            <Image url="@../images/discount.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="userIcon" fitHeight="92.0" fitWidth="72.0" layoutX="714.0" layoutY="14.0" onMouseClicked="#userMenuAction" onMousePressed="#userIconBig" onMouseReleased="#userIconSmall" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/user.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

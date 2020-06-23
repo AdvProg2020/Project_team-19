@@ -276,6 +276,19 @@ public class ProductController {
         sortProduct.setPrice(price);
         products.sort(sortProduct);
     }
+
+    public double getAveragePrice(Product product) {
+        double price = 0;
+        int size = stock.containsKey(product) ? stock.get(product).size() : 1;
+        for (Salesperson salesperson : stock.get(product)) {
+            price += salesperson.getProductPrice(product);
+        }
+        return price / size;
+    }
+
+    public ArrayList<Salesperson> getProductsSellers(Product product) {
+        return stock.get(product);
+    }
 }
 
 class SortByPrice implements Comparator<OwnedProduct> {

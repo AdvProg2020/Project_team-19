@@ -1,0 +1,417 @@
+package fxmlController;
+
+import controller.ProductController;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import model.Comment;
+import model.Customer;
+import model.Product;
+import model.Salesperson;
+import view.App;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
+
+public class ProductMenu implements Initializable {
+    private static final String STAR = "/images/empty-star.png";
+    private static final String FUL_STAR = "/images/star.png";
+    private ArrayList<Parent> sellerCards;
+    private ImageView[] stars = new ImageView[5];
+    public static Customer customer;
+    private Product product;
+    private TextField comment;
+    private TextField title;
+    private Button submit;
+    private Parent currentCard;
+    private Stage commentStage;
+    private Stage rateStage;
+    private int score = 0;
+    private boolean isBought = false;
+    @FXML private ImageView productImage;
+    @FXML private GridPane sellerCardBase;
+    @FXML private ImageView forthButton;
+    @FXML private ImageView backButton;
+    @FXML private Button addComment;
+    @FXML private Label productName;
+    @FXML private Label properties;
+    @FXML private Button showComments;
+    @FXML private ImageView notAvailable;
+    @FXML private ScrollPane basePane;
+    @FXML private Pane starRate;
+    @FXML private ImageView rate;
+    @FXML private FontAwesomeIcon back;
+
+    public ProductMenu(Product product) {
+        this.product = product;
+        sellerCards = new ArrayList<>();
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        rate.setVisible(false);
+        setSellerCards();
+        setSubmit();
+        currentCard = sellerCards.get(0);
+        sellerCardBase.getChildren().add(currentCard);
+        backButton.setOpacity(0.2);
+        setProductInfo();
+        checkBackAndForth();
+        addComment.setOnAction(addCommentEvent());
+        showComments.setOnAction(showCommentEvent());
+        zoomImage();
+        checkAvailable();
+        setStarRate();
+//        checkBought();
+        //if (isBought) {
+            rate.setVisible(true);
+            rate.setOnMouseClicked(event -> rate());
+        //}
+        back.setOnMouseClicked ( event -> App.setRoot ( "mainProductsMenu" ) );
+
+        back.setOnMousePressed ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #17b5ff,75,0,5,0);" ) );
+
+        back.setOnMouseReleased ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" ) );
+    }
+
+    private void setSubmit() {
+        submit = new Button("Submit");
+    }
+
+    private void rate() {
+        GridPane gridPane = new GridPane();
+        setStars();
+        Label rateText = new Label("Rate this product!");
+
+        gridPane.add(rateText, 0, 0, 5, 1);
+        for (int i = 0; i < 5; i++) {
+            gridPane.add(stars[i], i + 1, 1);
+        }
+
+        gridPane.add(submit, 0, 2, 5, 1);
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setVgap(20);
+        gridPane.setHgap(10);
+
+        rateText.setOnMouseClicked(event -> {
+            score = 0;
+            handleScore();
+        });
+
+        rateStage = new Stage();
+        Scene scene = new Scene(gridPane, 300, 180);
+
+        rateStage.setScene(scene);
+        rateStage.initModality(Modality.APPLICATION_MODAL);
+        rateStage.show();
+        setMouseClicked();
+        submit.setOnAction(event -> submitRate());
+    }
+
+    private void submitRate() {
+        product.increaseTotalScore(score);
+    }
+
+    private void setMouseClicked() {
+        for (int i = 0; i < 5; i++) {
+            int finalI = i;
+            stars[i].setOnMouseClicked(event -> {
+                score = finalI + 1;
+                handleScore();
+            });
+        }
+    }
+
+    private void handleScore() {
+        for (int i = 0; i < score; i++) {
+            stars[i].setImage(new Image(FUL_STAR));
+        }
+        for (int i = score; i < 5; i++) {
+            stars[i].setImage(new Image(STAR));
+        }
+    }
+
+    private void setStars() {
+        for (int i = 0; i < 5; i++) {
+            stars[i] = new ImageView(new Image(STAR));
+            stars[i].setFitHeight(40);
+            stars[i].setFitWidth(40);
+        }
+    }
+
+    private void checkBought() {
+        if (customer.isProductBought(product)) {
+            isBought = true;
+        }
+    }
+
+    private void setStarRate() {
+        StarRate starRate = new StarRate(product);
+        FXMLLoader loader = new FXMLLoader(ProductMenu.class.getResource("/fxml/starRate.fxml"));
+        loader.setController(starRate);
+        try {
+            this.starRate.getChildren().add(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void checkAvailable() {
+        if (ProductController.getInstance().isProductAvailable(product))
+            notAvailable.setVisible(false);
+    }
+
+    private void showComments() {
+        ShowComments showCommentsCtrl = new ShowComments(product);
+        FXMLLoader loader = new FXMLLoader(ProductMenu.class.getResource("/fxml/showComments.fxml"));
+        loader.setController(showCommentsCtrl);
+        Parent parent = null;
+        try {
+            parent = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        App.currentScene = new Scene(parent, 800, 500);
+        App.currentStage.setScene(App.currentScene);
+        App.currentStage.show();
+    }
+
+    private EventHandler<ActionEvent> showCommentEvent() {
+        return event -> showComments();
+    }
+
+    private void addComment() {
+        GridPane gridPane = new GridPane();
+        Label label = new Label("Add your comment");
+        comment = new TextField();
+        title = new TextField();
+        title.setPromptText("title");
+        comment.setPromptText("comment");
+        gridPane.setVgap(20);
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.add(label, 0, 0);
+        gridPane.add(title, 0, 1);
+        gridPane.add(comment, 0, 2);
+        gridPane.add(submit, 0, 3);
+
+        commentStage = new Stage();
+        Scene scene = new Scene(gridPane, 300, 180);
+
+        commentStage.setScene(scene);
+        commentStage.initModality(Modality.APPLICATION_MODAL);
+        commentStage.show();
+        submitComment();
+    }
+
+    private void submitComment() {
+        submit.setOnAction(event -> {
+            if (title.getText().isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, commentStage, "Error", "Fill the title!");
+                return;
+            }
+            if (comment.getText().isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, commentStage, "Error", "Fill the comment!");
+                return;
+            }
+            Comment newComment = new Comment(true, customer, title.getText(), comment.getText());
+//            if (customer.isProductBought(product)) {
+//                newComment.setBought(true);
+//            }
+            product.addComment(newComment);
+            commentStage.close();
+        });
+    }
+
+    public void showAlert(Alert.AlertType alertType,Stage owner, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.initOwner(owner);
+        alert.show();
+    }
+
+    private void setProductInfo() {
+        productName.setText(product.getName());
+        productName.setFont(Font.font("Verdana", FontWeight.BOLD,20));
+
+        properties.setText(getProperties());
+        properties.setFont(Font.font("Verdana", 16));
+    }
+
+    private String getProperties() {
+        String info = "";
+        for (String key : product.getProperties().keySet()) {
+            info += key + " :" + product.getProperties().get(key) + "\n";
+        }
+        info += product.getDescription() != null ? product.getDescription() : "";
+        return info;
+    }
+
+    private EventHandler<ActionEvent> addCommentEvent() {
+        return event -> addComment();
+    }
+
+    private EventHandler<MouseEvent> previousSeller() {
+        return event -> {
+            if (sellerCards.indexOf(currentCard) != 0) {
+                forthButton.setOpacity(1);
+                sellerCardBase.getChildren().remove(0, 1);
+                sellerCardBase.getChildren().add(sellerCards.get(sellerCards.indexOf(currentCard) - 1));
+                currentCard = sellerCards.get(sellerCards.indexOf(currentCard) - 1);
+                if (sellerCards.indexOf(currentCard) == 0) {
+                    backButton.setOpacity(0.2);
+                }
+            }
+        };
+    }
+
+    private EventHandler<MouseEvent> nextSeller() {
+        return event -> {
+            if (sellerCards.indexOf(currentCard) != sellerCards.size() - 1) {
+                backButton.setOpacity(1);
+                sellerCardBase.getChildren().remove(0, 1);
+                sellerCardBase.getChildren().add(sellerCards.get(sellerCards.indexOf(currentCard) + 1));
+                currentCard = sellerCards.get(sellerCards.indexOf(currentCard) + 1);
+                if (sellerCards.indexOf(currentCard) == sellerCards.size() - 1) {
+                    forthButton.setOpacity(0.2);
+                }
+            }
+        };
+    }
+
+    private void checkBackAndForth() {
+        backButton.addEventHandler(MouseEvent.MOUSE_CLICKED, previousSeller());
+        forthButton.addEventHandler(MouseEvent.MOUSE_CLICKED, nextSeller());
+    }
+
+    private void setSellerCards() {
+        for (Salesperson seller : ProductController.getInstance().getProductsSellers(product)) {
+            SellerInList sellerCard = new SellerInList(seller, product);
+            FXMLLoader loader = new FXMLLoader(ProductMenu.class.getResource("/fxml/sellerInList.fxml"));
+            loader.setController(sellerCard);
+            Parent parent = null;
+            try {
+                parent = loader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            sellerCards.add(parent);
+        }
+
+
+    }
+
+    private void zoomImage() {
+        double width = productImage.getImage().getWidth();
+        double height = productImage.getImage().getHeight();
+
+        productImage.setPreserveRatio(true);
+        reset(productImage, width, height);
+
+        ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
+
+        productImage.setOnMousePressed(e -> {
+            Point2D mousePress = imageViewToImage(productImage, new Point2D(e.getX(), e.getY()));
+            mouseDown.set(mousePress);
+        });
+
+        productImage.setOnMouseDragged(e -> {
+            Point2D dragPoint = imageViewToImage(productImage, new Point2D(e.getX(), e.getY()));
+            shift(productImage, dragPoint.subtract(mouseDown.get()));
+            mouseDown.set(imageViewToImage(productImage, new Point2D(e.getX(), e.getY())));
+        });
+
+        productImage.setOnScroll(e -> {
+            double delta = e.getDeltaY();
+            Rectangle2D viewport = productImage.getViewport();
+
+            double scale = clamp(Math.pow(1.01, delta),
+
+                    // don't scale so we're zoomed in to fewer than MIN_PIXELS in any direction:
+                    Math.min(10 / viewport.getWidth(), 10 / viewport.getHeight()),
+
+                    // don't scale so that we're bigger than image dimensions:
+                    Math.max(width / viewport.getWidth(), height / viewport.getHeight())
+
+            );
+
+            Point2D mouse = imageViewToImage(productImage, new Point2D(e.getX(), e.getY()));
+
+            double newWidth = viewport.getWidth() * scale;
+            double newHeight = viewport.getHeight() * scale;
+            double newMinX = clamp(mouse.getX() - (mouse.getX() - viewport.getMinX()) * scale,
+                    0, width - newWidth);
+            double newMinY = clamp(mouse.getY() - (mouse.getY() - viewport.getMinY()) * scale,
+                    0, height - newHeight);
+
+            productImage.setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
+        });
+
+        productImage.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                reset(productImage, width, height);
+            }
+        });
+
+    }
+
+    private void reset(ImageView imageView, double width, double height) {
+        imageView.setViewport(new Rectangle2D(0, 0, width, height));
+    }
+
+    private void shift(ImageView imageView, Point2D delta) {
+        Rectangle2D viewport = imageView.getViewport();
+
+        double width = imageView.getImage().getWidth() ;
+        double height = imageView.getImage().getHeight() ;
+
+        double maxX = width - viewport.getWidth();
+        double maxY = height - viewport.getHeight();
+
+        double minX = clamp(viewport.getMinX() - delta.getX(), 0, maxX);
+        double minY = clamp(viewport.getMinY() - delta.getY(), 0, maxY);
+
+        imageView.setViewport(new Rectangle2D(minX, minY, viewport.getWidth(), viewport.getHeight()));
+    }
+
+    private double clamp(double value, double min, double max) {
+        if (value < min)
+            return min;
+        return Math.min(value, max);
+    }
+
+    private Point2D imageViewToImage(ImageView imageView, Point2D imageViewCoordinates) {
+        double xProportion = imageViewCoordinates.getX() / imageView.getBoundsInLocal().getWidth();
+        double yProportion = imageViewCoordinates.getY() / imageView.getBoundsInLocal().getHeight();
+
+        Rectangle2D viewport = imageView.getViewport();
+        return new Point2D(
+                viewport.getMinX() + xProportion * viewport.getWidth(),
+                viewport.getMinY() + yProportion * viewport.getHeight());
+    }
+
+
+}

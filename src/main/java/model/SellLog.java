@@ -54,6 +54,10 @@ public class SellLog {
         return (Customer) PersonController.getInstance().getPersonByUsername(buyerUsername);
     }
 
+    public LocalDateTime getDate () {
+        return date;
+    }
+
     public boolean isTransmitted() {
         return transmitted;
     }

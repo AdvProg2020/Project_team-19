@@ -59,4 +59,8 @@ public class Comment {
     public void setBought(boolean bought) {
         isBought = bought;
     }
+
+    public String getCommenterUsername () {
+        return commenterUsername;
+    }
 }

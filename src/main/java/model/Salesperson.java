@@ -5,6 +5,7 @@ import controller.Database;
 import controller.DiscountController;
 import controller.ProductController;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -28,6 +29,7 @@ public class Salesperson extends Person {
         offeredProducts.get(sellLog.getProduct().getID()).setAmount(offeredProducts.get(sellLog.getProduct().getID()).getAmount() - sellLog.getCount());
         setCredit(credit + sellLog.getDeliveredAmount());
         sellLogs.add(sellLog);
+        Database.saveToFile(this, Database.createPath("salespersons", personInfo.get("username")));
     }
 
     public double getDiscountPrice(Product product) {
@@ -56,6 +58,15 @@ public class Salesperson extends Person {
 
     public ArrayList<SellLog> getSellLogs() {
         return sellLogs;
+    }
+
+    public SellLog getSellLogAtTime ( String dateTime ) {
+        for (SellLog sellLog : sellLogs) {
+            if ( sellLog.getDate ( ).toString ( ).equals ( dateTime ) ) {
+                return sellLog;
+            }
+        }
+        return null;
     }
 
     public Discount getDiscountWithIdSpecificSalesperson(String id) {

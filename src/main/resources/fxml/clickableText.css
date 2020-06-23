@@ -1,0 +1,7 @@
+.registerBtn {
+    -fx-text-fill: black;
+}
+
+.registerBtn:hover {
+    -fx-text-fill: hotpink;
+}

@@ -2,6 +2,7 @@ package model;
 
 import controller.CategoryController;
 import controller.Database;
+import controller.ProductController;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.io.IOException;
@@ -25,6 +26,10 @@ public class Product {
     private double averagePrice;
     private double leastPrice;
     private ArrayList<Comment> comments;
+
+
+    private int buyersNum;
+    private int totalScore;
 
     public Product(String name, String brand, String category,
                    HashMap<String, String> properties) {
@@ -57,10 +62,6 @@ public class Product {
         return name;
     }
 
-    public double getAverageScore() {
-        return averageScore;
-    }
-
     public String getBrand() {
         return brand;
     }
@@ -75,10 +76,6 @@ public class Product {
 
     public ArrayList<Comment> getComments() {
         return comments;
-    }
-
-    public double getAveragePrice() {
-        return averagePrice;
     }
 
     public double getLeastPrice() {
@@ -110,6 +107,25 @@ public class Product {
         this.category = category;
     }
 
+    public void increaseBuyers() {
+        buyersNum += 1;
+    }
+
+    public void increaseTotalScore(int score) {
+        totalScore += score;
+    }
+
+    public double getAveragePrice() {
+        return ProductController.getInstance().getAveragePrice(this);
+    }
+
+    public double getAverageScore() {
+        return buyersNum != 0 ? (double)totalScore / buyersNum : 0;
+    }
+
+    public String getDescription () {
+        return description;
+    }
 
     @Override
     public String toString() { //ToDo ino taqir ddm check knim hmeja ok e

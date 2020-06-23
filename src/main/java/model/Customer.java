@@ -86,6 +86,14 @@ public class Customer extends Person {
         return buyLogs;
     }
 
+    public BuyLog getBuyLogAtTime (String dateTime ) {
+        for (BuyLog buyLog : buyLogs) {
+            if (buyLog.getDate ().toString ().equals ( dateTime ))
+                return buyLog;
+        }
+        return null;
+    }
+
     public void updateHistory() {
 
     }

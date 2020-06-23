@@ -1,6 +1,8 @@
 package model;
 
 import controller.Database;
+import javafx.beans.property.SimpleStringProperty;
+
 import java.util.HashMap;
 
 import static controller.PersonController.allPersons;
@@ -70,4 +72,5 @@ abstract public class Person {
     public String toString() {
         return personInfo.get("username");
     }
+
 }

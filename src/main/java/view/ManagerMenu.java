@@ -36,6 +36,7 @@ public class ManagerMenu extends Menu {
             @Override
             public void execute () {
                 String id;
+                System.out.println ( ProductController.allProducts );
                 System.out.println("Enter product id you want to remove :");
                 id = getValidProductId();
                 if (id.equals(BACK_BUTTON))

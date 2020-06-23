@@ -53,6 +53,26 @@ public class BuyLog {
         return logID;
     }
 
+    public LocalDateTime getDate () {
+        return date;
+    }
+
+    public HashMap < String, ArrayList < String > > getProducts () {
+        return products;
+    }
+
+    public double getPaymentAmount () {
+        return paymentAmount;
+    }
+
+    public double getDiscountCodeAmount () {
+        return discountCodeAmount;
+    }
+
+    public boolean isReachedBuyer () {
+        return reachedBuyer;
+    }
+
     public String getEverythingString () {
         return "Log ID : " + logID + "\n" +
                 "Date : " + date + "\n" +

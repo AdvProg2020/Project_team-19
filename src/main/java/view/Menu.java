@@ -2,9 +2,7 @@ package view;
 
 import controller.CategoryController;
 import controller.ProductController;
-import model.Category;
-import model.Product;
-import model.Salesperson;
+import model.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -244,19 +242,20 @@ public abstract class Menu {
     }
 
     public String getValidCustomer() {
-        boolean check;
+        Person person;
         String input;
-        do {
+        while (true) {
             input = scanner.nextLine();
             if (input.equals(BACK_BUTTON))
                 return input;
-            check = PersonController.getInstance().isLoggedInPersonCustomer();
-            if (!check) {
+//            check = PersonController.getInstance().isLoggedInPersonCustomer();
+            person = PersonController.getInstance ().getPersonByUsername ( input );
+            if ( !(person instanceof Customer) ) {
                 System.out.println("There is no customer with that username. Please enter username again:");
-            }
-
-        } while (!check);
-        return input;
+            } else
+                break;
+        }
+        return person.getUsername ();
     }
 
     public String getValidCategoryName() {

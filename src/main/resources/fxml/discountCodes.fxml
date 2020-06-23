@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.DiscountCodes">
+    <children>
+        <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" onMouseClicked="#back" onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+        <TableView fx:id="tableView" layoutX="-1.0" layoutY="49.0" prefHeight="751.0" prefWidth="800.0">
+            <columns>
+                <TableColumn fx:id="codeColumn" prefWidth="112.79995727539062" text="Code" />
+                <TableColumn fx:id="startColumn" prefWidth="239.40000915527344" text="Start Time" />
+            <TableColumn fx:id="endColumn" prefWidth="249.80001831054688" text="End Time" />
+            <TableColumn fx:id="percentColumn" prefWidth="249.80001831054688" text="Discount Percentage" />
+            <TableColumn fx:id="maxColumn" prefWidth="249.80001831054688" text="Max Discount Amount" />
+            <TableColumn fx:id="countColumn" prefWidth="249.80001831054688" text="Usage Counter" />
+            </columns>
+        </TableView>
+    </children>
+
+</AnchorPane>

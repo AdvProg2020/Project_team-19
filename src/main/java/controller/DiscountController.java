@@ -37,20 +37,17 @@ public class DiscountController {
     public void declineRequestDiscountForEditAndRemove(Discount discount, Salesperson salesperson) {
         discount.setDiscountState(Discount.DiscountState.VERIFIED);
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
-        saveToFile(stock, address.get("stock"));
     }
 
     public void removeDiscount(Salesperson salesperson, Discount discount) {
         salesperson.removeFromDiscounts(discount);
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
-        saveToFile(stock, address.get("stock"));
     }
 
 
     public void addDiscount(Salesperson salesperson, Discount discount) {
         discount.setDiscountState(Discount.DiscountState.VERIFIED);
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
-        saveToFile(stock, address.get("stock"));
     }
 
     public void editDiscount(double discountPercentage, LocalDateTime startTime, LocalDateTime endTime, ArrayList<Product> products, Discount discount, Salesperson salesperson) {
@@ -63,7 +60,6 @@ public class DiscountController {
             salesperson.setProductDiscountState(product, discount);
         }
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
-        saveToFile(stock, address.get("stock"));
     }
 
     public void handleProductsInDiscount(ArrayList<Product> products, ArrayList<Product> chosenProducts, EditType editType) {

@@ -89,7 +89,7 @@ public class CartController {
             if (!customer.checkCredit(customer.getCart().calculateTotalPrice())) {
                 throw new NotEnoughCreditMoney("Your balance is not enough" + "\n" + "Please increase your credit.");
             } else {
-                if(customer.getCart().calculateTotalPrice()>1000000){
+                if(customer.getCart().calculateTotalPrice()>1_000_000){
                     System.out.println("We got that you are rich. Take this discount and show off less.");
                     discountCodeForGoodCustomer(customer);
                 }

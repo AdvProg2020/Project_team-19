@@ -125,7 +125,6 @@ public class RequestController {
     private void saveFileChangesForProductBeforeSendingRequest(Product product, Salesperson salesperson) {
         saveToFile(product, createPath("products", product.getID()));
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
-        saveToFile(stock, address.get("stock"));
     }
 
     public void editProductRequest(String price, String amount, Salesperson salesperson, String productID

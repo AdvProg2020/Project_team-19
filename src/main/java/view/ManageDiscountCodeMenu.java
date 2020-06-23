@@ -89,10 +89,12 @@ public class ManageDiscountCodeMenu extends Menu {
                 counter = Integer.parseInt(input);
                 System.out.println("5. Give To Customer:");
                 System.out.println("Enter \"..\" to continue.");
-                do {
-                input = getValidCustomer();
-                customers.add(PersonController.getInstance().getPersonByUsername(input));
-                }while (!input.equals(BACK_BUTTON));
+                while ( true ) {
+                    input = getValidCustomer();
+                    if (input.equals ( BACK_BUTTON ))
+                        break;
+                    customers.add(PersonController.getInstance().getPersonByUsername(input));
+                }
                 DiscountCodeController.getInstance().addNewDiscountCode(start,end,percentage,max,counter,customers);
                 System.out.println("Successful.");
             }
