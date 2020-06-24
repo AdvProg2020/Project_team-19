@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="content" prefHeight="500.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.RegisterMenuController">
+   <children>
+      <ScrollPane hbarPolicy="NEVER" prefHeight="500.0" prefWidth="400.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="700.0" prefWidth="500.0">
+               <children>
+<!--                   <FontAwesomeIcon glyphName="CLOSE" layoutX="362.0" layoutY="30.0" onMouseClicked="#closeApp" strokeType="OUTSIDE" strokeWidth="0.0" text="" />-->
+                   <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" onMouseClicked="#back" onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+                   <Label layoutX="169.0" layoutY="53.0" text="Register">
+                       <font>
+                           <Font name="Ebrima" size="17.0" />
+                       </font>
+                   </Label>
+                   <TextField fx:id="username" layoutX="56.0" layoutY="136.0" prefHeight="26.0" prefWidth="282.0" promptText="Username" stylesheets="@textField.css" />
+                   <PasswordField fx:id="password" layoutX="56.0" layoutY="185.0" prefHeight="26.0" prefWidth="282.0" promptText="Password" stylesheets="@textField.css" />
+                  <ChoiceBox fx:id="type" layoutX="56.0" layoutY="234.0" prefHeight="26.0" prefWidth="282.0" />
+                   <TextField fx:id="firstName" layoutX="56.0" layoutY="283.0" prefHeight="26.0" prefWidth="282.0" promptText="First Name" stylesheets="@textField.css" />
+                   <TextField fx:id="lastName" layoutX="56.0" layoutY="332.0" prefHeight="26.0" prefWidth="282.0" promptText="Last Name" stylesheets="@textField.css" />
+                  <TextField fx:id="email" layoutX="56.0" layoutY="381.0" prefHeight="26.0" prefWidth="282.0" promptText="Email" stylesheets="@textField.css" />
+                  <TextField fx:id="phone" layoutX="56.0" layoutY="430.0" prefHeight="26.0" prefWidth="282.0" promptText="Phone" stylesheets="@textField.css" />
+                   <Button fx:id="registerBtn" defaultButton="true" layoutX="56.0" layoutY="479.0" mnemonicParsing="false" onAction="#registerBtnAction" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Register" />
+                  <TextField fx:id="company" layoutX="56.0" layoutY="479.0" prefHeight="26.0" prefWidth="282.0" promptText="Company" stylesheets="@textField.css" visible="false" />
+                  <TextField fx:id="darSurateVjud" layoutX="56.0" layoutY="528.0" prefHeight="26.0" prefWidth="282.0" promptText="Dar Surate Vjud Sayere Moshakhasat" stylesheets="@textField.css" visible="false" />
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

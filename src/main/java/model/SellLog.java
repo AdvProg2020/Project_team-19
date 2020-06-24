@@ -1,13 +1,10 @@
 package model;
 
-import controller.Database;
 import controller.PersonController;
 import controller.ProductController;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 public class SellLog {
     private String logID;
@@ -52,6 +49,10 @@ public class SellLog {
 
     public Customer getBuyer() {
         return (Customer) PersonController.getInstance().getPersonByUsername(buyerUsername);
+    }
+
+    public LocalDateTime getDate () {
+        return date;
     }
 
     public boolean isTransmitted() {

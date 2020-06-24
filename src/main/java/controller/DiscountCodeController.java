@@ -5,6 +5,7 @@ import model.Customer;
 import model.DiscountCode;
 import model.Person;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -21,6 +22,12 @@ public class DiscountCodeController {
             single_instance = new DiscountCodeController();
 
         return single_instance;
+    }
+
+    public void initializeDiscountCodes() {
+        for (File file : Database.returnListOfFiles(Database.address.get("discount_codes"))) {
+            allDiscountCodes.add((DiscountCode) Database.read(DiscountCode.class, file.getAbsolutePath()));
+        }
     }
 
     public ArrayList<DiscountCode> getAllDiscountCodes() {
@@ -58,12 +65,12 @@ public class DiscountCodeController {
         for (Person person : people) {
             if(((Customer) person).getDiscountCodes().containsKey(discountCode)){
                 ((Customer) person).getDiscountCodes().put(discountCode,(((Customer) person).getDiscountCodes().get(discountCode)+useCounter));
-            }else
+            } else
             ((Customer) person).getDiscountCodes().put(discountCode,useCounter);
             Database.saveToFile(person,Database.createPath("customers",person.getUsername()));
         }
         allDiscountCodes.add(discountCode);
-        Database.saveToFile(allDiscountCodes,Database.createPath("discount_codes",discountCode.getCode()));
+        Database.saveToFile(discountCode, Database.createPath("discount_codes",discountCode.getCode()));
         return discountCode;
     }
 

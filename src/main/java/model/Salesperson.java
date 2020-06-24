@@ -58,6 +58,15 @@ public class Salesperson extends Person {
         return sellLogs;
     }
 
+    public SellLog getSellLogAtTime ( String dateTime ) {
+        for (SellLog sellLog : sellLogs) {
+            if ( sellLog.getDate ( ).toString ( ).equals ( dateTime ) ) {
+                return sellLog;
+            }
+        }
+        return null;
+    }
+
     public Discount getDiscountWithIdSpecificSalesperson(String id) {
         for (Discount discount : discounts) {
             if (discount.getDiscountID().equals(id))

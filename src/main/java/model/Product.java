@@ -5,7 +5,6 @@ import controller.Database;
 import controller.ProductController;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -24,7 +23,7 @@ public class Product {
     private String brand;
     private String category;
     private String description;
-    private String mediaPath = "";
+    private String mediaURI = "";
     private double averageScore;
     private double averagePrice;
     private double leastPrice;
@@ -47,15 +46,15 @@ public class Product {
     }
 
     public boolean hasMedia() {
-        return mediaPath.length() != 0;
+        return mediaURI.length() != 0;
     }
 
-    public String getMediaPath() {
-        return mediaPath;
+    public String getMediaURI() {
+        return mediaURI;
     }
 
-    public void setMediaPath(String path) {
-        mediaPath = path;
+    public void setMediaURI(String path) {
+        mediaURI = path;
     }
 
     public void increaseBuyers() {

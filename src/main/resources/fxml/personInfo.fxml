@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.PersonInfoController">
+    <children>
+        <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" onMouseClicked="#back" onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+      <TableView fx:id="tableView" layoutX="42.0" layoutY="54.0" prefHeight="350.0" prefWidth="700.0">
+        <columns>
+          <TableColumn fx:id="fieldColumn" prefWidth="342.59998321533203" text="Field" />
+            <TableColumn fx:id="valueColumn" minWidth="0.0" prefWidth="357.3999328613281" text="Value" />
+        </columns>
+      </TableView>
+        <Button layoutX="251.0" layoutY="436.0" mnemonicParsing="false" onAction="#changeInfo" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Change Info" />
+    </children>
+
+</AnchorPane>

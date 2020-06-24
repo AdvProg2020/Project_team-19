@@ -1,14 +1,10 @@
 package model;
 
-import controller.Database;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.UUID;
 
 public class BuyLog {
     private String logID;
@@ -51,6 +47,26 @@ public class BuyLog {
 
     public String getLogID () {
         return logID;
+    }
+
+    public LocalDateTime getDate () {
+        return date;
+    }
+
+    public HashMap < String, ArrayList < String > > getProducts () {
+        return products;
+    }
+
+    public double getPaymentAmount () {
+        return paymentAmount;
+    }
+
+    public double getDiscountCodeAmount () {
+        return discountCodeAmount;
+    }
+
+    public boolean isReachedBuyer () {
+        return reachedBuyer;
     }
 
     public String getEverythingString () {
