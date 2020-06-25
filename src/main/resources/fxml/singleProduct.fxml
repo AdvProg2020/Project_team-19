@@ -8,13 +8,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
-
 <ScrollPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <content>
       <VBox prefHeight="632.0" prefWidth="770.0" spacing="20.0">
          <children>
-            <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+<!--            <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />-->
             <HBox prefHeight="149.0" prefWidth="753.0" spacing="20.0">
                <children>
                   <StackPane prefHeight="150.0" prefWidth="200.0">
@@ -103,12 +101,12 @@
                </padding>
             </GridPane>
             <Separator prefWidth="200.0" />
-            <Button fx:id="showComments" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" style="-fx-border-color: black; -fx-border-radius: 15; -fx-border-width: 3; -fx-background-color: #ccf5ff; -fx-background-radius: 15;" text="Show comments">
+            <Button fx:id="showComments" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="btn" stylesheets="@button.css" text="Show comments">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="addComment" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #ccf5ff; -fx-background-radius: 15; -fx-border-color: black; -fx-border-radius: 15; -fx-border-width: 3;" text="Add comment">
+            <Button fx:id="addComment" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="btn" stylesheets="@button.css" text="Add comment">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

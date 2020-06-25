@@ -2,6 +2,7 @@ package fxmlController;
 
 import controller.CategoryController;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,11 +22,14 @@ import view.App;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static view.App.getFXMLLoader;
+
 public class CategoryCard implements Initializable {
     private Category category;
     @FXML private ImageView removeIcon;
     @FXML private ImageView editIcon;
     @FXML private Label categoryName;
+    @FXML private ImageView childArrow;
 
 
     public CategoryCard(Category category) {
@@ -36,13 +40,22 @@ public class CategoryCard implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         categoryName.setText(category.getName());
         categoryName.setFont(Font.font("Verdana", 10));
-
+        if (category.getParent()!=null)
+            childArrow.setVisible(true);
         editIcon.setOnMouseClicked(event -> editIcon());
         removeIcon.setOnMouseClicked(event -> removeIcon());
     }
 
     private void editIcon() {
-        //todo
+        try {
+            FXMLLoader loader = getFXMLLoader("addCategory");
+            AddCategory addCategory = new AddCategory(category);
+            loader.setController(addCategory);
+            App.currentScene = new Scene(loader.load());
+            App.currentStage.setScene ( App.currentScene );
+        } catch (Exception e) {
+            App.error(e.getMessage());
+        }
     }
 
     private void removeIcon() {

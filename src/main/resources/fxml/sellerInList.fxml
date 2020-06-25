@@ -40,7 +40,7 @@
       <Separator prefWidth="200.0" />
       <HBox prefHeight="62.0" prefWidth="359.0" spacing="80.0">
          <children>
-            <Button fx:id="addToCart" mnemonicParsing="false" prefHeight="28.0" prefWidth="177.0" style="-fx-background-color: #ccf5ff; -fx-background-radius: 15; -fx-border-color: black; -fx-border-radius: 15; -fx-border-width: 1;" text="Add to cart">
+            <Button fx:id="addToCart" mnemonicParsing="false" prefHeight="28.0" prefWidth="177.0" styleClass="btn" stylesheets="@button.css" text="Add to cart">
                <font>
                   <Font name="Verdana" size="15.0" />
                </font>

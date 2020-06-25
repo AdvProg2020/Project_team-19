@@ -24,11 +24,26 @@
           <RowConstraints maxHeight="361.0" minHeight="10.0" prefHeight="299.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Pagination fx:id="categoryCardsBase" prefHeight="299.0" prefWidth="774.0" GridPane.rowIndex="2" />
-            <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <Pagination fx:id="categoryCardsBase" prefHeight="299.0" prefWidth="774.0" stylesheets="@pagination.css" GridPane.rowIndex="2" />
+            <GridPane>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="384.0" minWidth="10.0" prefWidth="127.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="692.0" minWidth="10.0" prefWidth="178.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="692.0" minWidth="10.0" prefWidth="369.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="692.0" minWidth="10.0" prefWidth="71.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="692.0" minWidth="10.0" prefWidth="62.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
                <children>
+                  <TextField fx:id="propertyField" disable="true" prefHeight="35.0" prefWidth="453.0" promptText="write property" stylesheets="@textField.css" GridPane.columnIndex="1">
+                     <font>
+                        <Font name="Verdana" size="13.0" />
+                     </font>
+                  </TextField>
 <!--                  <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />-->
-                  <ComboBox fx:id="filter" prefHeight="35.0" prefWidth="86.0" promptText="filter" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+                  <ComboBox fx:id="filterCombo" prefHeight="35.0" prefWidth="86.0" promptText="filter" stylesheets="@combo.css" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
                      <GridPane.margin>
                         <Insets left="20.0" />
                      </GridPane.margin>
@@ -36,19 +51,21 @@
                         <Insets left="20.0" top="20.0" />
                      </VBox.margin>
                   </ComboBox>
-                  <TextField fx:id="propertyField" disable="true" prefHeight="35.0" prefWidth="148.0" promptText="write property">
-                     <font>
-                        <Font name="Verdana" size="13.0" />
-                     </font>
-                  </TextField>
+                  <ImageView fx:id="switchIcon" fitHeight="55.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView fx:id="cartIcon" fitHeight="41.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER">
+                     <image>
+                        <Image url="@../images/cart.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
                </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <padding>
-                  <Insets left="20.0" />
-               </padding>
-            </HBox>
+            </GridPane>
          </children>
       </GridPane>
    </content>

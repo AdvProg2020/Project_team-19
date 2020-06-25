@@ -111,6 +111,10 @@ public class Salesperson extends Person {
         offeredProducts.remove(offeredProduct.getID());
     }
 
+    public double getDiscountPercentage(Product product) {
+        return offeredProducts.get(product.getID()).getDiscount().getDiscountPercentage();
+    }
+
     public HashMap<Product, ProductState> getOfferedProducts() {
         HashMap<Product, ProductState> products = new HashMap<>();
         for (String id : offeredProducts.keySet()) {

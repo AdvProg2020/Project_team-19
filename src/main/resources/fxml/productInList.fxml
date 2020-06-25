@@ -23,6 +23,11 @@
                   <Image url="@../images/finished.png" />
                </image>
             </ImageView>
+            <ImageView fx:id="deleteProduct" fitHeight="40.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true" visible="false" StackPane.alignment="TOP_LEFT">
+               <image>
+                  <Image url="@../images/filled-trash.png" />
+               </image>
+            </ImageView>
          </children>
       </StackPane>
       <Label fx:id="productNameLabel" alignment="CENTER" prefHeight="27.0" prefWidth="134.0" text="Label" />

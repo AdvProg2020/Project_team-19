@@ -5,8 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import model.Comment;
 import model.Customer;
@@ -22,12 +20,14 @@ import java.util.ResourceBundle;
 public class ShowComments implements Initializable {
     private ArrayList<Parent> commentCards;
     private Product product;
+    private boolean isDiscount;
     @FXML
     private VBox cardBase;
     @FXML
     private FontAwesomeIcon back;
 
-    public ShowComments(Product product) {
+    public ShowComments(Product product, boolean isDiscount) {
+        this.isDiscount = isDiscount;
         this.product = product;
     }
 
@@ -36,7 +36,7 @@ public class ShowComments implements Initializable {
         masalan();
         setCommentCards();
         setCommentCardBase();
-        ProductMenu productMenu = new ProductMenu(product);
+        ProductMenu productMenu = new ProductMenu(product, isDiscount);
         FXMLLoader loader = new FXMLLoader(ShowComments.class.getResource("/fxml/singleProduct.fxml"));
         loader.setController(productMenu);
         back.setOnMouseClicked(event -> App.setRoot(loader));

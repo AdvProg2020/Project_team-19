@@ -5,8 +5,10 @@ import controller.PersonController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
+import model.Salesperson;
 import view.App;
 
 import java.io.IOException;
@@ -26,7 +28,11 @@ public class SalespersonMenuController {
 
     @FXML
     void availableProd ( ActionEvent event ) {
-
+        Salesperson salesperson = (Salesperson)PersonController.getInstance().getLoggedInPerson();
+        AllProductsForSeller allProductsForSeller = new AllProductsForSeller(salesperson, true);
+        FXMLLoader loader = new FXMLLoader(SalespersonMenuController.class.getResource("/fxml/allProductsForSeller.fxml"));
+        loader.setController(allProductsForSeller);
+        App.setRoot(loader);
     }
 
     @FXML
@@ -36,7 +42,8 @@ public class SalespersonMenuController {
 
     @FXML
     void discounts ( ActionEvent event ) {
-
+        FXMLLoader loader = new FXMLLoader(SalespersonMenuController.class.getResource("/fxml/allDiscounts.fxml"));
+        App.setRoot(loader);
     }
 
     @FXML
@@ -53,7 +60,11 @@ public class SalespersonMenuController {
 
     @FXML
     void prod ( ActionEvent event ) {
-
+        Salesperson salesperson = (Salesperson)PersonController.getInstance().getLoggedInPerson();
+        AllProductsForSeller allProductsForSeller = new AllProductsForSeller(salesperson, false);
+        FXMLLoader loader = new FXMLLoader(SalespersonMenuController.class.getResource("/fxml/allProductsForSeller.fxml"));
+        loader.setController(allProductsForSeller);
+        App.setRoot(loader);
     }
 
     @FXML

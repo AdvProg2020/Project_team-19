@@ -34,6 +34,10 @@ public class Customer extends Person {
         return false;
     }
 
+    public ArrayList<String> getDiscountCodesList() {
+        return new ArrayList<>(discountCodes.keySet());
+    }
+
     public Cart getCart() {
         return cart;
     }

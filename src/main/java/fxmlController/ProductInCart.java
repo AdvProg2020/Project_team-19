@@ -24,17 +24,18 @@ public class ProductInCart implements Initializable {
     @FXML private Label countLabel;
     @FXML private Label priceLabel;
     @FXML private ImageView decrease;
+    private boolean productIsInCart;
 
     public ProductInCart(ProductStateInCart productStateInCart) {
         this.productStateInCart = productStateInCart;
+        productIsInCart = true;
     }
 
     private void decreaseOnClick() {
-        productStateInCart.setCount(productStateInCart.getCount() - 1);
-        if (productStateInCart.getCount() == 0) {
-            //remove this cart
-        }
         if (productStateInCart.getCount() == 1) {
+            productIsInCart = false;
+        }
+        if (productStateInCart.getCount()-1 == 1) {
             Image image = new Image("/images/filled-trash.png");
             decrease.setImage(image);
         }
@@ -45,9 +46,8 @@ public class ProductInCart implements Initializable {
     private void increaseOnClick() {
         Image image = new Image("/images/icons8-minus-30.png");
         decrease.setImage(image);
-        productStateInCart.setCount(productStateInCart.getCount() + 1);
-        countLabel.setText(String.valueOf(productStateInCart.getCount()));
         CartController.getInstance().setProductCount(productStateInCart.getProduct(), 1, productStateInCart.getSalesperson());
+        countLabel.setText(String.valueOf(productStateInCart.getCount()));
     }
 
     @Override
@@ -61,5 +61,9 @@ public class ProductInCart implements Initializable {
         countLabel.setText(String.valueOf(productStateInCart.getCount()));
         decrease.setOnMouseClicked(event -> decreaseOnClick());
         increase.setOnMouseClicked(event -> increaseOnClick());
+    }
+
+    public boolean isProductInCart() {
+        return productIsInCart;
     }
 }

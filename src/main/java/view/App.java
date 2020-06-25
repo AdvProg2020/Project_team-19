@@ -24,14 +24,14 @@ public class App extends Application {
     public static Scene currentScene;
     public static Stage currentStage;
     public static Scene firstScene; //ToDo feilan injow mizarimesh
-    private double xOffset,yOffset;
+    private double xOffset, yOffset;
 
-    public static void main ( String[] args ) {
-        launch ( args );
+    public static void main(String[] args) {
+        launch(args);
     }
 
     @Override
-    public void start ( Stage primaryStage ) throws IOException {
+    public void start(Stage primaryStage) throws IOException {
 //        initializer();
 //        PersonController.getInstance().login("solale");
 //        //initialLogIn();
@@ -45,14 +45,14 @@ public class App extends Application {
 //        primaryStage.show();
 //        //mainProducts(primaryStage);
 
-        App.currentStage = primaryStage ;
+        App.currentStage = primaryStage;
 
-        AnchorPane root = getFXMLLoader ("mainMenu").load ();
-        root.setOnMouseClicked ( event -> System.out.println ( event.getX () + " " + event.getY () ) );
+        AnchorPane root = getFXMLLoader("mainMenu").load();
+        root.setOnMouseClicked(event -> System.out.println(event.getX() + " " + event.getY()));
 
-        currentScene = new Scene ( root );
-        primaryStage.setTitle ( "Bruh" );
-        primaryStage.setScene( currentScene );
+        currentScene = new Scene(root);
+        primaryStage.setTitle("Bruh");
+        primaryStage.setScene(currentScene);
 //        primaryStage.initStyle( StageStyle.UNDECORATED);
 //        primaryStage.setResizable ( false ); //felan
 //        root.setOnMousePressed( event -> {
@@ -66,17 +66,16 @@ public class App extends Application {
 
         primaryStage.show();
 
-        mainRun ();
+        mainRun();
     }
 
-    public void initialLogIn(){
-        CartController.getInstance().addProduct(ProductController.allProducts.get(0),ProductController.getInstance().getProductsOfProduct(ProductController.allProducts.get(0)).get(0).getSalesperson());
-        CartController.getInstance().addProduct(ProductController.allProducts.get(1),ProductController.getInstance().getProductsOfProduct(ProductController.allProducts.get(1)).get(0).getSalesperson());
+    public void initialLogIn() {
+        CartController.getInstance().addProduct(ProductController.allProducts.get(0), ProductController.getInstance().getProductsOfProduct(ProductController.allProducts.get(0)).get(0).getSalesperson());
+        CartController.getInstance().addProduct(ProductController.allProducts.get(1), ProductController.getInstance().getProductsOfProduct(ProductController.allProducts.get(1)).get(0).getSalesperson());
     }
 
 
-
-    private void mainProducts(Stage primaryStage) throws IOException{
+    private void mainProducts(Stage primaryStage) throws IOException {
         initializer();
         HashSet<String> p = new HashSet<>();
         p.add("color");
@@ -84,20 +83,20 @@ public class App extends Application {
         Category category = new Category("labaniat", null, p);
 //        Category category1 = new Category("dodols", null, new HashSet<>());
 //        Product product = new Product("name", "brand", category.getName(), new HashMap<>());
-        HashMap<String ,String> property = new HashMap<>();
+        HashMap<String, String> property = new HashMap<>();
         property.put("color", "white");
         property.put("size", "big");
-        Product product2 = new Product("panir","lighvan", category.getName(), property);
+        Product product2 = new Product("panir", "lighvan", category.getName(), property);
 //        Product product1 = new Product("dol", "dolhub", category1.getName(), new HashMap<>());
 //        category.addProduct(product);
-      category.addProduct(product2);
+        category.addProduct(product2);
 //        category1.addProduct(product1);
-       HashMap<String, String> info = new HashMap<>();
+        HashMap<String, String> info = new HashMap<>();
         info.put("username", "jalalii");
         info.put("color", "yellow");
-       info.put("dick", "golden");
+        info.put("dick", "golden");
         Salesperson salesperson = new Salesperson(info);
-       //ProductMenu.customer = new Customer(info);
+        //ProductMenu.customer = new Customer(info);
 //        Salesperson seller2 = new Salesperson(info);
 //        Salesperson seller3 = new Salesperson(info);
         salesperson.addToOfferedProducts(product2, 4, 100);
@@ -123,39 +122,39 @@ public class App extends Application {
         Database.saveToFile(salesperson, Database.createPath("salespersons", salesperson.getUsername()));
         Database.saveToFile(CategoryController.rootCategories, Database.address.get("root_categories"));
         Parent parent = FXMLLoader.load(App.class.getResource("/fxml/mainProductsMenu.fxml"));
-        App.currentStage = primaryStage ;
-        currentScene = new Scene ( parent, 800, 500 );
-        primaryStage.setTitle ( "Bruh" );
-        primaryStage.setScene( currentScene );
-        primaryStage.setResizable ( false ); //felan
+        App.currentStage = primaryStage;
+        currentScene = new Scene(parent, 800, 500);
+        primaryStage.setTitle("Bruh");
+        primaryStage.setScene(currentScene);
+        primaryStage.setResizable(false); //felan
         primaryStage.show();
     }
 
-    private void mainRun () {
-        initializer ();
-        App.manageDiscountCodeTimer ();
-        App.manageDiscountTimer ();
-        mainMenu = new MainMenu ( null );
-        userMenu =  new UserMenu(mainMenu);
+    private void mainRun() {
+        initializer();
+        App.manageDiscountCodeTimer();
+        App.manageDiscountTimer();
+        mainMenu = new MainMenu(null);
+        userMenu = new UserMenu(mainMenu);
     }
 
-    public static void manageDiscountCodeTimer(){
+    public static void manageDiscountCodeTimer() {
         Timer timer = new Timer();
-        TimerTask task = new DiscountCodeTimer ();
-        timer.schedule(task,60000);
+        TimerTask task = new DiscountCodeTimer();
+        timer.schedule(task, 60000);
     }
 
-    public static void manageDiscountTimer(){
+    public static void manageDiscountTimer() {
         Timer timer = new Timer();
-        TimerTask task = new DiscountTimer ();
-        timer.schedule(task,60000);
+        TimerTask task = new DiscountTimer();
+        timer.schedule(task, 60000);
     }
 
     private void allProducts(Stage primaryStage) throws IOException {
         initializer();
         Category category = new Category("labaniat", null, new HashSet<>());
         Product product = new Product("name", "brand", category.getName(), new HashMap<>());
-        Product product2 = new Product("panir","lighvan", category.getName(), new HashMap<>());
+        Product product2 = new Product("panir", "lighvan", category.getName(), new HashMap<>());
         category.addProduct(product);
         category.addProduct(product2);
         HashMap<String, String> info = new HashMap<>();
@@ -168,7 +167,7 @@ public class App extends Application {
         salesperson.addToOfferedProducts(product, 4, 100);
         seller2.addToOfferedProducts(product, 5, 120);
         seller3.addToOfferedProducts(product, 7, 1000);
-        seller3.addToOfferedProducts(product2, 6 , 10);
+        seller3.addToOfferedProducts(product2, 6, 10);
         ArrayList<Salesperson> sellers = new ArrayList<>();
         product.setProperties(info);
         product2.setProperties(info);
@@ -181,20 +180,20 @@ public class App extends Application {
         ProductController.stock.put(product2, sellers2);
         product.setAverageScore(3.5);
         product2.setAverageScore(2);
-        ProductsInCategory apm = new ProductsInCategory(category);
+        ProductsInCategory apm = new ProductsInCategory(category, false);
         FXMLLoader loader = new FXMLLoader(App.class.getResource("/fxml/productsInCategory.fxml"));
         loader.setController(apm);
         Parent parent1 = loader.load();
 
-        App.currentStage = primaryStage ;
-        currentScene = new Scene ( parent1, 800, 500 );
-        primaryStage.setTitle ( "Bruh" );
-        primaryStage.setScene( currentScene );
-        primaryStage.setResizable ( false ); //felan
+        App.currentStage = primaryStage;
+        currentScene = new Scene(parent1, 800, 500);
+        primaryStage.setTitle("Bruh");
+        primaryStage.setScene(currentScene);
+        primaryStage.setResizable(false); //felan
         primaryStage.show();
     }
 
-    public void productMenu(Stage primaryStage) throws IOException{
+    public void productMenu(Stage primaryStage) throws IOException {
         initializer();
         Product product = new Product("name", "brand", "panir", new HashMap<>());
         HashMap<String, String> info = new HashMap<>();
@@ -213,65 +212,74 @@ public class App extends Application {
         sellers.add(seller2);
         sellers.add(seller3);
         ProductController.stock.put(product, sellers);
-        ProductMenu pM = new ProductMenu(product);
+        ProductMenu pM = new ProductMenu(product, false);
         FXMLLoader loader = new FXMLLoader(App.class.getResource("/fxml/singleProduct.fxml"));
 
         loader.setController(pM);
         Parent parent1 = loader.load();
 
-        App.currentStage = primaryStage ;
-        currentScene = new Scene ( parent1, 800, 500 );
-        primaryStage.setTitle ( "Bruh" );
-        primaryStage.setScene( currentScene );
-        primaryStage.setResizable ( false ); //felan
+        App.currentStage = primaryStage;
+        currentScene = new Scene(parent1, 800, 500);
+        primaryStage.setTitle("Bruh");
+        primaryStage.setScene(currentScene);
+        primaryStage.setResizable(false); //felan
         primaryStage.show();
     }
 
-    public static void initializer(){
-        Database.createDatabase ();
-        Database.initializeAddress ( );
-        ProductController.getInstance ().initializeProducts ();
+    public static void initializer() {
+        Database.createDatabase();
+        Database.initializeAddress();
+        ProductController.getInstance().initializeProducts();
         CategoryController.getInstance().initializeRootCategories();
-        PersonController.getInstance ().initializePersons ();
-        ProductController.getInstance ().initializeStock ();
-        RequestController.getInstance ().initializeRequests ();
+        PersonController.getInstance().initializePersons();
+        ProductController.getInstance().initializeStock();
+        RequestController.getInstance().initializeRequests();
     }
 
 
-
-    public static FXMLLoader getFXMLLoader ( String fxml ) {
-        return new FXMLLoader ( App.class.getResource ( "/fxml/" + fxml + ".fxml"));
+    public static FXMLLoader getFXMLLoader(String fxml) {
+        return new FXMLLoader(App.class.getResource("/fxml/" + fxml + ".fxml"));
     }
 
-    public static void error (String message) {
-        Alert alert = new Alert ( Alert.AlertType.ERROR );
-        alert.setContentText ( message );
-        alert.showAndWait ();
+    public static void error(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    public static void showAlert(Alert.AlertType alertType, Stage owner, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.initOwner(owner);
+        alert.show();
     }
 
     public static void setRoot(String fxml) {
         try {
-            currentScene.setRoot ( getFXMLLoader ( fxml ).load () );
+            currentScene.setRoot(getFXMLLoader(fxml).load());
         } catch (IOException e) {
-            e.printStackTrace ( );
-        }
-    }
-    public static void setRoot(FXMLLoader fxmlLoader) {
-        try {
-            currentScene.setRoot ( fxmlLoader.load () );
-        } catch (IOException e) {
-            e.printStackTrace ( );
+            e.printStackTrace();
         }
     }
 
-    public static void goBack () {
-        Person person = PersonController.getInstance ().getLoggedInPerson ();
-        if (person instanceof Manager ) {
-            App.setRoot ( "managerMenu" );
-        } else if (person instanceof Salesperson ) {
-            App.setRoot ( "salespersonMenu" );
+    public static void setRoot(FXMLLoader fxmlLoader) {
+        try {
+            currentScene.setRoot(fxmlLoader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void goBack() {
+        Person person = PersonController.getInstance().getLoggedInPerson();
+        if (person instanceof Manager) {
+            App.setRoot("managerMenu");
+        } else if (person instanceof Salesperson) {
+            App.setRoot("salespersonMenu");
         } else {
-            App.setRoot ( "customerMenu" );
+            App.setRoot("customerMenu");
         }
     }
 

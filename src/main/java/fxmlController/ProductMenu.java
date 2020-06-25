@@ -57,6 +57,7 @@ public class ProductMenu implements Initializable {
     private boolean isBought = false;
     private Popup similarProductsPopup;
     private Popup mediaPopup;
+    private boolean isDiscount;
     @FXML private ImageView showSimilarProducts;
     @FXML private ImageView productImage;
     @FXML private GridPane sellerCardBase;
@@ -71,10 +72,11 @@ public class ProductMenu implements Initializable {
     @FXML private Pane starRate;
     @FXML private ImageView rate;
     @FXML private ImageView playMedia;
-    @FXML private FontAwesomeIcon back;
+    //@FXML private FontAwesomeIcon back;
 
-    public ProductMenu(Product product) {
+    public ProductMenu(Product product, boolean isDiscount) {
         this.product = product;
+        this.isDiscount = isDiscount;
         sellerCards = new ArrayList<>();
     }
 
@@ -113,11 +115,11 @@ public class ProductMenu implements Initializable {
             similarProductsPopup.show(App.currentStage);
         });
         checkMedia();
-        back.setOnMouseClicked ( event -> App.setRoot ( "mainProductsMenu" ) );
+        //back.setOnMouseClicked ( event -> App.setRoot ( "mainProductsMenu" ) );
 
-        back.setOnMousePressed ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #17b5ff,75,0,5,0);" ) );
+        //back.setOnMousePressed ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #17b5ff,75,0,5,0);" ) );
 
-        back.setOnMouseReleased ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" ) );
+        //back.setOnMouseReleased ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" ) );
 
     }
 
@@ -180,7 +182,7 @@ public class ProductMenu implements Initializable {
     private void handleClickedOnProduct(Parent parent, Product product) {
         parent.setOnMouseClicked(event -> {
             similarProductsPopup.hide();
-            ProductMenu productMenu = new ProductMenu(product);
+            ProductMenu productMenu = new ProductMenu(product, isDiscount);
             FXMLLoader loader = new FXMLLoader(MainProductsMenu.class.getResource("/fxml/singleProduct.fxml"));
             loader.setController(productMenu);
             Parent base = null;
@@ -281,7 +283,7 @@ public class ProductMenu implements Initializable {
     }
 
     private void showComments() {
-        ShowComments showCommentsCtrl = new ShowComments(product);
+        ShowComments showCommentsCtrl = new ShowComments(product, isDiscount);
         FXMLLoader loader = new FXMLLoader(ProductMenu.class.getResource("/fxml/showComments.fxml"));
         loader.setController(showCommentsCtrl);
         Parent parent = null;
@@ -306,6 +308,9 @@ public class ProductMenu implements Initializable {
         comment = new TextField();
         title = new TextField();
         submit = new Button("Submit");
+        submit.getStyleClass().add("btn");
+        submit.getStylesheets().add("/fxml/button.css");
+        submit.setCursor(Cursor.HAND);
         title.setPromptText("title");
         comment.setPromptText("comment");
         gridPane.setVgap(20);
@@ -363,6 +368,7 @@ public class ProductMenu implements Initializable {
 
     private String getProperties() {
         String info = "";
+        info += "brand :" + product.getBrand() + "\n";
         for (String key : product.getProperties().keySet()) {
             info += key + " :" + product.getProperties().get(key) + "\n";
         }
@@ -409,6 +415,10 @@ public class ProductMenu implements Initializable {
 
     private void setSellerCards() {
         for (Salesperson seller : ProductController.getInstance().getProductsSellers(product)) {
+            if (isDiscount) {
+                if (!seller.isInDiscount(product))
+                    continue;
+            }
             SellerInList sellerCard = new SellerInList(seller, product);
             FXMLLoader loader = new FXMLLoader(ProductMenu.class.getResource("/fxml/sellerInList.fxml"));
             loader.setController(sellerCard);

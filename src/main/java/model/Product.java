@@ -127,6 +127,19 @@ public class Product {
         return minPrice;
     }
 
+    public boolean isInDiscountInTotal() {
+        return !getSellersInDiscount().isEmpty();
+    }
+
+    public ArrayList<Salesperson> getSellersInDiscount() {
+        ArrayList<Salesperson> sellers = new ArrayList<>();
+        for (Salesperson salesperson : stock.get(this)) {
+            if (salesperson.isInDiscount(this))
+                sellers.add(salesperson);
+        }
+        return sellers;
+    }
+
     public void addComment(Comment comment) {
         comments.add(comment);
     }

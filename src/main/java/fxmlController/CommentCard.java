@@ -110,6 +110,9 @@ public class CommentCard implements Initializable {
         Label label = new Label("Add your comment");
         replyTextField = new TextField();
         submit = new Button("Submit");
+        submit.getStyleClass().add("btn");
+        submit.getStylesheets().add("/fxml/button.css");
+        submit.setCursor(Cursor.HAND);
         replyTextField.setPromptText("reply");
         gridPane.setVgap(20);
         gridPane.setAlignment(Pos.CENTER);

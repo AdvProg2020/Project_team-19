@@ -24,16 +24,16 @@ public class ProductRequestFXML implements Initializable {
     Salesperson salesperson;
     Image image;
 
-//    public ProductRequestFXML(Product product, Request.RequestState state,Salesperson salesperson){
-//        this.product = product;
-//        this.state = state;
-//        this.salesperson = salesperson;
-//    }
-//
-//    public ProductRequestFXML( Request.RequestState state,Salesperson salesperson){
-//        this.state = state;
-//        this.salesperson = salesperson;
-//    }
+    public ProductRequestFXML(Product product, Request.RequestState state,Salesperson salesperson){
+        this.product = product;
+        this.state = state;
+        this.salesperson = salesperson;
+    }
+
+    public ProductRequestFXML( Request.RequestState state,Salesperson salesperson){
+        this.state = state;
+        this.salesperson = salesperson;
+    }
 
     @FXML
     private TextField name;
@@ -60,6 +60,9 @@ public class ProductRequestFXML implements Initializable {
     private Button chooseFile;
 
     @FXML
+    private Button chooseFileMedia;
+
+    @FXML
     void chooseImage(ActionEvent event) {
         Stage stage = new Stage();
         stage.setTitle("FileChooser");
@@ -68,6 +71,26 @@ public class ProductRequestFXML implements Initializable {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG", "*.png"));
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("JPG", "*.jpg"));
+        chooseFile.setOnAction(e -> {
+
+            File file = fileChooser.showSaveDialog(stage);
+
+            if (file != null) {
+                image = new Image(file.toURI().toString());
+            }
+        });
+    }
+
+
+    @FXML
+    void chooseMedia(ActionEvent event) {
+        Stage stage = new Stage();
+        stage.setTitle("FileChooser");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("View Medias");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("FLV", "*.FLV"));
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("mp4", "*.mp4"));
         chooseFile.setOnAction(e -> {
 
             File file = fileChooser.showSaveDialog(stage);
@@ -101,12 +124,12 @@ public class ProductRequestFXML implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        if (state.equals(Request.RequestState.EDIT)){
-//            initializeTextFields();
-//            actionButton.setText("Edit");
-//        }else if (state.equals(Request.RequestState.ADD)){
-//            actionButton.setText("Add");
-//        }
+        if (state.equals(Request.RequestState.EDIT)){
+            initializeTextFields();
+            actionButton.setText("Edit");
+        }else if (state.equals(Request.RequestState.ADD)){
+            actionButton.setText("Add");
+        }
     }
 
     public void initializeTextFields() {

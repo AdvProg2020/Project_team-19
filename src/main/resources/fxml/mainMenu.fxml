@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: #99ddff;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.MainMenuController">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: #99ddff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.MainMenuController">
    <children>
 <!--      <Label alignment="CENTER" layoutX="290.0" layoutY="87.0" styleClass="outline" stylesheets="@titleOutliner.css" text="Main Menu">-->
 <!--      </Label>-->
@@ -26,12 +27,12 @@
 <!--      <Button fx:id="back" cancelButton="true" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" style="-fx-background-color: whitesmoke;" text="Back" />-->
 <!--      <Button fx:id="userMenu" layoutX="690.0" layoutY="180.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="" prefHeight="26.0" prefWidth="94.0" styleClass="userBtn" stylesheets="@button.css" text="User Menu" />-->
 <!--      <Button fx:id="help" layoutX="14.0" layoutY="460.0" mnemonicParsing="false" style="-fx-background-color: whitesmoke;" text="?" />-->
-      <ImageView fx:id="productIcon" fitHeight="150.0" fitWidth="200.0" layoutX="425.0" layoutY="250.0" onMouseClicked="#productAction" pickOnBounds="true" preserveRatio="true" onMousePressed="#productIconBig" onMouseReleased="#productIconSmall">
+      <ImageView fx:id="productIcon" fitHeight="150.0" fitWidth="200.0" layoutX="425.0" layoutY="250.0" onMouseClicked="#productAction" onMousePressed="#productIconBig" onMouseReleased="#productIconSmall" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/product.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="discountIcon" fitHeight="150.0" fitWidth="200.0" layoutX="217.0" layoutY="250.0" pickOnBounds="true" preserveRatio="true" onMousePressed="#discountIconBig" onMouseReleased="#discountIconSmall">
+      <ImageView fx:id="discountIcon" fitHeight="150.0" fitWidth="200.0" layoutX="217.0" layoutY="250.0" onMouseClicked="#discountAction" onMousePressed="#discountIconBig" onMouseReleased="#discountIconSmall" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/discount.png" />
          </image>

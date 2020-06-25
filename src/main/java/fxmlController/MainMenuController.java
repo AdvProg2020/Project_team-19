@@ -37,7 +37,7 @@ public class MainMenuController implements Initializable {
             Person person = PersonController.getInstance ().getLoggedInPerson ();
             if ( person instanceof Manager ) {
                 App.currentScene = new Scene ( getFXMLLoader ( "managerMenu" ).load () );
-            } else if ( person instanceof Salesperson ){
+            } else if ( person instanceof Salesperson ) {
                 App.currentScene = new Scene ( getFXMLLoader ( "salespersonMenu" ).load () );
             } else {
                 App.currentScene = new Scene ( getFXMLLoader ( "customerMenu" ).load () );
@@ -49,6 +49,12 @@ public class MainMenuController implements Initializable {
     }
 
     @FXML private void productAction () {
+        MainProductsMenu.isDiscount = false;
+        App.setRoot ( "mainProductsMenu" );
+    }
+
+    @FXML void discountAction() {
+        MainProductsMenu.isDiscount = true;
         App.setRoot ( "mainProductsMenu" );
     }
 

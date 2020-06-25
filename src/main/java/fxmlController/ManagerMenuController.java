@@ -26,7 +26,12 @@ public class ManagerMenuController {
 
     @FXML
     void categories ( ActionEvent event ) {
-
+        try {
+            App.currentScene = new Scene(getFXMLLoader("AllCategoriesMenu").load());
+            App.currentStage.setScene(App.currentScene);
+        } catch (Exception e) {
+            App.error(e.getMessage());
+        }
     }
 
     @FXML
@@ -47,13 +52,8 @@ public class ManagerMenuController {
     }
 
     @FXML
-    void prod ( ActionEvent event ) {
-
-    }
-
-    @FXML
     void reqs ( ActionEvent event ) {
-
+        App.setRoot("AllRequests");
     }
 
     @FXML

@@ -26,8 +26,8 @@
             <Separator prefWidth="200.0" GridPane.rowIndex="2" />
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <children>
-                  <ComboBox fx:id="filterBox" prefHeight="30.0" prefWidth="96.0" promptText="filter" />
-                  <TextField fx:id="propertyField" disable="true" prefHeight="30.0" prefWidth="199.0" promptText="write property" />
+                  <ComboBox fx:id="filterBox" prefHeight="30.0" prefWidth="96.0" promptText="filter" stylesheets="@combo.css" />
+                  <TextField fx:id="propertyField" disable="true" prefHeight="30.0" prefWidth="199.0" promptText="write property" stylesheets="@textField.css" />
                </children>
             </HBox>
          </children>

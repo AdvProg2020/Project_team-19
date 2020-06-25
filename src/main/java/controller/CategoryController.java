@@ -46,6 +46,15 @@ public class CategoryController {
         }
     }
 
+    public void getParentCategories(ArrayList<String> leafCategories, ArrayList<Category> categories) {
+        for (Category category : categories) {
+            if (!category.isLeaf())
+                leafCategories.add(category.getName());
+            else if (category.getChildren().size() != 0)
+                getParentCategories(leafCategories, category.getChildren());
+        }
+    }
+
     public Category getCategoryByName(String categoryName, ArrayList<Category> categories) {
         for (Category category : categories) {
             if (category.getName().equals(categoryName)) {

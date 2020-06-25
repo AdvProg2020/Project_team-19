@@ -229,11 +229,11 @@ public class ProductController {
         return products.stream().filter(product -> {
             if (!productName.isEmpty()) {
                 return product.getName().startsWith(productName);
-            }
-            else
+            } else
                 return false;
         }).collect(Collectors.toCollection(LinkedList::new));
     }
+
 
     public ArrayList<Product> filterByBrand(String brandName, ArrayList<Product> products) {
         return products.stream().filter(product -> product.getBrand().equals(brandName)).
@@ -241,8 +241,12 @@ public class ProductController {
     }
 
     public LinkedList<Product> filterByBrand(String brand, LinkedList<Product> products) {
-        return products.stream().filter(product -> product.getBrand().equals(brand)).
-                collect(Collectors.toCollection(LinkedList::new));
+        return products.stream().filter(product -> {
+            if (!brand.isEmpty()) {
+                return product.getBrand().startsWith(brand);
+            } else
+                return false;
+        }).collect(Collectors.toCollection(LinkedList::new));
     }
 
     public ArrayList<Product> filterByCategory(String categoryName, ArrayList<Product> products) {
@@ -256,6 +260,11 @@ public class ProductController {
             products.addAll(filterOwnedProductByPrice(lowPrice, highPrice, product));
         }
         return products;
+    }
+
+    public LinkedList<Product> filterByPrice(double low, double high, LinkedList<Product> products) {
+        return products.stream().filter(product -> product.getLeastPrice() >= low && product.getLeastPrice() <= high)
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 
     public ArrayList<Product> filterByPrice(double low, double high, ArrayList<Product> products) {

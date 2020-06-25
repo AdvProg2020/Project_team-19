@@ -1,23 +1,29 @@
 package fxmlController;
 
 import controller.CartController;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import model.Cart;
 import model.Product;
 import model.Salesperson;
+import view.App;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static view.App.getFXMLLoader;
 
 public class CartMenuFXML implements Initializable {
 
@@ -37,6 +43,22 @@ public class CartMenuFXML implements Initializable {
         ordersBox.setHgap(5);
         scrollPane.setContent(ordersBox);
         basePane.add(ordersBox, 0 , 1);
+        totalPrice.setText(String.valueOf(CartController.getInstance().getCart().calculateTotalPrice()));
+//        discountCodeAmount.setText(String.valueOf(CartController.getInstance().getCart().));
+    }
+
+    @FXML
+    void discountCode(ActionEvent event) {
+        Stage stage = new Stage();
+        Parent fxml = null;
+        try {
+            fxml = getFXMLLoader ("discountCodeHandler").load ();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assert fxml != null;
+        stage.setScene(new Scene(fxml,300,200));
+        stage.show();
     }
 
     private void setCartsOnPane() {
@@ -53,6 +75,12 @@ public class CartMenuFXML implements Initializable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                Parent finalParent = parent;
+                finalParent.setOnMouseClicked(e -> {
+                    if (!productInCart.isProductInCart()){
+                        ordersBox.getChildren().remove(finalParent);
+                    }
+                });
                 ordersBox.add(parent, rowIndex % 2, rowIndex / 2);
                 rowIndex++;
             }
