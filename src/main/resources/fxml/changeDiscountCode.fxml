@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.ChangeDiscountCode">
+    <children>
+        <ChoiceBox fx:id="field" layoutX="159.0" layoutY="51.0" prefHeight="26.0" prefWidth="282.0" />
+        <TextField fx:id="text" layoutX="159.0" layoutY="123.0" prefHeight="26.0" prefWidth="282.0" promptText="Password" stylesheets="@textField.css" />
+        <Button fx:id="doneBtn" defaultButton="true" layoutX="239.0" layoutY="176.0" mnemonicParsing="false" onAction="#done" prefHeight="26.0" prefWidth="122.0" styleClass="btn" stylesheets="@button.css" text="Done" />
+      <ChoiceBox fx:id="customer" layoutX="159.0" layoutY="123.0" prefHeight="26.0" prefWidth="180.0" />
+      <FontAwesomeIcon fx:id="add" glyphName="CHECK" layoutX="367.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <FontAwesomeIcon fx:id="del" glyphName="CLOSE" layoutX="406.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <Label fx:id="amount" layoutX="463.0" layoutY="118.0" prefHeight="26.0" prefWidth="122.0" text="Label">
+         <font>
+            <Font name="Consolas" size="31.0" />
+         </font>
+      </Label>
+    </children>
+</AnchorPane>

@@ -39,6 +39,7 @@ public class StoreMain {
         ProductController.getInstance ().initializeProducts ();
         CategoryController.getInstance().initializeRootCategories();
         PersonController.getInstance ().initializePersons ();
+        DiscountCodeController.getInstance ().initializeDiscountCodes ();
         ProductController.getInstance ().initializeStock ();
         RequestController.getInstance ().initializeRequests ();
     }

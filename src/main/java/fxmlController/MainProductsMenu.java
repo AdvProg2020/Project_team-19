@@ -50,7 +50,7 @@ public class MainProductsMenu implements Initializable {
                     e.printStackTrace();
                 }
                 assert base != null;
-                App.currentScene = new Scene(base, 800, 500);
+                App.currentScene = new Scene(base);
                 App.currentStage.setScene(App.currentScene);
                 App.currentStage.show();
             });

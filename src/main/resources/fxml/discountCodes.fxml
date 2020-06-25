@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.DiscountCodes">
-    <children>
-        <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" onMouseClicked="#back" onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
-        <TableView fx:id="tableView" layoutX="-1.0" layoutY="49.0" prefHeight="751.0" prefWidth="800.0">
-            <columns>
-                <TableColumn fx:id="codeColumn" prefWidth="112.79995727539062" text="Code" />
-                <TableColumn fx:id="startColumn" prefWidth="239.40000915527344" text="Start Time" />
-            <TableColumn fx:id="endColumn" prefWidth="249.80001831054688" text="End Time" />
-            <TableColumn fx:id="percentColumn" prefWidth="249.80001831054688" text="Discount Percentage" />
-            <TableColumn fx:id="maxColumn" prefWidth="249.80001831054688" text="Max Discount Amount" />
-            <TableColumn fx:id="countColumn" prefWidth="249.80001831054688" text="Usage Counter" />
-            </columns>
-        </TableView>
-    </children>
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.DiscountCodesFXMLController">
+   <StackPane layoutY="53.0" prefHeight="447.0" prefWidth="800.0">
+       <TableView fx:id="tableView" layoutX="-1.0" layoutY="49.0" prefHeight="486.0" prefWidth="205.0" GridPane.rowIndex="1">
+           <columns>
+            <TableColumn fx:id="editColumn" editable="false" prefWidth="112.79995727539062" resizable="false" style="-fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" text="Edit" />
+               <TableColumn fx:id="codeColumn" editable="false" prefWidth="112.79995727539062" resizable="false" style="-fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" text="Code" />
+               <TableColumn fx:id="startColumn" editable="false" prefWidth="239.40000915527344" resizable="false" style="-fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" text="Start Time" />
+               <TableColumn fx:id="endColumn" editable="false" prefWidth="249.80001831054688" resizable="false" style="-fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" text="End Time" />
+               <TableColumn fx:id="percentColumn" editable="false" prefWidth="249.80001831054688" resizable="false" style="-fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" text="Discount Percentage" />
+               <TableColumn fx:id="maxColumn" editable="false" prefWidth="249.80001831054688" resizable="false" style="-fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" text="Max Discount Amount" />
+               <TableColumn fx:id="countColumn" editable="false" prefWidth="249.80001831054688" resizable="false" style="-fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" text="Usage Counter" />
+           </columns>
+           <opaqueInsets>
+               <Insets />
+           </opaqueInsets>
+       </TableView>
+   </StackPane>
+        <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" onMouseClicked="#back" onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall" strokeType="OUTSIDE" strokeWidth="0.0" text="" GridPane.halignment="LEFT" />
+    <Button layoutX="678.0" layoutY="18.0" mnemonicParsing="false" onAction="#newOne" prefHeight="26.0" prefWidth="107.0" styleClass="btn" stylesheets="@button.css" text="New" />
 
 </AnchorPane>

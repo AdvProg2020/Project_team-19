@@ -5,18 +5,25 @@ import controller.PersonController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import model.Salesperson;
 import view.App;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import static view.App.getFXMLLoader;
 
-public class SalespersonMenuController {
+public class SalespersonMenuController implements Initializable {
 
     @FXML
     private FontAwesomeIcon back;
+    @FXML
+    private Label yourBalanceLabel;
 
     @FXML
     void back ( MouseEvent event ) {
@@ -69,4 +76,8 @@ public class SalespersonMenuController {
         back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" );
     }
 
+    @Override
+    public void initialize ( URL location , ResourceBundle resources ) {
+        yourBalanceLabel.setText ( "Your Balance : " + ((Salesperson) PersonController.getInstance ().getLoggedInPerson ()).getCredit ());
+    }
 }

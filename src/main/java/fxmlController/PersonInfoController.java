@@ -11,6 +11,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -27,6 +29,8 @@ import static view.App.getFXMLLoader;
 import static view.LoginMenu.PersonInfo.*;
 
 public class PersonInfoController implements Initializable {
+
+    @FXML private ImageView profile;
 
     @FXML private TableView<String[]> tableView;
 
@@ -55,6 +59,8 @@ public class PersonInfoController implements Initializable {
 
     public void updateTable () {
         HashMap<String,String> personInfo = PersonController.getInstance ().getLoggedInPerson ().getPersonInfo ();
+
+        profile.setImage ( new Image ( personInfo.get ( PROFILE.label ) ) );
 
         String[][] data = new String[6][2];
         data[0] = new String[]{"Username",personInfo.get ( USERNAME.label )};
@@ -87,8 +93,9 @@ public class PersonInfoController implements Initializable {
             }
         } );
 
-        fieldColumn.setStyle ( "-fx-alignment: center" );
-        valueColumn.setStyle ( "-fx-alignment: center" );
+        fieldColumn.setStyle ( "-fx-alignment: center;-fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" );
+        valueColumn.setStyle ( "-fx-alignment: center;-fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" );
+
 
         tableView.getItems().setAll(data);
     }

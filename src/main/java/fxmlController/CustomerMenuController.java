@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.AudioClip;
@@ -28,6 +29,7 @@ public class CustomerMenuController implements Initializable {
     @FXML private FontAwesomeIcon increaseCredit;
     @FXML private FontAwesomeIcon back;
     @FXML private FontAwesomeIcon increaseCreditShowButton;
+    @FXML private Label yourBalanceLabel;
     private AudioClip chaching;
 
     @FXML
@@ -49,7 +51,7 @@ public class CustomerMenuController implements Initializable {
 
     @FXML
     void discountCodes ( ActionEvent event ) {
-        App.setRoot ( "discountCodes" );
+        App.setRoot ( "customerDiscountCodes" );
     }
 
     @FXML
@@ -76,6 +78,7 @@ public class CustomerMenuController implements Initializable {
             credit = Double.parseDouble ( enterAmount.getText () );
 //            chaching.play ();
             PersonController.getInstance().increaseCustomerCredit( (Customer) PersonController.getInstance ().getLoggedInPerson () , credit);
+            yourBalanceLabel.setText ( "Your Balance : " + ((Customer) PersonController.getInstance ().getLoggedInPerson ()).getCredit () );
         } catch (Exception e) {
             App.error ( "Enter numbers only." );
         }
@@ -89,11 +92,30 @@ public class CustomerMenuController implements Initializable {
         back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" );
     }
 
+    @FXML private void plusSizeBig ( MouseEvent mouseEvent ) {
+        increaseCredit.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #00ad48,75,0,5,0);" );
+    }
+
+    @FXML private void plusSizeSmall ( MouseEvent mouseEvent ) {
+        increaseCredit.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em;-fx-effect: innershadow(gaussian, #00ad48,75,0,5,0);" );
+    }
+
+    @FXML private void plusShowSizeBig ( MouseEvent mouseEvent ) {
+        increaseCreditShowButton.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" );
+    }
+
+    @FXML private void plusShowSizeSmall ( MouseEvent mouseEvent ) {
+        increaseCreditShowButton.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 0.8em" );
+    }
+
+
+
     @Override
     public void initialize ( URL location , ResourceBundle resources ) {
         enterAmount.setVisible ( false );
         increaseCredit.setVisible ( false );
-        increaseCredit.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 2em; -fx-effect: innershadow(gaussian, #00ad48,75,0,5,0);" );
+        increaseCredit.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20; -fx-effect: innershadow(gaussian, #00ad48,75,0,5,0);" );
+        yourBalanceLabel.setText ( "Your Balance : " + ((Customer) PersonController.getInstance ().getLoggedInPerson ()).getCredit () );
 //        chaching = new AudioClip ( new File ( "ChaChing.mp3" ).toURI ( ).toString ( ) );
     }
 

@@ -71,35 +71,35 @@
           <GridPane.margin>
               <Insets left="15.0" />
           </GridPane.margin></Label>
-       <Label fx:id="date" layoutX="10.0" layoutY="30.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1">
+       <TextArea fx:id="date" editable="false" layoutX="10.0" layoutY="30.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1">
 
            <font>
                <Font name="Consolas" size="14.0" />
-           </font></Label>
-      <Label fx:id="deliveredAmount" layoutX="10.0" layoutY="30.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+           </font></TextArea>
+      <TextArea fx:id="deliveredAmount" editable="false" layoutX="10.0" layoutY="30.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2">
           <font>
               <Font name="Consolas" size="14.0" />
-          </font></Label>
-      <Label fx:id="discountAmount" layoutX="10.0" layoutY="88.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3">
+          </font></TextArea>
+      <TextArea fx:id="discountAmount" editable="false" layoutX="10.0" layoutY="88.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3">
           <font>
               <Font name="Consolas" size="14.0" />
-          </font></Label>
-      <Label fx:id="product" layoutX="10.0" layoutY="202.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="4">
+          </font></TextArea>
+      <TextArea fx:id="product" editable="false" layoutX="10.0" layoutY="202.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="4">
           <font>
               <Font name="Consolas" size="14.0" />
-          </font></Label>
-      <Label fx:id="count" layoutX="10.0" layoutY="260.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="5">
+          </font></TextArea>
+      <TextArea fx:id="count" editable="false" layoutX="10.0" layoutY="260.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="5">
           <font>
               <Font name="Consolas" size="14.0" />
-          </font></Label>
-      <Label fx:id="buyer" layoutX="10.0" layoutY="317.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="6">
+          </font></TextArea>
+      <TextArea fx:id="buyer" editable="false" layoutX="10.0" layoutY="317.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="6">
           <font>
               <Font name="Consolas" size="14.0" />
-          </font></Label>
-      <Label fx:id="transmitted" layoutX="10.0" layoutY="374.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="7">
+          </font></TextArea>
+      <TextArea fx:id="transmitted" editable="false" layoutX="10.0" layoutY="374.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="7">
           <font>
               <Font name="Consolas" size="14.0" />
-          </font></Label>
+          </font></TextArea>
        <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" onMouseClicked="#back" onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall" strokeType="OUTSIDE" strokeWidth="0.0" text="" GridPane.halignment="LEFT">
          <GridPane.margin>
             <Insets left="15.0" />

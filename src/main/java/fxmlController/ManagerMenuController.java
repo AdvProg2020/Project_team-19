@@ -31,7 +31,7 @@ public class ManagerMenuController {
 
     @FXML
     void discountCodes ( ActionEvent event ) {
-
+        App.setRoot ( "discountCodes" );
     }
 
     @FXML

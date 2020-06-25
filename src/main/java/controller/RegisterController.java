@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class RegisterController {
-    private static boolean firstManagerRegistered = false;
     private static RegisterController single_instance = null;
 
     private RegisterController() {
@@ -40,12 +39,15 @@ public class RegisterController {
     }
 
     public boolean isFirstManagerRegistered() {
-        return firstManagerRegistered;
+        for (Person person : PersonController.allPersons) {
+            if (person instanceof Manager)
+                return true;
+        }
+        return false;
     }
 
     public void registerManager (HashMap<String, String> personInfo) {
         Manager manager = new Manager(personInfo);
-        firstManagerRegistered = true;
     }
 
     private String changeTypeToStandardForm (String type) {

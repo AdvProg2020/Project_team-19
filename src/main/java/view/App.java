@@ -86,6 +86,7 @@ public class App extends Application {
         Database.initializeAddress ( );
         ProductController.getInstance ().initializeProducts ();
         CategoryController.getInstance().initializeRootCategories();
+        DiscountCodeController.getInstance ().initializeDiscountCodes ();
         PersonController.getInstance ().initializePersons ();
         ProductController.getInstance ().initializeStock ();
         RequestController.getInstance ().initializeRequests ();

@@ -9,9 +9,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import view.App;
 
+import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -22,6 +27,8 @@ import static view.LoginMenu.usernamePattern;
 
 public class RegisterMenuController implements Initializable {
 
+    @FXML private ImageView profile;
+    private File profileFile;
     @FXML private TextField username;
     @FXML private PasswordField password;
     @FXML private TextField firstName;
@@ -75,11 +82,18 @@ public class RegisterMenuController implements Initializable {
             personInfo.put ( LAST_NAME.label , lastName.getText () );
             personInfo.put ( EMAIL.label , email.getText () );
             personInfo.put ( PHONE.label , phone.getText () );
-            personInfo.put ( COMPANY.label , company.getText () );
-            personInfo.put ( SAYERE_MOSHAKHASAT.label , darSurateVjud.getText () );
+            personInfo.put ( PROFILE.label , profileFile.toURI ().toString () );
+            if (type.getValue ().equals ( "Salesperson" )) {
+                personInfo.put ( COMPANY.label , company.getText ( ) );
+                personInfo.put ( SAYERE_MOSHAKHASAT.label , darSurateVjud.getText ( ) );
+            }
             RegisterController.getInstance ( ).register ( personInfo );
-            Alert alert = new Alert ( Alert.AlertType.CONFIRMATION );
-            alert.setContentText ( "Successfully Registered!" );
+            ButtonType ok = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+            ButtonType cancel = new ButtonType("Ok", ButtonBar.ButtonData.CANCEL_CLOSE);
+            Alert alert = new Alert( Alert.AlertType.CONFIRMATION,
+                    "Successfully Registered! Ok?",
+                    ok,
+                    cancel);
             alert.showAndWait ();
             back ();
         } catch (Exception e) {
@@ -104,13 +118,31 @@ public class RegisterMenuController implements Initializable {
             if (type.getValue ().equals ( "Salesperson" )) {
                 company.setVisible ( true );
                 darSurateVjud.setVisible ( true );
-                registerBtn.setLayoutY ( 577.0 );
+                registerBtn.setLayoutY ( 906.0 );
             } else {
                 company.setVisible ( false );
                 darSurateVjud.setVisible ( false );
-                registerBtn.setLayoutY ( 479.0 );
+                registerBtn.setLayoutY ( 808.0 );
             }
         } );
+
+
+        Stage stage = new Stage();
+        stage.setTitle("FileChooser");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("View Pictures");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG", "*.png"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JPG", "*.jpg"));
+        profile.setOnMouseClicked ( event -> {
+            if (event.getClickCount () == 2) {
+                profileFile = fileChooser.showOpenDialog ( stage );
+
+                if (profileFile != null) {
+                    profile.setImage ( new Image (profileFile.toURI().toString()) );
+                }
+            }
+        } );
+
     }
 
     @FXML private void backSizeBig ( MouseEvent mouseEvent ) {

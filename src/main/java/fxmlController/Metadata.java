@@ -1,6 +1,6 @@
 package fxmlController;
 
-import java.time.LocalDateTime;
+import model.DiscountCode;
 
 public class Metadata {
     public static PersonInfoController personInfoController;
@@ -12,5 +12,8 @@ public class Metadata {
     public static int count;
     public static String buyerUsername;
     public static boolean transmitted;
+
+    public static DiscountCodesFXMLController discountCodesFXMLController;
+    public static DiscountCode discountCode;
 
 }
