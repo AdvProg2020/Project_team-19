@@ -59,16 +59,28 @@ public class DiscountCodeController {
         }
     }
 
-    public DiscountCode addNewDiscountCode(LocalDateTime start,LocalDateTime end,double percentage,double max,int useCounter,ArrayList<Person> people){
+    public DiscountCode addNewDiscountCode(LocalDateTime start,LocalDateTime end,double percentage,double max,int useCounter,ArrayList<Person> people){ //ToDo ridin
         DiscountCode discountCode = new DiscountCode(start,end,percentage,max,useCounter);
         if(people!=null)
-        for (Person person : people) {
-            if(((Customer) person).getDiscountCodes().containsKey(discountCode)){
-                ((Customer) person).getDiscountCodes().put(discountCode,(((Customer) person).getDiscountCodes().get(discountCode)+useCounter));
-            } else
-            ((Customer) person).getDiscountCodes().put(discountCode,useCounter);
-            Database.saveToFile(person,Database.createPath("customers",person.getUsername()));
-        }
+            for (Person person : people) {
+                if(((Customer) person).getDiscountCodes().containsKey(discountCode)){
+                    ((Customer) person).getDiscountCodes().put(discountCode,(((Customer) person).getDiscountCodes().get(discountCode)+useCounter));
+                }else
+                    ((Customer) person).getDiscountCodes().put(discountCode,useCounter);
+                Database.saveToFile(person,Database.createPath("customers",person.getUsername()));
+            }
+        allDiscountCodes.add(discountCode);
+        Database.saveToFile(discountCode, Database.createPath("discount_codes",discountCode.getCode()));
+        return discountCode;
+    }
+
+    public DiscountCode addNewDiscountCodeGraphics(LocalDateTime start,LocalDateTime end,double percentage,double max,int useCounter,ArrayList<Customer> customers){
+        DiscountCode discountCode = new DiscountCode(start,end,percentage,max,useCounter);
+        if(customers!=null)
+            for (Customer customer : customers) {
+                customer.addDiscountCode ( discountCode , useCounter );
+                Database.saveToFile(customer ,Database.createPath("customers",customer.getUsername()));
+            }
         allDiscountCodes.add(discountCode);
         Database.saveToFile(discountCode, Database.createPath("discount_codes",discountCode.getCode()));
         return discountCode;

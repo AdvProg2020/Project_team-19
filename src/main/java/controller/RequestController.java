@@ -110,6 +110,17 @@ public class RequestController {
         new ProductRequest(price, amount, salesperson, product);
     }
 
+    public void addProductRequest(Double price, Integer amount, Salesperson salesperson
+            , String category, String name, String brand, HashMap<String, String> properties, String imageURI, String mediaURI) {
+        Product product = new Product(name, brand, category, properties);
+        product.setImageURI(imageURI);
+        product.setMediaURI(mediaURI);
+        saveTempProductInProgramLists(product, salesperson, amount, price);
+        saveFileChangesForProductBeforeSendingRequest(product, salesperson);
+        productID = product.getID();
+        new ProductRequest(price, amount, salesperson, product);
+    }
+
     private void saveTempProductInProgramLists(Product product, Salesperson salesperson, int amount, double price) {
         salesperson.addToOfferedProducts(product, amount, price);
         salesperson.setBuildInProgress(product);
@@ -136,6 +147,19 @@ public class RequestController {
             , String category, String name, String brand, HashMap<String, String> properties) {
 
         Product product = ProductController.getInstance().getProductById(productID);
+        salesperson.setEditInProgress(product);
+        saveFileChangesForProductBeforeSendingRequest(product, salesperson);
+        double pr = (price == null) ? salesperson.getProductPrice(product) : Double.parseDouble(price);
+        int am = (amount == null) ? salesperson.getProductAmount(product) : Integer.parseInt(amount);
+        new ProductRequest(pr, am, salesperson, category, name, brand, properties, product);
+    }
+
+    public void editProductRequest(String price, String amount, Salesperson salesperson, String productID
+            , String category, String name, String brand, HashMap<String, String> properties, String image, String media) {
+
+        Product product = ProductController.getInstance().getProductById(productID);
+        product.setImageURI(image);
+        product.setMediaURI(media);
         salesperson.setEditInProgress(product);
         saveFileChangesForProductBeforeSendingRequest(product, salesperson);
         double pr = (price == null) ? salesperson.getProductPrice(product) : Double.parseDouble(price);

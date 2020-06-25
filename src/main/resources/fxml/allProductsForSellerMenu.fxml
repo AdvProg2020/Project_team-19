@@ -8,7 +8,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <ScrollPane prefHeight="500.0" prefViewportHeight="500.0" prefViewportWidth="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <content>
       <GridPane fx:id="basePane" alignment="CENTER" prefHeight="497.0" prefWidth="797.0">
@@ -23,13 +22,20 @@
             <RowConstraints maxHeight="435.0" minHeight="10.0" prefHeight="435.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-             <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER" />
             <Label fx:id="title" alignment="CENTER" prefHeight="27.0" prefWidth="416.0" text="Your available products" textFill="#0089e4" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <font>
                   <Font name="Verdana" size="18.0" />
                </font>
             </Label>
             <Separator prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="1" />
+            <Button fx:id="add" alignment="CENTER" mnemonicParsing="false" styleClass="btn" stylesheets="@button.css" text="Add product" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <font>
+                  <Font name="Verdana" size="14.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
          </children>
       </GridPane>
    </content>

@@ -112,6 +112,7 @@ public class Customer extends Person {
 
     public void increaseCredit(double amount) {
         credit += amount;
+        Database.saveToFile(this, Database.createPath("customers", personInfo.get("username")));
     }
 
     public HashMap<DiscountCode, Integer> getDiscountCodes() {

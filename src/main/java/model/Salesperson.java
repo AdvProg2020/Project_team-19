@@ -28,6 +28,7 @@ public class Salesperson extends Person {
         offeredProducts.get(sellLog.getProduct().getID()).setAmount(offeredProducts.get(sellLog.getProduct().getID()).getAmount() - sellLog.getCount());
         setCredit(credit + sellLog.getDeliveredAmount());
         sellLogs.add(sellLog);
+        Database.saveToFile(this, Database.createPath("salespersons", personInfo.get("username")));
     }
 
     public double getDiscountPrice(Product product) {

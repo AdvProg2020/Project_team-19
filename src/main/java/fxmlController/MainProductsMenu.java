@@ -207,20 +207,22 @@ public class MainProductsMenu implements Initializable {
 
     private void handleClickedOnProduct(Parent parent, Product product) {
         parent.setOnMouseClicked(event -> {
-            popup.hide();
-            ProductMenu productMenu = new ProductMenu(product, isDiscount);
-            FXMLLoader loader = new FXMLLoader(MainProductsMenu.class.getResource("/fxml/singleProduct.fxml"));
-            loader.setController(productMenu);
-            Parent base = null;
-            try {
-                base = loader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (event.getClickCount() == 2) {
+                popup.hide();
+                ProductMenu productMenu = new ProductMenu(product, isDiscount);
+                FXMLLoader loader = new FXMLLoader(MainProductsMenu.class.getResource("/fxml/singleProduct.fxml"));
+                loader.setController(productMenu);
+                Parent base = null;
+                try {
+                    base = loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                assert base != null;
+                App.currentScene = new Scene(base, 800, 500);
+                App.currentStage.setScene(App.currentScene);
+                App.currentStage.show();
             }
-            assert base != null;
-            App.currentScene = new Scene(base, 800, 500);
-            App.currentStage.setScene(App.currentScene);
-            App.currentStage.show();
         });
     }
 

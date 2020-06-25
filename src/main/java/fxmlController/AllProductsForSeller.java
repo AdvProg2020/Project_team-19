@@ -1,22 +1,20 @@
 package fxmlController;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import model.Product;
-import model.Salesperson;
+import model.*;
 import view.App;
 
 import java.io.IOException;
@@ -30,8 +28,9 @@ public class AllProductsForSeller implements Initializable {
     private boolean verified;
     private GridPane cardBase;
     @FXML private GridPane basePane;
-    @FXML private FontAwesomeIcon back;
+    //@FXML private FontAwesomeIcon back;
     @FXML private Label title;
+    @FXML private Button add;
 
     public AllProductsForSeller(Salesperson salesperson, boolean verified) {
         this.salesperson = salesperson;
@@ -48,12 +47,20 @@ public class AllProductsForSeller implements Initializable {
         addProductCardsToPane();
         cardBase.setBackground((new Background(new BackgroundFill(Color.rgb(153, 221, 255), CornerRadii.EMPTY, Insets.EMPTY))));
         basePane.add(cardBase, 1, 2);
-        back.setOnMouseClicked ( event -> App.setRoot ( "salespersonMenu" ) );
-
-        back.setOnMousePressed ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #17b5ff,75,0,5,0);" ) );
-
-        back.setOnMouseReleased ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" ) );
+//        back.setOnMouseClicked ( event -> App.setRoot ( "salespersonMenu" ) );
+//
+//        back.setOnMousePressed ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #17b5ff,75,0,5,0);" ) );
+//
+//        back.setOnMouseReleased ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" ) );
         cardBase.setAlignment(Pos.CENTER);
+        add.setOnAction(event -> add());
+    }
+
+    private void add() {
+        ProductRequestFXML productRequestFXML = new ProductRequestFXML(Request.RequestState.ADD, salesperson);
+        FXMLLoader loader = new FXMLLoader(AllProductsForSeller.class.getResource("/fxml/productRequest.fxml"));
+        loader.setController(productRequestFXML);
+        App.setRoot(loader);
     }
 
     private void setProductCards() {

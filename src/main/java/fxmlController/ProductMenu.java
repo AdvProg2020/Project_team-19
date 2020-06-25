@@ -124,7 +124,6 @@ public class ProductMenu implements Initializable {
     }
 
     private void checkMedia() {
-        product.setMediaURI("/videos/81b26991a04e2c2e93ead9ac94c70d933757105-360p.mp4");
         if (product.hasMedia()) {
             playMedia.setCursor(Cursor.HAND);
             playMedia.setOpacity(1);

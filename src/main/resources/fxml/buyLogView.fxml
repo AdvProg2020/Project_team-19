@@ -55,24 +55,24 @@
             <GridPane.margin>
                 <Insets left="15.0" />
             </GridPane.margin></Label>
-        <TextArea fx:id="date" layoutX="10.0" layoutY="30.0" style="-fx-background-color: #89b7ff;" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1">
+        <TextArea fx:id="date" editable="false" layoutX="10.0" layoutY="30.0" style="-fx-background-color: #89b7ff;" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1">
 
             <font>
                 <Font name="Consolas" size="14.0" />
             </font></TextArea>
-        <TextArea fx:id="deliveredAmount" layoutX="10.0" layoutY="30.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+        <TextArea fx:id="deliveredAmount" editable="false" layoutX="10.0" layoutY="30.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2">
             <font>
                 <Font name="Consolas" size="14.0" />
             </font></TextArea>
-        <TextArea fx:id="discountAmount" layoutX="10.0" layoutY="88.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3">
+        <TextArea fx:id="discountAmount" editable="false" layoutX="10.0" layoutY="88.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3">
             <font>
                 <Font name="Consolas" size="14.0" />
             </font></TextArea>
-        <TextArea fx:id="product" layoutX="10.0" layoutY="202.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="4">
+        <TextArea fx:id="product" editable="false" layoutX="10.0" layoutY="202.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="4">
             <font>
                 <Font name="Consolas" size="14.0" />
             </font></TextArea>
-        <TextArea fx:id="transmitted" layoutX="10.0" layoutY="374.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="5">
+        <TextArea fx:id="transmitted" editable="false" layoutX="10.0" layoutY="374.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="5">
             <font>
                 <Font name="Consolas" size="14.0" />
             </font></TextArea>

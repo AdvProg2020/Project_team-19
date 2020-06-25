@@ -20,7 +20,8 @@ public class LoginMenu extends Menu {
         EMAIL ( "email" ),
         PHONE ( "phone number" ),
         COMPANY ( "company" ),
-        SAYERE_MOSHAKHASAT ( "dar surate vjud sayere moshakhsat" );
+        SAYERE_MOSHAKHASAT ( "dar surate vjud sayere moshakhsat" ),
+        PROFILE ("profile");
 
         public final String label;
 

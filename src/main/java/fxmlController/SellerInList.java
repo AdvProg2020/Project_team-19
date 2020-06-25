@@ -3,12 +3,14 @@ package fxmlController;
 import controller.CartController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import model.Product;
 import model.Salesperson;
+import view.App;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -45,7 +47,10 @@ public class SellerInList implements Initializable {
         sellerName.setFont(Font.font(FONT, 18));
         price.setText(salesperson.getProductPrice(product) + "$");
         editLabel();
-        addToCart.setOnAction(event -> handleAddToCart());
+        addToCart.setOnAction(event -> {
+            handleAddToCart();
+            App.showAlert(Alert.AlertType.INFORMATION, App.currentStage, "add to cart", "Successfully added to cart");
+        });
     }
 
     private void handleAddToCart() {

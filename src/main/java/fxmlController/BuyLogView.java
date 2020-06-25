@@ -46,6 +46,12 @@ public class BuyLogView implements Initializable {
 
     @Override
     public void initialize ( URL location , ResourceBundle resources ) {
+//        date.setStyle("-fx-control-inner-background:#000000; -fx-font-family: Consolas; -fx-highlight-fill: #00ff00; -fx-highlight-text-fill: #000000; -fx-text-fill: #00ff00; ");
+        date.setStyle("-fx-control-inner-background:#89b7ff; -fx-font-family: Consolas; -fx-highlight-fill: #000000; -fx-highlight-text-fill: #89b7ff; -fx-text-fill: #000000; ");
+        deliveredAmount.setStyle ( "-fx-control-inner-background:#89b7ff; -fx-font-family: Consolas; -fx-highlight-fill: #000000; -fx-highlight-text-fill: #89b7ff; -fx-text-fill: #000000; " );
+        discountAmount.setStyle ( "-fx-control-inner-background:#89b7ff; -fx-font-family: Consolas; -fx-highlight-fill: #000000; -fx-highlight-text-fill: #89b7ff; -fx-text-fill: #000000; " );
+        product.setStyle ( "-fx-control-inner-background:#89b7ff; -fx-font-family: Consolas; -fx-highlight-fill: #000000; -fx-highlight-text-fill: #89b7ff; -fx-text-fill: #000000; " );
+        transmitted.setStyle ( "-fx-control-inner-background:#89b7ff; -fx-font-family: Consolas; -fx-highlight-fill: #000000; -fx-highlight-text-fill: #89b7ff; -fx-text-fill: #000000; " );
         date.setText (  Metadata.date );
         deliveredAmount.setText ( String.valueOf ( Metadata.deliveredAmount ) );
         discountAmount.setText ( String.valueOf ( Metadata.discountAmount ));

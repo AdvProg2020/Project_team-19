@@ -5,9 +5,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import model.Customer;
@@ -61,8 +59,12 @@ public class UserLoginMenuController {
             checkValidity ();
             PersonController.getInstance ( ).checkPassword ( password.getText () , username.getText () );
             PersonController.getInstance ().login ( username.getText () );
-            Alert alert = new Alert ( Alert.AlertType.CONFIRMATION );
-            alert.setContentText ( "Successfully Logged In!" );
+            ButtonType ok = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+            ButtonType cancel = new ButtonType("Ok", ButtonBar.ButtonData.CANCEL_CLOSE);
+            Alert alert = new Alert( Alert.AlertType.CONFIRMATION,
+                    "Successfully Logged In! Ok?",
+                    ok,
+                    cancel);
             alert.showAndWait ();
 //            back ();
             App.firstScene = new Scene ( getFXMLLoader ( "mainMenu" ).load () );

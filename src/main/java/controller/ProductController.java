@@ -125,6 +125,15 @@ public class ProductController {
         changeFilesAfterEditProduct(product, salesperson);
     }
 
+    public void editProduct(Product product, Salesperson salesperson, int amount, double price,
+                            String category, String name, String brand, HashMap<String, String> properties, String imageURI, String mediaURI) {
+
+        changeStateToVerified(product, salesperson);
+        editProductForSeller(product, salesperson, price, amount);
+        editProductInGeneral(product, category, name, brand, properties, imageURI, mediaURI);
+        changeFilesAfterEditProduct(product, salesperson);
+    }
+
     private void editProductForSeller(Product product, Salesperson salesperson, double price, int amount) {
         salesperson.editProduct(product, price, amount);
     }
@@ -132,6 +141,14 @@ public class ProductController {
     private void editProductInGeneral(Product product, String category, String name, String brand, HashMap<String, String> properties) {
         product.getCategory().removeProduct(product);
         product.edit(category, name, brand, properties);
+        product.getCategory().addProduct(product);
+    }
+
+    private void editProductInGeneral(Product product, String category, String name, String brand, HashMap<String, String> properties, String imageURI, String mediaURI) {
+        product.getCategory().removeProduct(product);
+        product.edit(category, name, brand, properties);
+        product.setMediaURI(mediaURI);
+        product.setImageURI(imageURI);
         product.getCategory().addProduct(product);
     }
 
@@ -156,11 +173,6 @@ public class ProductController {
     private void changeFilesAfterRemoveProduct(Product product, Salesperson salesperson) {
         saveToFile(CategoryController.rootCategories, address.get("root_categories"));
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
-        try {
-            deleteFile(createPath("products", product.getID()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void declineProductRequestForAdd(Product product, Salesperson salesperson) {

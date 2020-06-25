@@ -9,16 +9,24 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Salesperson;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import static view.LoginMenu.PersonInfo.PASSWORD;
+import static view.LoginMenu.PersonInfo.PROFILE;
 
 public class ChangeInfoController implements Initializable {
 
+    @FXML private ImageView profile;
+    private File profileFile;
+    private String profileFileString;
     @FXML private Button cancel;
     @FXML private ChoiceBox<String> field;
     @FXML private TextField text;
@@ -47,15 +55,38 @@ public class ChangeInfoController implements Initializable {
                 text.setPromptText ( field.getValue () );
             }
         } );
+
+        profileFileString =  PersonController.getInstance ().getLoggedInPerson ().getPersonInfo ().get ( PROFILE.label );
+
+        profile.setImage ( new Image ( profileFileString ) );
+
+        Stage stage = new Stage();
+        stage.setTitle("FileChooser");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("View Pictures");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG", "*.png"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JPG", "*.jpg"));
+        profile.setOnMouseClicked ( event -> {
+            if (event.getClickCount () == 2) {
+                profileFile = fileChooser.showOpenDialog ( stage );
+
+                if (profileFile != null) {
+                    profile.setImage ( new Image (profileFile.toURI().toString()) );
+                    profileFileString = profileFile.toURI ().toString ();
+                }
+            }
+        } );
+
     }
 
     @FXML private void done () {
-        if (field.getValue ().equals ( "Password" )) {
+        if (field.getValue ().equals ( "Password" ) && !password.getText ().isEmpty ()) {
             PersonController.getInstance ().getLoggedInPerson ().setField ( PASSWORD.label , password.getText () );
-        } else {
-            System.out.println ( field.getValue ().toLowerCase () );
-            PersonController.getInstance ().getLoggedInPerson ().setField ( field.getValue ().toLowerCase () , text.getText () );
+        } else if (!text.getText ().isEmpty ()) {
+            System.out.println ( field.getValue ( ).toLowerCase ( ) );
+            PersonController.getInstance ( ).getLoggedInPerson ( ).setField ( field.getValue ( ).toLowerCase ( ) , text.getText ( ) );
         }
+        PersonController.getInstance ().getLoggedInPerson ().setField ( PROFILE.label , profileFileString );
         Metadata.personInfoController.updateTable ();
         cancel();
     }

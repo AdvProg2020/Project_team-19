@@ -20,7 +20,7 @@ public class BarController {
             Person person = PersonController.getInstance ().getLoggedInPerson ();
             App.currentScene = new Scene ( getFXMLLoader ( "userMenu" ).load () );
         } else {
-            App.currentScene = new Scene ( getFXMLLoader ("userLoginMenu").load () , 800 , 400 );
+            App.currentScene = new Scene ( getFXMLLoader ("userLoginMenu").load () );
         }
         App.currentStage.setScene ( App.currentScene );
     }

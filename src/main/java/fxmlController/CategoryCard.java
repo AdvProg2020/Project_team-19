@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -90,6 +91,8 @@ public class CategoryCard implements Initializable {
 
         gridPane.setBackground((new Background(new BackgroundFill(Color.rgb(153,221,255), CornerRadii.EMPTY, Insets.EMPTY))));
 
+        yes.setCursor(Cursor.HAND);
+        no.setCursor(Cursor.HAND);
         yes.setOnMouseClicked(event -> {
             remove();
             stage.close();

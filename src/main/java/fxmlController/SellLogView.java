@@ -5,6 +5,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import view.App;
 
@@ -14,25 +15,25 @@ import java.util.ResourceBundle;
 public class SellLogView implements Initializable {
 
     @FXML
-    private Label date;
+    private TextArea date;
 
     @FXML
-    private Label deliveredAmount;
+    private TextArea deliveredAmount;
 
     @FXML
-    private Label discountAmount;
+    private TextArea discountAmount;
 
     @FXML
-    private Label product;
+    private TextArea product;
 
     @FXML
-    private Label count;
+    private TextArea count;
 
     @FXML
-    private Label buyer;
+    private TextArea buyer;
 
     @FXML
-    private Label transmitted;
+    private TextArea transmitted;
 
     @FXML
     private FontAwesomeIcon back;
@@ -52,6 +53,13 @@ public class SellLogView implements Initializable {
 
     @Override
     public void initialize ( URL location , ResourceBundle resources ) {
+        date.setStyle("-fx-control-inner-background:#89b7ff; -fx-font-family: Consolas; -fx-highlight-fill: #000000; -fx-highlight-text-fill: #89b7ff; -fx-text-fill: #000000; ");
+        deliveredAmount.setStyle ( "-fx-control-inner-background:#89b7ff; -fx-font-family: Consolas; -fx-highlight-fill: #000000; -fx-highlight-text-fill: #89b7ff; -fx-text-fill: #000000; " );
+        discountAmount.setStyle ( "-fx-control-inner-background:#89b7ff; -fx-font-family: Consolas; -fx-highlight-fill: #000000; -fx-highlight-text-fill: #89b7ff; -fx-text-fill: #000000; " );
+        product.setStyle ( "-fx-control-inner-background:#89b7ff; -fx-font-family: Consolas; -fx-highlight-fill: #000000; -fx-highlight-text-fill: #89b7ff; -fx-text-fill: #000000; " );
+        count.setStyle ( "-fx-control-inner-background:#89b7ff; -fx-font-family: Consolas; -fx-highlight-fill: #000000; -fx-highlight-text-fill: #89b7ff; -fx-text-fill: #000000; " );
+        buyer.setStyle ( "-fx-control-inner-background:#89b7ff; -fx-font-family: Consolas; -fx-highlight-fill: #000000; -fx-highlight-text-fill: #89b7ff; -fx-text-fill: #000000; " );
+        transmitted.setStyle ( "-fx-control-inner-background:#89b7ff; -fx-font-family: Consolas; -fx-highlight-fill: #000000; -fx-highlight-text-fill: #89b7ff; -fx-text-fill: #000000; " );
         date.setText (  Metadata.date );
         deliveredAmount.setText ( String.valueOf ( Metadata.deliveredAmount ) );
         discountAmount.setText ( String.valueOf ( Metadata.discountAmount ));

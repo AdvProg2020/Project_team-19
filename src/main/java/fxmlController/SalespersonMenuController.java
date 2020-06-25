@@ -30,14 +30,9 @@ public class SalespersonMenuController {
     void availableProd ( ActionEvent event ) {
         Salesperson salesperson = (Salesperson)PersonController.getInstance().getLoggedInPerson();
         AllProductsForSeller allProductsForSeller = new AllProductsForSeller(salesperson, true);
-        FXMLLoader loader = new FXMLLoader(SalespersonMenuController.class.getResource("/fxml/allProductsForSeller.fxml"));
+        FXMLLoader loader = new FXMLLoader(SalespersonMenuController.class.getResource("/fxml/allProductsForSellerMenu.fxml"));
         loader.setController(allProductsForSeller);
         App.setRoot(loader);
-    }
-
-    @FXML
-    void category ( ActionEvent event ) {
-
     }
 
     @FXML
@@ -62,7 +57,7 @@ public class SalespersonMenuController {
     void prod ( ActionEvent event ) {
         Salesperson salesperson = (Salesperson)PersonController.getInstance().getLoggedInPerson();
         AllProductsForSeller allProductsForSeller = new AllProductsForSeller(salesperson, false);
-        FXMLLoader loader = new FXMLLoader(SalespersonMenuController.class.getResource("/fxml/allProductsForSeller.fxml"));
+        FXMLLoader loader = new FXMLLoader(SalespersonMenuController.class.getResource("/fxml/allProductsForSellerMenu.fxml"));
         loader.setController(allProductsForSeller);
         App.setRoot(loader);
     }

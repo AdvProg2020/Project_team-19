@@ -23,7 +23,8 @@ public class Product {
     private String brand;
     private String category;
     private String description;
-    private String mediaURI = "";
+    private String mediaURI;
+    private String imageURI;
     private double averageScore;
     private double averagePrice;
     private double leastPrice;
@@ -45,6 +46,14 @@ public class Product {
         Database.saveToFile(this, Database.createPath("products", productID));
     }
 
+    public void setImageURI(String imageURI) {
+        if (!imageURI.isEmpty()) this.imageURI = imageURI;
+    }
+
+    public void setMediaURI(String mediaURI) {
+        if (!mediaURI.isEmpty()) this.mediaURI = mediaURI;
+    }
+
     public boolean hasMedia() {
         return mediaURI.length() != 0;
     }
@@ -53,13 +62,9 @@ public class Product {
         return mediaURI;
     }
 
-    public void setMediaURI(String path) {
-        mediaURI = path;
-    }
-
     public void increaseBuyers() {
         buyersNum += 1;
-    }
+    } //todo
 
     public void increaseTotalScore(int score) {
         totalScore += score;

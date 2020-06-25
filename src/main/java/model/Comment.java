@@ -1,6 +1,5 @@
 package model;
 
-import controller.Database;
 import controller.PersonController;
 
 import java.time.LocalDateTime;
