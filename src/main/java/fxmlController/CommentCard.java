@@ -1,5 +1,6 @@
 package fxmlController;
 
+import controller.Database;
 import controller.PersonController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,6 +12,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -20,6 +22,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Comment;
 import model.Person;
+import model.Product;
 
 import java.io.IOException;
 import java.net.URL;
@@ -31,15 +34,17 @@ public class CommentCard implements Initializable {
     private Stage commentStage;
     private Button submit;
     private Person person;
+    private Product product;
     @FXML private Label commenterName;
-    @FXML private ImageView commenterImage; //todo
+    @FXML private ImageView commenterImage;
     @FXML private Label commentLabel;
     @FXML private Label titleLabel;
     @FXML private Label isBoughtLabel;
     @FXML private ImageView reply;
     @FXML private VBox commentBase;
 
-    public CommentCard(Comment comment) {
+    public CommentCard(Comment comment, Product product) {
+        this.product = product;
         this.comment = comment;
     }
 
@@ -48,6 +53,7 @@ public class CommentCard implements Initializable {
         person = PersonController.getInstance().getLoggedInPerson();
         commentLabel.setText(comment.getCommentString());
         commenterName.setText(comment.getCommenterUsername());
+        commenterImage.setImage(new Image(comment.getCommenter().getImage()));
         titleLabel.setText(comment.getTitle());
         isBoughtLabel.setOpacity(0.5);
         if (comment.isBought()) {
@@ -137,8 +143,8 @@ public class CommentCard implements Initializable {
             showAlert(Alert.AlertType.ERROR, commentStage, "Error", "Fill the comment!");
             return;
         }
-
         comment.setReply(person.getUsername(), replyTextField.getText());
+        Database.saveToFile(product, Database.createPath("products", product.getID()));
         commentStage.close();
     }
 

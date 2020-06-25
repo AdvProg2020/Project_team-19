@@ -14,6 +14,10 @@ abstract public class Person {
         allPersons.add(this);
     }
 
+    public String getImage() {
+        return personInfo.get(PROFILE.label);
+    }
+
     public String getPassword() {
         return personInfo.get("password");
     }

@@ -68,8 +68,6 @@ public class Comment {
 
     public void setReply(String username, String reply) {
         this.replies.put(username, reply);
-        Person person = PersonController.getInstance().getPersonByUsername(commenterUsername);
-      //  Database.saveToFile(person, Database.createPath(person.getType(), person.getUsername()));
     }
 
     public HashMap<String, String> getReply() {

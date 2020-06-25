@@ -9,7 +9,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <VBox fx:id="commentBase" style="-fx-background-color: #b3e6ff; -fx-border-color: #99ddff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="600.0">
@@ -40,19 +39,19 @@
             <Separator orientation="VERTICAL" prefHeight="200.0" />
             <VBox prefHeight="103.0" prefWidth="463.0" spacing="5.0">
                <children>
-                  <Label fx:id="isBoughtLabel" opacity="0.48" prefHeight="23.0" prefWidth="106.0" text="Bought this">
+                  <Label fx:id="isBoughtLabel" opacity="0.48" prefHeight="23.0" prefWidth="437.0" text="Bought this">
                      <font>
-                        <Font name="Verdana" size="18.0" />
+                        <Font name="Verdana" size="14.0" />
                      </font>
                   </Label>
-                  <Label fx:id="titleLabel" prefHeight="27.0" prefWidth="118.0" text="title">
+                  <Label fx:id="titleLabel" prefHeight="23.0" prefWidth="444.0" text="title">
                      <font>
                         <Font name="Verdana" size="18.0" />
                      </font>
                   </Label>
                   <Label fx:id="commentLabel" prefHeight="54.0" prefWidth="471.0" text="comment">
                      <font>
-                        <Font name="Verdana" size="18.0" />
+                        <Font name="Verdana" size="14.0" />
                      </font>
                   </Label>
                </children>

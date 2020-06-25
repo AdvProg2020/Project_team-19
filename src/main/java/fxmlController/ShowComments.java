@@ -33,7 +33,6 @@ public class ShowComments implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        masalan();
         setCommentCards();
         setCommentCardBase();
         ProductMenu productMenu = new ProductMenu(product, isDiscount);
@@ -50,7 +49,7 @@ public class ShowComments implements Initializable {
     private void setCommentCards() {
         commentCards = new ArrayList<>();
         for (Comment comment : product.getComments()) {
-            CommentCard commentCardCtrl = new CommentCard(comment);
+            CommentCard commentCardCtrl = new CommentCard(comment, product);
             FXMLLoader loader = new FXMLLoader(ShowComments.class.getResource("/fxml/commentCard.fxml"));
             loader.setController(commentCardCtrl);
             Parent parent = null;

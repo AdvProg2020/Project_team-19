@@ -3,6 +3,7 @@ package fxmlController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import model.Person;
 
@@ -20,9 +21,9 @@ public class PersonInList implements Initializable {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {  //Todo type ro hatman tu hashmap bezarim
+    public void initialize(URL location, ResourceBundle resources) {
         role.setText(person.getType());
-        //setimageview
+        profilePic.setImage(new Image(person.getImage()));
         username.setText(person.getUsername());
     }
 }

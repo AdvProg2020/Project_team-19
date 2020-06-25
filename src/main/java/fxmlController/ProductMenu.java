@@ -1,5 +1,6 @@
 package fxmlController;
 
+import controller.Database;
 import controller.PersonController;
 import controller.ProductController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -124,6 +125,7 @@ public class ProductMenu implements Initializable {
     }
 
     private void checkMedia() {
+        product.setMediaURI("/videos/81b26991a04e2c2e93ead9ac94c70d933757105-360p.mp4");
         if (product.hasMedia()) {
             playMedia.setCursor(Cursor.HAND);
             playMedia.setOpacity(1);
@@ -339,11 +341,12 @@ public class ProductMenu implements Initializable {
                 return;
             }
             Customer customer = (Customer) person;
-            Comment newComment = new Comment(true, customer, title.getText(), comment.getText());
+            Comment newComment = new Comment(true, customer, comment.getText(), title.getText());
             if (customer.isProductBought(product)) {
                 newComment.setBought(true);
             }
             product.addComment(newComment);
+            Database.saveToFile(product, Database.createPath("products", product.getID()));
             commentStage.close();
         });
     }
