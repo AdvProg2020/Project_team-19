@@ -16,4 +16,6 @@ public class Metadata {
     public static DiscountCodesFXMLController discountCodesFXMLController;
     public static DiscountCode discountCode;
 
+    public static AllRequests allRequests;
+
 }

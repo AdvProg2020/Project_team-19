@@ -12,7 +12,7 @@
 
 <!--<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>-->
 
-<ScrollPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.MainProductsMenu">
+<ScrollPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.MainProductsMenu">
    <content>
        <GridPane fx:id="basePane" prefHeight="497.0" prefWidth="793.0">
         <columnConstraints>

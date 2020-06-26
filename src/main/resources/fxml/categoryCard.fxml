@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox alignment="CENTER" prefHeight="50.0" prefWidth="197.0" spacing="5.0" style="-fx-border-color: #99ddff; -fx-border-width: 2;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<HBox alignment="CENTER" prefHeight="50.0" prefWidth="197.0" spacing="5.0" style="-fx-border-color: #99ddff; -fx-border-width: 2;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ImageView fx:id="childArrow" fitHeight="35.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>

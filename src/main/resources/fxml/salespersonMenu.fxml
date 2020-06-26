@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.SalespersonMenuController">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.SalespersonMenuController">
     <children>
         <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" onMouseClicked="#back" onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
         <Button layoutX="259.0" layoutY="427.0" mnemonicParsing="false" onAction="#logout" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Logout" />

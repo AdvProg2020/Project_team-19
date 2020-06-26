@@ -22,6 +22,12 @@ public class AllRequests implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        Metadata.allRequests = this;
+        updateTable();
+    }
+
+    public void updateTable () {
+        vBox.getChildren ().clear ();
         for (Request request : RequestController.getAllRequests()) {
             RequestCard card = new RequestCard(request);
             FXMLLoader loader = new FXMLLoader(AllRequests.class.getResource("/fxml/requestCard.fxml"));

@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<ScrollPane prefHeight="500.0" prefViewportHeight="500.0" prefViewportWidth="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<ScrollPane prefHeight="500.0" prefViewportHeight="500.0" prefViewportWidth="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
    <content>
       <GridPane fx:id="basePane" alignment="CENTER" prefHeight="497.0" prefWidth="797.0">
         <columnConstraints>

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 
 
-<VBox alignment="CENTER" prefHeight="53.0" prefWidth="49.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" prefHeight="53.0" prefWidth="49.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ImageView fx:id="profilePic" fitHeight="22.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
          <image>

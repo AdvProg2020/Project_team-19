@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
-<ScrollPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.AllCategoriesMenu">
+<ScrollPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.AllCategoriesMenu">
    <content>
       <GridPane fx:id="basePane" alignment="CENTER_LEFT" prefHeight="487.0" prefWidth="785.0">
          <columnConstraints>
