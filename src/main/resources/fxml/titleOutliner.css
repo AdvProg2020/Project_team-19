@@ -1,0 +1,12 @@
+.label {
+    -fx-font-size: 50px;
+}
+
+.outline.label .text {
+    -fx-font-family: Vivaldi;
+    -fx-font-size: 47;
+    -fx-alignment: center;
+    -fx-stroke: black;
+    -fx-stroke-width: 0.3;
+    -fx-fill: #ff27a6;
+}

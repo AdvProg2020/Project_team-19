@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="content" prefHeight="500.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.RegisterMenuController">
+   <children>
+      <ScrollPane hbarPolicy="NEVER" prefHeight="500.0" prefWidth="400.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1000.0" prefWidth="400.0">
+               <children>
+<!--                   <FontAwesomeIcon glyphName="CLOSE" layoutX="362.0" layoutY="30.0" onMouseClicked="#closeApp" strokeType="OUTSIDE" strokeWidth="0.0" text="" />-->
+                   <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" onMouseClicked="#back" onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+                   <Label layoutX="169.0" layoutY="53.0" text="Register">
+                       <font>
+                           <Font name="Ebrima" size="17.0" />
+                       </font>
+                   </Label>
+                   <TextField fx:id="username" layoutX="56.0" layoutY="136.0" prefHeight="26.0" prefWidth="282.0" promptText="Username" stylesheets="@textField.css" />
+                   <PasswordField fx:id="password" layoutX="56.0" layoutY="185.0" prefHeight="26.0" prefWidth="282.0" promptText="Password" stylesheets="@textField.css" />
+                  <ChoiceBox fx:id="type" layoutX="56.0" layoutY="563.0" prefHeight="26.0" prefWidth="282.0" />
+                   <TextField fx:id="firstName" layoutX="56.0" layoutY="612.0" prefHeight="26.0" prefWidth="282.0" promptText="First Name" stylesheets="@textField.css" />
+                   <TextField fx:id="lastName" layoutX="56.0" layoutY="661.0" prefHeight="26.0" prefWidth="282.0" promptText="Last Name" stylesheets="@textField.css" />
+                  <TextField fx:id="email" layoutX="56.0" layoutY="710.0" prefHeight="26.0" prefWidth="282.0" promptText="Email" stylesheets="@textField.css" />
+                  <TextField fx:id="phone" layoutX="56.0" layoutY="759.0" prefHeight="26.0" prefWidth="282.0" promptText="Phone" stylesheets="@textField.css" />
+                   <Button fx:id="registerBtn" defaultButton="true" layoutX="56.0" layoutY="808.0" mnemonicParsing="false" onAction="#registerBtnAction" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Register" />
+                  <TextField fx:id="company" layoutX="56.0" layoutY="808.0" prefHeight="26.0" prefWidth="282.0" promptText="Company" stylesheets="@textField.css" visible="false" />
+                  <TextField fx:id="darSurateVjud" layoutX="56.0" layoutY="857.0" prefHeight="26.0" prefWidth="282.0" promptText="Dar Surate Vjud Sayere Moshakhasat" stylesheets="@textField.css" visible="false" />
+                  <StackPane layoutX="49.0" layoutY="224.0" prefHeight="280.0" prefWidth="280.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);;-fx-padding: 10;-fx-border-color: firebrick; -fx-border-radius: 5;">
+                     <children>
+                        <ImageView fx:id="profile" fitHeight="280.0" fitWidth="280.0" pickOnBounds="true" preserveRatio="true" />
+                     </children>
+                  </StackPane>
+                  <Label layoutX="56.0" layoutY="526.0" text="Double Click To Insert Profile Picture" textFill="#575757">
+                     <font>
+                        <Font name="Dubai Regular" size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

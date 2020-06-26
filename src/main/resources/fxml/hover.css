@@ -1,0 +1,8 @@
+.label:hover{
+    -fx-effect: innershadow(gaussian, #901aff,75,0,5,0);
+}
+
+.register:hover{
+    -fx-underline: true;
+    -fx-effect: innershadow(gaussian, #901aff,75,0,5,0);
+}

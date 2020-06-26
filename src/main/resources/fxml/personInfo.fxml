@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.PersonInfoController">
+    <children>
+        <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" onMouseClicked="#back" onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+      <TableView fx:id="tableView" layoutX="42.0" layoutY="54.0" prefHeight="350.0" prefWidth="344.0">
+        <columns>
+          <TableColumn fx:id="fieldColumn" editable="false" prefWidth="171.0" resizable="false" sortable="false" text="Field" />
+            <TableColumn fx:id="valueColumn" editable="false" minWidth="0.0" prefWidth="171.0" resizable="false" sortable="false" text="Value" />
+        </columns>
+      </TableView>
+        <Button layoutX="251.0" layoutY="436.0" mnemonicParsing="false" onAction="#changeInfo" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Change Info" />
+        <StackPane layoutX="416.0" layoutY="54.0" prefHeight="350.0" prefWidth="350.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);;-fx-padding: 10;-fx-border-color: firebrick; -fx-border-radius: 5;">
+            <children>
+                <ImageView fx:id="profile" fitHeight="326.0" fitWidth="326.0" pickOnBounds="true" preserveRatio="true" />
+            </children>
+        </StackPane>
+    </children>
+
+</AnchorPane>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.UsersController">
+    <children>
+        <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" onMouseClicked="#back" onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+        <TableView fx:id="tableView" layoutY="50.0" prefHeight="451.0" prefWidth="800.0">
+            <columns>
+                <TableColumn fx:id="nameColumn" editable="false" prefWidth="447.0" resizable="false" style="-fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" text="Username" />
+                <TableColumn fx:id="typeColumn" editable="false" minWidth="0.0" prefWidth="176.79998779296875" resizable="false" style="-fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" text="Type" />
+            <TableColumn fx:id="removeColumn" editable="false" minWidth="0.0" prefWidth="176.79998779296875" resizable="false" style="-fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" text="Remove" />
+            </columns>
+        </TableView>
+        <Button layoutX="232.0" layoutY="12.0" mnemonicParsing="false" onAction="#newOne" prefHeight="26.0" prefWidth="554.0" styleClass="btn" stylesheets="@button.css" text="New Manager To Help You Out With This Hard Job And Sympathize With You" />
+    </children>
+</AnchorPane>

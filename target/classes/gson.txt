@@ -1,0 +1,6 @@
+[
+{ "name":"John", "age":20, "car":null },
+{ "name":"Jamy", "age":30, "car":null },
+{ "name":"Annie", "age":18, "car":null },
+{ "name":"Mike", "age":28, "car":null }
+]

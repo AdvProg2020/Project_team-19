@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.ManagerMenuController">
+    <children>
+        <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" onMouseClicked="#back" onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+        <Button layoutX="260.0" layoutY="415.0" mnemonicParsing="false" onAction="#logout" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Logout" />
+        <Button layoutX="260.0" layoutY="369.0" mnemonicParsing="false" onAction="#personalInfo" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Personal Info" />
+        <Button layoutX="258.0" layoutY="323.0" mnemonicParsing="false" onAction="#categories" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Categories" />
+        <Button layoutX="260.0" layoutY="277.0" mnemonicParsing="false" onAction="#discountCodes" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Discount Codes" />
+        <Button layoutX="259.0" layoutY="231.0" mnemonicParsing="false" onAction="#reqs" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Requests" />
+        <Button layoutX="258.0" layoutY="185.0" mnemonicParsing="false" onAction="#users" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Users" />
+        <Label layoutX="266.0" layoutY="32.0" text="HELLO MANAGER">
+            <font>
+                <Font name="Bodoni MT" size="30.0" />
+            </font>
+        </Label>
+    </children>
+</AnchorPane>
