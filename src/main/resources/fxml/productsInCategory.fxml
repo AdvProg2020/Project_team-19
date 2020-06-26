@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<ScrollPane prefHeight="200.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+    <content>
+        <AnchorPane fx:id="anchorPane" prefHeight="203.0" prefWidth="772.0">
+            <children>
+                <Label fx:id="categoryName" layoutX="14.0" layoutY="14.0" prefHeight="27.0" prefWidth="195.0" text="category">
+               <font>
+                  <Font name="Verdana" size="12.0" />
+               </font></Label>
+                <Separator layoutX="12.0" layoutY="50.0" prefHeight="0.0" prefWidth="200.0" />
+                <HBox alignment="CENTER" layoutX="369.0" layoutY="2.0" prefHeight="58.0" prefWidth="389.0" spacing="10.0">
+                    <children>
+                        <ComboBox fx:id="filterBox" prefHeight="30.0" prefWidth="96.0" promptText="filter" stylesheets="@combo.css" />
+                        <TextField fx:id="propertyField" disable="true" prefHeight="30.0" prefWidth="199.0" promptText="write property" stylesheets="@textField.css" />
+                    </children>
+                </HBox>
+            </children>
+        </AnchorPane>
+    </content>
+</ScrollPane>

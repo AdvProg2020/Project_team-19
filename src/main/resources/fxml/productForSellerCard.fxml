@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" prefHeight="210.0" prefWidth="175.0" style="-fx-border-color: #085def;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox>
+         <children>
+            <Label fx:id="off" prefHeight="26.0" prefWidth="56.0" textFill="RED">
+               <font>
+                  <Font name="Verdana" size="11.0" />
+               </font>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </Label>
+         </children>
+      </HBox>
+      <StackPane prefHeight="100.0" prefWidth="100.0">
+         <children>
+            <ImageView fx:id="productImage" fitHeight="104.0" fitWidth="125.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/product.png" />
+               </image></ImageView>
+            <ImageView fx:id="inDiscount" fitHeight="33.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true" visible="false" StackPane.alignment="BOTTOM_RIGHT">
+               <StackPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="20.0" top="10.0" />
+               </StackPane.margin>
+               <image>
+                  <Image url="@../images/icons8-discount-100.png" />
+               </image>
+            </ImageView>
+         </children>
+      </StackPane>
+      <Label fx:id="name" alignment="CENTER" prefHeight="27.0" prefWidth="138.0" text="Label">
+         <font>
+            <Font name="Verdana" size="14.0" />
+         </font>
+      </Label>
+      <HBox prefHeight="29.0" prefWidth="175.0" spacing="5.0">
+         <children>
+            <StackPane fx:id="pricePane">
+               <children>
+                  <Label fx:id="price" alignment="CENTER" prefHeight="22.0" prefWidth="139.0" text="Label">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Label>
+                  <Line fx:id="priceLine" endX="20.0" startX="-20.0" />
+               </children>
+            </StackPane>
+            <Label fx:id="priceInDiscount" alignment="CENTER" prefHeight="27.0" prefWidth="157.0">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <Label fx:id="amount" alignment="CENTER" prefHeight="27.0" prefWidth="144.0" text="Label">
+         <font>
+            <Font name="Verdana" size="10.0" />
+         </font>
+      </Label>
+      <Label fx:id="state" alignment="CENTER" prefHeight="28.0" prefWidth="162.0" text="Label">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+         <children>
+            <ImageView fx:id="remove" fitHeight="30.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/remove.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <ImageView fx:id="edit" fitHeight="30.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/pencil.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+         </children>
+         <VBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+</VBox>

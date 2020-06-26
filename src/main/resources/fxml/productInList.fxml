@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="150.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <StackPane>
+         <children>
+            <ImageView fx:id="productImage" fitHeight="104.0" fitWidth="133.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/product.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="finished" fitHeight="30.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_RIGHT">
+               <StackPane.margin>
+                  <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+               </StackPane.margin>
+               <image>
+                  <Image url="@../images/finished.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="deleteProduct" fitHeight="40.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true" visible="false" StackPane.alignment="TOP_LEFT">
+               <image>
+                  <Image url="@../images/filled-trash.png" />
+               </image>
+            </ImageView>
+         </children>
+      </StackPane>
+      <Label fx:id="productNameLabel" alignment="CENTER" prefHeight="27.0" prefWidth="134.0" text="Label" />
+      <HBox alignment="CENTER" prefHeight="27.0" prefWidth="150.0">
+         <children>
+            <Label fx:id="priceLabel" alignment="CENTER" prefHeight="27.0" prefWidth="131.0" text="Label" />
+         </children>
+      </HBox>
+      <HBox fx:id="starRate" alignment="CENTER" prefHeight="36.0" prefWidth="150.0">
+         <padding>
+            <Insets left="50.0" />
+         </padding>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </HBox>
+   </children>
+</VBox>

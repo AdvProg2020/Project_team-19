@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<VBox alignment="CENTER" prefHeight="53.0" prefWidth="49.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fx:id="profilePic" fitHeight="22.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/person.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="role" alignment="CENTER" prefHeight="13.0" prefWidth="55.0" text="Label">
+         <font>
+            <Font size="9.0" />
+         </font>
+      </Label>
+      <Label fx:id="username" alignment="CENTER" prefHeight="20.0" prefWidth="59.0" text="Label">
+         <font>
+            <Font name="Verdana" size="10.0" />
+         </font>
+      </Label>
+   </children>
+</VBox>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="171.0" prefWidth="357.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox prefHeight="65.0" prefWidth="500.0" spacing="20.0">
+         <children>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/store.png" />
+               </image></ImageView>
+            <Label fx:id="sellerName" prefHeight="40.0" prefWidth="171.0" text="seller name" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </HBox>
+      <Separator prefWidth="200.0" />
+      <HBox layoutX="10.0" layoutY="10.0" prefHeight="60.0" prefWidth="414.0" spacing="20.0">
+         <children>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/price.png" />
+               </image></ImageView>
+            <Label fx:id="price" prefHeight="40.0" prefWidth="134.0" text="price" />
+            <Label fx:id="priceInDiscount" prefHeight="40.0" prefWidth="202.0" text="discount" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </HBox>
+      <Separator prefWidth="200.0" />
+      <HBox prefHeight="62.0" prefWidth="359.0" spacing="80.0">
+         <children>
+            <Button fx:id="addToCart" mnemonicParsing="false" prefHeight="28.0" prefWidth="177.0" styleClass="btn" stylesheets="@button.css" text="Add to cart">
+               <font>
+                  <Font name="Verdana" size="15.0" />
+               </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+         </children>
+         <VBox.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</VBox>

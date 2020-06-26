@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.UserLoginMenuController">
+   <children>
+      <AnchorPane fx:id="content" layoutX="400.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="400.0">
+         <children>
+            <Label layoutX="176.0" layoutY="53.0" text="Login">
+               <font>
+                  <Font name="Ebrima" size="17.0" />
+               </font>
+            </Label>
+            <TextField fx:id="username" layoutX="56.0" layoutY="136.0" prefHeight="26.0" prefWidth="282.0" promptText="Username" stylesheets="@textField.css" />
+            <PasswordField fx:id="password" layoutX="56.0" layoutY="185.0" prefHeight="26.0" prefWidth="282.0" promptText="Password" stylesheets="@textField.css" />
+            <Button fx:id="loginBtn" defaultButton="true" layoutX="56.0" layoutY="259.0" mnemonicParsing="false" onAction="#loginBtnAction" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Login" />
+            <Label fx:id="registerBtn" layoutX="200.0" layoutY="303.0" onMouseClicked="#registerBtnAction" styleClass="register" stylesheets="@hover.css" text="Register" textFill="#17b5ff">
+               <font>
+                  <Font name="Ebrima" size="12.0" />
+               </font>
+            </Label>
+            <Label layoutX="140.0" layoutY="303.0" text="New User?">
+               <font>
+                  <Font name="Ebrima" size="12.0" />
+               </font>
+            </Label>
+<!--            <FontAwesomeIcon glyphName="CLOSE" layoutX="362.0" layoutY="30.0" onMouseClicked="#closeApp" onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall" strokeType="OUTSIDE" strokeWidth="0.0" />-->
+            <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" onMouseClicked="#back" onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+         </children>
+      </AnchorPane>
+      <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="400.0" style="-fx-background-color: pink;">
+         <children>
+            <Label stylesheets="@hover.css" text="The BRUH">
+               <font>
+                  <Font name="Stencil" size="70.0" />
+               </font>
+            </Label>
+         </children>
+      </StackPane>
+   </children>
+</AnchorPane>

@@ -1,0 +1,55 @@
+.btn{
+    /*-fx-background-color: pink;*/
+    -fx-background-color: #99ddff;
+    -fx-text-fill: honeydew;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.btn:hover {
+    /*-fx-background-color: pink;*/
+    -fx-background-color: #17b5ff;
+    -fx-border-color: grey;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.btn:pressed {
+    -fx-text-fill: dimgrey;
+    /*-fx-background-color: #ff77c0;*/
+    -fx-background-color: #17b5ff;
+    /*-fx-border-color: pink;*/
+    -fx-border-color: #17b5ff;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.userBtn{
+    -fx-background-color: whitesmoke;
+    -fx-text-fill: black;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.userBtn:hover {
+    -fx-background-color: whitesmoke;
+    -fx-border-color: black;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.userBtn:pressed {
+    -fx-text-fill: black;
+    -fx-background-color: #ff77c0;
+    -fx-border-color: hotpink;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}

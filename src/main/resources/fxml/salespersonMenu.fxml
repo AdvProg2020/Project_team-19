@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.SalespersonMenuController">
+    <children>
+        <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" onMouseClicked="#back" onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+        <Button layoutX="259.0" layoutY="427.0" mnemonicParsing="false" onAction="#logout" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Logout" />
+        <Button layoutX="259.0" layoutY="385.0" mnemonicParsing="false" onAction="#personalInfo" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Personal Info" />
+        <Button layoutX="258.0" layoutY="343.0" mnemonicParsing="false" onAction="#sellLogs" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Sell Logs" />
+        <Button layoutX="259.0" layoutY="301.0" mnemonicParsing="false" onAction="#discounts" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Discounts" />
+        <Button layoutX="259.0" layoutY="259.0" mnemonicParsing="false" onAction="#availableProd" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="My Available Products" />
+        <Button layoutX="259.0" layoutY="217.0" mnemonicParsing="false" onAction="#prod" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="My Products" />
+        <Label layoutX="160.0" layoutY="60.0" text="HELLO SALESMAN... OR WOMAN">
+            <font>
+                <Font name="Bodoni MT" size="30.0" />
+            </font>
+        </Label>
+        <Label fx:id="yourBalanceLabel" layoutX="639.0" layoutY="131.0" prefHeight="18.0" prefWidth="158.0" text="Your Balance :">
+            <font>
+                <Font name="Consolas" size="12.0" />
+            </font></Label>
+    </children>
+</AnchorPane>
