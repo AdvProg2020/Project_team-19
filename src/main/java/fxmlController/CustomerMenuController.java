@@ -48,7 +48,7 @@ public class CustomerMenuController implements Initializable {
     }
 
     @FXML
-    void cart ( ActionEvent event ) {
+    void cart () {
         CartMenuFXML cartMenuFXML = new CartMenuFXML("customerMenu");
         FXMLLoader loader = new FXMLLoader(CustomerMenuController.class.getResource("/fxml/cart.fxml"));
         loader.setController(cartMenuFXML);
@@ -73,16 +73,11 @@ public class CustomerMenuController implements Initializable {
     }
 
     @FXML
-    void purchase ( ActionEvent event ) {
-        //nmikhad fek konam, hala ta solale biad
-    }
-
-    @FXML
     void increaseCredit ( MouseEvent mouseEvent ) {
         double credit;
         try {
             credit = Double.parseDouble ( enterAmount.getText () );
-//            chaching.play ();
+            App.chaChing.play ();
             PersonController.getInstance().increaseCustomerCredit( (Customer) PersonController.getInstance ().getLoggedInPerson () , credit);
             yourBalanceLabel.setText ( "Your Balance : " + ((Customer) PersonController.getInstance ().getLoggedInPerson ()).getCredit () );
         } catch (Exception e) {
@@ -122,7 +117,7 @@ public class CustomerMenuController implements Initializable {
         increaseCredit.setVisible ( false );
         increaseCredit.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20; -fx-effect: innershadow(gaussian, #00ad48,75,0,5,0);" );
         yourBalanceLabel.setText ( "Your Balance : " + ((Customer) PersonController.getInstance ().getLoggedInPerson ()).getCredit () );
-//        chaching = new AudioClip ( new File ( "ChaChing.mp3" ).toURI ( ).toString ( ) );
+        cart.setOnMouseClicked ( event -> cart () );
     }
 
     @FXML private void increaseCreditShow ( MouseEvent mouseEvent ) {

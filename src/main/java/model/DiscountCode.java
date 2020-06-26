@@ -52,7 +52,7 @@ public class DiscountCode {
 
     public double getPriceAfterDiscountCode(double price) {
         if(price * (1 - discountPercentage / 100)<= maxDiscount)
-        return price * (1 - discountPercentage / 100);
+            return price * (1 - discountPercentage / 100);
         return price - maxDiscount;
     }
 

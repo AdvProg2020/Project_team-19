@@ -18,14 +18,12 @@ public class DiscountRequest extends Request {
     private LocalDateTime endTime;
     private double discountPercentage;
 
-    public DiscountRequest(Discount discount, ArrayList<Product> products, LocalDateTime startTime,
+    public DiscountRequest(Discount discount, ArrayList<String> products, LocalDateTime startTime,
                            LocalDateTime endTime, double discountPercentage, Salesperson salesperson) {
         super(RequestState.EDIT);
         this.discountId = discount.getDiscountID();
         productIds = new ArrayList<>();
-        for (Product product : products) {
-            productIds.add(product.getID());
-        }
+        productIds = products;
         this.startTime = startTime;
         this.endTime = endTime;
         this.discountPercentage = discountPercentage;

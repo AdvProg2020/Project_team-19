@@ -233,6 +233,7 @@ public class ProductMenu implements Initializable {
     }
 
     private void submitRate() {
+        product.increaseBuyers ();
         product.increaseTotalScore(score);
     }
 

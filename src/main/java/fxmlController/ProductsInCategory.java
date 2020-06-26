@@ -5,16 +5,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Popup;
@@ -37,13 +35,15 @@ public class ProductsInCategory implements Initializable {
     private String property;
     private boolean isDiscount;
     private Popup popup = new Popup();
-    @FXML private GridPane productCardsBase;
+    private GridPane productCardsBase;
+    @FXML private AnchorPane anchorPane;
     @FXML private Label categoryName;
     @FXML private ComboBox<String> filterBox;
     @FXML private TextField propertyField;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        productCardsBase = new GridPane();
         filters = new LinkedHashMap<>();
         setProductCards();
         addProductCardsToPane();
@@ -51,6 +51,11 @@ public class ProductsInCategory implements Initializable {
         setComboFilters();
         setOnComboAction();
         setTextFieldAction();
+        productCardsBase.setAlignment(Pos.CENTER);
+        productCardsBase.setPadding(new Insets(20));
+        anchorPane.getChildren().add(productCardsBase);
+        productCardsBase.setLayoutX(10);
+        productCardsBase.setLayoutY(50);
     }
 
     public HashMap<Parent, Product> getProductLinks() {

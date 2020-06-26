@@ -38,7 +38,7 @@ public class DiscountCard implements Initializable {
     @FXML
     void edit(ActionEvent event) {
         try {
-            FXMLLoader loader = getFXMLLoader("discountRequestHandler");
+            FXMLLoader loader = getFXMLLoader("discountRequest");
             DiscountRequestHandler handler = new DiscountRequestHandler(discount);
             loader.setController(handler);
             App.currentScene = new Scene(loader.load());

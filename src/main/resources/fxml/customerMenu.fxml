@@ -15,8 +15,6 @@
         <Button layoutX="259.0" layoutY="395.0" mnemonicParsing="false" onAction="#personalInfo" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Personal Info" />
         <Button layoutX="259.0" layoutY="353.0" mnemonicParsing="false" onAction="#buyLogs" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Buy Logs" />
         <Button layoutX="259.0" layoutY="311.0" mnemonicParsing="false" onAction="#discountCodes" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Discount Codes" />
-        <Button layoutX="260.0" layoutY="269.0" mnemonicParsing="false" onAction="#cart" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Cart" />
-        <Button layoutX="260.0" layoutY="227.0" mnemonicParsing="false" onAction="#purchase" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Purchase" />
       <Label layoutX="260.0" layoutY="32.0" text="HELLO CUSTOMER">
          <font>
             <Font name="Bodoni MT" size="30.0" />

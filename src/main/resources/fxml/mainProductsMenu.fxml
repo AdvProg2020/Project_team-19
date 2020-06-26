@@ -44,7 +44,7 @@
                            </font>
                         </TextField>
       <!--                  <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />-->
-                        <ComboBox fx:id="filterCombo" prefHeight="35.0" prefWidth="86.0" promptText="filter" stylesheets="@combo.css" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+                        <ComboBox fx:id="filterCombo" prefHeight="35.0" prefWidth="120.0" promptText="filter" stylesheets="@combo.css" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
                            <GridPane.margin>
                               <Insets left="20.0" />
                            </GridPane.margin>

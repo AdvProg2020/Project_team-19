@@ -1,17 +1,25 @@
 package fxmlController;
 
+import controller.CategoryController;
+import controller.PersonController;
+import controller.RequestController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import model.*;
 import view.App;
 
@@ -57,10 +65,40 @@ public class AllProductsForSeller implements Initializable {
     }
 
     private void add() {
-        ProductRequestFXML productRequestFXML = new ProductRequestFXML(Request.RequestState.ADD, salesperson);
-        FXMLLoader loader = new FXMLLoader(AllProductsForSeller.class.getResource("/fxml/productRequest.fxml"));
-        loader.setController(productRequestFXML);
-        App.setRoot(loader);
+        Stage stage = new Stage();
+        GridPane gridPane = new GridPane();
+        Button newProd = new Button("add new product");
+        Button fromStock = new Button("add from stock");
+
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setPadding(new Insets(30));
+
+
+        newProd.getStylesheets().add("/fxml/button.css");
+        newProd.getStyleClass().add("btn");
+
+        fromStock.getStylesheets().add("/fxml/button.css");
+        fromStock.getStyleClass().add("btn");
+
+        newProd.setOnAction(event -> {
+            FXMLLoader loader = new FXMLLoader(AllProductsForSeller.class.getResource("/fxml/addRequestFromStock.fxml"));
+            App.setRoot(loader);
+            stage.close();
+        });
+        fromStock.setOnAction(event -> {
+            Salesperson salesperson = (Salesperson) PersonController.getInstance().getLoggedInPerson();
+            ProductRequestFXML productRequestFXML = new ProductRequestFXML(Request.RequestState.ADD, salesperson);
+            FXMLLoader loader = new FXMLLoader(AllProductsForSeller.class.getResource("/fxml/productRequest.fxml"));
+            loader.setController(productRequestFXML);
+            App.setRoot(loader);
+            stage.close();
+        });
+
+        Scene scene = new Scene(gridPane, 300, 200);
+
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
     }
 
     private void setProductCards() {

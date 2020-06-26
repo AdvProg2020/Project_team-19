@@ -236,11 +236,11 @@ public class ProductRequestFXML implements Initializable {
                 App.showAlert(Alert.AlertType.ERROR, App.currentStage, "error", "Fill every thing");
                 return;
             }
-            if (price.getText().matches("\\d+(.\\d+)?")) {
+            if (!price.getText().matches("\\d+(.\\d+)?")) {
                 App.showAlert(Alert.AlertType.ERROR, App.currentStage, "error", "Enter number for price");
                 return;
             }
-            if (amount.getText().matches("\\d+")) {
+            if (!amount.getText().matches("\\d+")) {
                 App.showAlert(Alert.AlertType.ERROR, App.currentStage, "error", "Enter number for amount");
                 return;
             }
