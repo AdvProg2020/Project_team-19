@@ -2,6 +2,7 @@ package fxmlController;
 
 import controller.CategoryController;
 import controller.RequestController;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -49,6 +50,9 @@ public class ProductRequestFXML implements Initializable {
 
     @FXML
     private TextField name;
+
+    @FXML
+    private FontAwesomeIcon back;
 
     @FXML
     private TextField brand;
@@ -137,6 +141,13 @@ public class ProductRequestFXML implements Initializable {
         chooseFileMedia.setOnAction(event -> chooseMedia());
         property.setOnAction(event -> getProperty());
         actionButton.setOnAction(event -> setActionButton());
+
+        back.setOnMouseClicked ( event -> App.setRoot ( "salespersonMenu" ) );
+
+        back.setOnMousePressed ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #17b5ff,75,0,5,0);" ) );
+
+        back.setOnMouseReleased ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" ) );
+
     }
 
     private void getProperty() {

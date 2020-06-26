@@ -1,6 +1,7 @@
 package fxmlController;
 
 import controller.CartController;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,16 +22,23 @@ import view.App;
 
 import java.io.IOException;
 import java.net.URL;
+import java.security.PublicKey;
 import java.util.ResourceBundle;
 
 import static view.App.getFXMLLoader;
 
 public class CartMenuFXML implements Initializable {
 
+    private String backPageName;
     private GridPane ordersBox;
     @FXML private Label totalPrice;
     @FXML private Label discountCodeAmount;
     @FXML private GridPane basePane;
+    @FXML private FontAwesomeIcon back;
+
+    public CartMenuFXML(String backPageName) {
+        this.backPageName = backPageName;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -44,6 +52,13 @@ public class CartMenuFXML implements Initializable {
         scrollPane.setContent(ordersBox);
         basePane.add(ordersBox, 0 , 1);
         totalPrice.setText(String.valueOf(CartController.getInstance().getCart().calculateTotalPrice()));
+        System.out.println(backPageName);
+        back.setOnMouseClicked ( event -> App.setRoot ( backPageName ) );
+
+        back.setOnMousePressed ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #17b5ff,75,0,5,0);" ) );
+
+        back.setOnMouseReleased ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" ) );
+
 //        discountCodeAmount.setText(String.valueOf(CartController.getInstance().getCart().));
     }
 

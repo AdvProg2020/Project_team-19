@@ -4,10 +4,12 @@ import controller.PersonController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.MediaPlayer;
@@ -30,6 +32,7 @@ public class CustomerMenuController implements Initializable {
     @FXML private FontAwesomeIcon back;
     @FXML private FontAwesomeIcon increaseCreditShowButton;
     @FXML private Label yourBalanceLabel;
+    @FXML private ImageView cart;
     private AudioClip chaching;
 
     @FXML
@@ -46,7 +49,10 @@ public class CustomerMenuController implements Initializable {
 
     @FXML
     void cart ( ActionEvent event ) {
-
+        CartMenuFXML cartMenuFXML = new CartMenuFXML("customerMenu");
+        FXMLLoader loader = new FXMLLoader(CustomerMenuController.class.getResource("/fxml/cart.fxml"));
+        loader.setController(cartMenuFXML);
+        App.setRoot(loader);
     }
 
     @FXML
@@ -68,7 +74,7 @@ public class CustomerMenuController implements Initializable {
 
     @FXML
     void purchase ( ActionEvent event ) {
-
+        //nmikhad fek konam, hala ta solale biad
     }
 
     @FXML

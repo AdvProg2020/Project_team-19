@@ -2,10 +2,12 @@ package fxmlController;
 
 import controller.CategoryController;
 import controller.ProductController;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -46,7 +48,8 @@ public class MainProductsMenu implements Initializable {
     private ImageView switchIcon;
     @FXML
     private ImageView cartIcon;
-    // @FXML private FontAwesomeIcon back;
+    @FXML
+    private FontAwesomeIcon back;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -67,12 +70,19 @@ public class MainProductsMenu implements Initializable {
             switchIcon.setImage(new Image("/images/discount.png"));
         basePane.add(slides(), 0, 1);
 
+        cartIcon.setCursor(Cursor.HAND);
+        cartIcon.setOnMouseClicked(event -> {
+            CartMenuFXML cartMenuFXML = new CartMenuFXML("mainProductsMenu");
+            FXMLLoader loader = new FXMLLoader(MainProductsMenu.class.getResource("/fxml/cart.fxml"));
+            loader.setController(cartMenuFXML);
+            App.setRoot(loader);
+        });
 
-//        back.setOnMouseClicked ( event -> App.setRoot ( "mainMenu" ) );
+        back.setOnMouseClicked ( event -> App.setRoot ( "mainMenu" ) );
 
-//        back.setOnMousePressed ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #17b5ff,75,0,5,0);" ) );
+        back.setOnMousePressed ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #17b5ff,75,0,5,0);" ) );
 
-        //       back.setOnMouseReleased ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" ) );
+        back.setOnMouseReleased ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" ) );
     }
 
     private void switchIconHandler() {
@@ -131,7 +141,6 @@ public class MainProductsMenu implements Initializable {
                     filterProducts = ProductController.getInstance().filterByPrice(Integer.parseInt(leastPrice), Integer.parseInt(mostPrice), filterByOtherFields(products));
                     filterCombo.setDisable(false);
                 } else {
-                    //propertyField.setText("invalid format");
                     filterCombo.setDisable(true);
                 }
                 break;

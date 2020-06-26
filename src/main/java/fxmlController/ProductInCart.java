@@ -61,6 +61,9 @@ public class ProductInCart implements Initializable {
         countLabel.setText(String.valueOf(productStateInCart.getCount()));
         decrease.setOnMouseClicked(event -> decreaseOnClick());
         increase.setOnMouseClicked(event -> increaseOnClick());
+        if (productStateInCart.getProduct().getImageURI() != null) {
+            productImage.setImage(new Image(productStateInCart.getProduct().getImageURI()));
+        }
     }
 
     public boolean isProductInCart() {

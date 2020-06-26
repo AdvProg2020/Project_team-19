@@ -8,27 +8,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<ScrollPane prefHeight="500.0" prefViewportHeight="500.0" prefViewportWidth="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<ScrollPane prefHeight="500.0" prefViewportHeight="500.0" prefViewportWidth="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <content>
-      <GridPane fx:id="basePane" alignment="CENTER" prefHeight="497.0" prefWidth="797.0">
-        <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="427.0" minWidth="10.0" prefWidth="109.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="755.0" minWidth="10.0" prefWidth="525.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="741.0" minWidth="10.0" prefWidth="109.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints maxHeight="161.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="161.0" minHeight="0.0" prefHeight="11.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="435.0" minHeight="10.0" prefHeight="435.0" vgrow="SOMETIMES" />
-        </rowConstraints>
+      <AnchorPane fx:id="basePane" prefHeight="57.0" prefWidth="789.0">
          <children>
-            <Label fx:id="title" alignment="CENTER" prefHeight="27.0" prefWidth="416.0" text="Your available products" textFill="#0089e4" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+             <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+             <Label fx:id="title" alignment="CENTER" layoutX="196.0" layoutY="18.0" prefHeight="27.0" prefWidth="416.0" text="Your available products" textFill="#0089e4">
                <font>
                   <Font name="Verdana" size="18.0" />
                </font>
             </Label>
-            <Separator prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="1" />
-            <Button fx:id="add" alignment="CENTER" mnemonicParsing="false" styleClass="btn" stylesheets="@button.css" text="Add product" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <Button fx:id="add" alignment="CENTER" layoutX="641.0" layoutY="18.0" mnemonicParsing="false" styleClass="btn" stylesheets="@button.css" text="Add product">
                <font>
                   <Font name="Verdana" size="14.0" />
                </font>
@@ -36,7 +27,8 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
+            <Separator layoutX="4.0" layoutY="59.0" prefHeight="3.0" prefWidth="784.0" />
          </children>
-      </GridPane>
+      </AnchorPane>
    </content>
 </ScrollPane>

@@ -73,7 +73,8 @@ public class ProductMenu implements Initializable {
     @FXML private Pane starRate;
     @FXML private ImageView rate;
     @FXML private ImageView playMedia;
-    //@FXML private FontAwesomeIcon back;
+    @FXML private FontAwesomeIcon back;
+    @FXML private ImageView cart;
 
     public ProductMenu(Product product, boolean isDiscount) {
         this.product = product;
@@ -116,17 +117,19 @@ public class ProductMenu implements Initializable {
             similarProductsPopup.show(App.currentStage);
         });
         checkMedia();
-        //back.setOnMouseClicked ( event -> App.setRoot ( "mainProductsMenu" ) );
+        if (product.getImageURI() != null) {
+            productImage.setImage(new Image(product.getImageURI()));
+        }
+        back.setOnMouseClicked ( event -> App.setRoot ( "mainProductsMenu" ) );
 
-        //back.setOnMousePressed ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #17b5ff,75,0,5,0);" ) );
+        back.setOnMousePressed ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #17b5ff,75,0,5,0);" ) );
 
-        //back.setOnMouseReleased ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" ) );
+        back.setOnMouseReleased ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" ) );
 
     }
 
     private void checkMedia() {
-        product.setMediaURI("/videos/81b26991a04e2c2e93ead9ac94c70d933757105-360p.mp4");
-        if (product.hasMedia()) {
+        if (product.getMediaURI() != null) {
             playMedia.setCursor(Cursor.HAND);
             playMedia.setOpacity(1);
             playMedia.setOnMouseClicked(event -> playMedia());

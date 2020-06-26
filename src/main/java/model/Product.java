@@ -50,12 +50,12 @@ public class Product {
         if (!imageURI.isEmpty()) this.imageURI = imageURI;
     }
 
-    public void setMediaURI(String mediaURI) {
-        if (!mediaURI.isEmpty()) this.mediaURI = mediaURI;
+    public String getImageURI() {
+        return imageURI;
     }
 
-    public boolean hasMedia() {
-        return mediaURI.length() != 0;
+    public void setMediaURI(String mediaURI) {
+        if (!mediaURI.isEmpty()) this.mediaURI = mediaURI;
     }
 
     public String getMediaURI() {

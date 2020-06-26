@@ -10,7 +10,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" prefHeight="210.0" prefWidth="175.0" style="-fx-border-color: #085def;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" prefHeight="210.0" prefWidth="175.0" style="-fx-border-color: #085def;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox>
          <children>
@@ -28,7 +28,7 @@
          <children>
             <ImageView fx:id="productImage" fitHeight="104.0" fitWidth="125.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../images/sample.jpg" />
+                  <Image url="@../images/product.png" />
                </image></ImageView>
             <ImageView fx:id="inDiscount" fitHeight="33.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true" visible="false" StackPane.alignment="BOTTOM_RIGHT">
                <StackPane.margin>
