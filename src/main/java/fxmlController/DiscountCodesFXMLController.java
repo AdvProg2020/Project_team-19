@@ -18,7 +18,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.*;
+import model.DiscountCode;
+import model.Person;
+import model.Salesperson;
+import model.SellLog;
 import view.App;
 
 import java.io.IOException;
@@ -118,31 +121,20 @@ public class DiscountCodesFXMLController implements Initializable {
     }
 
     public void newOne ( ActionEvent event ) {
-        boolean haveCustomer = false;
-        for (Person person : PersonController.allPersons) {
-            if ( person instanceof Customer ) {
-                haveCustomer = true;
-                break;
-            }
+        Parent root = null;
+        try {
+            root = getFXMLLoader ( "newDiscountCode" ).load ();
+        } catch (IOException ioException) {
+            ioException.printStackTrace ( );
         }
-        if (haveCustomer) {
-            Parent root = null;
-            try {
-                root = getFXMLLoader ( "newDiscountCode" ).load ();
-            } catch (IOException ioException) {
-                ioException.printStackTrace ( );
-            }
-            Stage window = new Stage ( );
-            window.setTitle ( "New Discount Code" );
-            assert root != null;
-            Scene scene = new Scene ( root , 600 , 300 );
-            window.setScene ( scene );
-            window.initModality ( Modality.APPLICATION_MODAL );
-            window.centerOnScreen ();
-            window.show ();
-        } else {
-            App.error ( "There is no customer." );
-        }
+        Stage window = new Stage ( );
+        window.setTitle ( "New Discount Code" );
+        assert root != null;
+        Scene scene = new Scene ( root , 600 , 300 );
+        window.setScene ( scene );
+        window.initModality ( Modality.APPLICATION_MODAL );
+        window.centerOnScreen ();
+        window.show ();
     }
 
 }

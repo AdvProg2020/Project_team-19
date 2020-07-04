@@ -206,15 +206,11 @@ public class ProductMenu implements Initializable {
         GridPane gridPane = new GridPane();
         setStars();
         Label rateText = new Label("Rate this product!");
+
         gridPane.add(rateText, 0, 0, 5, 1);
         for (int i = 0; i < 5; i++) {
             gridPane.add(stars[i], i + 1, 1);
         }
-
-        submit = new Button("Submit");
-        submit.getStyleClass().add("btn");
-        submit.getStylesheets().add("/fxml/button.css");
-        submit.setCursor(Cursor.HAND);
 
         gridPane.add(submit, 0, 2, 5, 1);
         gridPane.setAlignment(Pos.CENTER);
@@ -237,7 +233,6 @@ public class ProductMenu implements Initializable {
     }
 
     private void submitRate() {
-        product.increaseBuyers ();
         product.increaseTotalScore(score);
     }
 

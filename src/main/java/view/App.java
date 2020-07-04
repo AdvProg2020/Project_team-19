@@ -10,11 +10,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import model.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -27,12 +25,6 @@ public class App extends Application {
     public static Stage currentStage;
     public static Scene firstScene; //ToDo feilan injow mizarimesh
     private double xOffset, yOffset;
-
-    public static AudioClip akh = new AudioClip ( new File ( "src/main/resources/akh.mp3" ).toURI ().toString () );
-    public static AudioClip bop = new AudioClip ( new File ( "src/main/resources/bop.mp3" ).toURI ().toString () );
-    public static AudioClip click = new AudioClip ( new File ( "src/main/resources/mouseClick.mp3" ).toURI ().toString () );
-    public static AudioClip chaChing = new AudioClip ( new File ( "src/main/resources/chaChing.mp3" ).toURI ().toString () );
-
 
     public static void main(String[] args) {
         launch(args);
@@ -56,7 +48,7 @@ public class App extends Application {
         App.currentStage = primaryStage;
 
         AnchorPane root = getFXMLLoader("mainMenu").load();
-//        root.setOnMouseClicked(event -> System.out.println(event.getX() + " " + event.getY()));
+        root.setOnMouseClicked(event -> System.out.println(event.getX() + " " + event.getY()));
 
         currentScene = new Scene(root);
         primaryStage.setTitle("Bruh");
@@ -71,10 +63,6 @@ public class App extends Application {
 //            primaryStage.setX(event.getScreenX() - xOffset);
 //            primaryStage.setY(event.getScreenY() - yOffset);
 //        } );
-
-        AudioClip background = new AudioClip ( new File ( "src/main/resources/Soul_and_Mind.mp3" ).toURI ().toString () );
-        background.setCycleCount ( AudioClip.INDEFINITE );
-        background.play ();
 
         primaryStage.show();
 

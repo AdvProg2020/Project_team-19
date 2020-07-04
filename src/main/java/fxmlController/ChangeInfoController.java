@@ -58,8 +58,7 @@ public class ChangeInfoController implements Initializable {
 
         profileFileString =  PersonController.getInstance ().getLoggedInPerson ().getPersonInfo ().get ( PROFILE.label );
 
-        if (profileFileString != null)
-            profile.setImage ( new Image ( profileFileString ) );
+        profile.setImage ( new Image ( profileFileString ) );
 
         Stage stage = new Stage();
         stage.setTitle("FileChooser");

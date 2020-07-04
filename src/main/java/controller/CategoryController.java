@@ -48,10 +48,10 @@ public class CategoryController {
 
     public void getParentCategories(ArrayList<String> leafCategories, ArrayList<Category> categories) {
         for (Category category : categories) {
-            if (category.getProductList ().size () == 0)
-                leafCategories.add ( category.getName ( ) );
-            if (category.getChildren ().size () > 0)
-                getParentCategories ( leafCategories , category.getChildren ( ) );
+            if (!category.isLeaf())
+                leafCategories.add(category.getName());
+            else if (category.getChildren().size() != 0)
+                getParentCategories(leafCategories, category.getChildren());
         }
     }
 
@@ -111,22 +111,6 @@ public class CategoryController {
         System.out.println(parent);
         if (parent != null)
             changeParent(category, parent);
-
-        if (parent == null && root) {
-            changeParent(category,null);
-            rootCategories.add(category);
-        }
-        saveToFile(rootCategories, address.get("root_categories"));
-    }
-
-    public void editCategory(String name, Category category, Category parent, HashSet<String> properties, boolean root) {
-
-        if (name != null)
-            category.setName(name);
-        if (parent != null)
-            changeParent(category, parent);
-
-        category.setPropertyFields(properties);
 
         if (parent == null && root) {
             changeParent(category,null);

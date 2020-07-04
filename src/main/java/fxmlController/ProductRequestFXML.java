@@ -13,7 +13,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -82,19 +81,6 @@ public class ProductRequestFXML implements Initializable {
     @FXML
     private TextField description;
 
-    @FXML
-    void back() {
-        App.setRoot ( "salespersonMenu" );
-    }
-
-    @FXML private void backSizeBig ( MouseEvent mouseEvent ) {
-        back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #17b5ff,75,0,5,0);" );
-    }
-
-    @FXML private void backSizeSmall ( MouseEvent mouseEvent ) {
-        back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" );
-    }
-
 
     private void chooseImage() {
         Stage stage = new Stage();
@@ -104,7 +90,7 @@ public class ProductRequestFXML implements Initializable {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG", "*.png"));
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("JPG", "*.jpg"));
-        File file = fileChooser.showOpenDialog (stage);
+        File file = fileChooser.showSaveDialog(stage);
 
         if (file != null) {
             image = file.getAbsolutePath();
@@ -116,7 +102,7 @@ public class ProductRequestFXML implements Initializable {
         stage.setTitle("FileChooser");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("View Medias");
-        File file = fileChooser.showOpenDialog (stage);
+        File file = fileChooser.showSaveDialog(stage);
         if (file != null) {
             media = file.getAbsolutePath();
         }
@@ -156,11 +142,11 @@ public class ProductRequestFXML implements Initializable {
         property.setOnAction(event -> getProperty());
         actionButton.setOnAction(event -> setActionButton());
 
-//        back.setOnMouseClicked ( event -> App.setRoot ( "salespersonMenu" ) );
-//
-//        back.setOnMousePressed ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #17b5ff,75,0,5,0);" ) );
-//
-//        back.setOnMouseReleased ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" ) );
+        back.setOnMouseClicked ( event -> App.setRoot ( "salespersonMenu" ) );
+
+        back.setOnMousePressed ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #17b5ff,75,0,5,0);" ) );
+
+        back.setOnMouseReleased ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" ) );
 
     }
 
@@ -250,11 +236,11 @@ public class ProductRequestFXML implements Initializable {
                 App.showAlert(Alert.AlertType.ERROR, App.currentStage, "error", "Fill every thing");
                 return;
             }
-            if (!price.getText().matches("\\d+(.\\d+)?")) {
+            if (price.getText().matches("\\d+(.\\d+)?")) {
                 App.showAlert(Alert.AlertType.ERROR, App.currentStage, "error", "Enter number for price");
                 return;
             }
-            if (!amount.getText().matches("\\d+")) {
+            if (amount.getText().matches("\\d+")) {
                 App.showAlert(Alert.AlertType.ERROR, App.currentStage, "error", "Enter number for amount");
                 return;
             }

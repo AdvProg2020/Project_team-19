@@ -32,7 +32,6 @@ public class MainMenuController implements Initializable {
 //    @FXML private Button userMenu;
 
     @FXML private void userMenuAction () throws IOException {
-        App.akh.play ();
         App.firstScene = App.currentScene;
         if ( PersonController.getInstance ().isThereLoggedInPerson () ) {
             Person person = PersonController.getInstance ().getLoggedInPerson ();
@@ -51,13 +50,11 @@ public class MainMenuController implements Initializable {
 
     @FXML private void productAction () {
         MainProductsMenu.isDiscount = false;
-        App.akh.play ();
         App.setRoot ( "mainProductsMenu" );
     }
 
     @FXML void discountAction() {
         MainProductsMenu.isDiscount = true;
-        App.akh.play ();
         App.setRoot ( "mainProductsMenu" );
     }
 

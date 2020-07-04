@@ -10,10 +10,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -37,7 +35,6 @@ public class CartMenuFXML implements Initializable {
     @FXML private Label discountCodeAmount;
     @FXML private GridPane basePane;
     @FXML private FontAwesomeIcon back;
-    @FXML private AnchorPane anchorPane;
 
     public CartMenuFXML(String backPageName) {
         this.backPageName = backPageName;
@@ -45,7 +42,6 @@ public class CartMenuFXML implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         ScrollPane scrollPane = new ScrollPane();
         ordersBox = new GridPane();
         ordersBox.setAlignment(Pos.CENTER);
@@ -54,7 +50,7 @@ public class CartMenuFXML implements Initializable {
         ordersBox.setVgap(5);
         ordersBox.setHgap(5);
         scrollPane.setContent(ordersBox);
-        basePane.add(scrollPane, 0 , 1);
+        basePane.add(ordersBox, 0 , 1);
         totalPrice.setText(String.valueOf(CartController.getInstance().getCart().calculateTotalPrice()));
         System.out.println(backPageName);
         back.setOnMouseClicked ( event -> App.setRoot ( backPageName ) );
@@ -63,7 +59,7 @@ public class CartMenuFXML implements Initializable {
 
         back.setOnMouseReleased ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" ) );
 
-        discountCodeAmount.setText(String.valueOf(CartController.getInstance().getCart().calculateTotalPrice () - CartController.getInstance ().getCart ().getTotalPriceAfterDiscountCode ()));
+//        discountCodeAmount.setText(String.valueOf(CartController.getInstance().getCart().));
     }
 
     @FXML
@@ -78,18 +74,6 @@ public class CartMenuFXML implements Initializable {
         assert fxml != null;
         stage.setScene(new Scene(fxml,300,200));
         stage.show();
-    }
-
-    @FXML
-    void purchase(ActionEvent event) {
-        try {
-            CartController.getInstance().purchase(true);
-            App.setRoot("pay");
-        } catch (CartController.NoLoggedInPersonException e) {
-            App.showAlert(Alert.AlertType.ERROR,App.currentStage,"Error","You need to login.");
-        } catch (CartController.AccountIsNotCustomerException e) {
-            App.showAlert(Alert.AlertType.ERROR,App.currentStage,"Error","You need to login with customer account.");
-        }
     }
 
     private void setCartsOnPane() {

@@ -79,7 +79,6 @@ public class Cart {
                 totalPrice += products.get(product).get(salesperson).getTotalPrice();
             }
         }
-        totalPriceAfterDiscountCode = totalPrice;
         return totalPrice;
     }
 

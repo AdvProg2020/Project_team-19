@@ -170,7 +170,7 @@ public class SalespersonDiscountsMenu extends Menu {
                     }
 
                 } while (!choice.equals("6"));
-//                RequestController.getInstance().editDiscountRequest(discount, add, remove, start, end, percentage,salesperson);
+                RequestController.getInstance().editDiscountRequest(discount, add, remove, start, end, percentage,salesperson);
             }
         };
     }

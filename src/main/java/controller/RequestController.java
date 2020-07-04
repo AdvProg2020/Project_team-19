@@ -1,5 +1,6 @@
 package controller;
 
+import fxmlController.Metadata;
 import model.*;
 
 import java.io.File;
@@ -111,21 +112,10 @@ public class RequestController {
     }
 
     public void addProductRequest(Double price, Integer amount, Salesperson salesperson
-            ,Product chosenProduct) {
-        Product product = chosenProduct;
-        saveTempProductInProgramLists(product, salesperson, amount, price);
-        saveFileChangesForProductBeforeSendingRequest(product, salesperson);
-        productID = product.getID();
-        new ProductRequest(price, amount, salesperson, product);
-    }
-
-    public void addProductRequest(Double price, Integer amount, Salesperson salesperson
             , String category, String name, String brand, HashMap<String, String> properties, String imageURI, String mediaURI) {
         Product product = new Product(name, brand, category, properties);
-        if (imageURI != null)
-            product.setImageURI(imageURI);
-        if (mediaURI != null)
-            product.setMediaURI(mediaURI);
+        product.setImageURI(imageURI);
+        product.setMediaURI(mediaURI);
         saveTempProductInProgramLists(product, salesperson, amount, price);
         saveFileChangesForProductBeforeSendingRequest(product, salesperson);
         productID = product.getID();
@@ -151,7 +141,7 @@ public class RequestController {
     private void saveFileChangesForProductBeforeSendingRequest(Product product, Salesperson salesperson) {
         saveToFile(product, createPath("products", product.getID()));
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
-//        saveToFile(stock, address.get("stock"));
+        saveToFile(stock, address.get("stock"));
     }
 
     public void editProductRequest(String price, String amount, Salesperson salesperson, String productID
@@ -169,10 +159,8 @@ public class RequestController {
             , String category, String name, String brand, HashMap<String, String> properties, String image, String media) {
 
         Product product = ProductController.getInstance().getProductById(productID);
-        if (image != null)
-            product.setImageURI(image);
-        if (media != null)
-            product.setMediaURI(media);
+        product.setImageURI(image);
+        product.setMediaURI(media);
         salesperson.setEditInProgress(product);
         saveFileChangesForProductBeforeSendingRequest(product, salesperson);
         double pr = (price == null) ? salesperson.getProductPrice(product) : Double.parseDouble(price);
@@ -197,20 +185,22 @@ public class RequestController {
         new DiscountRequest(discount, salesperson, Request.RequestState.ADD);
     }
 
-    public void editDiscountRequest(Discount discount, ArrayList<String> products, LocalDateTime startTime,
+    public void editDiscountRequest(Discount discount, ArrayList<Product> add, ArrayList<Product> remove, LocalDateTime startTime,
                                     LocalDateTime endTime, Double discountPercentage, Salesperson salesperson) {
 
         discount.setDiscountState(Discount.DiscountState.EDIT_IN_PROGRESS);
         //serfan bedonim editInProgressE base
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
 
+        ArrayList<Product> products = discount.getProducts();
         if (startTime == null)
             startTime = discount.getStartTime();
         if (endTime == null)
             endTime = discount.getEndTime();
         if (discountPercentage == null)
             discountPercentage = discount.getDiscountPercentage();
-
+        products.addAll(add);
+        products.removeAll(remove);
 
         new DiscountRequest(discount, products, startTime, endTime, discountPercentage, salesperson);
     }

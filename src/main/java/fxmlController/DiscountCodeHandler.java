@@ -1,5 +1,4 @@
 package fxmlController;
-import controller.CartController;
 import controller.DiscountCodeController;
 import controller.PersonController;
 import javafx.collections.FXCollections;
@@ -12,7 +11,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import model.Customer;
-import model.DiscountCode;
 import org.omg.CORBA.INITIALIZE;
 import view.App;
 
@@ -27,6 +25,9 @@ public class DiscountCodeHandler implements Initializable {
     private ImageView tickImage;
 
     @FXML
+    private TextField codeField;
+
+    @FXML
     private Button confirmButton;
 
     @FXML
@@ -34,14 +35,12 @@ public class DiscountCodeHandler implements Initializable {
 
     @FXML
     void confirmOnClick(ActionEvent event) {
-        if (codes.getValue().length()==0){
+        if (codeField.getText().length()==0){
             errorLabel.setText("Please Enter The Discount Code.");
-        }
-//        else if (!DiscountCodeController.getInstance().isThereDiscountCodeByCode(codes.getValue())){
-//            errorLabel.setText("The Entered Code Is Wrong.");
-//        }
-        else {
-            CartController.getInstance().manageDiscountCode(DiscountCode.findDiscountCodeByCode(codes.getValue()));
+        }else
+        if (DiscountCodeController.getInstance().isThereDiscountCodeByCode(codeField.getText())){
+            errorLabel.setText("The Entered Code Is Wrong.");
+        }else {
             errorLabel.setText("Successful.");
             errorLabel.setTextFill(Color.web("#79d2a6"));
             tickImage.setVisible(true);
@@ -54,7 +53,7 @@ public class DiscountCodeHandler implements Initializable {
             showAlert(Alert.AlertType.ERROR, App.currentStage,"Bitch","You do not have any discount code.");
         }
         else
-            codes.setItems(FXCollections.observableArrayList(((Customer)PersonController.getInstance().getLoggedInPerson()).getDiscountCodesList()));
+        codes.setItems(FXCollections.observableArrayList(((Customer)PersonController.getInstance().getLoggedInPerson()).getDiscountCodesList()));
     }
 
     public void showAlert(Alert.AlertType alertType, Stage owner, String title, String message) {
