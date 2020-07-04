@@ -4,6 +4,7 @@ import model.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -54,6 +55,18 @@ public class ProductController {
 
     public void setCurrentProducts(ArrayList<Product> currentProducts) {
         ProductController.currentProducts = currentProducts;
+    }
+
+    public HashMap<Salesperson, ArrayList<Product>> getAllAuctions() {
+        HashMap<Salesperson, ArrayList<Product>> auctions = new HashMap<>();
+
+        ArrayList<Person> sellers = PersonController.getInstance().filterByRoll(Salesperson.class);
+        for (Person seller : sellers) {
+            ArrayList<Product> products = new ArrayList<>(((Salesperson) seller).getAuctions().keySet());
+            auctions.put((Salesperson) seller, products);
+        }
+
+        return auctions;
     }
 
     public static ArrayList<Product> getAllProducts() {
@@ -217,10 +230,7 @@ public class ProductController {
     }
 
     public boolean isProductAvailable(Product product, Salesperson salesperson) {
-        if (salesperson.getProductAmount(product) > 0) {
-            return true;
-        }
-        return false;
+        return salesperson.getProductAmount(product) > 0;
     }
 
     public ArrayList<Product> filterByField(String fieldName, String property, ArrayList<Product> products) {

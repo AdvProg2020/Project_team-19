@@ -5,6 +5,7 @@ import controller.Database;
 import controller.DiscountController;
 import controller.ProductController;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -12,6 +13,7 @@ public class Salesperson extends Person {
     private ArrayList<SellLog> sellLogs;
     private HashMap<String, ProductState> offeredProducts;
     private ArrayList<Discount> discounts;
+    private HashMap<String, LocalDateTime> auctions;  //product -> endTime
     private double credit;
 
 
@@ -20,9 +22,31 @@ public class Salesperson extends Person {
         sellLogs = new ArrayList<>();
         offeredProducts = new HashMap<>();
         discounts = new ArrayList<>();
+        auctions = new HashMap<>();
         Database.saveToFile(this, Database.createPath("salespersons", personInfo.get("username")));
     }
 
+    //todo before it should check everything
+    public void addAuction(Product product, LocalDateTime endTime) {
+        auctions.put(product.getID(), endTime);
+
+        //todo after calling this should save in file
+    }
+
+    public LocalDateTime getAuctionEndTime(Product product) {
+        return auctions.get(product.getID());
+    }
+
+    public HashMap<Product, LocalDateTime> getAuctions() {
+        HashMap<Product, LocalDateTime> auctionsMap = new HashMap<>();
+
+        for (String productId : auctions.keySet()) {
+            Product product = ProductController.getInstance().getProductById(productId);
+            auctionsMap.put(product, auctions.get(productId));
+        }
+
+        return auctionsMap;
+    }
 
     public void addSellLogAndPurchase(SellLog sellLog) {
         offeredProducts.get(sellLog.getProduct().getID()).setAmount(offeredProducts.get(sellLog.getProduct().getID()).getAmount() - sellLog.getCount());
