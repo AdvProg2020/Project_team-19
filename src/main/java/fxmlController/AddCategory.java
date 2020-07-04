@@ -1,11 +1,13 @@
 package fxmlController;
 
 import controller.CategoryController;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import model.Category;
 import view.App;
 
@@ -39,6 +41,21 @@ public class AddCategory implements Initializable {
     private TextArea properties;
     @FXML
     private Button manageButton;
+    @FXML
+    private FontAwesomeIcon back;
+
+    @FXML
+    void back() {
+        App.setRoot ( "managerMenu" );
+    }
+
+    @FXML private void backSizeBig ( MouseEvent mouseEvent ) {
+        back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #17b5ff,75,0,5,0);" );
+    }
+
+    @FXML private void backSizeSmall ( MouseEvent mouseEvent ) {
+        back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" );
+    }
 
 
     private void manage() {

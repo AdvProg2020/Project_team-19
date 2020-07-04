@@ -147,8 +147,14 @@ public class ProductController {
     private void editProductInGeneral(Product product, String category, String name, String brand, HashMap<String, String> properties, String imageURI, String mediaURI) {
         product.getCategory().removeProduct(product);
         product.edit(category, name, brand, properties);
-        product.setMediaURI(mediaURI);
-        product.setImageURI(imageURI);
+//        if (mediaURI != null)
+//            product.setMediaURI(mediaURI);
+//        else
+//            product.setMediaURI ( "" );
+//        if (imageURI != null)
+//            product.setImageURI(imageURI);
+//        else
+//            product.setImageURI ( "" );
         product.getCategory().addProduct(product);
     }
 

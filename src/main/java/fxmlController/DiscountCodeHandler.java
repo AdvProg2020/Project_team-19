@@ -36,10 +36,11 @@ public class DiscountCodeHandler implements Initializable {
     void confirmOnClick(ActionEvent event) {
         if (codes.getValue().length()==0){
             errorLabel.setText("Please Enter The Discount Code.");
-        }else
-        if (DiscountCodeController.getInstance().isThereDiscountCodeByCode(codes.getValue())){
-            errorLabel.setText("The Entered Code Is Wrong.");
-        }else {
+        }
+//        else if (!DiscountCodeController.getInstance().isThereDiscountCodeByCode(codes.getValue())){
+//            errorLabel.setText("The Entered Code Is Wrong.");
+//        }
+        else {
             CartController.getInstance().manageDiscountCode(DiscountCode.findDiscountCodeByCode(codes.getValue()));
             errorLabel.setText("Successful.");
             errorLabel.setTextFill(Color.web("#79d2a6"));

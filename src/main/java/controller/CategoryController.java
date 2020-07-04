@@ -48,10 +48,10 @@ public class CategoryController {
 
     public void getParentCategories(ArrayList<String> leafCategories, ArrayList<Category> categories) {
         for (Category category : categories) {
-            if (!category.isLeaf())
-                leafCategories.add(category.getName());
-            else if (category.getChildren().size() != 0)
-                getParentCategories(leafCategories, category.getChildren());
+            if (category.getProductList ().size () == 0)
+                leafCategories.add ( category.getName ( ) );
+            if (category.getChildren ().size () > 0)
+                getParentCategories ( leafCategories , category.getChildren ( ) );
         }
     }
 

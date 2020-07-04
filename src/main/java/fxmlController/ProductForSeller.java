@@ -67,9 +67,10 @@ public class ProductForSeller implements Initializable {
         name.setText(product.getName() + "(" + product.getID() + ")");
         edit.setOnMouseClicked(event -> edit());
         remove.setOnMouseClicked(event -> remove());
-        if (product.getImageURI() != null) {
-            productImage.setImage(new Image(product.getImageURI()));
-        }
+
+//        if (product.getImageURI().length () != 0) {
+//            productImage.setImage(new Image(product.getImageURI()));
+//        }
     }
 
     private void edit() {

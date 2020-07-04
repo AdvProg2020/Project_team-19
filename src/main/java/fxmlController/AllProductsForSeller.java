@@ -67,8 +67,8 @@ public class AllProductsForSeller implements Initializable {
     private void add() {
         Stage stage = new Stage();
         GridPane gridPane = new GridPane();
-        Button newProd = new Button("add new product");
-        Button fromStock = new Button("add from stock");
+        Button newProd = new Button("add from stock");
+        Button fromStock = new Button("add new product");
 
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setPadding(new Insets(30));
@@ -94,6 +94,8 @@ public class AllProductsForSeller implements Initializable {
             stage.close();
         });
 
+        gridPane.add ( newProd , 0 , 0 );
+        gridPane.add ( fromStock , 0 , 1 );
         Scene scene = new Scene(gridPane, 300, 200);
 
         stage.setScene(scene);
