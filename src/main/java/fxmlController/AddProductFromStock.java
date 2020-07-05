@@ -61,7 +61,7 @@ public class AddProductFromStock implements Initializable {
             App.showAlert(Alert.AlertType.ERROR, App.currentStage, "error", "Fill every thing");
             return;
         }
-        RequestController.getInstance().addProductRequest(Double.parseDouble(price.getText()),Integer.parseInt(amount.getText()),salesperson,ProductController.getInstance().getProductById(products.getValue()));
+        RequestController.getInstance().addProductRequestFromStock(Double.parseDouble(price.getText()),Integer.parseInt(amount.getText()),salesperson,ProductController.getInstance().getProductById(products.getValue()));
     }
 
     @FXML

@@ -31,6 +31,7 @@ public class Database {
         address.put("product_requests", databaseAddress + File.separator + "requests" + File.separator + "product_requests");
         address.put("discount_requests", databaseAddress + File.separator + "requests" + File.separator + "discount_requests");
         address.put("salesperson_requests", databaseAddress + File.separator + "requests" + File.separator + "salesperson_requests");
+        address.put("auction_requests", databaseAddress + File.separator + "requests" + File.separator + "auction_requests");
     }
 
     public static <T> Object read(Type typeOfT, String address) { //todo oooooooooooooooo
@@ -114,6 +115,7 @@ public class Database {
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "requests" + File.separator + "salesperson_requests");
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "requests" + File.separator + "product_requests");
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "requests" + File.separator + "discount_requests");
+        createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "requests" + File.separator + "auction_requests");
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "discount_codes");
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "products");
         createFile(System.getProperty("user.dir") + File.separator + "database" + File.separator + "root_categories.json");

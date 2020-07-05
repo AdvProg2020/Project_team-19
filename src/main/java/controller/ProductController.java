@@ -57,6 +57,11 @@ public class ProductController {
         ProductController.currentProducts = currentProducts;
     }
 
+    public void addAuction(Salesperson salesperson, Product product, LocalDateTime endTime) {
+        salesperson.addAuction(product, endTime);
+        saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
+    }
+
     public HashMap<Salesperson, ArrayList<Product>> getAllAuctions() {
         HashMap<Salesperson, ArrayList<Product>> auctions = new HashMap<>();
 

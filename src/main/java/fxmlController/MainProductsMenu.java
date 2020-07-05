@@ -245,11 +245,13 @@ public class MainProductsMenu implements Initializable {
         categoryCardsBase.setPageCount(leafCategories.size());
         categoryCardsBase.setCurrentPageIndex(0);
         categoryCardsBase.setMaxPageIndicatorCount(3);
-        categoryCardsBase.setPageFactory(param -> {
-            GridPane gridPane = new GridPane();
-            gridPane.add(categoryCards.get(param), 0, 0);
-            return gridPane;
-        });
+        if (categoryCards.size() != 0) {
+            categoryCardsBase.setPageFactory(param -> {
+                GridPane gridPane = new GridPane();
+                gridPane.add(categoryCards.get(param), 0, 0);
+                return gridPane;
+            });
+        }
     }
 
     private void setCategoryCards() {

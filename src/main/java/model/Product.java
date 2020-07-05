@@ -47,7 +47,7 @@ public class Product {
     }
 
     public void setImageURI(String imageURI) {
-        if (!imageURI.isEmpty()) this.imageURI = imageURI;
+        this.imageURI = imageURI;
     }
 
     public String getImageURI() {
@@ -55,7 +55,7 @@ public class Product {
     }
 
     public void setMediaURI(String mediaURI) {
-        if (!mediaURI.isEmpty()) this.mediaURI = mediaURI;
+        this.mediaURI = mediaURI;
     }
 
     public String getMediaURI() {

@@ -63,6 +63,8 @@ public class RequestController {
                 deleteFile(createPath("product_requests", request.getRequestId()));
             else if (request instanceof SalespersonRequest)
                 deleteFile(createPath("salesperson_requests", request.getRequestId()));
+            else if (request instanceof AuctionRequest)
+                deleteFile(createPath("auction_requests", request.getRequestId()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -78,6 +80,8 @@ public class RequestController {
                 deleteFile(createPath("product_requests", request.getRequestId()));
             else if (request instanceof SalespersonRequest)
                 deleteFile(createPath("salesperson_requests", request.getRequestId()));
+            else if (request instanceof AuctionRequest)
+                deleteFile(createPath("auction_requests", request.getRequestId()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -111,6 +115,13 @@ public class RequestController {
         new ProductRequest(price, amount, salesperson, product);
     }
 
+    public void addProductRequestFromStock(Double price, Integer amount, Salesperson salesperson, Product product) {
+        saveTempProductInProgramLists(product, salesperson, amount, price);
+        saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
+        new ProductRequest(price, amount, salesperson, product);
+    }
+
+    // fuck
     public void addProductRequest(Double price, Integer amount, Salesperson salesperson
             , String category, String name, String brand, HashMap<String, String> properties, String imageURI, String mediaURI) {
         Product product = new Product(name, brand, category, properties);
@@ -119,7 +130,7 @@ public class RequestController {
         saveTempProductInProgramLists(product, salesperson, amount, price);
         saveFileChangesForProductBeforeSendingRequest(product, salesperson);
         productID = product.getID();
-        new ProductRequest(price, amount, salesperson, product);
+        new ProductRequest(price, amount, salesperson, product, imageURI, mediaURI);
     }
 
     private void saveTempProductInProgramLists(Product product, Salesperson salesperson, int amount, double price) {
@@ -141,7 +152,6 @@ public class RequestController {
     private void saveFileChangesForProductBeforeSendingRequest(Product product, Salesperson salesperson) {
         saveToFile(product, createPath("products", product.getID()));
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
-        saveToFile(stock, address.get("stock"));
     }
 
     public void editProductRequest(String price, String amount, Salesperson salesperson, String productID
@@ -165,7 +175,7 @@ public class RequestController {
         saveFileChangesForProductBeforeSendingRequest(product, salesperson);
         double pr = (price == null) ? salesperson.getProductPrice(product) : Double.parseDouble(price);
         int am = (amount == null) ? salesperson.getProductAmount(product) : Integer.parseInt(amount);
-        new ProductRequest(pr, am, salesperson, category, name, brand, properties, product);
+        new ProductRequest(pr, am, salesperson, category, name, brand, properties, product, image, media);
     }
 
     public void deleteDiscountRequest(Discount discount, Salesperson salesperson) {
