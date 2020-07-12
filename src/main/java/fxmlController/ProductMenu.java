@@ -33,7 +33,7 @@ import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import model.*;
-import view.App;
+import client.view.App;
 
 import java.io.IOException;
 import java.net.URL;

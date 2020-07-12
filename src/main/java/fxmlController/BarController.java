@@ -5,11 +5,11 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import model.Person;
-import view.App;
+import client.view.App;
 
 import java.io.IOException;
 
-import static view.App.getFXMLLoader;
+import static client.view.App.getFXMLLoader;
 
 public class BarController {
     @FXML private Button userMenu;

@@ -23,7 +23,7 @@ import javafx.stage.Stage;
 import model.Product;
 import model.Request;
 import model.Salesperson;
-import view.App;
+import client.view.App;
 
 import java.io.File;
 import java.net.URL;

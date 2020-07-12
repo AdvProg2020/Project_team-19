@@ -1,24 +1,22 @@
-package fxmlController;
+package client.view;
 
 import controller.PersonController;
-import javafx.event.ActionEvent;
+import fxmlController.MainProductsMenu;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.shape.Circle;
 import model.Manager;
 import model.Person;
 import model.Salesperson;
-import view.App;
+import client.view.App;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static view.App.getFXMLLoader;
+import static client.view.App.getFXMLLoader;
 
 public class MainMenuController implements Initializable {
     @FXML private ImageView productIcon;

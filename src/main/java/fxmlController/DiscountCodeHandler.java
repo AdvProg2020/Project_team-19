@@ -1,6 +1,5 @@
 package fxmlController;
 import controller.CartController;
-import controller.DiscountCodeController;
 import controller.PersonController;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -9,12 +8,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import model.Customer;
 import model.DiscountCode;
-import org.omg.CORBA.INITIALIZE;
-import view.App;
+import client.view.App;
 
 import java.net.URL;
 import java.util.ResourceBundle;

@@ -9,7 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import model.Request;
-import view.App;
+import client.view.App;
 
 import java.io.IOException;
 import java.net.URL;

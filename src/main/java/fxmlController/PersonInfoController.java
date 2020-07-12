@@ -3,9 +3,7 @@ package fxmlController;
 import controller.PersonController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,13 +17,13 @@ import javafx.stage.Stage;
 import model.Manager;
 import model.Person;
 import model.Salesperson;
-import view.App;
+import client.view.App;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-import static view.App.getFXMLLoader;
+import static client.view.App.getFXMLLoader;
 import static view.LoginMenu.PersonInfo.*;
 
 public class PersonInfoController implements Initializable {

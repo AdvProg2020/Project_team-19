@@ -7,11 +7,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
-import view.App;
+import client.view.App;
 
 import java.io.IOException;
 
-import static view.App.getFXMLLoader;
+import static client.view.App.getFXMLLoader;
 
 public class ManagerMenuController {
 

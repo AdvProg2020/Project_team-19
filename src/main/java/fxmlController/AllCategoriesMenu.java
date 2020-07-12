@@ -10,7 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import model.Category;
-import view.App;
+import client.view.App;
 
 
 import java.io.IOException;

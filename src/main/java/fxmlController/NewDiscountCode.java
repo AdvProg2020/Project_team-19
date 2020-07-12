@@ -13,7 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.Customer;
 import model.Person;
-import view.App;
+import client.view.App;
 
 import java.net.URL;
 import java.time.LocalDateTime;

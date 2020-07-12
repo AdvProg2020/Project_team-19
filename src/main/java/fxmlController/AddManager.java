@@ -2,12 +2,10 @@ package fxmlController;
 
 import controller.PersonController;
 import controller.RegisterController;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import view.App;
+import client.view.App;
 
 import java.util.HashMap;
 

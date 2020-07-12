@@ -12,7 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import model.Discount;
 import model.Salesperson;
-import view.App;
+import client.view.App;
 
 import java.io.IOException;
 import java.net.URL;

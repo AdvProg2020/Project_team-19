@@ -9,7 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import view.App;
+import client.view.App;
 
 import java.io.IOException;
 

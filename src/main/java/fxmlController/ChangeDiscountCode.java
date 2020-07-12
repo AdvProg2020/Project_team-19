@@ -8,21 +8,16 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Customer;
-import model.DiscountCode;
 import model.Person;
-import model.Salesperson;
-import view.App;
+import client.view.App;
 
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
-
-import static view.LoginMenu.PersonInfo.PASSWORD;
 
 public class ChangeDiscountCode implements Initializable {
 

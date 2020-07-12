@@ -9,7 +9,7 @@ import javafx.scene.layout.VBox;
 import model.Comment;
 import model.Customer;
 import model.Product;
-import view.App;
+import client.view.App;
 
 import java.io.IOException;
 import java.net.URL;

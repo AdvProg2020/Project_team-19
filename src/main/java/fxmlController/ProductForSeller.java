@@ -25,7 +25,7 @@ import model.Request;
 import model.Salesperson;
 
 import javafx.scene.shape.Line;
-import view.App;
+import client.view.App;
 
 import java.net.URL;
 import java.util.HashMap;

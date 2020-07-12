@@ -1,24 +1,18 @@
 package fxmlController;
 
-import controller.PersonController;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import model.Discount;
-import model.Manager;
-import model.Person;
-import model.Salesperson;
-import view.App;
+import client.view.App;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static view.App.getFXMLLoader;
+import static client.view.App.getFXMLLoader;
 
 public class DiscountCard implements Initializable {
     private Discount discount;

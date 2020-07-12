@@ -15,15 +15,14 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 import model.Category;
-import view.App;
+import client.view.App;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static view.App.getFXMLLoader;
+import static client.view.App.getFXMLLoader;
 
 public class CategoryCard implements Initializable {
     private Category category;

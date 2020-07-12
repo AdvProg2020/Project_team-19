@@ -3,13 +3,12 @@ package fxmlController;
 import controller.CategoryController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import model.Category;
-import view.App;
+import client.view.App;
 
 import java.net.URL;
 import java.util.ArrayList;

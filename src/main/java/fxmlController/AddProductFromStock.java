@@ -14,7 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import model.Product;
 import model.Salesperson;
-import view.App;
+import client.view.App;
 
 import java.net.URL;
 import java.util.ArrayList;

@@ -1,6 +1,5 @@
 package fxmlController;
 
-import controller.PersonController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -10,8 +9,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import model.DiscountCode;
-import model.Person;
-import view.App;
+import client.view.App;
 
 import java.net.URL;
 import java.util.ArrayList;

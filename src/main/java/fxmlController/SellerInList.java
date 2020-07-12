@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import model.Product;
 import model.Salesperson;
-import view.App;
+import client.view.App;
 
 import java.net.URL;
 import java.util.ResourceBundle;

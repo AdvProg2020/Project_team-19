@@ -18,7 +18,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Popup;
 import model.Category;
 import model.Product;
-import view.App;
+import client.view.App;
 
 import java.io.IOException;
 import java.net.URL;

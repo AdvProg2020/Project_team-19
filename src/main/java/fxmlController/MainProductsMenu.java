@@ -16,10 +16,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Popup;
-import javafx.stage.Stage;
 import model.Category;
 import model.Product;
-import view.App;
+import client.view.App;
 
 import java.io.IOException;
 import java.net.URL;
