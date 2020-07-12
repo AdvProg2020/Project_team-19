@@ -77,7 +77,10 @@ public class PersonController {
         return null;
     }
 
-    public void login(String username) {
+    public void login(String username,String password) throws Exception {
+        if (!PersonController.getInstance ( ).isTherePersonByUsername ( username ))
+            throw new Exception ( "You Don't Exist. Go Make Yourself." );
+        else checkPassword(password,username);
         loggedInPerson = getPersonByUsername (username);
         if (isLoggedInPersonCustomer()) {
             CartController.getInstance().setLoggedInPersonCart();

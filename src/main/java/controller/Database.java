@@ -51,6 +51,7 @@ public class Database {
 
     public static <T> void write(T obj, String address) {
         try {
+            System.out.println(address);
             GsonBuilder builder = new GsonBuilder().enableComplexMapKeySerialization();
             Gson gson = builder.create();
             FileWriter writer = new FileWriter(address);

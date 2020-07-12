@@ -27,7 +27,7 @@ public class LoginMenuTest {
     }
 
     @Test
-    public void loginTest () {
-        PersonController.getInstance ().login ( "Alireza" );
+    public void loginTest () throws Exception {
+        PersonController.getInstance ().login ( "Alireza","Aa123456" );
     }
 }

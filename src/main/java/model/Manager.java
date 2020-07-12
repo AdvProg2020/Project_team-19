@@ -17,6 +17,7 @@ public class Manager extends Person  {
     public Manager(HashMap<String, String> personInfo) {
         super(personInfo);
         managers.add(this);
+        System.out.println(Database.address.get("managers"));
         Database.saveToFile(this,Database.createPath("managers", personInfo.get("username")));
     }
 }

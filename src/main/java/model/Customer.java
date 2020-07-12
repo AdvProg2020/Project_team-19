@@ -2,6 +2,8 @@ package model;
 
 import controller.Database;
 import controller.DiscountCodeController;
+import controller.WalletController;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,6 +13,7 @@ public class Customer extends Person {
     private HashMap<Product, Integer> productsWithScore;
     private double credit;
     private Cart cart;
+    private Wallet wallet;
 
 
     public Customer(HashMap<String, String> personInfo) {
@@ -19,6 +22,7 @@ public class Customer extends Person {
         buyLogs = new ArrayList<>();
         productsWithScore = new HashMap<>();
         cart = new Cart();
+        wallet = new Wallet(this, WalletController.getInstance().createAccount(this));
         Database.saveToFile(this, Database.createPath("customers", personInfo.get("username")));
     }
 
@@ -77,6 +81,8 @@ public class Customer extends Person {
     public double getCredit () {
         return credit;
     }
+
+    public Wallet getWallet() { return wallet; }
 
     public void addToBuyLogs(BuyLog buyLog) {
         buyLogs.add(buyLog);

@@ -12,14 +12,14 @@ import java.util.HashMap;
 public class purchaseTest {
 
     @Test
-    public void discountCodeTest(){
+    public void discountCodeTest() throws Exception {
         Database.initializeAddress();
         HashMap<String,String> Info = new HashMap<>();
         Info.put("username","reza");
         Customer customer = new Customer(Info);
         customer.setCredit(100000);
         PersonController.getInstance().addPerson(customer);
-        PersonController.getInstance().login("reza");
+        PersonController.getInstance().login("reza","");
         Product product1 = new Product("lip stick","beauty","",Info);
         Product product2 = new Product("comb","beauty","",Info);
         HashMap<String,String> info = new HashMap<>();
@@ -45,7 +45,7 @@ public class purchaseTest {
         Customer customer = new Customer(Info);
         customer.setCredit(100000);
         PersonController.getInstance().addPerson(customer);
-        PersonController.getInstance().login("reza");
+       // PersonController.getInstance().login("reza");
         Product product1 = new Product("lip stick","beauty","",Info);
         Product product2 = new Product("comb","beauty","",Info);
         HashMap<String,String> info = new HashMap<>();
@@ -70,7 +70,7 @@ public class purchaseTest {
         Customer customer = new Customer(Info);
         customer.setCredit(100000);
         PersonController.getInstance().addPerson(customer);
-        PersonController.getInstance().login("reza");
+       // PersonController.getInstance().login("reza");
         Product product1 = new Product("lip stick","beauty","",Info);
         Product product2 = new Product("comb","beauty","",Info);
         HashMap<String,String> info = new HashMap<>();

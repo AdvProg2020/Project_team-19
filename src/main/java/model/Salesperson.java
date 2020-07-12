@@ -4,6 +4,7 @@ package model;
 import controller.Database;
 import controller.DiscountController;
 import controller.ProductController;
+import controller.WalletController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ public class Salesperson extends Person {
     private HashMap<String, ProductState> offeredProducts;
     private ArrayList<Discount> discounts;
     private double credit;
+    private Wallet wallet;
 
 
     public Salesperson(HashMap<String, String> personInfo) {
@@ -20,6 +22,7 @@ public class Salesperson extends Person {
         sellLogs = new ArrayList<>();
         offeredProducts = new HashMap<>();
         discounts = new ArrayList<>();
+        wallet = new Wallet(this, WalletController.getInstance().createAccount(this));
         Database.saveToFile(this, Database.createPath("salespersons", personInfo.get("username")));
     }
 
@@ -38,6 +41,8 @@ public class Salesperson extends Person {
     public void setProductState(Product product, ProductState.State state) {
         offeredProducts.get(product.getID()).setState(state);
     }
+
+    public Wallet getWallet() { return wallet; }
 
     public boolean isInDiscount(Product product) {
         return offeredProducts.get(product.getID()).isInDiscount();
@@ -250,6 +255,8 @@ class ProductState {
     public void setProductState(State productState) {
         this.productState = productState;
     }
+
+
 
 
 }
