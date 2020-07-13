@@ -57,40 +57,6 @@ public class ProductController {
         ProductController.currentProducts = currentProducts;
     }
 
-    public void addAuction(Salesperson salesperson, Product product, LocalDateTime endTime) {
-        salesperson.addAuction(product, endTime);
-        saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
-    }
-
-    public HashMap<Salesperson, ArrayList<Product>> getAllAuctions() {
-        HashMap<Salesperson, ArrayList<Product>> auctions = new HashMap<>();
-
-        ArrayList<Person> sellers = PersonController.getInstance().filterByRoll(Salesperson.class);
-        for (Person seller : sellers) {
-            ArrayList<Product> products = new ArrayList<>(((Salesperson) seller).getAuctions().keySet());
-            auctions.put((Salesperson) seller, products);
-        }
-
-        return auctions;
-    }
-
-    public void checkAuctionTime() {
-        HashMap<Salesperson, ArrayList<Product>> allAuctions = new HashMap<>(getAllAuctions());
-        ArrayList<Product> remove = new ArrayList<>();
-        for (Salesperson salesperson : allAuctions.keySet()) {
-            remove.clear();
-            for (Product product : salesperson.getAuctions().keySet()) {
-                if (salesperson.checkEndTimeAuction(product)) {
-                    remove.add(product);
-                }
-            }
-            for (Product removeProd : remove) {
-                salesperson.removeAuction(removeProd);
-            }
-            saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
-        }
-    }
-
     public static ArrayList<Product> getAllProducts() {
         return allProducts;
     }

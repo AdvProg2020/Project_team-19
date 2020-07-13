@@ -27,6 +27,8 @@ public class MainMenuController implements Initializable {
     @FXML private ImageView discountIcon;
     @FXML private ImageView userIcon;
     @FXML private ImageView auctionIcon;
+
+    public static boolean clickedOnAuctionCard = false;
 //    @FXML Button productMenu;
 //    @FXML Button discountMenu;
 //    @FXML Button back;
@@ -67,7 +69,10 @@ public class MainMenuController implements Initializable {
             TimerTask timerTask = new TimerTask() {
                 @Override
                 public void run() {
-                    App.setRoot("allAuctionsMenu");
+                    if (!clickedOnAuctionCard) {
+                        App.setRoot("allAuctionsMenu");
+                        //System.out.println("load");
+                    }
                 }
             };
             timer.schedule(timerTask, new Date(), 60000);
@@ -77,6 +82,7 @@ public class MainMenuController implements Initializable {
 
     @Override
     public void initialize ( URL location , ResourceBundle resources ) {
+        MainMenuController.clickedOnAuctionCard = false;
         if (PersonController.getInstance().getLoggedInPerson() != null
         && PersonController.getInstance().getLoggedInPerson() instanceof Customer) {
             auctionIcon.setDisable(false);

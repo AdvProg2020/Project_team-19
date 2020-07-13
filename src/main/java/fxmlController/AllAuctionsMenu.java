@@ -1,6 +1,6 @@
 package fxmlController;
 
-import controller.ProductController;
+import controller.AuctionController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +15,7 @@ import javafx.scene.paint.Color;
 import model.Product;
 import model.Salesperson;
 import view.App;
+import view.MainMenu;
 
 import java.io.IOException;
 import java.net.URL;
@@ -47,8 +48,9 @@ public class AllAuctionsMenu implements Initializable {
         setCardsOnPaneAndMouseClicked();
     }
 
-    private void handleClickOnAuction(Salesperson salesperson, Product product) {
-        AuctionMenu auctionMenu = new AuctionMenu(salesperson, product);
+    private void handleClickOnAuction(Salesperson salesperson, Product product, Parent card) {
+        MainMenuController.clickedOnAuctionCard = true;
+        AuctionMenu auctionMenu = new AuctionMenu(salesperson, product, card);
         FXMLLoader loader = new FXMLLoader(AllAuctionsMenu.class.getResource("/fxml/auctionMenu.fxml"));
         loader.setController(auctionMenu);
         App.setRoot(loader);
@@ -56,7 +58,7 @@ public class AllAuctionsMenu implements Initializable {
 
     private void setCardsOnPaneAndMouseClicked() {
         int index = 0;
-        for (Salesperson seller : ProductController.getInstance().getAllAuctions().keySet()) {
+        for (Salesperson seller : AuctionController.getInstance().getAllAuctions().keySet()) {
             for (Product product : seller.getAuctions().keySet()) {
                 AuctionInList auctionInList = new AuctionInList(seller, product);
                 FXMLLoader loader = new FXMLLoader(AllAuctionsMenu.class.getResource("/fxml/auctionInList.fxml"));
@@ -70,7 +72,8 @@ public class AllAuctionsMenu implements Initializable {
                 assert parent != null;
                 auctionCards.add(parent);
                 cardsBase.add(parent, index % 3, index / 3);
-                parent.setOnMouseClicked(event -> handleClickOnAuction(seller, product));
+                Parent finalParent = parent;
+                parent.setOnMouseClicked(event -> handleClickOnAuction(seller, product, finalParent));
                 index++;
             }
         }

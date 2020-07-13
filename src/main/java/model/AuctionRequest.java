@@ -1,5 +1,6 @@
 package model;
 
+import controller.AuctionController;
 import controller.Database;
 import controller.PersonController;
 import controller.ProductController;
@@ -30,7 +31,7 @@ public class AuctionRequest extends Request{
     public void doThis() {
         Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(sellerId);
         Product product = ProductController.getInstance().getProductById(productId);
-        ProductController.getInstance().addAuction(salesperson, product, endTime);
+        AuctionController.getInstance().addAuction(salesperson, product, endTime);
     }
 
     @Override
