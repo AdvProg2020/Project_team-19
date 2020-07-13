@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: #99ddff;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.MainMenuController">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: #99ddff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.MainMenuController">
    <children>
 <!--      <Label alignment="CENTER" layoutX="290.0" layoutY="87.0" styleClass="outline" stylesheets="@titleOutliner.css" text="Main Menu">-->
 <!--      </Label>-->
@@ -40,6 +40,11 @@
       <ImageView fx:id="userIcon" fitHeight="92.0" fitWidth="72.0" layoutX="714.0" layoutY="14.0" onMouseClicked="#userMenuAction" onMousePressed="#userIconBig" onMouseReleased="#userIconSmall" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/user.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="auctionIcon" fitHeight="72.0" fitWidth="72.0" layoutX="714.0" layoutY="125.0" onMouseClicked="#allAuction" onMousePressed="#auctionIconBig" onMouseReleased="#auctionIconSmall" pickOnBounds="true" preserveRatio="true" visible="false" disable="true">
+         <image>
+            <Image url="@../images/auction.png" />
          </image>
       </ImageView>
    </children>

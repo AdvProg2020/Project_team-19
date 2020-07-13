@@ -159,8 +159,8 @@ public class BankServer {
             String[] info = connection.getRequest().getRequestString().split("\\s+");
             try {
                 //first_name  last_name  username  password  repeatedPass
-                BankController.getInstance().createAccount(info[0], info[1], info[2], info[3], info[4]);
-                connection.getDataOutputStream().writeUTF("successfully created" + Arrays.toString(info));
+                String id = BankController.getInstance().createAccount(info[0], info[1], info[2], info[3], info[4]);
+                connection.getDataOutputStream().writeUTF(id);
                 connection.getDataOutputStream().flush();
             } catch (BankController.BankException e) {
                 try {

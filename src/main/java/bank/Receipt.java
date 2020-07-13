@@ -20,8 +20,8 @@ public class Receipt {
     }
 
     public void pay() {
-        Account source = BankController.getInstance().getAccountByUserName(sourceId);
-        Account dest = BankController.getInstance().getAccountByUserName(destId);
+        Account source = BankController.getInstance().getAccountById(sourceId);
+        Account dest = BankController.getInstance().getAccountById(destId);
         switch (receiptType) {
             case "move":
                 BankController.getInstance().move(source, dest, money);

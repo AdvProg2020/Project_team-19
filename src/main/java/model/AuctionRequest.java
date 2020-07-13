@@ -1,9 +1,12 @@
 package model;
 
+import controller.Database;
 import controller.PersonController;
 import controller.ProductController;
 
 import java.time.LocalDateTime;
+
+import static controller.RequestController.allRequests;
 
 public class AuctionRequest extends Request{
     private String sellerId;
@@ -15,8 +18,13 @@ public class AuctionRequest extends Request{
         this.sellerId = salesperson.getUsername();
         this.productId = product.getID();
         this.endTime = endTime;
+        save();
     }
 
+    private void save() {
+        Database.saveToFile(this, Database.createPath("auction_requests", this.getRequestId()));
+        allRequests.add(this);
+    }
 
     @Override
     public void doThis() {
@@ -27,8 +35,7 @@ public class AuctionRequest extends Request{
 
     @Override
     public void decline() {
-        //do nothing
-        //just delete auction request which is done before
+        allRequests.remove(this);
     }
 
     @Override

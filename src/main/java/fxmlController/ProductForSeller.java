@@ -34,6 +34,7 @@ import java.util.ResourceBundle;
 public class ProductForSeller implements Initializable {
     private Product product;
     private Salesperson salesperson;
+    private boolean inAuction;
     @FXML private Label amount;
     @FXML private ImageView productImage;
     @FXML private Line priceLine;
@@ -47,13 +48,18 @@ public class ProductForSeller implements Initializable {
     @FXML private ImageView remove;
     @FXML private ImageView edit;
 
-    public ProductForSeller(Product product, Salesperson salesperson) {
+    public ProductForSeller(Product product, Salesperson salesperson, boolean inAuction) {
         this.product = product;
         this.salesperson = salesperson;
+        this.inAuction = inAuction;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        if (inAuction) {
+            edit.setVisible(false);
+            remove.setVisible(false);
+        }
         if (salesperson.isInDiscount(product)) {
             inDiscount.setVisible(true);
             off.setText(salesperson.getDiscountPercentage(product) + "%");
@@ -65,11 +71,15 @@ public class ProductForSeller implements Initializable {
         state.setText(salesperson.getProductState(product).label + "");
         price.setText(salesperson.getProductPrice(product) + " $");
         name.setText(product.getName() + "(" + product.getID() + ")");
-        edit.setOnMouseClicked(event -> edit());
-        remove.setOnMouseClicked(event -> remove());
-        if (product.getImageURI() != null) {
-            productImage.setImage(new Image(product.getImageURI()));
+        if (!inAuction) {
+            edit.setVisible(true);
+            remove.setVisible(true);
+            edit.setOnMouseClicked(event -> edit());
+            remove.setOnMouseClicked(event -> remove());
         }
+//        if (product.getImageURI() != null) {
+//            productImage.setImage(new Image(product.getImageURI()));
+//        }
     }
 
     private void edit() {

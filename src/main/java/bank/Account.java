@@ -1,6 +1,9 @@
 package bank;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 public class Account {
+    private String id;
     private final String firstName;
     private final String lastName;
     private final String username;
@@ -13,6 +16,7 @@ public class Account {
         this.username = username;
         this.password = password;
         this.balance = 0;
+        this.id = RandomStringUtils.random(8, false, true);
     }
 
     public String getPassword() {
@@ -21,6 +25,10 @@ public class Account {
 
     public String getUsername() {
         return username;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public double getBalance() {

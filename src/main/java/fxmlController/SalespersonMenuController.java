@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import model.Salesperson;
 import view.App;
+import view.SalespersonMenu;
 
 import java.io.IOException;
 
@@ -73,6 +74,15 @@ public class SalespersonMenuController {
 
     @FXML private void backSizeSmall ( MouseEvent mouseEvent ) {
         back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" );
+    }
+
+    @FXML
+    void addAuctionForSeller(ActionEvent event) {
+        Salesperson salesperson = (Salesperson)PersonController.getInstance().getLoggedInPerson();
+        AddAuction addAuction = new AddAuction(salesperson);
+        FXMLLoader loader = new FXMLLoader(SalespersonMenuController.class.getResource("/fxml/addAuction.fxml"));
+        loader.setController(addAuction);
+        App.setRoot(loader);
     }
 
 }

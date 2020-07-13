@@ -71,7 +71,9 @@ public class AllProductsForSeller implements Initializable {
         Button fromStock = new Button("add new product");
 
         gridPane.setAlignment(Pos.CENTER);
-        gridPane.setPadding(new Insets(30));
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(20));
 
 
         newProd.getStylesheets().add("/fxml/button.css");
@@ -106,10 +108,10 @@ public class AllProductsForSeller implements Initializable {
     private void setProductCards() {
         for (Product product : salesperson.getOfferedProducts().keySet()) {
             if (verified) {
-                if (!salesperson.getProductState(product).label.equals("Verified") && salesperson.getProductAmount(product) == 0)
+                if (!salesperson.getProductState(product).label.equals("Verified") || salesperson.getProductAmount(product) == 0)
                     continue;
             }
-            ProductForSeller productForSeller = new ProductForSeller(product, salesperson);
+            ProductForSeller productForSeller = new ProductForSeller(product, salesperson, false);
             FXMLLoader loader = new FXMLLoader(AllProductsForSeller.class.getResource("/fxml/productForSellerCard.fxml"));
             loader.setController(productForSeller);
             Parent parent = null;

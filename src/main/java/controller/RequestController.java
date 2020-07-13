@@ -1,7 +1,9 @@
 package controller;
 
+import fxmlController.AuctionInList;
 import fxmlController.Metadata;
 import model.*;
+import view.SalespersonMenu;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,6 +52,9 @@ public class RequestController {
         }
         for (File file : Database.returnListOfFiles(address.get("salesperson_requests"))) {
             allRequests.add((SalespersonRequest) read(SalespersonRequest.class, file.getAbsolutePath()));
+        }
+        for (File file : Database.returnListOfFiles(address.get("auction_requests"))) {
+            allRequests.add((AuctionRequest) read(AuctionRequest.class, file.getAbsolutePath()));
         }
     }
 
@@ -104,6 +109,21 @@ public class RequestController {
 
     public void deleteProductRequest(String productId, Salesperson salesperson) {
         new ProductRequest(salesperson, ProductController.getInstance().getProductById(productId));
+    }
+
+    public void addAuctionRequest(String username, String productId, String endTime) {
+        int year = Integer.parseInt(endTime.substring(0, 4));
+        int month = Integer.parseInt(endTime.substring(5, 7));
+        int day = Integer.parseInt(endTime.substring(8, 10));
+        int hour = Integer.parseInt(endTime.substring(11, 13));
+        int minute = Integer.parseInt(endTime.substring(14, 16));
+
+
+        LocalDateTime end = LocalDateTime.of(year, month, day, hour, minute);
+        Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(username);
+        Product product = ProductController.getInstance().getProductById(productId);
+
+        new AuctionRequest(salesperson, product, end);
     }
 
     public void addProductRequest(Double price, Integer amount, Salesperson salesperson

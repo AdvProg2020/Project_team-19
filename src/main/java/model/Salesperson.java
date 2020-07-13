@@ -26,11 +26,12 @@ public class Salesperson extends Person {
         Database.saveToFile(this, Database.createPath("salespersons", personInfo.get("username")));
     }
 
-    //todo before it should check everything
     public void addAuction(Product product, LocalDateTime endTime) {
         auctions.put(product.getID(), endTime);
+    }
 
-        //todo after calling this should save in file
+    public boolean isInAuction(Product product) {
+        return auctions.containsKey(product.getID());
     }
 
     public LocalDateTime getAuctionEndTime(Product product) {

@@ -1,14 +1,12 @@
 package fxmlController;
 
 import controller.PersonController;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.shape.Circle;
+import model.Customer;
 import model.Manager;
 import model.Person;
 import model.Salesperson;
@@ -24,6 +22,7 @@ public class MainMenuController implements Initializable {
     @FXML private ImageView productIcon;
     @FXML private ImageView discountIcon;
     @FXML private ImageView userIcon;
+    @FXML private ImageView auctionIcon;
 //    @FXML Button productMenu;
 //    @FXML Button discountMenu;
 //    @FXML Button back;
@@ -58,9 +57,17 @@ public class MainMenuController implements Initializable {
         App.setRoot ( "mainProductsMenu" );
     }
 
+    @FXML void allAuction() {
+        App.setRoot("allAuctionsMenu");
+    }
+
     @Override
     public void initialize ( URL location , ResourceBundle resources ) {
-//        help.setShape ( new Circle ( 1.5 ) );
+        if (PersonController.getInstance().getLoggedInPerson() != null
+        && PersonController.getInstance().getLoggedInPerson() instanceof Customer) {
+            auctionIcon.setDisable(false);
+            auctionIcon.setVisible(true);
+        }
     }
 
     @FXML private void userIconBig ( MouseEvent mouseEvent ) {
@@ -83,6 +90,14 @@ public class MainMenuController implements Initializable {
     @FXML private void productIconSmall ( MouseEvent mouseEvent ) {
         productIcon.setStyle ( "" );
 //        productIcon.setFitWidth ( 200 );
+    }
+
+    @FXML private void auctionIconBig ( MouseEvent mouseEvent ) {
+        auctionIcon.setStyle ( "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);" );
+    }
+
+    @FXML private void auctionIconSmall ( MouseEvent mouseEvent ) {
+        auctionIcon.setStyle ( "" );
     }
 
     @FXML private void discountIconBig ( MouseEvent mouseEvent ) {

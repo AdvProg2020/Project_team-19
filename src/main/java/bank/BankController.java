@@ -47,6 +47,14 @@ public class BankController {
         return null;
     }
 
+    public Account getAccountById(String id) {
+        for (Account account : bankAccounts) {
+            if (account.getId().equals(id))
+                return account;
+        }
+        return null;
+    }
+
     public Receipt getReceiptById(String receiptId) {
         for (Receipt receipt : receipts) {
             if (receipt.getReceiptId().equals(receiptId))
@@ -59,13 +67,18 @@ public class BankController {
         return getAccountByUserName(username) != null;
     }
 
+    public boolean isThereAccountById(String id) {
+        return getAccountById(id) != null;
+    }
+
     public boolean isThereReceiptById(String receiptId) {
         return getReceiptById(receiptId) != null;
     }
 
     public boolean isReceiptForAccount(String username, String receiptId) {
         Receipt receipt = getReceiptById(receiptId);
-        return receipt.getSourceId().equals(username) || receipt.getDestId().equals(username);
+        Account account = getAccountByUserName(username);
+        return receipt.getSourceId().equals(account.getId()) || receipt.getDestId().equals(account.getId());
     }
 
     public ArrayList<Receipt> getReceiptsWithSourceId(String sourceId) {
@@ -86,7 +99,7 @@ public class BankController {
         return destReceipts;
     }
 
-    public void createAccount(String firstName, String lastName, String username, String password, String repeatedPass) throws BankException {
+    public String createAccount(String firstName, String lastName, String username, String password, String repeatedPass) throws BankException {
         if (isThereAccountByUsername(username))
             throw new BankException("account_exist");
         if (!repeatedPass.equals(password))
@@ -95,6 +108,7 @@ public class BankController {
         Account account = new Account(firstName, lastName, username, password);
         saveToFile(account, createPath("accounts", account.getUsername()));
         bankAccounts.add(account);
+        return account.getId();
     }
 
     public String getToken(String username, String password) throws BankException {
@@ -117,9 +131,9 @@ public class BankController {
             throw new BankException("invalid_account_id");
         if (receiptType.equals("withdraw") && !destId.equals("-1"))
             throw new BankException("invalid_account_id");
-        if (!sourceId.equals("-1") && !isThereAccountByUsername(sourceId))
+        if (!sourceId.equals("-1") && !isThereAccountById(sourceId))
             throw new BankException("invalid_sourceId");
-        if (!destId.equals("-1") && !isThereAccountByUsername(destId))
+        if (!destId.equals("-1") && !isThereAccountById(destId))
             throw new BankException("invalid_destId");
         if (sourceId.equals(destId))
             throw new BankException("equal_source_and_dest_account");
@@ -143,15 +157,16 @@ public class BankController {
         }
 
         String transaction;
+        Account account = getAccountByUserName(username);
         switch (type) {
             case "+":
-                transaction = destTransactions(username);
+                transaction = destTransactions(account.getId());
                 break;
             case "-":
-                transaction = sourceTransactions(username);
+                transaction = sourceTransactions(account.getId());
                 break;
             case "*":
-                transaction = allTransactions(username);
+                transaction = allTransactions(account.getId());
                 break;
             default:
                 Receipt receipt = getReceiptById(type);
@@ -202,7 +217,7 @@ public class BankController {
         if (receipt.isPaid())
             throw new BankException("receipt_is_payed_before");
         if (!receipt.getSourceId().equals("-1")) {
-            Account source = getAccountByUserName(receipt.getSourceId());
+            Account source = getAccountById(receipt.getSourceId());
             if (receipt.getMoney() >= source.getBalance())
                 throw new BankException("source_account_does_not_have_enough_money");
         }
