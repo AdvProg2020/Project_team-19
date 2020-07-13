@@ -43,7 +43,6 @@ public class BankServer {
         commands.put(TOKEN, new HandleGetToken());
         commands.put(TRANSACTION, new HandleTransaction());
         commands.put(PAY, new HandlePay());
-        //commands.put(EXIT, new HandleExit());
     }
 
     public static BankServer getInstance() {

@@ -1,4 +1,5 @@
 .idea
 database
+bankDB
 target
 *.iml
