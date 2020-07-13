@@ -2,7 +2,10 @@ package bank;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
+
+import static bank.PacketType.*;
 
 /**
  * This class handles initiating connection to bankAPI ,sending requests to Bank server
@@ -12,9 +15,20 @@ public class BankAPI {
     public static final int PORT = 2222;
     public static final String IP = "localhost";
 
+    private static ArrayList<PacketType> types;
     private static DataOutputStream outputStream;
     private static DataInputStream inputStream;
 
+    static {
+        types = new ArrayList<>();
+        types.add(CREATE_ACCOUNT);
+        types.add(TOKEN);
+        types.add(CREATE_RECEIPT);
+        types.add(TRANSACTION);
+        types.add(PAY);
+        types.add(BALANCE);
+        types.add(EXIT);
+    }
     /**
      * This method is used to add initiating socket and IN/OUT data stream .
      *
@@ -47,76 +61,26 @@ public class BankAPI {
         }).start();
     }
 
+    private static PacketType getType(String label) {
+        for (PacketType type : types) {
+            if (type.label.equals(label))
+                return type;
+        }
+        return null;
+    }
+
     /**
      * This method is used to send message with value
      *
      * @param msg to Bank server.
      * @throws IOException when OUT data stream been interrupted.
      */
-    public static String sendMessageCreateAccount(String msg) throws IOException {
-        try {
-            msg = msg.replace("create_account ", "");
-            Request request = new Request(PacketType.CREATE_ACCOUNT, msg);
-            outputStream.writeUTF(BankServer.write(request));
-            outputStream.flush();
-            return inputStream.readUTF();
-        } catch (IOException e) {
-            throw new IOException("Exception while sending message:");
-        }
-    }
 
-    public static String sendMessageGetToken(String msg) throws IOException {
+    public static String sendMessage(String msg) throws IOException {
         try {
-            msg = msg.replace("get_token ", "");
-            Request request = new Request(PacketType.TOKEN, msg);
-            outputStream.writeUTF(BankServer.write(request));
-            outputStream.flush();
-            return inputStream.readUTF();
-        } catch (IOException e) {
-            throw new IOException("Exception while sending message:");
-        }
-    }
-
-    public static String sendMessageGetBalance(String msg) throws IOException {
-        try {
-            msg = msg.replace("get_balance ", "");
-            Request request = new Request(PacketType.BALANCE, msg);
-            outputStream.writeUTF(BankServer.write(request));
-            outputStream.flush();
-            return inputStream.readUTF();
-        } catch (IOException e) {
-            throw new IOException("Exception while sending message:");
-        }
-    }
-
-    public static String sendMessageGetTransaction(String msg) throws IOException {
-        try {
-            msg = msg.replace("get_transaction ", "");
-            Request request = new Request(PacketType.TRANSACTION, msg);
-            outputStream.writeUTF(BankServer.write(request));
-            outputStream.flush();
-            return inputStream.readUTF();
-        } catch (IOException e) {
-            throw new IOException("Exception while sending message:");
-        }
-    }
-
-    public static String sendMessagePay(String msg) throws IOException {
-        try {
-            msg = msg.replace("pay ", "");
-            Request request = new Request(PacketType.PAY, msg);
-            outputStream.writeUTF(BankServer.write(request));
-            outputStream.flush();
-            return inputStream.readUTF();
-        } catch (IOException e) {
-            throw new IOException("Exception while sending message:");
-        }
-    }
-
-    public static String sendMessageCreateReceipt(String msg) throws IOException {
-        try {
-            msg = msg.replace("create_receipt ", "");
-            Request request = new Request(PacketType.CREATE_RECEIPT, msg);
+            String type = msg.split("\\s+")[0];
+            msg = msg.replace(type + " ", "");
+            Request request = new Request(getType(type), msg);
             outputStream.writeUTF(BankServer.write(request));
             outputStream.flush();
             return inputStream.readUTF();
@@ -131,11 +95,10 @@ public class BankAPI {
     public static void main(String[] args) {
         try {
             ConnectToBankServer();
-            StartListeningOnInput();
             Scanner scanner = new Scanner(System.in);
-//            while (true) {
-//                SendMessage(scanner.nextLine());
-//            }
+            while (true) {
+                System.out.println(sendMessage(scanner.nextLine()));
+            }
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();

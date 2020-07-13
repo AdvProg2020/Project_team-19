@@ -43,6 +43,7 @@ public class BankServer {
         commands.put(TOKEN, new HandleGetToken());
         commands.put(TRANSACTION, new HandleTransaction());
         commands.put(PAY, new HandlePay());
+        commands.put(EXIT, new HandleExit());
     }
 
     public static BankServer getInstance() {
@@ -94,9 +95,12 @@ public class BankServer {
                 try {
                     input = dataInputStream.readUTF();
                     System.out.println(input);
-                    if (input.equals(EXIT.label)) {
-                        socket.close();
-                        return;
+                    if (input.contains(" ")) {
+                        String secondPart = input.split("\\s+")[1];
+                        if (secondPart.equals(EXIT.label)) {
+                            socket.close();
+                            return;
+                        }
                     }
                     requests.put(new Connection((Request) getObj(Request.class, input), dataOutputStream));
                 } catch (IOException | InterruptedException e) {
@@ -300,6 +304,14 @@ public class BankServer {
                     ioException.printStackTrace();
                 }
             }
+        }
+    }
+
+    static class HandleExit implements Handler {
+
+        @Override
+        public void handle(Connection connection) {
+            //do nothing
         }
     }
 

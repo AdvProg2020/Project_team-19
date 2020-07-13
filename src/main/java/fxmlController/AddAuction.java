@@ -57,7 +57,7 @@ public class AddAuction implements Initializable {
 
     private void setCombo() {
         for (Product product : salesperson.getOfferedProducts().keySet()) {
-            if (!salesperson.getProductState(product).label.equals("Verified") && salesperson.getProductAmount(product) == 0)
+            if (!salesperson.getProductState(product).label.equals("Verified") && salesperson.getProductAmount(product) != 1)
                 continue;
             chooseCombo.getItems().add(product.getID());
         }

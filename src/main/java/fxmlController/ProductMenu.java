@@ -88,10 +88,12 @@ public class ProductMenu implements Initializable {
         rate.setOpacity(0.3);
         addComment.setDisable(true);
         setSellerCards();
-        currentCard = sellerCards.get(0);
-        sellerCardBase.getChildren().add(currentCard);
+        if (!sellerCards.isEmpty()) {
+            currentCard = sellerCards.get(0);
+            sellerCardBase.getChildren().add(currentCard);
+        }
         backButton.setOpacity(0.2);
-        if (sellerCards.size() == 1)
+        if (sellerCards.size() <= 1)
             forthButton.setOpacity(0.2);
         setProductInfo();
         checkBackAndForth();
