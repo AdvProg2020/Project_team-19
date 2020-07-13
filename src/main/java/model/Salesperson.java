@@ -30,8 +30,16 @@ public class Salesperson extends Person {
         auctions.put(product.getID(), endTime);
     }
 
+    public void removeAuction(Product product) {
+        auctions.remove(product.getID());
+    }
+
     public boolean isInAuction(Product product) {
         return auctions.containsKey(product.getID());
+    }
+
+    public boolean checkEndTimeAuction(Product product) {
+        return auctions.get(product.getID()).isBefore(LocalDateTime.now());
     }
 
     public LocalDateTime getAuctionEndTime(Product product) {

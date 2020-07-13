@@ -74,6 +74,23 @@ public class ProductController {
         return auctions;
     }
 
+    public void checkAuctionTime() {
+        HashMap<Salesperson, ArrayList<Product>> allAuctions = new HashMap<>(getAllAuctions());
+        ArrayList<Product> remove = new ArrayList<>();
+        for (Salesperson salesperson : allAuctions.keySet()) {
+            remove.clear();
+            for (Product product : salesperson.getAuctions().keySet()) {
+                if (salesperson.checkEndTimeAuction(product)) {
+                    remove.add(product);
+                }
+            }
+            for (Product removeProd : remove) {
+                salesperson.removeAuction(removeProd);
+            }
+            saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
+        }
+    }
+
     public static ArrayList<Product> getAllProducts() {
         return allProducts;
     }

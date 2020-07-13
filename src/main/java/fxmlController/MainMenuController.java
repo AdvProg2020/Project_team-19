@@ -2,6 +2,7 @@ package fxmlController;
 
 import controller.PersonController;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
@@ -14,7 +15,10 @@ import view.App;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static view.App.getFXMLLoader;
 
@@ -58,7 +62,17 @@ public class MainMenuController implements Initializable {
     }
 
     @FXML void allAuction() {
-        App.setRoot("allAuctionsMenu");
+        new Thread(() -> {
+            Timer timer = new Timer();
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    App.setRoot("allAuctionsMenu");
+                }
+            };
+            timer.schedule(timerTask, new Date(), 60000);
+        }).start();
+
     }
 
     @Override

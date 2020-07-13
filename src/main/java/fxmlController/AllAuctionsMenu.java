@@ -18,8 +18,7 @@ import view.App;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class AllAuctionsMenu implements Initializable {
     private GridPane cardsBase;
@@ -57,10 +56,8 @@ public class AllAuctionsMenu implements Initializable {
 
     private void setCardsOnPaneAndMouseClicked() {
         int index = 0;
-        System.out.println(ProductController.getInstance().getAllAuctions());
         for (Salesperson seller : ProductController.getInstance().getAllAuctions().keySet()) {
             for (Product product : seller.getAuctions().keySet()) {
-                System.out.println("hete");
                 AuctionInList auctionInList = new AuctionInList(seller, product);
                 FXMLLoader loader = new FXMLLoader(AllAuctionsMenu.class.getResource("/fxml/auctionInList.fxml"));
                 loader.setController(auctionInList);

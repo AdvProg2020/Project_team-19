@@ -57,7 +57,7 @@ public class AddAuction implements Initializable {
 
     private void setCombo() {
         for (Product product : salesperson.getOfferedProducts().keySet()) {
-            if (!salesperson.getProductState(product).label.equals("Verified") && salesperson.getProductAmount(product) != 1)
+            if (!salesperson.getProductState(product).label.equals("Verified") || salesperson.getProductAmount(product) != 1)
                 continue;
             chooseCombo.getItems().add(product.getID());
         }
@@ -88,7 +88,7 @@ public class AddAuction implements Initializable {
     }
 
     private void submit() {
-        if (endTime.getText().isEmpty() || !endTime.getText().matches("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}")) {
+        if (endTime.getText().isEmpty() || !endTime.getText().matches("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}")) {
             App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill all", "Enter end time(correctly)");
             return;
         }

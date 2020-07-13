@@ -8,6 +8,7 @@ import view.SalespersonMenu;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -112,14 +113,7 @@ public class RequestController {
     }
 
     public void addAuctionRequest(String username, String productId, String endTime) {
-        int year = Integer.parseInt(endTime.substring(0, 4));
-        int month = Integer.parseInt(endTime.substring(5, 7));
-        int day = Integer.parseInt(endTime.substring(8, 10));
-        int hour = Integer.parseInt(endTime.substring(11, 13));
-        int minute = Integer.parseInt(endTime.substring(14, 16));
-
-
-        LocalDateTime end = LocalDateTime.of(year, month, day, hour, minute);
+        LocalDateTime end = LocalDateTime.parse(endTime);
         Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(username);
         Product product = ProductController.getInstance().getProductById(productId);
 

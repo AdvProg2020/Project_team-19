@@ -333,21 +333,19 @@ public class BankServer {
     }
 
     public void checkTimer(String token) {
-        new Thread(() -> {
-            final int[] second = {0};
-            Timer timer = new Timer();
-            TimerTask timerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    second[0]++;
-                    if (second[0] == 90) {  //3600
-                        timer.cancel();
-                        tokens.remove(token);
-                    }
+        final int[] second = {0};
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                second[0]++;
+                if (second[0] == 90) {  //3600
+                    timer.cancel();
+                    tokens.remove(token);
                 }
-            };
-            timer.schedule(timerTask, new Date(), 1000);
-        }).start();
+            }
+        };
+        timer.schedule(timerTask, new Date(), 1000);
     }
 
     public void deleteOldToken(String username) {

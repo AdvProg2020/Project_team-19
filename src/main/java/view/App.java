@@ -134,6 +134,7 @@ public class App extends Application {
         initializer();
         App.manageDiscountCodeTimer();
         App.manageDiscountTimer();
+        App.manageAuctionTimer();
         mainMenu = new MainMenu(null);
         userMenu = new UserMenu(mainMenu);
     }
@@ -141,89 +142,19 @@ public class App extends Application {
     public static void manageDiscountCodeTimer() {
         Timer timer = new Timer();
         TimerTask task = new DiscountCodeTimer();
-        timer.schedule(task, 60000);
+        timer.schedule(task, new Date(), 60000);
     }
 
     public static void manageDiscountTimer() {
         Timer timer = new Timer();
         TimerTask task = new DiscountTimer();
-        timer.schedule(task, 60000);
+        timer.schedule(task, new Date(), 60000);
     }
 
-    private void allProducts(Stage primaryStage) throws IOException {
-        initializer();
-        Category category = new Category("labaniat", null, new HashSet<>());
-        Product product = new Product("name", "brand", category.getName(), new HashMap<>());
-        Product product2 = new Product("panir", "lighvan", category.getName(), new HashMap<>());
-        category.addProduct(product);
-        category.addProduct(product2);
-        HashMap<String, String> info = new HashMap<>();
-        info.put("username", "jalal");
-        info.put("color", "yellow");
-        info.put("dick", "golden");
-        Salesperson salesperson = new Salesperson(info);
-        Salesperson seller2 = new Salesperson(info);
-        Salesperson seller3 = new Salesperson(info);
-        salesperson.addToOfferedProducts(product, 4, 100);
-        seller2.addToOfferedProducts(product, 5, 120);
-        seller3.addToOfferedProducts(product, 7, 1000);
-        seller3.addToOfferedProducts(product2, 6, 10);
-        ArrayList<Salesperson> sellers = new ArrayList<>();
-        product.setProperties(info);
-        product2.setProperties(info);
-        sellers.add(salesperson);
-        sellers.add(seller2);
-        sellers.add(seller3);
-        ArrayList<Salesperson> sellers2 = new ArrayList<>();
-        sellers2.add(seller3);
-        ProductController.stock.put(product, sellers);
-        ProductController.stock.put(product2, sellers2);
-        product.setAverageScore(3.5);
-        product2.setAverageScore(2);
-        ProductsInCategory apm = new ProductsInCategory(category, false);
-        FXMLLoader loader = new FXMLLoader(App.class.getResource("/fxml/productsInCategory.fxml"));
-        loader.setController(apm);
-        Parent parent1 = loader.load();
-
-        App.currentStage = primaryStage;
-        currentScene = new Scene(parent1, 800, 500);
-        primaryStage.setTitle("Bruh");
-        primaryStage.setScene(currentScene);
-        primaryStage.setResizable(false); //felan
-        primaryStage.show();
-    }
-
-    public void productMenu(Stage primaryStage) throws IOException {
-        initializer();
-        Product product = new Product("name", "brand", "panir", new HashMap<>());
-        HashMap<String, String> info = new HashMap<>();
-        info.put("username", "jalal");
-        info.put("color", "yellow");
-        info.put("dick", "golden");
-        Salesperson salesperson = new Salesperson(info);
-        Salesperson seller2 = new Salesperson(info);
-        Salesperson seller3 = new Salesperson(info);
-        salesperson.addToOfferedProducts(product, 4, 100);
-        seller2.addToOfferedProducts(product, 5, 120);
-        seller3.addToOfferedProducts(product, 7, 1000);
-        ArrayList<Salesperson> sellers = new ArrayList<>();
-        product.setProperties(info);
-        sellers.add(salesperson);
-        sellers.add(seller2);
-        sellers.add(seller3);
-        ProductController.stock.put(product, sellers);
-        ProductMenu pM = new ProductMenu(product, false);
-        FXMLLoader loader = new FXMLLoader(App.class.getResource("/fxml/singleProduct.fxml"));
-
-        loader.setController(pM);
-        Parent parent1 = loader.load();
-
-        App.currentStage = primaryStage;
-        currentScene = new Scene(parent1, 800, 500);
-        primaryStage.setTitle("Bruh");
-        primaryStage.setScene(currentScene);
-        primaryStage.setResizable(false); //felan
-        primaryStage.show();
+    public static void manageAuctionTimer() {
+        Timer timer = new Timer();
+        TimerTask timerTask = new AuctionTimer();
+        timer.schedule(timerTask, new Date(), 60000);
     }
 
     public static void initializer() {
