@@ -41,14 +41,15 @@ public class AuctionInList implements Initializable {
         profilePic.setImage(new Image(salesperson.getImage()));
 
         productName.setText(product.getName());
-        //todo productPic.setImage(new Image(product.getImageURI()));
+        productPic.setImage(new Image(product.getImageURI()));
 
         endTime.setText(fancyEndTime());
     }
 
     private String fancyEndTime() {
         String uglyEndTime = String.valueOf(salesperson.getAuctionEndTime(product));
-        uglyEndTime = uglyEndTime.substring(0, 10);
-        return uglyEndTime.replace("-", "/");
+        uglyEndTime = uglyEndTime.replace("-", "/");
+        uglyEndTime = uglyEndTime.replace("T", "  ");
+        return uglyEndTime;
     }
 }

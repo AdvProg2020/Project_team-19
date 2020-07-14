@@ -119,9 +119,9 @@ public class ProductMenu implements Initializable {
             similarProductsPopup.show(App.currentStage);
         });
         checkMedia();
-//        if (product.getImageURI() != null) {
-//            productImage.setImage(new Image(product.getImageURI()));
-//        }
+        if (product.getImageURI() != null) {
+            productImage.setImage(new Image(product.getImageURI()));
+        }
         back.setOnMouseClicked ( event -> App.setRoot ( "mainProductsMenu" ) );
 
         back.setOnMousePressed ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #17b5ff,75,0,5,0);" ) );
@@ -142,7 +142,7 @@ public class ProductMenu implements Initializable {
 
     private void playMedia() {
         mediaPopup = new Popup();
-        MediaPlayer mediaPlayer = new MediaPlayer(new Media(ProductMenu.class.getResource(product.getMediaURI()).toExternalForm()));
+        MediaPlayer mediaPlayer = new MediaPlayer(new Media(product.getMediaURI()));
         mediaPlayer.setAutoPlay(true);
         MediaView mediaView = new MediaView();
         mediaView.setMediaPlayer(mediaPlayer);
@@ -446,8 +446,8 @@ public class ProductMenu implements Initializable {
     }
 
     private void zoomImage() {
-        double width = productImage.getImage().getWidth();
-        double height = productImage.getImage().getHeight();
+        double width = productImage.getFitWidth();
+        double height = productImage.getFitHeight();
 
         productImage.setPreserveRatio(true);
         reset(productImage, width, height);

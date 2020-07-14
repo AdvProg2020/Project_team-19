@@ -5,11 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
 import model.Category;
-import model.Product;
-import model.Salesperson;
 
 import java.io.*;
 import java.lang.reflect.Type;

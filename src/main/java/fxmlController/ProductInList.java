@@ -55,9 +55,9 @@ public class ProductInList implements Initializable {
         editLabel(priceLabel, ("" + product.getAveragePrice()).substring(0, index + 2) + "$");
         setScoreRate();
         checkFinished();
-//        if (product.getImageURI() != null) {
-//            productImage.setImage(new Image(product.getImageURI()));
-//        }
+        if (product.getImageURI() != null) {
+            productImage.setImage(new Image(product.getImageURI()));
+        }
     }
 
     private void deleteProduct() {

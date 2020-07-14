@@ -3,7 +3,6 @@ package fxmlController;
 import controller.AuctionController;
 import controller.PersonController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -15,9 +14,15 @@ import model.Person;
 import model.Product;
 import model.Salesperson;
 import view.App;
+import view.MainMenu;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import static fxmlController.MainMenuController.isInAllAuction;
 
 public class AuctionMenu implements Initializable {
     private Salesperson salesperson;
@@ -47,8 +52,19 @@ public class AuctionMenu implements Initializable {
         productCard.setLayoutY(100);
 
         back.setOnMouseClicked ( event -> {
-            MainMenuController.clickedOnAuctionCard = false;
-            App.setRoot ( "allAuctionsMenu" );
+            isInAllAuction = true;
+            Timer timer = new Timer();
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    if (isInAllAuction) {
+                        App.setRoot("allAuctionsMenu");
+                        System.out.println("load");
+                    } else
+                        timer.cancel();
+                }
+            };
+            timer.schedule(timerTask, new Date(), 2000);
         } );
 
         back.setOnMousePressed ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #17b5ff,75,0,5,0);" ) );

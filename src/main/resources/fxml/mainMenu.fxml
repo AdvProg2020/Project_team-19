@@ -42,9 +42,14 @@
             <Image url="@../images/user.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="auctionIcon" fitHeight="72.0" fitWidth="72.0" layoutX="714.0" layoutY="125.0" onMouseClicked="#allAuction" onMousePressed="#auctionIconBig" onMouseReleased="#auctionIconSmall" pickOnBounds="true" preserveRatio="true" visible="false" disable="true">
+      <ImageView fx:id="auctionIcon" disable="true" fitHeight="72.0" fitWidth="72.0" layoutX="14.0" layoutY="105.0" onMouseClicked="#allAuction" onMousePressed="#auctionIconBig" onMouseReleased="#auctionIconSmall" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../images/auction.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="walletIcon" disable="true" fitHeight="72.0" fitWidth="72.0" layoutX="14.0" layoutY="14.0" onMouseClicked="#walletClicked" onMousePressed="#walletIconBig" onMouseReleased="#walletIconSmall" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@../images/wallet.png" />
          </image>
       </ImageView>
    </children>

@@ -107,7 +107,7 @@ public class ProductRequestFXML implements Initializable {
         File file = fileChooser.showOpenDialog (stage);
 
         if (file != null) {
-            image = file.getAbsolutePath();
+            image = file.toURI().toString();
         }
     }
 
@@ -118,7 +118,7 @@ public class ProductRequestFXML implements Initializable {
         fileChooser.setTitle("View Medias");
         File file = fileChooser.showOpenDialog (stage);
         if (file != null) {
-            media = file.getAbsolutePath();
+            media = file.toURI().toString();
         }
     }
 

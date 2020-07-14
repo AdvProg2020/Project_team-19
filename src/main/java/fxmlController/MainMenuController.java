@@ -2,7 +2,6 @@ package fxmlController;
 
 import controller.PersonController;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
@@ -23,12 +22,14 @@ import java.util.TimerTask;
 import static view.App.getFXMLLoader;
 
 public class MainMenuController implements Initializable {
+    public static boolean isInAllAuction = true;
     @FXML private ImageView productIcon;
     @FXML private ImageView discountIcon;
     @FXML private ImageView userIcon;
     @FXML private ImageView auctionIcon;
+    @FXML private ImageView walletIcon;
 
-    public static boolean clickedOnAuctionCard = false;
+
 //    @FXML Button productMenu;
 //    @FXML Button discountMenu;
 //    @FXML Button back;
@@ -64,27 +65,33 @@ public class MainMenuController implements Initializable {
     }
 
     @FXML void allAuction() {
-        new Thread(() -> {
-            Timer timer = new Timer();
-            TimerTask timerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    if (!clickedOnAuctionCard) {
-                        App.setRoot("allAuctionsMenu");
-                        //System.out.println("load");
-                    }
-                }
-            };
-            timer.schedule(timerTask, new Date(), 60000);
-        }).start();
+        isInAllAuction = true;
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                if (isInAllAuction) {
+                    App.setRoot("allAuctionsMenu");
+                    System.out.println("load");
+                } else
+                    timer.cancel();
+            }
+        };
+        timer.schedule(timerTask, new Date(), 2000);
+    }
 
+    @FXML void walletClicked() {
+        App.setRoot("walletMenu");
     }
 
     @Override
     public void initialize ( URL location , ResourceBundle resources ) {
-        MainMenuController.clickedOnAuctionCard = false;
-        if (PersonController.getInstance().getLoggedInPerson() != null
-        && PersonController.getInstance().getLoggedInPerson() instanceof Customer) {
+        Person person = PersonController.getInstance().getLoggedInPerson();
+        if (person instanceof Customer || person instanceof Salesperson) {
+            walletIcon.setDisable(false);
+            walletIcon.setVisible(true);
+        }
+        if (person instanceof Customer) {
             auctionIcon.setDisable(false);
             auctionIcon.setVisible(true);
         }
@@ -128,5 +135,13 @@ public class MainMenuController implements Initializable {
     @FXML private void discountIconSmall ( MouseEvent mouseEvent ) {
         discountIcon.setStyle ( "" );
 //        discountIcon.setFitWidth ( 200 );
+    }
+
+    @FXML private void walletIconBig() {
+        walletIcon.setStyle ( "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);" );
+    }
+
+    @FXML private void walletIconSmall() {
+        walletIcon.setStyle ( "" );
     }
 }

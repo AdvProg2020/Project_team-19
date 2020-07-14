@@ -13,16 +13,11 @@
       <AnchorPane fx:id="pane" prefHeight="500.0" prefWidth="800.0">
          <children>
             <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" onMouseClicked="#back" onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
-            <ImageView fx:id="cart" fitHeight="50.0" fitWidth="50.0" layoutX="717.0" layoutY="14.0" onMouseClicked="#cartClicked" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/cart.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="wallet" fitHeight="50.0" fitWidth="50.0" layoutX="650.0" layoutY="14.0" onMouseClicked="#walletClicked" opacity="0.8" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/wallet.png" />
-               </image>
-            </ImageView>
+<!--            <ImageView fx:id="cart" fitHeight="50.0" fitWidth="50.0" layoutX="717.0" layoutY="14.0" onMouseClicked="#cartClicked" pickOnBounds="true" preserveRatio="true">-->
+<!--               <image>-->
+<!--                  <Image url="@../images/cart.png" />-->
+<!--               </image>-->
+<!--            </ImageView>-->
          </children>
       </AnchorPane>
    </content>

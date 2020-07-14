@@ -12,20 +12,20 @@
 <ScrollPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <content>
       <AnchorPane>
+         <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
          <children>
-            <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
             <VBox layoutY="27.0" prefHeight="605.0" prefWidth="770.0" spacing="20.0">
                <children>
-                  <HBox prefHeight="149.0" prefWidth="753.0" spacing="20.0">
+                  <HBox prefHeight="209.0" prefWidth="750.0" spacing="20.0">
                      <children>
-                        <StackPane prefHeight="150.0" prefWidth="200.0">
+                        <StackPane prefHeight="162.0" prefWidth="164.0">
                            <children>
-                              <ImageView fx:id="productImage" fitHeight="249.0" fitWidth="209.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: black;">
+                              <ImageView fx:id="productImage" fitHeight="160.0" fitWidth="164.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: black;">
                                  <image>
                                     <Image url="@../images/product.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fx:id="notAvailable" fitHeight="62.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: black;" StackPane.alignment="BOTTOM_RIGHT">
+                              <ImageView fx:id="notAvailable" fitHeight="39.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: black;" StackPane.alignment="BOTTOM_RIGHT">
                                  <StackPane.margin>
                                     <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
                                  </StackPane.margin>
@@ -42,17 +42,17 @@
                               <Label fx:id="properties" prefHeight="128.0" prefWidth="416.0" />
                               <Pane fx:id="starRate" prefHeight="70.0" prefWidth="416.0">
                                  <children>
-                                    <ImageView fx:id="rate" fitHeight="39.0" fitWidth="50.0" layoutX="356.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="rate" fitHeight="39.0" fitWidth="50.0" layoutX="435.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../images/rate.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="showSimilarProducts" fitHeight="39.0" fitWidth="40.0" layoutX="305.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="showSimilarProducts" fitHeight="39.0" fitWidth="40.0" layoutX="385.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../images/similar.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fx:id="playMedia" fitHeight="39.0" fitWidth="40.0" layoutX="249.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="playMedia" fitHeight="39.0" fitWidth="40.0" layoutX="330.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../images/play-button.png" />
                                        </image>

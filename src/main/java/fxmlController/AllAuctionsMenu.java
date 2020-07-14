@@ -2,7 +2,6 @@ package fxmlController;
 
 import controller.AuctionController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,19 +14,15 @@ import javafx.scene.paint.Color;
 import model.Product;
 import model.Salesperson;
 import view.App;
-import view.MainMenu;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
+
 public class AllAuctionsMenu implements Initializable {
     private GridPane cardsBase;
     private ArrayList<Parent> auctionCards;
-    @FXML
-    ImageView cart;
-    @FXML
-    ImageView wallet;
     @FXML
     FontAwesomeIcon back;
     @FXML
@@ -49,7 +44,7 @@ public class AllAuctionsMenu implements Initializable {
     }
 
     private void handleClickOnAuction(Salesperson salesperson, Product product, Parent card) {
-        MainMenuController.clickedOnAuctionCard = true;
+        MainMenuController.isInAllAuction = false;
         AuctionMenu auctionMenu = new AuctionMenu(salesperson, product, card);
         FXMLLoader loader = new FXMLLoader(AllAuctionsMenu.class.getResource("/fxml/auctionMenu.fxml"));
         loader.setController(auctionMenu);
@@ -80,20 +75,8 @@ public class AllAuctionsMenu implements Initializable {
     }
 
     @FXML
-    void cartClicked(ActionEvent event) {
-        CartMenuFXML cartMenuFXML = new CartMenuFXML("mainMenu");
-        FXMLLoader loader = new FXMLLoader(MainProductsMenu.class.getResource("/fxml/cart.fxml"));
-        loader.setController(cartMenuFXML);
-        App.setRoot(loader);
-    }
-
-    @FXML
-    void walletClicked(ActionEvent event) {
-        //todo open wallet
-    }
-
-    @FXML
     void back ( MouseEvent event ) {
+        MainMenuController.isInAllAuction = false;
         App.setRoot ( "mainMenu" );
     }
 
