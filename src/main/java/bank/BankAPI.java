@@ -39,7 +39,6 @@ public class BankAPI {
             Socket socket = new Socket(IP, PORT);
             outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
             inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-            //System.out.println(inputStream.readUTF());
         } catch (IOException e) {
             throw new IOException("Exception while initiating connection:");
         }
@@ -79,14 +78,30 @@ public class BankAPI {
     public static String sendMessage(String msg) throws IOException {
         try {
             String type = msg.split("\\s+")[0];
-            msg = msg.replace(type + " ", "");
+            if (!msg.equals("exit"))
+                msg = msg.replace(type + " ", "");
             Request request = new Request(getType(type), msg);
             outputStream.writeUTF(BankServer.write(request));
             outputStream.flush();
-            return inputStream.readUTF();
+            if (!msg.equals("exit")) {
+                return inputStream.readUTF();
+            } else
+                return "exit";
         } catch (IOException e) {
             throw new IOException("Exception while sending message:");
         }
+    }
+
+    public static String getBankResponse(String msg) {
+        try {
+            ConnectToBankServer();
+            String response = sendMessage(msg);
+            sendMessage("exit");
+            return response;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "error";
     }
 
     /**

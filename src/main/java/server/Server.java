@@ -1,5 +1,6 @@
 package server;
 
+import bank.BankAPI;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -16,7 +17,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class Server {
     private static Server single_instance = null;
-    private static final int PORT = 4444;
+    private static int PORT = 4444;
     private static BlockingQueue<Connection> requests;
     private HashMap<String,String> authTokens;
 
@@ -30,12 +31,12 @@ public class Server {
         }
         commands = new HashMap<>();
         commands.put(PacketType.LOGIN, new HandleLogin());
-        commands.put(PacketType.REGISTER, new RegisterHandler());
-        commands.put(PacketType.ADD_DISCOUNT_REQUEST, new AddDiscountHandler());
-        commands.put(PacketType.REMOVE_DISCOUNT_REQUEST, new RemoveDiscountHandler());
-        commands.put(PacketType.EDIT_DISCOUNT_REQUEST, new EditDiscountHandler());
-        commands.put(PacketType.ADD_PRODUCT_FROM_STOCK, new AddStockProductHandler());
-        commands.put(PacketType.ADD_NEW_PRODUCT, new AddNewProductHandler());
+        commands.put(PacketType.REGISTER,new RegisterHandler());
+        commands.put(PacketType.ADD_DISCOUNT_REQUEST,new AddDiscountHandler());
+        commands.put(PacketType.REMOVE_DISCOUNT_REQUEST,new RemoveDiscountHandler());
+        commands.put(PacketType.EDIT_DISCOUNT_REQUEST,new EditDiscountHandler());
+        commands.put(PacketType.ADD_PRODUCT_FROM_STOCK,new AddStockProductHandler());
+        commands.put(PacketType.ADD_NEW_PRODUCT,new AddNewProductHandler());
         commands.put(PacketType.ACCEPT_REQUEST,new AcceptRequestHandler());
         commands.put(PacketType.DECLINE_REQUEST,new DeclineRequestHandler());
         commands.put(PacketType.INCREASE_COUNT_CART,new IncreaseProductFromCart());
@@ -43,6 +44,10 @@ public class Server {
         commands.put(PacketType.ADD_CATEGORY,new AddCategoryHandler());
         commands.put(PacketType.EDIT_CATEGORY,new EditCategoryHandler());
         commands.put(PacketType.REMOVE_CATEGORY,new RemoveCategoryHandler());
+        commands.put(PacketType.GET_PERSON,new GetPersonHandler());
+        commands.put(PacketType.IS_FIRST_MANAGER_REGISTERED,new IsManagerRegistered());
+        commands.put(PacketType.LOG_OUT,new LogOutHandler());
+        commands.put(PacketType.GET_PERSON_TYPE,new GetPersonType());
     }
 
     public static Server getInstance() {
@@ -71,18 +76,17 @@ public class Server {
 
     public Thread readRequest() {
         return new Thread(() -> {
-                while (true) {
-                    try {
-                        Connection request = requests.take();
-                        requests.remove(request);
-                        getInstance().commands.get(request.getRequest().getRequestType()).handle(request);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            while (true) {
+                try {
+                    Connection request = requests.take();
+                    getInstance().commands.get(request.getRequest().getRequestType()).handle(request);
+                    requests.remove(request);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+            }
         });
     }
-
 
     private static class HandleClient extends Thread {
         Socket socket;
@@ -105,45 +109,48 @@ public class Server {
 
         @Override
         public void run() {
-                while (true) {
-                    try {
-                        String string = dataInputStream.readUTF();
-                        System.out.println(string);
-                        Request request = (Request) read(Request.class, string);
-
-                        requests.put(new Connection(request, socket, dataOutputStream));
-                    } catch (IOException | InterruptedException e) {
-                        e.printStackTrace();
+            while (true) {
+                try {
+                    String string = dataInputStream.readUTF();
+                    System.out.println(string);
+                    Request request = (Request) read(Request.class, string);
+                    if (request.getToken().length()>0){
+                        if (!checkToken(request.getToken()))
+                            continue;
                     }
+                    requests.put(new Connection(request, socket, dataOutputStream));
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
                 }
+            }
         }
 
     }
 
-    public static Object read(java.lang.reflect.Type typeOfT, String string) {
-            GsonBuilder builder = new GsonBuilder().setLenient().enableComplexMapKeySerialization();
-            Gson gson = builder.create();
+    public static Object read(java.lang.reflect.Type typeOfT, String string) { //todo oooooooooooooooo
+        GsonBuilder builder = new GsonBuilder().setLenient().enableComplexMapKeySerialization();
+        Gson gson = builder.create();
         return gson.fromJson(string, typeOfT);
     }
 
     public static <T> String write(T obj) {
-            GsonBuilder builder = new GsonBuilder().enableComplexMapKeySerialization();
-            Gson gson = builder.create();
-            return gson.toJson(obj);
+        GsonBuilder builder = new GsonBuilder().enableComplexMapKeySerialization();
+        Gson gson = builder.create();
+        return gson.toJson(obj);
     }
-
 
     class HandleLogin implements Handler {
         @Override
         synchronized public void handle(Connection connection) {
             try {
-                String[] info = connection.getRequest().getJson().remove(0).split(" ");
-                PersonController.getInstance().login(info[0],info[1]);
-                String token = getToken(info[0],info[1]);
-                authTokens.put(token,info[0]);
+                ArrayList<String> strings = connection.getRequest().getJson();
+                PersonController.getInstance().login(strings.get(0), strings.get(1));
+                String token = getToken(strings.get(0), strings.get(1));
+                authTokens.put(token, strings.get(1));
                 connection.getDataOutputStream().writeUTF(token);
             } catch (Exception e) {
                 try {
+                    System.out.println(e.getMessage());
                     connection.getDataOutputStream().writeUTF(e.getMessage());
                 } catch (IOException ex) {
                     ex.printStackTrace();
@@ -153,7 +160,7 @@ public class Server {
 
     }
 
-    static class AddDiscountHandler implements Handler{
+    class AddDiscountHandler implements Handler{
 
         @Override
         public void handle(Connection connection) {
@@ -166,7 +173,7 @@ public class Server {
         }
     }
 
-    static class RemoveDiscountHandler implements Handler{
+    class RemoveDiscountHandler implements Handler{
 
         @Override
         public void handle(Connection connection) {
@@ -177,7 +184,7 @@ public class Server {
         }
     }
 
-    static class EditDiscountHandler implements Handler{
+    class EditDiscountHandler implements Handler{
 
         @Override
         public void handle(Connection connection) {
@@ -191,17 +198,7 @@ public class Server {
         }
     }
 
-    static class RegisterHandler implements Handler{
-
-        @Override
-        synchronized public void handle(Connection connection) {
-            HashMap<String,String> info = (HashMap<String, String>) Server.read(new TypeToken<HashMap<String, String>>() {}.getType(),connection.getRequest().getJson().get(0));
-            RegisterController.getInstance().register(info);
-            connection.SendMessage("Registered successfully.");
-        }
-    }
-
-    static class AddNewProductHandler implements Handler{
+    class AddNewProductHandler implements Handler{
 
         @Override
         public void handle(Connection connection) {
@@ -213,7 +210,7 @@ public class Server {
         }
     }
 
-    static class AddStockProductHandler implements Handler{
+    class AddStockProductHandler implements Handler{
 
         @Override
         public void handle(Connection connection) {
@@ -308,6 +305,72 @@ public class Server {
         }
     }
 
+    class GetPersonHandler implements Handler {
+
+        @Override
+        public void handle(Connection connection) {
+            ArrayList<String> strings = connection.getRequest().getJson();
+            if (!PersonController.getInstance().isTherePersonByUsername(strings.get(0))){
+                try {
+                    connection.getDataOutputStream().writeUTF("invalid username.");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    String person = write(PersonController.getInstance().getPersonByUsername(strings.get(0)));
+                    connection.getDataOutputStream().writeUTF(person);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    class RegisterHandler implements Handler{
+
+        @Override
+        public void handle(Connection connection) {
+            HashMap<String,String> info = (HashMap<String, String>) Server.read(new TypeToken<HashMap<String, String>>() {}.getType(),connection.getRequest().getJson().get(0));
+            RegisterController.getInstance().register(info);
+            String response = "";
+            if (!(RegisterController.getInstance().isFirstManagerRegistered() && info.get("type").equals("manager"))) {
+                 response = BankAPI.getBankResponse("create_account " +
+                        info.get("first name") + " " +
+                        info.get("last name") + " " +
+                        info.get("username") + " " +
+                        info.get("password") + " " +
+                        info.get("password"));
+            }
+            connection.SendMessage("Registered successfully.\nYour bank response : " + response);
+        }
+    }
+
+    class IsManagerRegistered implements Handler{
+
+        @Override
+        public void handle(Connection connection) {
+            connection.SendMessage(write(RegisterController.getInstance().isFirstManagerRegistered()));
+        }
+    }
+
+    class GetPersonType implements Handler{
+
+        @Override
+        public void handle(Connection connection) {
+            ArrayList<String> strings = connection.getRequest().getJson();
+            connection.SendMessage(PersonController.getInstance().getPersonByUsername(strings.get(0)).getType());
+        }
+    }
+
+    class LogOutHandler implements Handler{
+
+        @Override
+        public void handle(Connection connection) {
+            authTokens.remove(connection.getToken());
+        }
+    }
+
     public static void main(String[] args) {
         Database.createDatabase ();
         Database.initializeAddress ( );
@@ -328,6 +391,10 @@ public class Server {
             throw new Exception ( "You Don't Exist. Go Make Yourself." );
         PersonController.getInstance().checkPassword(username, password);
         return UUID.randomUUID().toString();
+    }
+
+    public static boolean checkToken(String token){
+        return Server.getInstance().authTokens.containsKey(token);
     }
 }
 

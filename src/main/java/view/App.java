@@ -1,5 +1,6 @@
 package view;
 
+import clientController.ServerConnection;
 import controller.*;
 import fxmlController.AllCategoriesMenu;
 import fxmlController.ProductsInCategory;
@@ -14,8 +15,8 @@ import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import model.*;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.net.Socket;
 import java.util.*;
 
 import static view.Menu.mainMenu;
@@ -40,11 +41,10 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-
+        ServerConnection.run();
         App.currentStage = primaryStage;
 
         AnchorPane root = getFXMLLoader("mainMenu").load();
-        root.setOnMouseClicked(event -> System.out.println(event.getX() + " " + event.getY()));
 
         currentScene = new Scene(root);
         primaryStage.setTitle("Bruh");
@@ -57,11 +57,6 @@ public class App extends Application {
         primaryStage.show();
 
         mainRun();
-    }
-
-    public void initialLogIn() {
-        CartController.getInstance().addProduct(ProductController.allProducts.get(0), ProductController.getInstance().getProductsOfProduct(ProductController.allProducts.get(0)).get(0).getSalesperson());
-        CartController.getInstance().addProduct(ProductController.allProducts.get(1), ProductController.getInstance().getProductsOfProduct(ProductController.allProducts.get(1)).get(0).getSalesperson());
     }
 
     private void mainRun() {

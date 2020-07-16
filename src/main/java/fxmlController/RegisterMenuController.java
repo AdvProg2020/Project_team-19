@@ -1,11 +1,8 @@
 package fxmlController;
 
-import controller.PersonController;
-import controller.RegisterController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -23,6 +20,7 @@ import java.util.ResourceBundle;
 
 import static view.LoginMenu.PersonInfo.*;
 import static view.LoginMenu.usernamePattern;
+import static clientController.ServerConnection.*;
 
 
 public class RegisterMenuController implements Initializable {
@@ -56,7 +54,8 @@ public class RegisterMenuController implements Initializable {
     }
 
     private void checkIfExist () throws Exception {
-        if (PersonController.getInstance ( ).isTherePersonByUsername ( username.getText () ))
+        String response = sendGetPerson(username.getText());
+        if (response.equals("invalid username."))
             throw new Exception ( "This Dude Already Exists." );
     }
 
@@ -65,7 +64,8 @@ public class RegisterMenuController implements Initializable {
             throw new Exception ( "Username Can't Be Nigger." );
         if ( !usernamePattern.matcher ( username.getText () ).matches ( ) )
             throw new Exception ( "Username Should Contain More Than 3 Characters And Not Contain Spaces." );
-        if ( type.getValue ().equals ( "Manager" ) && RegisterController.getInstance ( ).isFirstManagerRegistered ( ) )
+        String response = getIsFirstManagerRegistered();
+        if ( type.getValue ().equals ( "Manager" ) && response.contains("true") )
             throw new Exception ( "You can't add a manager. Contact one of the existing managers." );
     }
 
@@ -87,11 +87,12 @@ public class RegisterMenuController implements Initializable {
                 personInfo.put ( COMPANY.label , company.getText ( ) );
                 personInfo.put ( SAYERE_MOSHAKHASAT.label , darSurateVjud.getText ( ) );
             }
-            RegisterController.getInstance ( ).register ( personInfo );
+            String response = sendRegisterRequest(personInfo);
+            //RegisterController.getInstance ( ).register ( personInfo );
             ButtonType ok = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
             ButtonType cancel = new ButtonType("Ok", ButtonBar.ButtonData.CANCEL_CLOSE);
             Alert alert = new Alert( Alert.AlertType.CONFIRMATION,
-                    "Successfully Registered! Ok?",
+                    response,
                     ok,
                     cancel);
             alert.showAndWait ();

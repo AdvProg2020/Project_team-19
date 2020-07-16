@@ -8,15 +8,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import model.Customer;
-import model.Manager;
-import model.Person;
-import model.Salesperson;
 import view.App;
 
 import java.io.IOException;
 
-import static view.App.getFXMLLoader;
+import static clientController.ServerConnection.*;
+import static view.App.*;
 import static view.LoginMenu.usernamePattern;
 
 public class UserLoginMenuController {
@@ -39,11 +36,6 @@ public class UserLoginMenuController {
             throw new Exception ( "Fields Should Be Filled!" );
     }
 
-    private void checkIfExistNot () throws Exception {
-        if (!PersonController.getInstance ( ).isTherePersonByUsername ( username.getText () ))
-            throw new Exception ( "You Don't Exist. Go Make Yourself." );
-    }
-
     private void checkValidity () throws Exception {
         if (username.getText ().equalsIgnoreCase ( "nigger" ))
             throw new Exception ( "Username Can't Be Nigger." );
@@ -56,25 +48,30 @@ public class UserLoginMenuController {
         try {
             checkIfEmpty ();
             checkValidity ();
-            PersonController.getInstance ().login ( username.getText () ,password.getText());
-            ButtonType ok = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
-            ButtonType cancel = new ButtonType("Ok", ButtonBar.ButtonData.CANCEL_CLOSE);
-            Alert alert = new Alert( Alert.AlertType.CONFIRMATION,
-                    "Successfully Logged In! Ok?",
-                    ok,
-                    cancel);
-            alert.showAndWait ();
-//            back ();
-            App.firstScene = new Scene ( getFXMLLoader ( "mainMenu" ).load () );
-            Person person = PersonController.getInstance ().getLoggedInPerson ();
-            if ( person instanceof Manager ) {
-                App.currentScene = new Scene ( getFXMLLoader ( "managerMenu" ).load () );
-            } else if ( person instanceof Salesperson ){
-                App.currentScene = new Scene ( getFXMLLoader ( "salespersonMenu" ).load () );
+            String response = sendLoginRequest(username.getText(), password.getText());
+            if (response.equals("You Don't Exist. Go Make Yourself.") || response.equals("Incorrect password")) {
+                App.showAlert(Alert.AlertType.ERROR, currentStage, "wrong login", response);
             } else {
-                App.currentScene = new Scene ( getFXMLLoader ( "customerMenu" ).load () );
+                ButtonType ok = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+                ButtonType cancel = new ButtonType("Ok", ButtonBar.ButtonData.CANCEL_CLOSE);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                        "Successfully Logged In! Ok?" +
+                        response,
+                        ok,
+                        cancel);
+                alert.showAndWait();
+                App.firstScene = new Scene(getFXMLLoader("mainMenu").load());
+                String type = getPersonType(username.getText());
+                if (type.equals("manager")) {
+                    App.currentScene = new Scene(getFXMLLoader("managerMenu").load());
+                } else if (type.equals("salesperson")) {
+                    App.currentScene = new Scene(getFXMLLoader("salespersonMenu").load());
+                } else {
+                    App.currentScene = new Scene(getFXMLLoader("customerMenu").load());
+                }
+                App.currentStage.setScene(App.currentScene);
+                token = response;
             }
-            App.currentStage.setScene ( App.currentScene );
         } catch (Exception e) {
             App.error ( e.getMessage () );
         }
@@ -104,5 +101,7 @@ public class UserLoginMenuController {
     @FXML private void backSizeSmall ( MouseEvent mouseEvent ) {
         back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" );
     }
+
+
 }
 

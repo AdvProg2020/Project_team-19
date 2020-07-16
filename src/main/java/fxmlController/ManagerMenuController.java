@@ -1,7 +1,6 @@
 package fxmlController;
 
 
-import controller.PersonController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,7 +40,7 @@ public class ManagerMenuController {
 
     @FXML
     void logout ( ActionEvent event ) throws IOException {
-        PersonController.getInstance().logOut();
+        //todo PersonController.getInstance().logOut();
         App.currentScene = new Scene ( getFXMLLoader ( "mainMenu" ).load () );
         App.currentStage.setScene ( App.currentScene );
     }

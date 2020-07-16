@@ -23,6 +23,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static view.App.getFXMLLoader;
+import static clientController.ServerConnection.*;
 
 public class CustomerMenuController implements Initializable {
 
@@ -78,7 +79,7 @@ public class CustomerMenuController implements Initializable {
         try {
             credit = Double.parseDouble ( enterAmount.getText () );
             App.chaChing.play ();
-            PersonController.getInstance().increaseCustomerCredit( (Customer) PersonController.getInstance ().getLoggedInPerson () , credit);
+            //todo PersonController.getInstance().increaseCustomerCredit( (Customer) PersonController.getInstance ().getLoggedInPerson () , credit);
             yourBalanceLabel.setText ( "Your Balance : " + ((Customer) PersonController.getInstance ().getLoggedInPerson ()).getCredit () );
         } catch (Exception e) {
             App.error ( "Enter numbers only." );
@@ -116,7 +117,7 @@ public class CustomerMenuController implements Initializable {
         enterAmount.setVisible ( false );
         increaseCredit.setVisible ( false );
         increaseCredit.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20; -fx-effect: innershadow(gaussian, #00ad48,75,0,5,0);" );
-        yourBalanceLabel.setText ( "Your Balance : " + ((Customer) PersonController.getInstance ().getLoggedInPerson ()).getCredit () );
+        //todo yourBalanceLabel.setText ( "Your Balance : " + ((Customer) PersonController.getInstance ().getLoggedInPerson ()).getCredit () );
         cart.setOnMouseClicked ( event -> cart () );
     }
 
