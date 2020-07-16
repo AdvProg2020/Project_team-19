@@ -60,7 +60,8 @@ public class PersonInfoController implements Initializable {
     public void updateTable () {
         HashMap<String,String> personInfo = PersonController.getInstance ().getLoggedInPerson ().getPersonInfo ();
 
-        profile.setImage ( new Image ( personInfo.get ( PROFILE.label ) ) );
+        if (personInfo.get ( PROFILE.label ) != null)
+            profile.setImage ( new Image ( personInfo.get ( PROFILE.label ) ) );
 
         String[][] data = new String[6][2];
         data[0] = new String[]{"Username",personInfo.get ( USERNAME.label )};

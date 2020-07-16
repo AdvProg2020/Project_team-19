@@ -55,10 +55,8 @@ public class UserLoginMenuController {
     void loginBtnAction() {
         try {
             checkIfEmpty ();
-            checkIfExistNot ();
             checkValidity ();
-            PersonController.getInstance ( ).checkPassword ( password.getText () , username.getText () );
-            PersonController.getInstance ().login ( username.getText () );
+            PersonController.getInstance ().login ( username.getText () ,password.getText());
             ButtonType ok = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
             ButtonType cancel = new ButtonType("Ok", ButtonBar.ButtonData.CANCEL_CLOSE);
             Alert alert = new Alert( Alert.AlertType.CONFIRMATION,

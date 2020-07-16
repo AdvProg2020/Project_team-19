@@ -129,13 +129,14 @@ public class RequestController {
         new ProductRequest(price, amount, salesperson, product);
     }
 
-    public void addProductRequestFromStock(Double price, Integer amount, Salesperson salesperson, Product product) {
-        saveTempProductInProgramLists(product, salesperson, amount, price);
-        saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
-        new ProductRequest(price, amount, salesperson, product);
+    public void addProductRequest(Double price, Integer amount, Salesperson salesperson
+            ,Product chosenProduct) {
+        saveTempProductInProgramLists(chosenProduct, salesperson, amount, price);
+        saveFileChangesForProductBeforeSendingRequest(chosenProduct, salesperson);
+        productID = chosenProduct.getID();
+        new ProductRequest(price, amount, salesperson, chosenProduct);
     }
 
-    // fuck
     public void addProductRequest(Double price, Integer amount, Salesperson salesperson
             , String category, String name, String brand, HashMap<String, String> properties, String imageURI, String mediaURI) {
         Product product = new Product(name, brand, category, properties);
@@ -209,22 +210,20 @@ public class RequestController {
         new DiscountRequest(discount, salesperson, Request.RequestState.ADD);
     }
 
-    public void editDiscountRequest(Discount discount, ArrayList<Product> add, ArrayList<Product> remove, LocalDateTime startTime,
+    public void editDiscountRequest(Discount discount, ArrayList<String> products, LocalDateTime startTime,
                                     LocalDateTime endTime, Double discountPercentage, Salesperson salesperson) {
 
         discount.setDiscountState(Discount.DiscountState.EDIT_IN_PROGRESS);
         //serfan bedonim editInProgressE base
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
 
-        ArrayList<Product> products = discount.getProducts();
         if (startTime == null)
             startTime = discount.getStartTime();
         if (endTime == null)
             endTime = discount.getEndTime();
         if (discountPercentage == null)
             discountPercentage = discount.getDiscountPercentage();
-        products.addAll(add);
-        products.removeAll(remove);
+
 
         new DiscountRequest(discount, products, startTime, endTime, discountPercentage, salesperson);
     }

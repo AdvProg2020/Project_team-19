@@ -99,6 +99,14 @@ public class CartController {
         }
     }
 
+    public void purchase(boolean b) throws NoLoggedInPersonException, AccountIsNotCustomerException{
+        if (!PersonController.getInstance().isThereLoggedInPerson()) {
+            throw new NoLoggedInPersonException("You are not logged in." + "\n" + "Please login to continue.");
+        } else if (!PersonController.getInstance().isLoggedInPersonCustomer()) {
+            throw new AccountIsNotCustomerException("Please login with customer account.");
+        }
+    }
+
     public void discountCodeForGoodCustomer(Customer customer){
         DiscountCode discountCode = new DiscountCode(LocalDateTime.MIN,LocalDateTime.MAX,10,Double.POSITIVE_INFINITY,1);
         manageDiscountCode(discountCode);

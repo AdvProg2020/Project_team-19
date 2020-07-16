@@ -83,7 +83,7 @@ public class DiscountCodesFXMLController implements Initializable {
         } );
         editColumn.setStyle ( "-fx-alignment: center; -fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-font-color: white; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" );
 
-        editColumn.setCellFactory(tc -> {
+                editColumn.setCellFactory(tc -> {
             TableCell <DiscountCode, String> cell = new TableCell<DiscountCode, String>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {

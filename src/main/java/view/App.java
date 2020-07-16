@@ -10,9 +10,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import model.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -26,24 +28,18 @@ public class App extends Application {
     public static Scene firstScene; //ToDo feilan injow mizarimesh
     private double xOffset, yOffset;
 
+    public static AudioClip akh = new AudioClip ( new File ( "src/main/resources/akh.mp3" ).toURI ().toString () );
+    public static AudioClip bop = new AudioClip ( new File ( "src/main/resources/bop.mp3" ).toURI ().toString () );
+    public static AudioClip click = new AudioClip ( new File ( "src/main/resources/mouseClick.mp3" ).toURI ().toString () );
+    public static AudioClip chaChing = new AudioClip ( new File ( "src/main/resources/chaChing.mp3" ).toURI ().toString () );
+
+
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-//        initializer();
-//        PersonController.getInstance().login("solale");
-//        //initialLogIn();
-//        Parent parent = FXMLLoader.load(App.class.getResource("/fxml/AllCategoriesMenu.fxml"));
-//
-//        App.currentStage = primaryStage ;
-//        currentScene = new Scene ( parent, 800, 500 );
-//        primaryStage.setTitle ( "Bruh" );
-//        primaryStage.setScene( currentScene );
-//        primaryStage.setResizable ( false ); //felan
-//        primaryStage.show();
-//        //mainProducts(primaryStage);
 
         App.currentStage = primaryStage;
 
@@ -53,16 +49,10 @@ public class App extends Application {
         currentScene = new Scene(root);
         primaryStage.setTitle("Bruh");
         primaryStage.setScene(currentScene);
-//        primaryStage.initStyle( StageStyle.UNDECORATED);
-//        primaryStage.setResizable ( false ); //felan
-//        root.setOnMousePressed( event -> {
-//            xOffset = event.getSceneX();
-//            yOffset = event.getSceneY();
-//        } );
-//        root.setOnMouseDragged( event -> {
-//            primaryStage.setX(event.getScreenX() - xOffset);
-//            primaryStage.setY(event.getScreenY() - yOffset);
-//        } );
+
+        AudioClip background = new AudioClip ( new File ( "src/main/resources/Soul_and_Mind.mp3" ).toURI ().toString () );
+        background.setCycleCount ( AudioClip.INDEFINITE );
+        background.play ();
 
         primaryStage.show();
 
@@ -72,62 +62,6 @@ public class App extends Application {
     public void initialLogIn() {
         CartController.getInstance().addProduct(ProductController.allProducts.get(0), ProductController.getInstance().getProductsOfProduct(ProductController.allProducts.get(0)).get(0).getSalesperson());
         CartController.getInstance().addProduct(ProductController.allProducts.get(1), ProductController.getInstance().getProductsOfProduct(ProductController.allProducts.get(1)).get(0).getSalesperson());
-    }
-
-
-    private void mainProducts(Stage primaryStage) throws IOException {
-        initializer();
-        HashSet<String> p = new HashSet<>();
-        p.add("color");
-        p.add("size");
-        Category category = new Category("labaniat", null, p);
-//        Category category1 = new Category("dodols", null, new HashSet<>());
-//        Product product = new Product("name", "brand", category.getName(), new HashMap<>());
-        HashMap<String, String> property = new HashMap<>();
-        property.put("color", "white");
-        property.put("size", "big");
-        Product product2 = new Product("panir", "lighvan", category.getName(), property);
-//        Product product1 = new Product("dol", "dolhub", category1.getName(), new HashMap<>());
-//        category.addProduct(product);
-        category.addProduct(product2);
-//        category1.addProduct(product1);
-        HashMap<String, String> info = new HashMap<>();
-        info.put("username", "jalalii");
-        info.put("color", "yellow");
-        info.put("dick", "golden");
-        Salesperson salesperson = new Salesperson(info);
-        //ProductMenu.customer = new Customer(info);
-//        Salesperson seller2 = new Salesperson(info);
-//        Salesperson seller3 = new Salesperson(info);
-        salesperson.addToOfferedProducts(product2, 4, 100);
-//        seller2.addToOfferedProducts(product, 5, 120);
-//        seller3.addToOfferedProducts(product, 7, 1000);
-//        seller3.addToOfferedProducts(product2, 6 , 10);
-//        seller3.addToOfferedProducts(product1, 4, 12);
-//        ArrayList<Salesperson> sellers = new ArrayList<>();
-//        product.setProperties(info);
-//        product2.setProperties(info);
-//        sellers.add(salesperson);
-//        sellers.add(seller2);
-//        sellers.add(seller3);
-        ArrayList<Salesperson> sellers2 = new ArrayList<>();
-        sellers2.add(salesperson);
-//        ArrayList<Salesperson> sellers3 = new ArrayList<>();
-//        sellers3.add(seller3);
-//        ProductController.stock.put(product, sellers);
-        ProductController.stock.put(product2, sellers2);
-//        ProductController.stock.put(product1, sellers3);
-//        product.setAverageScore(3.5);
-        product2.setAverageScore(3.5);
-        Database.saveToFile(salesperson, Database.createPath("salespersons", salesperson.getUsername()));
-        Database.saveToFile(CategoryController.rootCategories, Database.address.get("root_categories"));
-        Parent parent = FXMLLoader.load(App.class.getResource("/fxml/mainProductsMenu.fxml"));
-        App.currentStage = primaryStage;
-        currentScene = new Scene(parent, 800, 500);
-        primaryStage.setTitle("Bruh");
-        primaryStage.setScene(currentScene);
-        primaryStage.setResizable(false); //felan
-        primaryStage.show();
     }
 
     private void mainRun() {

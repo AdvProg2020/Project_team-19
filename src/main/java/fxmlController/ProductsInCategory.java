@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
@@ -35,10 +36,10 @@ public class ProductsInCategory implements Initializable {
     private boolean isDiscount;
     private Popup popup = new Popup();
     private GridPane productCardsBase;
+    @FXML private AnchorPane anchorPane;
     @FXML private Label categoryName;
     @FXML private ComboBox<String> filterBox;
     @FXML private TextField propertyField;
-    @FXML private AnchorPane basePane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -50,9 +51,11 @@ public class ProductsInCategory implements Initializable {
         setComboFilters();
         setOnComboAction();
         setTextFieldAction();
-        basePane.getChildren().add(productCardsBase);
+        productCardsBase.setAlignment(Pos.CENTER);
+        productCardsBase.setPadding(new Insets(20));
+        anchorPane.getChildren().add(productCardsBase);
         productCardsBase.setLayoutX(10);
-        productCardsBase.setLayoutY(45);
+        productCardsBase.setLayoutY(50);
     }
 
     public HashMap<Parent, Product> getProductLinks() {

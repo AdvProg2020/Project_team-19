@@ -1,12 +1,14 @@
 package fxmlController;
 
 import controller.PersonController;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import model.Discount;
 import model.Salesperson;
@@ -18,7 +20,9 @@ import java.util.ResourceBundle;
 
 public class AllDiscounts implements Initializable {
     @FXML
-    private GridPane gridpane;
+    private AnchorPane basePane;
+    @FXML
+    private FontAwesomeIcon back;
 
     @FXML
     void newDiscount(ActionEvent event) {
@@ -32,8 +36,10 @@ public class AllDiscounts implements Initializable {
             App.error(e.getMessage());
         }
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        GridPane gridpane = new GridPane();
         int i=1;
         Salesperson salesperson = (Salesperson) PersonController.getInstance().getLoggedInPerson();
         for (Discount discount : salesperson.getDiscounts()) {
@@ -49,6 +55,15 @@ public class AllDiscounts implements Initializable {
             assert parent != null;
             gridpane.add(parent,0,i++);
         }
+        basePane.getChildren().add(gridpane);
+        gridpane.setLayoutY(60);
+        gridpane.setLayoutX(10);
+
+        back.setOnMouseClicked ( event -> App.setRoot ( "salespersonMenu" ) );
+
+        back.setOnMousePressed ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #17b5ff,75,0,5,0);" ) );
+
+        back.setOnMouseReleased ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" ) );
 
     }
 }

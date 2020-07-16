@@ -119,6 +119,22 @@ public class CategoryController {
         saveToFile(rootCategories, address.get("root_categories"));
     }
 
+    public void editCategory(String name, Category category, Category parent, HashSet<String> properties, boolean root) {
+
+        if (name != null)
+            category.setName(name);
+        if (parent != null)
+            changeParent(category, parent);
+
+        category.setPropertyFields(properties);
+
+        if (parent == null && root) {
+            changeParent(category,null);
+            rootCategories.add(category);
+        }
+        saveToFile(rootCategories, address.get("root_categories"));
+    }
+
     public void changeParent(Category category, Category newParent) {
         removeCategory(category.getParent(), category);
         category.setParent(newParent);

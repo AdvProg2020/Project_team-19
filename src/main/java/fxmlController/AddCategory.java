@@ -6,16 +6,14 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import model.Category;
 import view.App;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 
@@ -59,33 +57,52 @@ public class AddCategory implements Initializable {
         back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" );
     }
 
+
     private void manage() {
-        if (mode.equals(requestMode.EDIT)) {
-            //  CategoryController.getInstance().editCategory(name.getText(),category,CategoryController.getInstance().getCategoryByName(categories.getValue(),CategoryController.rootCategories),properties,properties,false);
-        } else {
-            CategoryController.getInstance().addCategory(name.getText(), CategoryController.getInstance().getCategoryByName(categories.getValue(), CategoryController.rootCategories), new HashSet<>());
+        String[] propertiesArray = properties.getText().split("-");
+        HashSet<String> set = new HashSet<>(Arrays.asList(propertiesArray));
+            if (mode.equals(requestMode.EDIT)) {
+                CategoryController.getInstance().editCategory(name.getText(), category, CategoryController.getInstance().getCategoryByName(categories.getValue(), CategoryController.rootCategories), set, false);
+                Alert alert = new Alert ( Alert.AlertType.CONFIRMATION );
+                alert.setContentText ( "Successfully Edited!" );
+                alert.showAndWait ();
+            } else {
+                if (name.getText().length() == 0 || categories.getValue().length() == 0 || propertiesArray.length == 0) {
+                    App.error("Please fill the fields.");
+                } else {
+                    CategoryController.getInstance().addCategory(name.getText(), CategoryController.getInstance().getCategoryByName(categories.getValue(), CategoryController.rootCategories), set);
+                    Alert alert = new Alert ( Alert.AlertType.CONFIRMATION );
+                    alert.setContentText ( "Successfully Added!" );
+                    alert.showAndWait ();
+                }
+            }
         }
-    }
 
-    private ArrayList<String> parentCategories = new ArrayList<>();
+        private ArrayList<String> parentCategories = new ArrayList<>();
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        if (mode.equals(requestMode.EDIT)) {
-            manageButton.setText("Edit");
-            name.setText(category.getName());
-            categories.setValue(category.getParent().getName());
-        } else {
-            manageButton.setText("Add");
+        @Override
+        public void initialize (URL location, ResourceBundle resources){
+            if (mode.equals(requestMode.EDIT)) {
+                manageButton.setText("Edit");
+                name.setText(category.getName());
+                categories.setValue(category.getParent().getName());
+                StringBuilder p=new StringBuilder();
+                for (String propertyField : category.getPropertyFields()) {
+                    p.append(propertyField).append("-");
+                }
+                p.deleteCharAt(p.length()-1);
+                properties.setText(p.toString());
+            } else {
+                manageButton.setText("Add");
+            }
+            initializeCategories();
+            manageButton.setOnAction(event -> manage());
         }
-        initializeCategories();
-        manageButton.setOnAction(event -> manage());
-    }
 
-    public void initializeCategories() {
-        parentCategories.add("root");
-        CategoryController.getInstance().getParentCategories(parentCategories, CategoryController.rootCategories);
-        categories.setItems(FXCollections.observableArrayList(parentCategories));
-    }
+        public void initializeCategories () {
+            parentCategories.add("root");
+            CategoryController.getInstance().getParentCategories(parentCategories, CategoryController.rootCategories);
+            categories.setItems(FXCollections.observableArrayList(parentCategories));
+        }
 
-}
+    }
