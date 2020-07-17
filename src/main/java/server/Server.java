@@ -43,6 +43,10 @@ public class Server {
         commands.put(PacketType.ADD_CATEGORY,new AddCategoryHandler());
         commands.put(PacketType.EDIT_CATEGORY,new EditCategoryHandler());
         commands.put(PacketType.REMOVE_CATEGORY,new RemoveCategoryHandler());
+        commands.put(PacketType.GET_PERSON,new GetPersonHandler());
+        commands.put(PacketType.IS_FIRST_MANAGER_REGISTERED,new IsManagerRegistered());
+        commands.put(PacketType.LOG_OUT,new LogOutHandler());
+        commands.put(PacketType.GET_PERSON_TYPE,new GetPersonType());
     }
 
     public static Server getInstance() {
@@ -110,7 +114,10 @@ public class Server {
                         String string = dataInputStream.readUTF();
                         System.out.println(string);
                         Request request = (Request) read(Request.class, string);
-
+                        if (request.getToken().length()>0){
+                            if (!checkToken(request.getToken()))
+                                continue;
+                        }
                         requests.put(new Connection(request, socket, dataOutputStream));
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
@@ -137,10 +144,10 @@ public class Server {
         @Override
         synchronized public void handle(Connection connection) {
             try {
-                String[] info = connection.getRequest().getJson().remove(0).split(" ");
-                PersonController.getInstance().login(info[0],info[1]);
-                String token = getToken(info[0],info[1]);
-                authTokens.put(token,info[0]);
+                ArrayList<String> strings = connection.getRequest().getJson();
+                PersonController.getInstance().login(strings.get(0),strings.get(1));
+                String token = getToken(strings.get(0),strings.get(1));
+                authTokens.put(token,strings.get(1));
                 connection.getDataOutputStream().writeUTF(token);
             } catch (Exception e) {
                 try {
@@ -308,6 +315,53 @@ public class Server {
         }
     }
 
+    class GetPersonHandler implements Handler{
+
+        @Override
+        public void handle(Connection connection) {
+            ArrayList<String> strings = connection.getRequest().getJson();
+            if (!PersonController.getInstance().isTherePersonByUsername(strings.get(0))){
+                try {
+                    connection.getDataOutputStream().writeUTF("invalid username.");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }else {
+                Request request = new Request(PacketType.GET_PERSON,write(PersonController.getInstance().getPersonByUsername(strings.get(0))),"");
+                try {
+                    connection.getDataOutputStream().writeUTF(write(request));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    class GetPersonType implements Handler{
+
+        @Override
+        public void handle(Connection connection) {
+            ArrayList<String> strings = connection.getRequest().getJson();
+            connection.SendMessage(PersonController.getInstance().getPersonByUsername(strings.get(0)).getType());
+        }
+    }
+
+    class IsManagerRegistered implements Handler{
+
+        @Override
+        public void handle(Connection connection) {
+            connection.SendMessage(write(RegisterController.getInstance().isFirstManagerRegistered()));
+        }
+    }
+
+    class LogOutHandler implements Handler{
+
+        @Override
+        public void handle(Connection connection) {
+            authTokens.remove(connection.getToken());
+        }
+    }
+
     public static void main(String[] args) throws InterruptedException {
         Database.createDatabase ();
         Database.initializeAddress ( );
@@ -328,6 +382,10 @@ public class Server {
             throw new Exception ( "You Don't Exist. Go Make Yourself." );
         PersonController.getInstance().checkPassword(username, password);
         return UUID.randomUUID().toString();
+    }
+
+    public static boolean checkToken(String token){
+        return Server.getInstance().authTokens.containsKey(token);
     }
 }
 

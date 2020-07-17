@@ -8,9 +8,9 @@ import java.util.UUID;
 public class Request {
     private PacketType requestType;
     private ArrayList<String> json;
-    private UUID token;
+    private String token;
 
-    public Request(PacketType requestType, String json,UUID token) {
+    public Request(PacketType requestType, String json,String token) {
         this.requestType = requestType;
         this.json = new ArrayList<>();
         this.json.add(json);
@@ -29,11 +29,11 @@ public class Request {
         return json;
     }
 
-    public UUID getToken() {
+    public String getToken() {
         return token;
     }
 
-    public void setToken(UUID token) {
+    public void setToken(String token) {
         this.token = token;
     }
 
