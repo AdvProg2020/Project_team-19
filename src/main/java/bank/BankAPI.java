@@ -34,7 +34,7 @@ public class BankAPI {
      *
      * @throws IOException when IP/PORT hasn't been set up properly.
      */
-    public static void ConnectToBankServer() throws IOException {
+    private static void ConnectToBankServer() throws IOException {
         try {
             Socket socket = new Socket(IP, PORT);
             outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
@@ -75,7 +75,7 @@ public class BankAPI {
      * @throws IOException when OUT data stream been interrupted.
      */
 
-    public static String sendMessage(String msg) throws IOException {
+    private static String sendMessage(String msg) throws IOException {
         try {
             String type = msg.split("\\s+")[0];
             if (!msg.equals("exit"))

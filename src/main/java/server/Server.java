@@ -48,6 +48,9 @@ public class Server {
         commands.put(PacketType.IS_FIRST_MANAGER_REGISTERED,new IsManagerRegistered());
         commands.put(PacketType.LOG_OUT,new LogOutHandler());
         commands.put(PacketType.GET_PERSON_TYPE,new GetPersonType());
+        commands.put(PacketType.GET_BANK_TOKEN, new GetBankToken());
+        commands.put(PacketType.GET_BANK_BALANCE, new GetBankBalance());
+        commands.put(PacketType.GET_TRANSACTION, new GetTransaction());
     }
 
     public static Server getInstance() {
@@ -98,13 +101,6 @@ public class Server {
             this.socket = socket;
             this.dataOutputStream = dataOutputStream;
             this.dataInputStream = dataInputStream;
-            try {
-                String string = dataInputStream.readUTF();
-                System.out.println(string);
-                dataOutputStream.writeUTF("connected successful");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
 
         @Override
@@ -114,7 +110,7 @@ public class Server {
                     String string = dataInputStream.readUTF();
                     System.out.println(string);
                     Request request = (Request) read(Request.class, string);
-                    if (request.getToken().length()>0){
+                    if (request.getToken().length() > 0){
                         if (!checkToken(request.getToken()))
                             continue;
                     }
@@ -124,7 +120,6 @@ public class Server {
                 }
             }
         }
-
     }
 
     public static Object read(java.lang.reflect.Type typeOfT, String string) { //todo oooooooooooooooo
@@ -141,7 +136,7 @@ public class Server {
 
     class HandleLogin implements Handler {
         @Override
-        synchronized public void handle(Connection connection) {
+         public void handle(Connection connection) {
             try {
                 ArrayList<String> strings = connection.getRequest().getJson();
                 PersonController.getInstance().login(strings.get(0), strings.get(1));
@@ -363,6 +358,44 @@ public class Server {
         }
     }
 
+    static class GetBankToken implements Handler {
+
+        @Override
+        public void handle(Connection connection) {
+            ArrayList<String> info = connection.getRequest().getJson();
+            String username = info.get(0);
+            String password = info.get(1);
+            String msg = "get_token " + username + " " + password;
+            String response = BankAPI.getBankResponse(msg);
+            connection.SendMessage(response);
+        }
+    }
+
+    static class GetBankBalance implements Handler {
+
+        @Override
+        public void handle(Connection connection) {
+            ArrayList<String> info = connection.getRequest().getJson();
+            String token = info.get(0);
+            String msg = "get_balance " + token;
+            String response = BankAPI.getBankResponse(msg);
+            connection.SendMessage(response);
+        }
+    }
+
+    static class GetTransaction implements Handler {
+
+        @Override
+        public void handle(Connection connection) {
+            ArrayList<String> info = connection.getRequest().getJson();
+            String token = info.get(0);
+            String type = info.get(1);
+            String msg = "get_transaction " + token + " " + type;
+            String response = BankAPI.getBankResponse(msg);
+            connection.SendMessage(response);
+        }
+    }
+
     class LogOutHandler implements Handler{
 
         @Override
@@ -430,7 +463,7 @@ class Connection {
         return token;
     }
 
-    public  void SendMessage(String msg)  {
+    public void SendMessage(String msg)  {
         try {
             dataOutputStream.writeUTF(msg);
         } catch (IOException e) {

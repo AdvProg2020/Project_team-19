@@ -1,6 +1,5 @@
 package controller;
 
-import bank.BankAPI;
 import bank.BankServer;
 
 public class WalletController {

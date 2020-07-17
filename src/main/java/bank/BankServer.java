@@ -338,7 +338,7 @@ public class BankServer {
             @Override
             public void run() {
                 second[0]++;
-                if (second[0] == 90) {  //3600
+                if (second[0] == 180) {  //3600
                     timer.cancel();
                     tokens.remove(token);
                 }

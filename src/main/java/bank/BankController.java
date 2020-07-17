@@ -117,7 +117,7 @@ public class BankController {
         if (!isPasswordsCorrect(username, password))
             throw new BankException("wrong_password");
 
-        return UUID.randomUUID().toString();
+        return UUID.randomUUID().toString().substring(0, 8);
     }
 
     public String createReceipt(String receiptType, String money, String sourceId, String destId, String description) throws BankException {

@@ -42,6 +42,12 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         ServerConnection.run();
+        mainRun();
+        try {
+            PersonController.getInstance().login("yasna", "123");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         App.currentStage = primaryStage;
 
         AnchorPane root = getFXMLLoader("mainMenu").load();
@@ -50,13 +56,17 @@ public class App extends Application {
         primaryStage.setTitle("Bruh");
         primaryStage.setScene(currentScene);
 
+
+
+
+
         AudioClip background = new AudioClip ( new File ( "src/main/resources/Soul_and_Mind.mp3" ).toURI ().toString () );
         background.setCycleCount ( AudioClip.INDEFINITE );
         background.play ();
 
         primaryStage.show();
 
-        mainRun();
+
     }
 
     private void mainRun() {

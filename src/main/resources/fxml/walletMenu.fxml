@@ -8,10 +8,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <AnchorPane prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: #99ddff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.WalletMenu">
    <children>
-      <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" onMouseClicked="#back" onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
       <Label alignment="CENTER" layoutX="334.0" layoutY="17.0" prefHeight="27.0" prefWidth="132.0" text="Wallet Menu" textFill="#499cc3">
          <font>
             <Font name="Verdana" size="18.0" />
@@ -98,7 +96,7 @@
             </HBox>
          </children>
       </GridPane>
-      <GridPane layoutX="466.0" layoutY="51.0" prefHeight="416.0" prefWidth="219.0" style="-fx-background-color: #5baed7; -fx-background-radius: 5;">
+      <GridPane layoutX="466.0" layoutY="51.0" prefHeight="415.0" prefWidth="219.0" style="-fx-background-color: #5baed7; -fx-background-radius: 5;">
          <children>
             <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" style="-fx-border-color: #5baed7; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #ffffff;" GridPane.rowIndex="2">
                <children>
@@ -245,6 +243,11 @@
                   <Insets />
                </opaqueInsets>
             </HBox>
+            <TextField fx:id="tokenField" promptText="enter token" stylesheets="@textField.css" GridPane.rowIndex="7">
+               <font>
+                  <Font name="Tw Cen MT Condensed" size="14.0" />
+               </font>
+            </TextField>
          </children>
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -252,6 +255,7 @@
          <rowConstraints>
             <RowConstraints maxHeight="62.0" minHeight="9.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="105.0" minHeight="10.0" prefHeight="67.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="114.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="114.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="114.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="114.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
@@ -310,9 +314,9 @@
                   <Insets />
                </opaqueInsets>
             </HBox>
-            <Label fx:id="token" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="208.0" text="1234567890111213141516" textFill="WHITE" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+            <Label fx:id="token" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="208.0" text="" textFill="WHITE" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <font>
-                  <Font name="Tw Cen MT Condensed" size="18.0" />
+                  <Font name="Tw Cen MT Condensed" size="14.0" />
                </font>
             </Label>
             <ImageView fx:id="getToken" fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3">

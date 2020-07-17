@@ -2,6 +2,7 @@ package model;
 
 public class Wallet {
     private double balance;
+    private String bankId;
 
     public Wallet(double balance) {
 

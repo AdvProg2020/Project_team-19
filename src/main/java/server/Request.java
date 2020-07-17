@@ -6,7 +6,7 @@ public class Request {
     private ArrayList<String> json;
     private String token;
 
-    public Request(PacketType requestType, ArrayList<String> json,String token) {
+    public Request(PacketType requestType, ArrayList<String> json, String token) {
         this.requestType = requestType;
         this.json = json;
         this.token = token;
