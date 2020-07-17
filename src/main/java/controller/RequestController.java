@@ -1,5 +1,6 @@
 package controller;
 
+import bank.BankAPI;
 import fxmlController.AuctionInList;
 import fxmlController.Metadata;
 import model.*;
@@ -94,8 +95,16 @@ public class RequestController {
     }
 
     public void addSalesPerson(HashMap<String, String> personInfo) {
-        Salesperson salesperson = new Salesperson(personInfo);
-        PersonController.getInstance().addPerson(salesperson);
+        String response = BankAPI.getBankResponse("create_account " +
+                personInfo.get("first name") + " " +
+                personInfo.get("last name") + " " +
+                personInfo.get("username") + " " +
+                personInfo.get("password") + " " +
+                personInfo.get("password"));
+        if (response.matches("\\d+")) {
+            Salesperson salesperson = new Salesperson(personInfo, response, WalletController.MIN_BALANCE);
+            PersonController.getInstance().addPerson(salesperson);
+        }
     }
 
     public ArrayList<Request> filterByState(Request.RequestState requestState) {

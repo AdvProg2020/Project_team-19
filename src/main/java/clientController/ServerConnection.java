@@ -15,7 +15,6 @@ public class ServerConnection {
     public static Socket socket;
     public static DataOutputStream dataOutputStream;
     public static DataInputStream dataInputStream;
-    public static String token;
 
     public static void run() {
         try {
@@ -74,6 +73,27 @@ public class ServerConnection {
         info.add(token);
         info.add(type);
         return sendMessage(PacketType.GET_TRANSACTION, info, "");
+    }
+
+    public static String getIncreaseBankBalance(String bankToken, String amount, String shopToken) {
+        ArrayList<String> info = new ArrayList<>();
+        info.add(bankToken);
+        info.add(amount);
+        return sendMessage(PacketType.INCREASE_BANK_BALANCE, info, shopToken);
+    }
+
+    public static String getIncreaseWalletBalance(String bankToken, String amount, String shopToken) {
+        ArrayList<String> info = new ArrayList<>();
+        info.add(bankToken);
+        info.add(amount);
+        return sendMessage(PacketType.INCREASE_WALLET_BALANCE, info, shopToken);
+    }
+
+    public static String getDecreaseWalletBalance(String bankToken, String amount, String shopToken) {
+        ArrayList<String> info = new ArrayList<>();
+        info.add(bankToken);
+        info.add(amount);
+        return sendMessage(PacketType.DECREASE_WALLET_BALANCE, info, shopToken);
     }
 
     private static String sendMessage(PacketType packetType, ArrayList<String> info, String token) {

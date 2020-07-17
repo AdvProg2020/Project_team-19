@@ -35,6 +35,8 @@ public class RegisterMenuController implements Initializable {
     @FXML private TextField phone;
     @FXML private TextField company;
     @FXML private TextField darSurateVjud;
+    @FXML private TextField minBalance;
+    @FXML private TextField wage;
 
     @FXML private Button registerBtn;
 
@@ -67,6 +69,10 @@ public class RegisterMenuController implements Initializable {
         String response = getIsFirstManagerRegistered();
         if ( type.getValue ().equals ( "Manager" ) && response.contains("true") )
             throw new Exception ( "You can't add a manager. Contact one of the existing managers." );
+        if ( !minBalance.getText().matches("^\\d*(\\.\\d+)?$"))
+            throw new Exception("Min balance should be balance!");
+        if (!wage.getText().matches("^[1-9][0-9]?$|^100$"))
+            throw new Exception("Enter number for wage!");
     }
 
     @FXML private void registerBtnAction () {
@@ -86,6 +92,10 @@ public class RegisterMenuController implements Initializable {
             if (type.getValue ().equals ( "Salesperson" )) {
                 personInfo.put ( COMPANY.label , company.getText ( ) );
                 personInfo.put ( SAYERE_MOSHAKHASAT.label , darSurateVjud.getText ( ) );
+            }
+            if (type.getValue().equals("Manager")) {
+                personInfo.put(MIN_BALANCE.label, minBalance.getText());
+                personInfo.put(WAGE.label, wage.getText());
             }
             String response = sendRegisterRequest(personInfo);
             //RegisterController.getInstance ( ).register ( personInfo );
@@ -120,11 +130,17 @@ public class RegisterMenuController implements Initializable {
                 company.setVisible ( true );
                 darSurateVjud.setVisible ( true );
                 registerBtn.setLayoutY ( 906.0 );
-            } else {
+            } else if (type.getValue().equals("Manager")) {
+                minBalance.setVisible(true);
+                wage.setVisible(true);
+                registerBtn.setLayoutY ( 906.0 );
+            }
+            else {
                 company.setVisible ( false );
                 darSurateVjud.setVisible ( false );
                 registerBtn.setLayoutY ( 808.0 );
             }
+
         } );
 
 

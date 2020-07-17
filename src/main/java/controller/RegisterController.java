@@ -1,5 +1,6 @@
 package controller;
 
+import fxmlController.WalletMenu;
 import model.*;
 
 import java.io.IOException;
@@ -18,10 +19,10 @@ public class RegisterController {
         return single_instance;
     }
 
-    public void register (HashMap<String, String> personInfo) {
+    public void register (HashMap<String, String> personInfo, String bankId) {
         personInfo.put ( "type" , changeTypeToStandardForm ( personInfo.get ( "type" ) ) );
         if (personInfo.get("type").equals("customer")) {
-            registerCustomer(personInfo);
+            registerCustomer(personInfo, bankId);
         } else if (personInfo.get("type").equals("salesperson")) {
             registerSalesperson(personInfo);
         } else {
@@ -29,9 +30,8 @@ public class RegisterController {
         }
     }
 
-    public void registerCustomer (HashMap<String, String> personInfo) {
-        Customer newCustomer = null;
-        newCustomer = new Customer(personInfo);
+    public void registerCustomer (HashMap<String, String> personInfo, String bankId) {
+        Customer customer = new Customer(personInfo, bankId, WalletController.MIN_BALANCE);
     }
 
     public void registerSalesperson (HashMap<String, String> personInfo) {

@@ -28,6 +28,9 @@ public class Database {
         address.put("discount_requests", databaseAddress + File.separator + "requests" + File.separator + "discount_requests");
         address.put("salesperson_requests", databaseAddress + File.separator + "requests" + File.separator + "salesperson_requests");
         address.put("auction_requests", databaseAddress + File.separator + "requests" + File.separator + "auction_requests");
+        address.put("min_balance", databaseAddress + File.separator + "min_balance.json");
+        address.put("wage", databaseAddress + File.separator + "wage.json");
+        address.put("shop_bankId", databaseAddress + File.separator + "shop_bankId.json");
     }
 
     public static <T> Object read(Type typeOfT, String address) { //todo oooooooooooooooo
@@ -115,6 +118,9 @@ public class Database {
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "discount_codes");
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "products");
         createFile(System.getProperty("user.dir") + File.separator + "database" + File.separator + "root_categories.json");
+        createFile(System.getProperty("user.dir") + File.separator + "database" + File.separator + "min_balance.json");
+        createFile(System.getProperty("user.dir") + File.separator + "database" + File.separator + "wage.json");
+        createFile(System.getProperty("user.dir") + File.separator + "database" + File.separator + "shop_bankId.json");
     }
 
     public static void createFolder(String path) {

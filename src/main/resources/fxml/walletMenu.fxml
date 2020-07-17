@@ -8,8 +8,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <AnchorPane prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: #99ddff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.WalletMenu">
    <children>
+      <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" onMouseClicked="#back"
+                       onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall" strokeType="OUTSIDE"
+                       strokeWidth="0.0" text=""/>
       <Label alignment="CENTER" layoutX="334.0" layoutY="17.0" prefHeight="27.0" prefWidth="132.0" text="Wallet Menu" textFill="#499cc3">
          <font>
             <Font name="Verdana" size="18.0" />
@@ -243,7 +247,7 @@
                   <Insets />
                </opaqueInsets>
             </HBox>
-            <TextField fx:id="tokenField" promptText="enter token" stylesheets="@textField.css" GridPane.rowIndex="7">
+            <TextField fx:id="tokenField" promptText="enter bank token" stylesheets="@textField.css" GridPane.rowIndex="7">
                <font>
                   <Font name="Tw Cen MT Condensed" size="14.0" />
                </font>
@@ -286,7 +290,7 @@
                   </TextField>
                </children>
             </HBox>
-            <Label alignment="CENTER" mouseTransparent="true" prefHeight="21.0" prefWidth="83.0" text="get token" textFill="WHITE" GridPane.halignment="CENTER">
+            <Label alignment="CENTER" mouseTransparent="true" prefHeight="21.0" prefWidth="106.0" text="get bank token" textFill="WHITE" GridPane.halignment="CENTER">
                <font>
                   <Font name="Tw Cen MT Condensed" size="18.0" />
                </font>
@@ -338,5 +342,10 @@
             <RowConstraints maxHeight="146.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
          </rowConstraints>
       </GridPane>
+      <TextField fx:id="shopTokenField" layoutX="578.0" layoutY="11.0" prefHeight="21.0" prefWidth="208.0" promptText="enter shop token">
+         <font>
+            <Font name="Tw Cen MT Condensed" size="14.0" />
+         </font>
+      </TextField>
    </children>
 </AnchorPane>

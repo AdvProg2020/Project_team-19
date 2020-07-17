@@ -23,7 +23,7 @@ public class LoginMenuTest {
         loginMenu.setPersonInfoProperty ( LAST_NAME.label , "Honarvar" );
         loginMenu.setPersonInfoProperty ( EMAIL.label , "honarvar45@gmail.com" );
         loginMenu.setPersonInfoProperty ( PHONE.label , "989174877257" );
-        RegisterController.getInstance ( ).register ( loginMenu.getPersonInfo () );
+        RegisterController.getInstance ( ).register ( loginMenu.getPersonInfo () ,null);
     }
 
     @Test

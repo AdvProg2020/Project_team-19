@@ -41,13 +41,13 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        ServerConnection.run();
+        //ServerConnection.run();
         mainRun();
-        try {
-            PersonController.getInstance().login("yasna", "123");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            PersonController.getInstance().login("yasna", "123");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         App.currentStage = primaryStage;
 
         AnchorPane root = getFXMLLoader("mainMenu").load();

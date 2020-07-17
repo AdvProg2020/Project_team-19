@@ -16,7 +16,7 @@ public class purchaseTest {
         Database.initializeAddress();
         HashMap<String,String> Info = new HashMap<>();
         Info.put("username","reza");
-        Customer customer = new Customer(Info);
+        Customer customer = new Customer(Info, null, 0);
         customer.setCredit(100000);
         PersonController.getInstance().addPerson(customer);
       //  PersonController.getInstance().login("reza");
@@ -24,7 +24,7 @@ public class purchaseTest {
         Product product2 = new Product("comb","beauty","",Info);
         HashMap<String,String> info = new HashMap<>();
         info.put("username","ogy");
-        Salesperson salesperson = new Salesperson(info);
+        Salesperson salesperson = new Salesperson(info, null, 0);
         salesperson.addToOfferedProducts(product1,5,6000);
         salesperson.addToOfferedProducts(product2,5,2000);
         customer.getCart().addProduct(product1,salesperson);
@@ -42,7 +42,7 @@ public class purchaseTest {
         Database.initializeAddress();
         HashMap<String,String> Info = new HashMap<>();
         Info.put("username","reza");
-        Customer customer = new Customer(Info);
+        Customer customer = new Customer(Info, null ,0);
         customer.setCredit(100000);
         PersonController.getInstance().addPerson(customer);
         //PersonController.getInstance().login("reza");
@@ -50,7 +50,7 @@ public class purchaseTest {
         Product product2 = new Product("comb","beauty","",Info);
         HashMap<String,String> info = new HashMap<>();
         info.put("username","ogy");
-        Salesperson salesperson = new Salesperson(info);
+        Salesperson salesperson = new Salesperson(info, null, 0);
         salesperson.addToOfferedProducts(product1,5,5000);
         salesperson.addToOfferedProducts(product2,5,2000);
         customer.getCart().addProduct(product1,salesperson);
@@ -67,7 +67,7 @@ public class purchaseTest {
         Database.initializeAddress();
         HashMap<String,String> Info = new HashMap<>();
         Info.put("username","reza");
-        Customer customer = new Customer(Info);
+        Customer customer = new Customer(Info, null, 0);
         customer.setCredit(100000);
         PersonController.getInstance().addPerson(customer);
       //  PersonController.getInstance().login("reza");
@@ -75,7 +75,7 @@ public class purchaseTest {
         Product product2 = new Product("comb","beauty","",Info);
         HashMap<String,String> info = new HashMap<>();
         info.put("username","ogy");
-        Salesperson salesperson = new Salesperson(info);
+        Salesperson salesperson = new Salesperson(info, null, 0);
         salesperson.addToOfferedProducts(product1,5,5000);
         salesperson.addToOfferedProducts(product2,5,2000);
         ArrayList<Product> products = new ArrayList<>();

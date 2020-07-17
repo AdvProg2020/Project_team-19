@@ -70,7 +70,7 @@ public class UserLoginMenuController {
                     App.currentScene = new Scene(getFXMLLoader("customerMenu").load());
                 }
                 App.currentStage.setScene(App.currentScene);
-                token = response;
+//                token = response;
             }
         } catch (Exception e) {
             App.error ( e.getMessage () );

@@ -62,20 +62,6 @@ public class ShowComments implements Initializable {
         }
     }
 
-    private void masalan() {
-        HashMap<String, String> info = new HashMap<>();
-        info.put("username", "jalali");
-        info.put("type", "customer");
-        Comment comment = new Comment(false, new Customer(info), "salam", "khobi");
-        product.addComment(comment);
-        comment.setReply("yalda", "alaki");
-        comment.setReply("yalda1", "replye");
-        product.addComment(new Comment(false, new Customer(info), "salam", "khobi"));
-        product.addComment(new Comment(false, new Customer(info), "salam", "khobi"));
-        product.addComment(new Comment(false, new Customer(info), "salam", "khobi"));
-        product.addComment(new Comment(false, new Customer(info), "salam", "khobi"));
-    }
-
     private void setCommentCardBase() {
         for (int i = 0; i < commentCards.size(); i++) {  //todo ba back az i + 1 shoru mikonom
             cardBase.getChildren().add(i, commentCards.get(i));

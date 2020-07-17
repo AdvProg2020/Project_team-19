@@ -28,7 +28,7 @@ public class CartMenuTest {
         properties2.put("size", "small");
 
         HashMap<String,String> Info = new HashMap<>();
-        Salesperson salesperson = new Salesperson(Info);
+        Salesperson salesperson = new Salesperson(Info,null,0);
 
         Product product1 = new Product( "panir", "lighvan", category.getName(), properties1);
         Product product2 = new Product( "shir", "mihan", category.getName(), properties2);
@@ -58,7 +58,7 @@ public class CartMenuTest {
         HashMap<String, String> personInfo = new HashMap<>();
         personInfo.put("username", "yeki");
         personInfo.put("password", "salam");
-        Salesperson seller1 = new Salesperson(personInfo);
+        Salesperson seller1 = new Salesperson(personInfo,null,0);
 
         seller1.addToOfferedProducts(product1, 2, 1000);
 

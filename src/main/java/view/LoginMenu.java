@@ -21,7 +21,9 @@ public class LoginMenu extends Menu {
         PHONE ( "phone number" ),
         COMPANY ( "company" ),
         SAYERE_MOSHAKHASAT ( "dar surate vjud sayere moshakhsat" ),
-        PROFILE ("profile");
+        PROFILE ("profile"),
+        MIN_BALANCE("min balance"),
+        WAGE("wage");
 
         public final String label;
 
@@ -103,7 +105,7 @@ public class LoginMenu extends Menu {
                 boolean backPressed = getPasswordTillEnd ( );
 
                 if ( !backPressed ) {
-                    RegisterController.getInstance ( ).register ( personInfo );
+                    //RegisterController.getInstance ( ).register ( personInfo );
                     System.out.println ( "Nice Job. Now Login." );
                 }
             }

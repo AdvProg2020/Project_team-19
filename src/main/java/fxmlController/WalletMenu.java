@@ -28,9 +28,7 @@ import java.util.ResourceBundle;
 import static clientController.ServerConnection.*;
 
 public class WalletMenu implements Initializable {
-//    private TextField tokenField = new TextField();
     private TextField balanceField = new TextField();
-    private String balance;
     @FXML private Label accountId;
     @FXML private TextField password;
     @FXML private Label walletBalance;
@@ -40,6 +38,7 @@ public class WalletMenu implements Initializable {
     @FXML private Label decreaseWalletLabel;
     @FXML private ImageView getToken;
     @FXML private TextField tokenField;
+    @FXML private TextField shopTokenField;
     @FXML private FontAwesomeIcon back;
 
     @Override
@@ -71,38 +70,43 @@ public class WalletMenu implements Initializable {
         token.setText(response);
     }
 
-    private void showPopup(boolean forToken, TextField textField, boolean forEnterMoneyAfter) {
-        textField.setText("");
+    @FXML
+    void increaseWalletBalance() {
+        if (tokenField.getText().isEmpty()) {
+            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill bank token box");
+            return;
+        }
+        if (shopTokenField.getText().isEmpty()) {
+            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill shop token box");
+            return;
+        }
         Stage stage = new Stage();
         GridPane gridPane = new GridPane();
         Label label = new Label();
-        label.setText(forToken ? "Enter token :" : "Enter price :");
+        label.setText( "Enter price :");
         label.setFont(Font.font("Tw Cen MT Condensed", 18));
-        textField.setFont(Font.font("Tw Cen MT Condensed", 18));
-        textField.getStylesheets().add("/fxml/textField.css");
+        TextField priceField = new TextField();
+        priceField.setFont(Font.font("Tw Cen MT Condensed", 18));
+        priceField.getStylesheets().add("/fxml/textField.css");
         Button submit = new Button("Submit");
         submit.getStylesheets().add("/fxml/button.css");
         submit.getStyleClass().add("btn");
         gridPane.add(label, 0, 0);
-        gridPane.add(textField, 0, 1);
+        gridPane.add(priceField, 0, 1);
         gridPane.add(submit, 0, 2);
         submit.setOnAction(event -> {
-            if (textField.getText().isEmpty()) {
+            if (priceField.getText().isEmpty()) {
                 App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Empty", "Fill the box");
                 return;
             }
-            if (forToken)
-                 textField.getText();
             else {
-                if (!textField.getText().matches("^\\d*(\\.\\d+)?$")) {
+                if (!priceField.getText().matches("^\\d*(\\.\\d+)?$")) {
                     App.showAlert(Alert.AlertType.ERROR, App.currentStage, "wrong number", "Enter number for balance");
                     return;
                 }
-                balance = textField.getText();
             }
+            getIncreaseWalletBalance(tokenField.getText(), priceField.getText(), shopTokenField.getText());
             stage.close();
-            if (forEnterMoneyAfter)
-                showPopup(false, balanceField, false);
         });
         gridPane.setVgap(10);
         gridPane.setHgap(10);
@@ -116,20 +120,52 @@ public class WalletMenu implements Initializable {
     }
 
     @FXML
-    void increaseWalletBalance(MouseEvent event) {
-        //showPopup(true, tokenField, true);
-        //create_receipt token move money bankId furushgah kir
-        //pay
-        String msg = "create_receipt " + tokenField.getText() + " ";
-        //todo connectTo bank ina ba server
-    }
-
-    @FXML
-    void decreaseWalletBalance(MouseEvent event) {
-        //showPopup(true, balanceField, true);
-        //create_receipt token move money shop bankId kir
-        //pay
-        //todo
+    void decreaseWalletBalance() {
+        if (tokenField.getText().isEmpty()) {
+            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill bank token box");
+            return;
+        }
+        if (shopTokenField.getText().isEmpty()) {
+            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill shop token box");
+            return;
+        }
+        Stage stage = new Stage();
+        GridPane gridPane = new GridPane();
+        Label label = new Label();
+        label.setText( "Enter price :");
+        label.setFont(Font.font("Tw Cen MT Condensed", 18));
+        TextField priceField = new TextField();
+        priceField.setFont(Font.font("Tw Cen MT Condensed", 18));
+        priceField.getStylesheets().add("/fxml/textField.css");
+        Button submit = new Button("Submit");
+        submit.getStylesheets().add("/fxml/button.css");
+        submit.getStyleClass().add("btn");
+        gridPane.add(label, 0, 0);
+        gridPane.add(priceField, 0, 1);
+        gridPane.add(submit, 0, 2);
+        submit.setOnAction(event -> {
+            if (priceField.getText().isEmpty()) {
+                App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Empty", "Fill the box");
+                return;
+            }
+            else {
+                if (!priceField.getText().matches("^\\d*(\\.\\d+)?$")) {
+                    App.showAlert(Alert.AlertType.ERROR, App.currentStage, "wrong number", "Enter number for balance");
+                    return;
+                }
+            }
+            getDecreaseWalletBalance(tokenField.getText(), priceField.getText(), balanceField.getText());
+            stage.close();
+        });
+        gridPane.setVgap(10);
+        gridPane.setHgap(10);
+        gridPane.setPadding(new Insets(10));
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setBackground((new Background(new BackgroundFill(Color.rgb(153,221,255), CornerRadii.EMPTY, Insets.EMPTY))));
+        Scene scene = new Scene(gridPane, 300, 180);
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
     }
 
     @FXML
@@ -143,10 +179,52 @@ public class WalletMenu implements Initializable {
     }
 
     @FXML
-    void increaseBankBalance(MouseEvent event) {
-        showPopup(true, tokenField, true);
-        //create_receipt token deposit money -1 bankId kir
-        //pay
+    void increaseBankBalance() {
+        if (tokenField.getText().isEmpty()) {
+            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill bank token box");
+            return;
+        }
+        if (shopTokenField.getText().isEmpty()) {
+            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill shop token box");
+            return;
+        }
+        Stage stage = new Stage();
+        GridPane gridPane = new GridPane();
+        Label label = new Label();
+        label.setText( "Enter price :");
+        label.setFont(Font.font("Tw Cen MT Condensed", 18));
+        TextField priceField = new TextField();
+        priceField.setFont(Font.font("Tw Cen MT Condensed", 18));
+        priceField.getStylesheets().add("/fxml/textField.css");
+        Button submit = new Button("Submit");
+        submit.getStylesheets().add("/fxml/button.css");
+        submit.getStyleClass().add("btn");
+        gridPane.add(label, 0, 0);
+        gridPane.add(priceField, 0, 1);
+        gridPane.add(submit, 0, 2);
+        submit.setOnAction(event -> {
+            if (priceField.getText().isEmpty()) {
+                App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Empty", "Fill the box");
+                return;
+            }
+            else {
+                if (!priceField.getText().matches("^\\d*(\\.\\d+)?$")) {
+                    App.showAlert(Alert.AlertType.ERROR, App.currentStage, "wrong number", "Enter number for balance");
+                    return;
+                }
+            }
+            getIncreaseBankBalance(tokenField.getText(), priceField.getText(), shopTokenField.getText());
+            stage.close();
+        });
+        gridPane.setVgap(10);
+        gridPane.setHgap(10);
+        gridPane.setPadding(new Insets(10));
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setBackground((new Background(new BackgroundFill(Color.rgb(153,221,255), CornerRadii.EMPTY, Insets.EMPTY))));
+        Scene scene = new Scene(gridPane, 300, 180);
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
     }
 
     @FXML

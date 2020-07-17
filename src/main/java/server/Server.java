@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import controller.*;
 import model.*;
+import view.LoginMenu;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -15,11 +16,13 @@ import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static server.PacketType.*;
+
 public class Server {
     private static Server single_instance = null;
     private static int PORT = 4444;
     private static BlockingQueue<Connection> requests;
-    private HashMap<String,String> authTokens;
+    private HashMap<String, String> authTokens;
 
 
     private Server() {
@@ -30,27 +33,30 @@ public class Server {
             e.printStackTrace();
         }
         commands = new HashMap<>();
-        commands.put(PacketType.LOGIN, new HandleLogin());
-        commands.put(PacketType.REGISTER,new RegisterHandler());
-        commands.put(PacketType.ADD_DISCOUNT_REQUEST,new AddDiscountHandler());
-        commands.put(PacketType.REMOVE_DISCOUNT_REQUEST,new RemoveDiscountHandler());
-        commands.put(PacketType.EDIT_DISCOUNT_REQUEST,new EditDiscountHandler());
-        commands.put(PacketType.ADD_PRODUCT_FROM_STOCK,new AddStockProductHandler());
-        commands.put(PacketType.ADD_NEW_PRODUCT,new AddNewProductHandler());
-        commands.put(PacketType.ACCEPT_REQUEST,new AcceptRequestHandler());
-        commands.put(PacketType.DECLINE_REQUEST,new DeclineRequestHandler());
-        commands.put(PacketType.INCREASE_COUNT_CART,new IncreaseProductFromCart());
-        commands.put(PacketType.DECREASE_COUNT_CART,new DecreaseProductFromCart());
-        commands.put(PacketType.ADD_CATEGORY,new AddCategoryHandler());
-        commands.put(PacketType.EDIT_CATEGORY,new EditCategoryHandler());
-        commands.put(PacketType.REMOVE_CATEGORY,new RemoveCategoryHandler());
-        commands.put(PacketType.GET_PERSON,new GetPersonHandler());
-        commands.put(PacketType.IS_FIRST_MANAGER_REGISTERED,new IsManagerRegistered());
-        commands.put(PacketType.LOG_OUT,new LogOutHandler());
-        commands.put(PacketType.GET_PERSON_TYPE,new GetPersonType());
-        commands.put(PacketType.GET_BANK_TOKEN, new GetBankToken());
-        commands.put(PacketType.GET_BANK_BALANCE, new GetBankBalance());
-        commands.put(PacketType.GET_TRANSACTION, new GetTransaction());
+        commands.put(LOGIN, new HandleLogin());
+        commands.put(REGISTER,new RegisterHandler());
+        commands.put(ADD_DISCOUNT_REQUEST,new AddDiscountHandler());
+        commands.put(REMOVE_DISCOUNT_REQUEST,new RemoveDiscountHandler());
+        commands.put(EDIT_DISCOUNT_REQUEST,new EditDiscountHandler());
+        commands.put(ADD_PRODUCT_FROM_STOCK,new AddStockProductHandler());
+        commands.put(ADD_NEW_PRODUCT,new AddNewProductHandler());
+        commands.put(ACCEPT_REQUEST,new AcceptRequestHandler());
+        commands.put(DECLINE_REQUEST,new DeclineRequestHandler());
+        commands.put(INCREASE_COUNT_CART,new IncreaseProductFromCart());
+        commands.put(DECREASE_COUNT_CART,new DecreaseProductFromCart());
+        commands.put(ADD_CATEGORY,new AddCategoryHandler());
+        commands.put(EDIT_CATEGORY,new EditCategoryHandler());
+        commands.put(REMOVE_CATEGORY,new RemoveCategoryHandler());
+        commands.put(GET_PERSON,new GetPersonHandler());
+        commands.put(IS_FIRST_MANAGER_REGISTERED,new IsManagerRegistered());
+        commands.put(LOG_OUT,new LogOutHandler());
+        commands.put(GET_PERSON_TYPE,new GetPersonType());
+        commands.put(GET_BANK_TOKEN, new GetBankToken());
+        commands.put(GET_BANK_BALANCE, new GetBankBalance());
+        commands.put(GET_TRANSACTION, new GetTransaction());
+        commands.put(INCREASE_BANK_BALANCE, new IncreaseBankBalance());
+        commands.put(INCREASE_WALLET_BALANCE, new IncreaseWalletBalance());
+        commands.put(DECREASE_WALLET_BALANCE, new DecreaseWalletBalance());
     }
 
     public static Server getInstance() {
@@ -322,12 +328,11 @@ public class Server {
         }
     }
 
-    class RegisterHandler implements Handler{
+    static class RegisterHandler implements Handler{
 
         @Override
         public void handle(Connection connection) {
             HashMap<String,String> info = (HashMap<String, String>) Server.read(new TypeToken<HashMap<String, String>>() {}.getType(),connection.getRequest().getJson().get(0));
-            RegisterController.getInstance().register(info);
             String response = "";
             if (!(RegisterController.getInstance().isFirstManagerRegistered() && info.get("type").equals("manager"))) {
                  response = BankAPI.getBankResponse("create_account " +
@@ -336,7 +341,15 @@ public class Server {
                         info.get("username") + " " +
                         info.get("password") + " " +
                         info.get("password"));
+            } else if (!RegisterController.getInstance().isFirstManagerRegistered() && info.get("type").equals("manager")) {
+                WalletController.MIN_BALANCE = Double.parseDouble(info.get(LoginMenu.PersonInfo.MIN_BALANCE.label));
+                WalletController.WAGE = Double.parseDouble(info.get(LoginMenu.PersonInfo.WAGE.label));
+                if (response.matches("\\d+"))
+                    WalletController.SHOP_BANK_ID = response;
+                else
+                    connection.SendMessage("error during making shop account : " + response);
             }
+            RegisterController.getInstance().register(info, response);
             connection.SendMessage("Registered successfully.\nYour bank response : " + response);
         }
     }
@@ -394,6 +407,69 @@ public class Server {
             String response = BankAPI.getBankResponse(msg);
             connection.SendMessage(response);
         }
+    }
+
+    class IncreaseBankBalance implements Handler {
+
+        @Override
+        public void handle(Connection connection) {
+            ArrayList<String> info = connection.getRequest().getJson();
+            String bankToken = info.get(0);
+            String amount = info.get(1);
+            String bankId = getBankId(connection.getRequest().getToken());
+            String bankReceiptRp = WalletController.getInstance()
+                    .getBankIncreaseBalance(Double.parseDouble(amount), bankToken, bankId);
+            if (bankReceiptRp.matches("\\d+")) { //it means it is a receipt id
+                bankReceiptRp = WalletController.getInstance().getPayResponse(bankReceiptRp);
+            }
+            connection.SendMessage(bankReceiptRp);
+        }
+    }
+
+    class IncreaseWalletBalance implements Handler {
+
+        @Override
+        public void handle(Connection connection) {
+            ArrayList<String> info = connection.getRequest().getJson();
+            String bankToken = info.get(0);
+            String amount = info.get(1);
+            String bankId = getBankId(connection.getRequest().getToken());
+            String bankReceiptRp = WalletController.getInstance()
+                    .getWalletIncreaseBalanceRespond(Double.parseDouble(amount), bankToken, bankId);
+            if (bankReceiptRp.matches("\\d+")) { //it means it is a receipt id
+                bankReceiptRp = WalletController.getInstance().getPayResponse(bankReceiptRp);
+            }
+            connection.SendMessage(bankReceiptRp);
+        }
+    }
+
+    class DecreaseWalletBalance implements Handler {
+
+        @Override
+        public void handle(Connection connection) {
+            ArrayList<String> info = connection.getRequest().getJson();
+            String bankToken = info.get(0);
+            String amount = info.get(1);
+            String bankId = getBankId(connection.getRequest().getToken());
+            String bankReceiptRp = WalletController.getInstance()
+                    .getWalletDecreaseBalanceRespond(Double.parseDouble(amount), bankToken, bankId);
+            if (bankReceiptRp.matches("\\d+")) { //it means it is a receipt id
+                bankReceiptRp = WalletController.getInstance().getPayResponse(bankReceiptRp);
+            }
+            connection.SendMessage(bankReceiptRp);
+        }
+    }
+
+    private String getBankId(String shopToken) {
+        String username = authTokens.get(shopToken);
+        Person person = PersonController.getInstance().getPersonByUsername(username);
+        String bankId = "";
+        if (person.getType().equals("salesperson")) {
+            bankId = ((Salesperson) person).getWallet().getBankId();
+        } else if (person.getType().equals("customer")) {
+            bankId = ((Customer) person).getWallet().getBankId();
+        }
+        return bankId;
     }
 
     class LogOutHandler implements Handler{

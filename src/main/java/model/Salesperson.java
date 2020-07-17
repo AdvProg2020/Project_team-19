@@ -15,15 +15,21 @@ public class Salesperson extends Person {
     private ArrayList<Discount> discounts;
     private HashMap<String, LocalDateTime> auctions;  //product -> endTime
     private double credit;
+    private Wallet wallet;
 
 
-    public Salesperson(HashMap<String, String> personInfo) {
+    public Salesperson(HashMap<String, String> personInfo, String bankId, double minBalance) {
         super(personInfo);
         sellLogs = new ArrayList<>();
         offeredProducts = new HashMap<>();
         discounts = new ArrayList<>();
         auctions = new HashMap<>();
+        wallet = new Wallet(minBalance, bankId);
         Database.saveToFile(this, Database.createPath("salespersons", personInfo.get("username")));
+    }
+
+    public Wallet getWallet() {
+        return wallet;
     }
 
     public void addAuction(Product product, LocalDateTime endTime) {

@@ -29,6 +29,8 @@
                    <Button fx:id="registerBtn" defaultButton="true" layoutX="56.0" layoutY="808.0" mnemonicParsing="false" onAction="#registerBtnAction" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Register" />
                   <TextField fx:id="company" layoutX="56.0" layoutY="808.0" prefHeight="26.0" prefWidth="282.0" promptText="Company" stylesheets="@textField.css" visible="false" />
                   <TextField fx:id="darSurateVjud" layoutX="56.0" layoutY="857.0" prefHeight="26.0" prefWidth="282.0" promptText="Dar Surate Vjud Sayere Moshakhasat" stylesheets="@textField.css" visible="false" />
+                   <TextField fx:id="minBalance" layoutX="56.0" layoutY="808.0" prefHeight="26.0" prefWidth="282.0" promptText="Minimum balance" stylesheets="@textField.css" visible="false" />
+                   <TextField fx:id="wage" layoutX="56.0" layoutY="857.0" prefHeight="26.0" prefWidth="282.0" promptText="wage" stylesheets="@textField.css" visible="false" />
                   <StackPane layoutX="49.0" layoutY="224.0" prefHeight="280.0" prefWidth="280.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);;-fx-padding: 10;-fx-border-color: firebrick; -fx-border-radius: 5;">
                      <children>
                         <ImageView fx:id="profile" fitHeight="280.0" fitWidth="280.0" pickOnBounds="true" preserveRatio="true" />

@@ -62,7 +62,7 @@ public class AddManager {
             personInfo.put ( LAST_NAME.label , lastName.getText () );
             personInfo.put ( EMAIL.label , email.getText () );
             personInfo.put ( PHONE.label , phone.getText () );
-            RegisterController.getInstance ( ).register ( personInfo );
+            //todo RegisterController.getInstance ( ).register ( personInfo );
             ButtonType ok = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
             ButtonType cancel = new ButtonType("Ok", ButtonBar.ButtonData.CANCEL_CLOSE);
             Alert alert = new Alert( Alert.AlertType.CONFIRMATION,

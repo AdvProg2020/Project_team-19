@@ -11,15 +11,20 @@ public class Customer extends Person {
     private HashMap<Product, Integer> productsWithScore;
     private double credit;
     private Cart cart;
+    private Wallet wallet;
 
-
-    public Customer(HashMap<String, String> personInfo) {
+    public Customer(HashMap<String, String> personInfo, String bankId, double minBalance) {
         super(personInfo);
         discountCodes = new HashMap<>();
         buyLogs = new ArrayList<>();
         productsWithScore = new HashMap<>();
         cart = new Cart();
+        wallet = new Wallet(minBalance, bankId);
         Database.saveToFile(this, Database.createPath("customers", personInfo.get("username")));
+    }
+
+    public Wallet getWallet() {
+        return wallet;
     }
 
     public void setCartAfterLogin(Cart cart) {

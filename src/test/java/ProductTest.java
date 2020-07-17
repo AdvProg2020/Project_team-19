@@ -69,8 +69,8 @@ public class ProductTest {
         personInfo2.put("username", "yeki dige");
         personInfo2.put("password", "salam");
 
-        Salesperson seller1 = new Salesperson(personInfo);
-        Salesperson seller2 = new Salesperson(personInfo2);
+        Salesperson seller1 = new Salesperson(personInfo,null,0);
+        Salesperson seller2 = new Salesperson(personInfo2,null,0);
         ArrayList<Salesperson> owners1 = new ArrayList<>();
         owners1.add(seller1);
         owners1.add(seller2);
@@ -128,8 +128,8 @@ public class ProductTest {
         personInfo2.put("username", "yeki dige");
         personInfo2.put("password", "salam");
 
-        Salesperson seller1 = new Salesperson(personInfo);
-        Salesperson seller2 = new Salesperson(personInfo2);
+        Salesperson seller1 = new Salesperson(personInfo,null,0);
+        Salesperson seller2 = new Salesperson(personInfo2,null,0);
         ArrayList<Salesperson> owners1 = new ArrayList<>();
         owners1.add(seller1);
         owners1.add(seller2);
@@ -185,8 +185,8 @@ public class ProductTest {
         personInfo2.put("username", "yeki dige");
         personInfo2.put("password", "salam");
 
-        Salesperson seller1 = new Salesperson(personInfo);
-        Salesperson seller2 = new Salesperson(personInfo2);
+        Salesperson seller1 = new Salesperson(personInfo,null,0);
+        Salesperson seller2 = new Salesperson(personInfo2,null,0);
         ArrayList<Salesperson> owners1 = new ArrayList<>();
         owners1.add(seller1);
         owners1.add(seller2);
