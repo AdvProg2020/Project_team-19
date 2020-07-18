@@ -1,8 +1,5 @@
 package fxmlController;
 
-import controller.PersonController;
-import controller.ProductController;
-import controller.RequestController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -13,13 +10,12 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import model.Product;
-import model.Salesperson;
 import view.App;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
+import static clientController.ServerConnection.*;
 public class AddProductFromStock implements Initializable {
     @FXML private TextField price;
     @FXML private TextField amount;
@@ -31,16 +27,14 @@ public class AddProductFromStock implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ArrayList<String> ids = new ArrayList<>();
-        for (Product product : ProductController.allProducts) {
+        for (Product product : getAllProducts()) {
             ids.add(product.getID());
         }
         products.setItems(FXCollections.observableArrayList(ids));
         actionButton.setOnAction(e->add());
-
     }
 
-    private void add(){
-        Salesperson salesperson = (Salesperson) PersonController.getInstance().getLoggedInPerson();
+    private void add() {
         if (price.getText().isEmpty()) {
             App.showAlert(Alert.AlertType.ERROR, App.currentStage, "error", "Fill every thing");
             return;
@@ -61,7 +55,12 @@ public class AddProductFromStock implements Initializable {
             App.showAlert(Alert.AlertType.ERROR, App.currentStage, "error", "Fill every thing");
             return;
         }
-        RequestController.getInstance().addProductRequest(Double.parseDouble(price.getText()),Integer.parseInt(amount.getText()),salesperson,ProductController.getInstance().getProductById(products.getValue()));
+        ArrayList<String> info = new ArrayList<>();
+        info.add(price.getText());
+        info.add(amount.getText());
+        info.add(products.getValue());
+        String response = addProductRequestFromStock(info);
+        App.showAlert(Alert.AlertType.INFORMATION, App.currentStage, response, "your request send to server");
     }
 
     @FXML

@@ -1,13 +1,11 @@
 package fxmlController;
 
-import controller.AuctionController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -18,7 +16,7 @@ import view.App;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
-
+import static clientController.ServerConnection.*;
 
 public class AllAuctionsMenu implements Initializable {
     private GridPane cardsBase;
@@ -53,8 +51,9 @@ public class AllAuctionsMenu implements Initializable {
 
     private void setCardsOnPaneAndMouseClicked() {
         int index = 0;
-        for (Salesperson seller : AuctionController.getInstance().getAllAuctions().keySet()) {
-            for (Product product : seller.getAuctions().keySet()) {
+        HashMap<Salesperson, ArrayList<Product>> allAuctions = getAllAuctions();
+        for (Salesperson seller : allAuctions.keySet()) {
+            for (Product product : allAuctions.get(seller)) {
                 AuctionInList auctionInList = new AuctionInList(seller, product);
                 FXMLLoader loader = new FXMLLoader(AllAuctionsMenu.class.getResource("/fxml/auctionInList.fxml"));
                 loader.setController(auctionInList);

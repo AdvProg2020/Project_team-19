@@ -1,6 +1,5 @@
 package fxmlController;
 
-import controller.CategoryController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,7 +16,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
+import static clientController.ServerConnection.*;
 
 public class AllCategoriesMenu implements Initializable {
     private GridPane gridPane;
@@ -63,7 +62,7 @@ public class AllCategoriesMenu implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         gridPane = new GridPane();
-        initializeCategories(CategoryController.rootCategories, 0, 0);
+        initializeCategories(getRootCategories(), 0, 0);
         basePane.add(gridPane, 1, 2);
         back.setOnMouseClicked ( event -> App.setRoot ( "managerMenu" ) );
 

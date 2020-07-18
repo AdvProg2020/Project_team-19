@@ -38,7 +38,6 @@ public class WalletMenu implements Initializable {
     @FXML private Label decreaseWalletLabel;
     @FXML private ImageView getToken;
     @FXML private TextField tokenField;
-    @FXML private TextField shopTokenField;
     @FXML private FontAwesomeIcon back;
 
     @Override
@@ -76,10 +75,6 @@ public class WalletMenu implements Initializable {
             App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill bank token box");
             return;
         }
-        if (shopTokenField.getText().isEmpty()) {
-            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill shop token box");
-            return;
-        }
         Stage stage = new Stage();
         GridPane gridPane = new GridPane();
         Label label = new Label();
@@ -105,7 +100,7 @@ public class WalletMenu implements Initializable {
                     return;
                 }
             }
-            getIncreaseWalletBalance(tokenField.getText(), priceField.getText(), shopTokenField.getText());
+            getIncreaseWalletBalance(tokenField.getText(), priceField.getText());
             stage.close();
         });
         gridPane.setVgap(10);
@@ -125,10 +120,6 @@ public class WalletMenu implements Initializable {
             App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill bank token box");
             return;
         }
-        if (shopTokenField.getText().isEmpty()) {
-            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill shop token box");
-            return;
-        }
         Stage stage = new Stage();
         GridPane gridPane = new GridPane();
         Label label = new Label();
@@ -154,7 +145,7 @@ public class WalletMenu implements Initializable {
                     return;
                 }
             }
-            getDecreaseWalletBalance(tokenField.getText(), priceField.getText(), balanceField.getText());
+            getDecreaseWalletBalance(tokenField.getText(), priceField.getText());
             stage.close();
         });
         gridPane.setVgap(10);
@@ -184,10 +175,6 @@ public class WalletMenu implements Initializable {
             App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill bank token box");
             return;
         }
-        if (shopTokenField.getText().isEmpty()) {
-            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill shop token box");
-            return;
-        }
         Stage stage = new Stage();
         GridPane gridPane = new GridPane();
         Label label = new Label();
@@ -213,7 +200,7 @@ public class WalletMenu implements Initializable {
                     return;
                 }
             }
-            getIncreaseBankBalance(tokenField.getText(), priceField.getText(), shopTokenField.getText());
+            getIncreaseBankBalance(tokenField.getText(), priceField.getText());
             stage.close();
         });
         gridPane.setVgap(10);

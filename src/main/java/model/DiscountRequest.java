@@ -90,7 +90,7 @@ public class DiscountRequest extends Request {
     public String show() {
         if (getRequestState().equals(RequestState.DELETE))
             return salespersonUsername + " want to delete " + discountId + " .";
-        return salespersonUsername + " want to put " + getProducts() + " in discount " + "(" + discountPercentage + "%"
+        return salespersonUsername + " want to put " + productIds + " in discount " + "(" + discountPercentage + "%"
                 + ")" + ": " + discountId + " \nfrom " + startTime + " to " + endTime + " .";
 
     }

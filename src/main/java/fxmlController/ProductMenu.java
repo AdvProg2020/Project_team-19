@@ -1,8 +1,5 @@
 package fxmlController;
 
-import controller.Database;
-import controller.PersonController;
-import controller.ProductController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -39,7 +36,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
+import static clientController.ServerConnection.*;
 public class ProductMenu implements Initializable {
     private static final String STAR = "/images/empty-star.png";
     private static final String FUL_STAR = "/images/star.png";
@@ -84,7 +81,7 @@ public class ProductMenu implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        person = PersonController.getInstance().getLoggedInPerson();
+        person = getPersonByToken(Person.class);
         rate.setOpacity(0.3);
         addComment.setDisable(true);
         setSellerCards();
@@ -102,7 +99,7 @@ public class ProductMenu implements Initializable {
         checkAvailable();
         setStarRate();
         checkBought();
-        if (person instanceof Customer) {
+        if (person.getType().equalsIgnoreCase("customer")) {
             addComment.setDisable(false);
             addComment.setOnAction(addCommentEvent());
         }
@@ -111,7 +108,7 @@ public class ProductMenu implements Initializable {
             rate.setCursor(Cursor.HAND);
             rate.setOnMouseClicked(event -> rate());
         }
-        product.increaseSeen();
+        increaseTotalSeen(product.getID());
         setSimilarProducts();
         showSimilarProducts.setCursor(Cursor.HAND);
         showSimilarProducts.setOnMouseClicked(event -> {
@@ -157,7 +154,7 @@ public class ProductMenu implements Initializable {
     }
 
     private void setSimilarProducts() {
-        similarProducts = new ArrayList<>(ProductController.getInstance().getSimilarProducts(product));
+        similarProducts = new ArrayList<>(getSimilarProducts(product.getID()));
     }
 
     private void setSimilarProductsAction() {
@@ -239,7 +236,7 @@ public class ProductMenu implements Initializable {
     }
 
     private void submitRate() {
-        product.increaseTotalScore(score);
+        increaseTotalScore(product.getID());
     }
 
     private void setMouseClicked() {
@@ -270,7 +267,7 @@ public class ProductMenu implements Initializable {
     }
 
     private void checkBought() {
-        if (person instanceof Customer
+        if (person.getType().equalsIgnoreCase("customer")
                 && ((Customer) person).isProductBought(product)) {
             isBought = true;
         }
@@ -425,7 +422,7 @@ public class ProductMenu implements Initializable {
     }
 
     private void setSellerCards() {
-        for (Salesperson seller : ProductController.getInstance().getProductsSellers(product)) {
+        for (Salesperson seller : getProductSellers(product.getID())) {
             if (seller.isInAuction(product))
                 continue;
             if (isDiscount) {

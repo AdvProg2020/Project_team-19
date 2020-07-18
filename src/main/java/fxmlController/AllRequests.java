@@ -1,6 +1,5 @@
 package fxmlController;
 
-import controller.RequestController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +13,7 @@ import view.App;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import static clientController.ServerConnection.*;
 
 public class AllRequests implements Initializable {
 
@@ -28,7 +28,7 @@ public class AllRequests implements Initializable {
 
     public void updateTable () {
         vBox.getChildren ().clear ();
-        for (Request request : RequestController.getAllRequests()) {
+        for (Request request : getAllRequests()) {
             RequestCard card = new RequestCard(request);
             FXMLLoader loader = new FXMLLoader(AllRequests.class.getResource("/fxml/requestCard.fxml"));
             loader.setController(card);

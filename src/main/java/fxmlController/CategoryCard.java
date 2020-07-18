@@ -1,6 +1,6 @@
 package fxmlController;
 
-import controller.CategoryController;
+import static clientController.ServerConnection.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,6 +21,7 @@ import model.Category;
 import view.App;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import static view.App.getFXMLLoader;
@@ -109,6 +110,6 @@ public class CategoryCard implements Initializable {
     }
 
     private void remove() {
-        CategoryController.getInstance().removeCategory(category.getParent(), category);
+        removeCategory(category);
     }
 }

@@ -1,7 +1,5 @@
 package fxmlController;
 
-import controller.CategoryController;
-import controller.RequestController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,9 +25,10 @@ import view.App;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-
+import static clientController.ServerConnection.*;
 public class ProductRequestFXML implements Initializable {
     Product product;
     Request.RequestState state;
@@ -126,7 +125,7 @@ public class ProductRequestFXML implements Initializable {
         if (category.getText().length() == 0) {
             category.setText("Fill the field.");
             return false;
-        } else if (CategoryController.getInstance().getCategoryByName(category.getText(), CategoryController.rootCategories) == null && !category.getText().equals("Fill the field.")) {
+        } else if (getCategoryByName(category.getText()) != null && !category.getText().equals("Fill the field.")) {
             category.setText("There is no such category.");
             return false;
         }
@@ -135,11 +134,28 @@ public class ProductRequestFXML implements Initializable {
 
     private void action() {
         if (state.equals(Request.RequestState.EDIT)) {
-            RequestController.getInstance().editProductRequest(price.getText(), amount.getText(), salesperson, product.getID(),
-                    category.getText(), name.getText(), brand.getText(), properties, image, media);
+            ArrayList<String> info = new ArrayList<>();
+            info.add(price.getText());
+            info.add(amount.getText());
+            info.add(product.getID());
+            info.add(category.getText());
+            info.add(name.getText());
+            info.add(brand.getText());
+            info.add(toJson(properties));
+            info.add(image);
+            info.add(media);
+            editProductRequest(info);
         } else if (state.equals(Request.RequestState.ADD)) {
-            RequestController.getInstance().addProductRequest(Double.parseDouble(price.getText()), Integer.parseInt(amount.getText()),
-                    salesperson, category.getText(), name.getText(), brand.getText(), properties, image, media);
+            ArrayList<String> info = new ArrayList<>();
+            info.add(price.getText());
+            info.add(amount.getText());
+            info.add(category.getText());
+            info.add(name.getText());
+            info.add(brand.getText());
+            info.add(toJson(properties));
+            info.add(image);
+            info.add(media);
+            addNewProduct(info);
         }
     }
 
@@ -173,7 +189,7 @@ public class ProductRequestFXML implements Initializable {
 
             int rowIndex = 0;
             HashMap<String, TextField> textFields = new HashMap<>();
-            for (String field : CategoryController.getInstance().getCategoryByName(category.getText(), CategoryController.rootCategories).getPropertyFields()) {
+            for (String field : getCategoryByName(product.getCategory().getName()).getPropertyFields()) {
                 Label label = new Label("new " + field + " : ");
                 label.setTextFill(Color.rgb(8, 181, 255));
                 label.setFont(Font.font("Verdana", 14));

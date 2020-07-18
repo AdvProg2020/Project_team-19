@@ -56,7 +56,7 @@ public class RegisterMenuController implements Initializable {
     }
 
     private void checkIfExist () throws Exception {
-        String response = sendGetPerson(username.getText());
+        String response = getPersonByUsername(username.getText());
         if (response.equals("invalid username."))
             throw new Exception ( "This Dude Already Exists." );
     }

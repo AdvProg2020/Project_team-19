@@ -1,18 +1,14 @@
 package fxmlController;
 
-import controller.CategoryController;
-import controller.PersonController;
-import controller.RequestController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import static clientController.ServerConnection.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
@@ -88,7 +84,7 @@ public class AllProductsForSeller implements Initializable {
             stage.close();
         });
         fromStock.setOnAction(event -> {
-            Salesperson salesperson = (Salesperson) PersonController.getInstance().getLoggedInPerson();
+            Salesperson salesperson = getPersonByToken(Salesperson.class);
             ProductRequestFXML productRequestFXML = new ProductRequestFXML(Request.RequestState.ADD, salesperson);
             FXMLLoader loader = new FXMLLoader(AllProductsForSeller.class.getResource("/fxml/productRequest.fxml"));
             loader.setController(productRequestFXML);
@@ -106,11 +102,11 @@ public class AllProductsForSeller implements Initializable {
     }
 
     private void setProductCards() {
-        for (Product product : salesperson.getOfferedProducts().keySet()) {
-            if (verified) {
-                if (!salesperson.getProductState(product).label.equals("Verified") || salesperson.getProductAmount(product) == 0)
-                    continue;
-            }
+        ArrayList<Product> products = verified ? getVerifiedSellerProducts() : getAllSellerProducts();
+        for (Product product : products) {
+//                if (!salesperson.getProductState(product).label.equals("Verified") || salesperson.getProductAmount(product) == 0)
+//                    continue;
+
             ProductForSeller productForSeller = new ProductForSeller(product, salesperson, false);
             FXMLLoader loader = new FXMLLoader(AllProductsForSeller.class.getResource("/fxml/productForSellerCard.fxml"));
             loader.setController(productForSeller);

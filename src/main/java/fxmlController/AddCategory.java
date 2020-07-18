@@ -1,9 +1,7 @@
 package fxmlController;
 
-import controller.CategoryController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -16,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.ResourceBundle;
+import static clientController.ServerConnection.*;
 
 public class AddCategory implements Initializable {
     enum requestMode {
@@ -62,17 +61,26 @@ public class AddCategory implements Initializable {
         String[] propertiesArray = properties.getText().split("-");
         HashSet<String> set = new HashSet<>(Arrays.asList(propertiesArray));
             if (mode.equals(requestMode.EDIT)) {
-                CategoryController.getInstance().editCategory(name.getText(), category, CategoryController.getInstance().getCategoryByName(categories.getValue(), CategoryController.rootCategories), set, false);
+                ArrayList<String> info = new ArrayList<>();
+                info.add(name.getText());
+                info.add(category.getName());
+                info.add(categories.getValue());
+                info.add(toJson(set));
+                String response = editCategory(info);
                 Alert alert = new Alert ( Alert.AlertType.CONFIRMATION );
-                alert.setContentText ( "Successfully Edited!" );
-                alert.showAndWait ();
+                alert.setContentText ( response );
+                alert.showAndWait ();  //4 ta to server
             } else {
                 if (name.getText().length() == 0 || categories.getValue().length() == 0 || propertiesArray.length == 0) {
                     App.error("Please fill the fields.");
                 } else {
-                    CategoryController.getInstance().addCategory(name.getText(), CategoryController.getInstance().getCategoryByName(categories.getValue(), CategoryController.rootCategories), set);
+                    ArrayList<String> info = new ArrayList<>();
+                    info.add(name.getText());
+                    info.add(categories.getValue());
+                    info.add(toJson(set));
+                    String response = addCategory(info);  //3 ta to server
                     Alert alert = new Alert ( Alert.AlertType.CONFIRMATION );
-                    alert.setContentText ( "Successfully Added!" );
+                    alert.setContentText ( response );
                     alert.showAndWait ();
                 }
             }
@@ -101,7 +109,7 @@ public class AddCategory implements Initializable {
 
         public void initializeCategories () {
             parentCategories.add("root");
-            CategoryController.getInstance().getParentCategories(parentCategories, CategoryController.rootCategories);
+            parentCategories.addAll(getParentCategories());
             categories.setItems(FXCollections.observableArrayList(parentCategories));
         }
 

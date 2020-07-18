@@ -342,10 +342,10 @@
             <RowConstraints maxHeight="146.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
          </rowConstraints>
       </GridPane>
-      <TextField fx:id="shopTokenField" layoutX="578.0" layoutY="11.0" prefHeight="21.0" prefWidth="208.0" promptText="enter shop token">
-         <font>
-            <Font name="Tw Cen MT Condensed" size="14.0" />
-         </font>
-      </TextField>
+<!--      <TextField fx:id="shopTokenField" layoutX="578.0" layoutY="11.0" prefHeight="21.0" prefWidth="208.0" promptText="enter shop token">-->
+<!--         <font>-->
+<!--            <Font name="Tw Cen MT Condensed" size="14.0" />-->
+<!--         </font>-->
+<!--      </TextField>-->
    </children>
 </AnchorPane>

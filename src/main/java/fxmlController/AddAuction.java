@@ -1,7 +1,5 @@
 package fxmlController;
 
-import controller.ProductController;
-import controller.RequestController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +18,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
+import static clientController.ServerConnection.*;
 
 public class AddAuction implements Initializable {
     private Salesperson salesperson;
@@ -56,9 +55,7 @@ public class AddAuction implements Initializable {
     }
 
     private void setCombo() {
-        for (Product product : salesperson.getOfferedProducts().keySet()) {
-            if (!salesperson.getProductState(product).label.equals("Verified") || salesperson.getProductAmount(product) != 1)
-                continue;
+        for (Product product : getAvailableProductsForAuction()) {
             chooseCombo.getItems().add(product.getID());
         }
     }
@@ -69,7 +66,7 @@ public class AddAuction implements Initializable {
             productPane.get().setVisible(false);
             if (chooseCombo.getValue() != null) {
                 productPane.set(new Pane());
-                product = ProductController.getInstance().getProductById(chooseCombo.getValue());
+                product = getProductById(chooseCombo.getValue());
                 ProductForSeller productForSeller = new ProductForSeller(product, salesperson, true);
                 FXMLLoader loader = new FXMLLoader(AddAuction.class.getResource("/fxml/productForSellerCard.fxml"));
                 loader.setController(productForSeller);
@@ -97,8 +94,8 @@ public class AddAuction implements Initializable {
             return;
         }
 
-        RequestController.getInstance().addAuctionRequest(salesperson.getUsername(), product.getID(), endTime.getText());
-        App.showAlert(Alert.AlertType.INFORMATION, App.currentStage, "successful", "Your request will be sent to manager");
+        String response = addAuctionRequest(salesperson.getUsername(), product.getID(), endTime.getText());
+        App.showAlert(Alert.AlertType.INFORMATION, App.currentStage, response, "Your request will be sent to manager");
         App.setRoot("salespersonMenu");
     }
 

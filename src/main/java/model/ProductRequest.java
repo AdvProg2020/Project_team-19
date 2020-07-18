@@ -113,16 +113,14 @@ public class ProductRequest extends Request {
 
     @Override
     public String show() {
-        Product product = ProductController.getInstance().getProductById(productId);
-        Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(salespersonUsername);
         if (getRequestState().equals(RequestState.DELETE)) {
             return salespersonUsername + " want to " + this.getRequestState() + " this product : " + productId +
-                    "\nname :" + product.getName() + "\ncategory :" + product.getCategory().getName();
+                    "\nname :" + name + "\ncategory :" + category;
         }
-        return salesperson.getUsername() + " want to "
+        return salespersonUsername + " want to "
                 + this.getRequestState() + " this product : "
-                + product.getID() +
+                + productId +
                 "\nwith " + price + "$" + " and amount " + amount +
-                "\nname :" + product.getName() + "\ncategory :" + product.getCategory().getName();
+                "\nname :" + name + "\ncategory :" + category;
     }
 }
