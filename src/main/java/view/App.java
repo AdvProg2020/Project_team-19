@@ -144,10 +144,13 @@ public class App extends Application {
 
     public static void goBack() {
         Person person = PersonController.getInstance().getLoggedInPerson();
+        //todo
         if (person instanceof Manager) {
             App.setRoot("managerMenu");
         } else if (person instanceof Salesperson) {
             App.setRoot("salespersonMenu");
+        } else if (person instanceof Support) {
+            App.setRoot ("supportMenu");
         } else {
             App.setRoot("customerMenu");
         }

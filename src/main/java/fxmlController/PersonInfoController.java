@@ -41,14 +41,8 @@ public class PersonInfoController implements Initializable {
 
 
     @FXML private void back () {
-        Person person = PersonController.getInstance ().getLoggedInPerson ();
-        if ( person instanceof Manager ) {
-            App.setRoot ( "managerMenu" );
-        } else if ( person instanceof Salesperson ){
-            App.setRoot ( "salespersonMenu" );
-        } else {
-            App.setRoot ( "customerMenu" );
-        }
+        //todo check
+        App.goBack ();
     }
 
     @Override

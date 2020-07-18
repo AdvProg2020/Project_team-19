@@ -19,6 +19,7 @@ import java.util.*;
 import static clientController.ServerConnection.*;
 
 public class AllAuctionsMenu implements Initializable {
+
     private GridPane cardsBase;
     private ArrayList<Parent> auctionCards;
     @FXML

@@ -1,6 +1,5 @@
 package fxmlController;
 
-import controller.PersonController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,13 +10,12 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import model.Discount;
-import model.Salesperson;
 import view.App;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
+import static clientController.ServerConnection.*;
 public class AllDiscounts implements Initializable {
     @FXML
     private AnchorPane basePane;
@@ -41,8 +39,7 @@ public class AllDiscounts implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         GridPane gridpane = new GridPane();
         int i=1;
-        Salesperson salesperson = (Salesperson) PersonController.getInstance().getLoggedInPerson();
-        for (Discount discount : salesperson.getDiscounts()) {
+        for (Discount discount : getAllDiscountsOfSeller()) {
             DiscountCard discountCard = new DiscountCard(discount);
             FXMLLoader loader = new FXMLLoader(MainProductsMenu.class.getResource("/fxml/discountCard.fxml"));
             loader.setController(discountCard);

@@ -44,6 +44,7 @@ public class AuctionInList implements Initializable {
         productPic.setImage(new Image(product.getImageURI()));
 
         endTime.setText(fancyEndTime());
+
     }
 
     private String fancyEndTime() {

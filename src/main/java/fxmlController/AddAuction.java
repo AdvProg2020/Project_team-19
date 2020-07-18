@@ -39,6 +39,7 @@ public class AddAuction implements Initializable {
         this.salesperson = salesperson;
     }
 
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setCombo();

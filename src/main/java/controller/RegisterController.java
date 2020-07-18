@@ -20,13 +20,20 @@ public class RegisterController {
     }
 
     public void register (HashMap<String, String> personInfo, String bankId) {
-        personInfo.put ( "type" , changeTypeToStandardForm ( personInfo.get ( "type" ) ) );
-        if (personInfo.get("type").equals("customer")) {
-            registerCustomer(personInfo, bankId);
-        } else if (personInfo.get("type").equals("salesperson")) {
-            registerSalesperson(personInfo);
-        } else {
-            registerManager(personInfo);
+        personInfo.put ( "type" , ( personInfo.get ( "type" ) ).toLowerCase () );
+        switch (personInfo.get ( "type" )) {
+            case "customer":
+                registerCustomer ( personInfo, bankId );
+                break;
+            case "salesperson":
+                registerSalesperson ( personInfo );
+                break;
+            case "support":
+                registerSupport ( personInfo );
+                break;
+            default:
+                registerManager ( personInfo );
+                break;
         }
     }
 
@@ -36,6 +43,10 @@ public class RegisterController {
 
     public void registerSalesperson (HashMap<String, String> personInfo) {
         SalespersonRequest request = new SalespersonRequest(personInfo);
+    }
+
+    public void registerSupport (HashMap<String, String> personInfo) {
+        SupportRequest request = new SupportRequest (personInfo);
     }
 
     public boolean isFirstManagerRegistered() {
@@ -48,16 +59,6 @@ public class RegisterController {
 
     public void registerManager (HashMap<String, String> personInfo) {
         Manager manager = new Manager(personInfo);
-    }
-
-    private String changeTypeToStandardForm (String type) {
-        if (type.equalsIgnoreCase ( "customer" ))
-            return "customer";
-        if (type.equalsIgnoreCase ( "salesperson" ))
-            return "salesperson";
-        if (type.equalsIgnoreCase ( "manager" ))
-            return "manager";
-        return "null";
     }
 
 }

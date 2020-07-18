@@ -8,7 +8,6 @@ import javafx.scene.control.Label;
 import model.Request;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 import static clientController.ServerConnection.*;
 
@@ -32,10 +31,12 @@ public class RequestCard implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         requestText.setText(request.show());
+
         acceptButton.setOnAction(e -> {
             acceptRequest(request.getRequestId());
             Metadata.allRequests.updateTable ();
         });
+
         declineButton.setOnAction(e -> {
             declineRequest(request.getRequestId());
             Metadata.allRequests.updateTable ();

@@ -58,6 +58,9 @@ public class RequestController {
         for (File file : Database.returnListOfFiles(address.get("auction_requests"))) {
             allRequests.add((AuctionRequest) read(AuctionRequest.class, file.getAbsolutePath()));
         }
+        for (File file : Database.returnListOfFiles(address.get("support_requests"))) {
+            allRequests.add((SupportRequest) read(SupportRequest.class, file.getAbsolutePath()));
+        }
     }
 
     public void acceptRequest(Request request) {
@@ -72,6 +75,8 @@ public class RequestController {
                 deleteFile(createPath("salesperson_requests", request.getRequestId()));
             else if (request instanceof AuctionRequest)
                 deleteFile(createPath("auction_requests", request.getRequestId()));
+            else if (request instanceof SupportRequest)
+                deleteFile(createPath("support_requests", request.getRequestId()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -89,6 +94,8 @@ public class RequestController {
                 deleteFile(createPath("salesperson_requests", request.getRequestId()));
             else if (request instanceof AuctionRequest)
                 deleteFile(createPath("auction_requests", request.getRequestId()));
+            else if (request instanceof SupportRequest)
+                deleteFile(createPath("support_requests", request.getRequestId()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -105,6 +112,11 @@ public class RequestController {
             Salesperson salesperson = new Salesperson(personInfo, response, WalletController.MIN_BALANCE);
             PersonController.getInstance().addPerson(salesperson);
         }
+    }
+
+    public void addSupport(HashMap<String, String> personInfo) {
+        Support support = new Support (personInfo);
+        PersonController.getInstance().addPerson(support);
     }
 
     public ArrayList<Request> filterByState(Request.RequestState requestState) {

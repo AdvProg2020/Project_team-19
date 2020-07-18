@@ -71,6 +71,7 @@ public class AddCategory implements Initializable {
                 alert.setContentText ( response );
                 alert.showAndWait ();  //4 ta to server
             } else {
+
                 if (name.getText().length() == 0 || categories.getValue().length() == 0 || propertiesArray.length == 0) {
                     App.error("Please fill the fields.");
                 } else {

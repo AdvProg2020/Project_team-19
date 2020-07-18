@@ -236,7 +236,7 @@ public class ProductMenu implements Initializable {
     }
 
     private void submitRate() {
-        increaseTotalScore(product.getID());
+        increaseTotalScore(product.getID(), score);
     }
 
     private void setMouseClicked() {

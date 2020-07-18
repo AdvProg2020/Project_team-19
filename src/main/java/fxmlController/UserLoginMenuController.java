@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import model.Support;
 import view.App;
 
 import java.io.IOException;
@@ -66,6 +67,8 @@ public class UserLoginMenuController {
                     App.currentScene = new Scene(getFXMLLoader("managerMenu").load());
                 } else if (type.equals("salesperson")) {
                     App.currentScene = new Scene(getFXMLLoader("salespersonMenu").load());
+                }else if (type.equals("support")){
+                    App.currentScene = new Scene ( getFXMLLoader ( "supportMenu" ).load () );
                 } else {
                     App.currentScene = new Scene(getFXMLLoader("customerMenu").load());
                 }
@@ -101,7 +104,5 @@ public class UserLoginMenuController {
     @FXML private void backSizeSmall ( MouseEvent mouseEvent ) {
         back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" );
     }
-
-
 }
 

@@ -19,6 +19,7 @@ import java.util.ResourceBundle;
 import static clientController.ServerConnection.*;
 
 public class AllCategoriesMenu implements Initializable {
+
     private GridPane gridPane;
     @FXML private GridPane basePane;
     @FXML private FontAwesomeIcon back;

@@ -158,7 +158,6 @@ public class Server {
                 }
             }
         }
-
     }
 
     class AddDiscountHandler implements Handler{

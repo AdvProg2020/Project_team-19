@@ -68,6 +68,7 @@ public class Product {
 
     public void increaseTotalScore(int score) {
         totalScore += score;
+        Database.saveToFile(this, Database.createPath("products", productID));
     }
 
     public String getDescription() {
@@ -84,6 +85,7 @@ public class Product {
 
     public void increaseSeen() {
         this.seen += 1;
+        Database.saveToFile(this, Database.createPath("products", productID));
     }
 
     public int getSeen() {

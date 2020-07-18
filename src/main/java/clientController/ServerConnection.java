@@ -4,16 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import model.Category;
-import model.Person;
+import model.Discount;
 import model.Product;
 import model.Salesperson;
 import server.PacketType;
 import server.Request;
 
 import java.io.*;
-import java.lang.reflect.Type;
 import java.net.Socket;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -35,29 +33,30 @@ public class ServerConnection {
         }
     }
 
-    public static String increaseTotalSeen(String productId) { //todo server
+    public static String increaseTotalSeen(String productId) {
         ArrayList<String> info = new ArrayList<>();
         info.add(productId);
-        return sendMessage(, info, "");
+        return sendMessage(INCREASE_SEEN, info, "");
     }
 
-    public static String increaseTotalScore(String productId) { //todo server
+    public static String increaseTotalScore(String productId, int score) {
         ArrayList<String> info = new ArrayList<>();
         info.add(productId);
-        return sendMessage(, info, "");
+        info.add(String.valueOf(score));
+        return sendMessage(INCREASE_SCORE, info, "");
     }
 
     public static ArrayList<Salesperson> getProductSellers(String productId) {
         ArrayList<String> info = new ArrayList<>();
         info.add(productId);
-        String response = sendMessage(, info, "");
+        String response = sendMessage(GET_SELLERS_OF_PRODUCTS, info, "");
         return (ArrayList<Salesperson>) getObj(new TypeToken<ArrayList<Salesperson>>(){}.getType(), response);
     }
 
-    public static ArrayList<Product> getSimilarProducts(String productId) { //todo server
+    public static ArrayList<Product> getSimilarProducts(String productId) {
         ArrayList<String> info = new ArrayList<>();
         info.add(productId);
-        String response = sendMessage(, info, "");
+        String response = sendMessage(GET_SIMILAR_PRODUCTS, info, "");
         return (ArrayList<Product>) getObj(new TypeToken<ArrayList<Product>>(){}.getType(), response);
     }
 
@@ -67,9 +66,26 @@ public class ServerConnection {
         return sendMessage(GET_PERSON_TYPE, info, "");
     }
 
-    public static <T> T getPersonByToken(Class<T> personType) { //todo server
-        String response = sendMessage(, null, token);
-        return (T) getObj(personType, response);
+//    public static <T> T getPersonByToken(Class<T> personType) { //todo server
+//        String response = sendMessage(, null, token);
+//        return (T) getObj(personType, response);
+//    }
+
+    public static String deleteProductForManager(String productId) {
+        ArrayList<String> info = new ArrayList<>();
+        info.add(productId);
+        return sendMessage(, info, "");
+    }
+
+    public static String deleteProductRequest(String productId) {  //todo
+        ArrayList<String> info = new ArrayList<>();
+        info.add(productId);
+        return sendMessage(, info, token);
+    }
+
+    public static ArrayList<Discount> getAllDiscountsOfSeller() {
+        String response = sendMessage(GET_ALL_DISCOUNTS_OF_SELLER, null, token);
+        return (ArrayList<Discount>) getObj(new TypeToken<ArrayList<Discount>>(){}.getType(), response);
     }
 
     public static String getPersonByUsername(String username) {
@@ -191,13 +207,13 @@ public class ServerConnection {
 //        return (ArrayList<Product>) getObj(new TypeToken<ArrayList<Product>>(){}.getType(), response);
 //    }
 
-    public static ArrayList<Product> getAllSellerProducts() {  //todo server
+    public static ArrayList<Product> getAllSellerProducts() {
         String response = sendMessage(GET_SELLER_PRODUCTS, null, token);
         return (ArrayList<Product>) getObj(new TypeToken<ArrayList<Product>>(){}.getType(), response);
     }
 
-    public static ArrayList<Product> getVerifiedSellerProducts() { //todo server
-        String response = sendMessage(, null, token);
+    public static ArrayList<Product> getVerifiedSellerProducts() {
+        String response = sendMessage(GET_VERIFIED_PRODUCTS, null, token);
         return (ArrayList<Product>) getObj(new TypeToken<ArrayList<Product>>(){}.getType(), response);
     }
 
@@ -206,8 +222,9 @@ public class ServerConnection {
         return (ArrayList<Category>) getObj(new TypeToken<ArrayList<Category>>(){}.getType(), response);
     }
 
-    public static String removeCategory(Category category) {  //todo server
+    public static String removeCategory(Category category) {
         ArrayList<String> info = new ArrayList<>();
+        info.add(category.getParent().getName());
         info.add(category.getName());
         return sendMessage(REMOVE_CATEGORY, info, "");
     }
@@ -227,11 +244,11 @@ public class ServerConnection {
         return (ArrayList<model.Request>) getObj(new TypeToken<ArrayList<model.Request>>(){}.getType(), response);
     }
 
-    public static String addCategory(ArrayList<String> info) {  //todo server
+    public static String addCategory(ArrayList<String> info) {
         return sendMessage(ADD_CATEGORY, info, "");
     }
 
-    public static String editCategory(ArrayList<String> info) {  //todo server
+    public static String editCategory(ArrayList<String> info) {
         return sendMessage(EDIT_CATEGORY, info, "");
     }
 

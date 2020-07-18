@@ -38,6 +38,9 @@ public class PersonController {
         for (File file : Database.returnListOfFiles(Database.address.get("salespersons"))) {
             allPersons.add((Salesperson) Database.read(Salesperson.class, file.getAbsolutePath()));
         }
+        for (File file : Database.returnListOfFiles(Database.address.get("supports"))) {
+            allPersons.add((Support) Database.read(Support.class, file.getAbsolutePath()));
+        }
     }
 
     public <T> boolean checkValidPersonType(String username, Class<T> personType) {

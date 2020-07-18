@@ -1,7 +1,5 @@
 package fxmlController;
 
-import controller.PersonController;
-import controller.RegisterController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -13,6 +11,7 @@ import java.util.HashMap;
 
 import static view.LoginMenu.PersonInfo.*;
 import static view.LoginMenu.usernamePattern;
+import static clientController.ServerConnection.*;
 
 public class AddManager {
 
@@ -38,7 +37,8 @@ public class AddManager {
     }
 
     private void checkIfExist () throws Exception {
-        if ( PersonController.getInstance ( ).isTherePersonByUsername ( username.getText () ))
+        String response = getPersonByUsername(username.getText());
+        if ( !response.equalsIgnoreCase("invalid username."))
             throw new Exception ( "This Dude Already Exists." );
     }
 
@@ -62,11 +62,11 @@ public class AddManager {
             personInfo.put ( LAST_NAME.label , lastName.getText () );
             personInfo.put ( EMAIL.label , email.getText () );
             personInfo.put ( PHONE.label , phone.getText () );
-            //todo RegisterController.getInstance ( ).register ( personInfo );
+            String response = sendRegisterRequest(personInfo);
             ButtonType ok = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
             ButtonType cancel = new ButtonType("Ok", ButtonBar.ButtonData.CANCEL_CLOSE);
             Alert alert = new Alert( Alert.AlertType.CONFIRMATION,
-                    "Successfully Registered! Ok?",
+                    response,
                     ok,
                     cancel);
             alert.showAndWait ();

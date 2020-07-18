@@ -38,6 +38,7 @@ public class AddProductFromStock implements Initializable {
         if (price.getText().isEmpty()) {
             App.showAlert(Alert.AlertType.ERROR, App.currentStage, "error", "Fill every thing");
             return;
+
         }
         if (amount.getText().isEmpty()) {
             App.showAlert(Alert.AlertType.ERROR, App.currentStage, "error", "Fill every thing");
