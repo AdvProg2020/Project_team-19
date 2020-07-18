@@ -50,6 +50,9 @@ public class RequestController {
         for (File file : Database.returnListOfFiles(address.get("salesperson_requests"))) {
             allRequests.add((SalespersonRequest) read(SalespersonRequest.class, file.getAbsolutePath()));
         }
+        for (File file : Database.returnListOfFiles(address.get("support_requests"))) {
+            allRequests.add((SupportRequest) read(SupportRequest.class, file.getAbsolutePath()));
+        }
     }
 
     public void acceptRequest(Request request) {
@@ -62,6 +65,8 @@ public class RequestController {
                 deleteFile(createPath("product_requests", request.getRequestId()));
             else if (request instanceof SalespersonRequest)
                 deleteFile(createPath("salesperson_requests", request.getRequestId()));
+            else if (request instanceof SupportRequest)
+                deleteFile(createPath("support_requests", request.getRequestId()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -77,6 +82,8 @@ public class RequestController {
                 deleteFile(createPath("product_requests", request.getRequestId()));
             else if (request instanceof SalespersonRequest)
                 deleteFile(createPath("salesperson_requests", request.getRequestId()));
+            else if (request instanceof SupportRequest)
+                deleteFile(createPath("support_requests", request.getRequestId()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -85,6 +92,11 @@ public class RequestController {
     public void addSalesPerson(HashMap<String, String> personInfo) {
         Salesperson salesperson = new Salesperson(personInfo);
         PersonController.getInstance().addPerson(salesperson);
+    }
+
+    public void addSupport(HashMap<String, String> personInfo) {
+        Support support = new Support (personInfo);
+        PersonController.getInstance().addPerson(support);
     }
 
     public ArrayList<Request> filterByState(Request.RequestState requestState) {

@@ -290,6 +290,8 @@ public class App extends Application {
             App.setRoot("managerMenu");
         } else if (person instanceof Salesperson) {
             App.setRoot("salespersonMenu");
+        } else if (person instanceof Support) {
+            App.setRoot ("supportMenu");
         } else {
             App.setRoot("customerMenu");
         }

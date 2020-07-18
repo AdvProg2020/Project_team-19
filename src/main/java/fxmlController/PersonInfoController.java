@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import model.Manager;
 import model.Person;
 import model.Salesperson;
+import model.Support;
 import view.App;
 
 import java.io.IOException;
@@ -41,14 +42,7 @@ public class PersonInfoController implements Initializable {
 
 
     @FXML private void back () {
-        Person person = PersonController.getInstance ().getLoggedInPerson ();
-        if ( person instanceof Manager ) {
-            App.setRoot ( "managerMenu" );
-        } else if ( person instanceof Salesperson ){
-            App.setRoot ( "salespersonMenu" );
-        } else {
-            App.setRoot ( "customerMenu" );
-        }
+        App.goBack ();
     }
 
     @Override

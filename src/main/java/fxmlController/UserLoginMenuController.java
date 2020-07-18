@@ -8,10 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import model.Customer;
-import model.Manager;
-import model.Person;
-import model.Salesperson;
+import model.*;
 import view.App;
 
 import java.io.IOException;
@@ -71,6 +68,8 @@ public class UserLoginMenuController {
                 App.currentScene = new Scene ( getFXMLLoader ( "managerMenu" ).load () );
             } else if ( person instanceof Salesperson ){
                 App.currentScene = new Scene ( getFXMLLoader ( "salespersonMenu" ).load () );
+            } else if (person instanceof Support ){
+                App.currentScene = new Scene ( getFXMLLoader ( "supportMenu" ).load () );
             } else {
                 App.currentScene = new Scene ( getFXMLLoader ( "customerMenu" ).load () );
             }

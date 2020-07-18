@@ -111,7 +111,7 @@ public class RegisterMenuController implements Initializable {
 
     @Override
     public void initialize ( URL location , ResourceBundle resources ) {
-        ObservableList<String> typeItems = FXCollections.observableArrayList ( "Customer","Salesperson","Manager" );
+        ObservableList<String> typeItems = FXCollections.observableArrayList ( "Customer","Salesperson","Manager","Support" );
         type.setItems ( typeItems );
         type.setValue ( "Customer" );
         type.setOnAction ( event -> {
