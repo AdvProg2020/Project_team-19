@@ -14,6 +14,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import server.PacketType;
+import server.Request;
+import server.Server;
 import view.App;
 
 import java.io.File;

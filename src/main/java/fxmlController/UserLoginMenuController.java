@@ -36,11 +36,6 @@ public class UserLoginMenuController {
             throw new Exception ( "Fields Should Be Filled!" );
     }
 
-    private void checkIfExistNot () throws Exception {
-        if (!PersonController.getInstance ( ).isTherePersonByUsername ( username.getText () ))
-            throw new Exception ( "You Don't Exist. Go Make Yourself." );
-    }
-
     private void checkValidity () throws Exception {
         if (username.getText ().equalsIgnoreCase ( "nigger" ))
             throw new Exception ( "Username Can't Be Nigger." );
@@ -61,7 +56,6 @@ public class UserLoginMenuController {
                     ok,
                     cancel);
             alert.showAndWait ();
-//            back ();
             App.firstScene = new Scene ( getFXMLLoader ( "mainMenu" ).load () );
             Person person = PersonController.getInstance ().getLoggedInPerson ();
             if ( person instanceof Manager ) {
