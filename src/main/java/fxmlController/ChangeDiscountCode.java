@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 
 import static view.LoginMenu.PersonInfo.PASSWORD;
 
-public class ChangeDiscountCode implements Initializable {
+public class ChangeDiscountCode implements Initializable { //todo
 
     public ChoiceBox< Customer > customer;
     public FontAwesomeIcon add;

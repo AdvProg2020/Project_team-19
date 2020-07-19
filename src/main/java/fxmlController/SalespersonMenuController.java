@@ -1,7 +1,6 @@
 package fxmlController;
 
 
-import controller.PersonController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,7 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import model.Salesperson;
 import view.App;
-
+import static clientController.ServerConnection.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -35,7 +34,7 @@ public class SalespersonMenuController implements Initializable {
 
     @FXML
     void availableProd ( ActionEvent event ) {
-        Salesperson salesperson = (Salesperson)PersonController.getInstance().getLoggedInPerson();
+        Salesperson salesperson = getPersonByToken(Salesperson.class);
         AllProductsForSeller allProductsForSeller = new AllProductsForSeller(salesperson, true);
         FXMLLoader loader = new FXMLLoader(SalespersonMenuController.class.getResource("/fxml/allProductsForSellerMenu.fxml"));
         loader.setController(allProductsForSeller);
@@ -50,7 +49,7 @@ public class SalespersonMenuController implements Initializable {
 
     @FXML
     void logout ( ActionEvent event ) throws IOException {
-        PersonController.getInstance().logOut();
+        sendLogout();
         App.currentScene = new Scene ( getFXMLLoader ( "mainMenu" ).load () );
         App.currentStage.setScene ( App.currentScene );
     }
@@ -62,7 +61,7 @@ public class SalespersonMenuController implements Initializable {
 
     @FXML
     void prod ( ActionEvent event ) {
-        Salesperson salesperson = (Salesperson)PersonController.getInstance().getLoggedInPerson();
+        Salesperson salesperson = getPersonByToken(Salesperson.class);
         AllProductsForSeller allProductsForSeller = new AllProductsForSeller(salesperson, false);
         FXMLLoader loader = new FXMLLoader(SalespersonMenuController.class.getResource("/fxml/allProductsForSellerMenu.fxml"));
         loader.setController(allProductsForSeller);
@@ -84,7 +83,7 @@ public class SalespersonMenuController implements Initializable {
 
     @FXML
     void addAuctionForSeller(ActionEvent event) {
-        Salesperson salesperson = (Salesperson)PersonController.getInstance().getLoggedInPerson();
+        Salesperson salesperson = getPersonByToken(Salesperson.class);
         AddAuction addAuction = new AddAuction(salesperson);
         FXMLLoader loader = new FXMLLoader(SalespersonMenuController.class.getResource("/fxml/addAuction.fxml"));
         loader.setController(addAuction);
@@ -93,6 +92,7 @@ public class SalespersonMenuController implements Initializable {
 
     @Override
     public void initialize ( URL location , ResourceBundle resources ) {
-        yourBalanceLabel.setText ( "Your Balance : " + ((Salesperson) PersonController.getInstance ().getLoggedInPerson ()).getCredit ());
+        //todo
+        //yourBalanceLabel.setText ( "Your Balance : " + ((Salesperson) PersonController.getInstance ().getLoggedInPerson ()).getCredit ());
     }
 }

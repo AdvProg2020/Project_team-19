@@ -189,6 +189,7 @@ public class Salesperson extends Person {
     }
 
     public void setVerified(Product product) {
+        System.out.println(offeredProducts);
         offeredProducts.get(product.getID()).setState(ProductState.State.VERIFIED);
     }
 

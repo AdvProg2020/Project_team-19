@@ -42,6 +42,8 @@ public class WalletMenu implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        accountId.setText(getBankId());
+        walletBalance.setText(getWalletBalance());
         checkPersonForWithdraw();
         getToken.setOnMouseClicked(event -> getToken());
         getToken.setCursor(Cursor.HAND);

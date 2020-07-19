@@ -1,6 +1,7 @@
 package controller;
 
 import bank.BankAPI;
+import com.google.gson.internal.$Gson$Types;
 import fxmlController.AuctionInList;
 import fxmlController.Metadata;
 import model.*;
@@ -43,6 +44,10 @@ public class RequestController {
 
     public String getDiscountID() {
         return discountID;
+    }
+
+    public <T> ArrayList<Request> filterByType(Class<T> type) {
+        return allRequests.stream().filter(type::isInstance).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public void initializeRequests() {

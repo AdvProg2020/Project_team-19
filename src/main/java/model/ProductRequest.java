@@ -26,6 +26,8 @@ public class ProductRequest extends Request {
         this.amount = amount;
         this.salespersonUsername = salesperson.getUsername();
         this.productId = product.getID();
+        this.name = product.getName();
+        this.category = product.getCategory().getName();
         save();
     }
 
@@ -37,6 +39,8 @@ public class ProductRequest extends Request {
         this.amount = amount;
         this.salespersonUsername = salesperson.getUsername();
         this.productId = product.getID();
+        this.name = product.getName();
+        this.category = product.getCategory().getName();
         save();
     }
 

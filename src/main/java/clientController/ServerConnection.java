@@ -3,10 +3,7 @@ package clientController;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import model.Category;
-import model.Discount;
-import model.Product;
-import model.Salesperson;
+import model.*;
 import server.PacketType;
 import server.Request;
 
@@ -21,7 +18,7 @@ public class ServerConnection {
     public static Socket socket;
     public static DataOutputStream dataOutputStream;
     public static DataInputStream dataInputStream;
-    public static String token;
+    public static String token = "";
 
     public static void run() {
         try {
@@ -31,6 +28,23 @@ public class ServerConnection {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String getBankId() {
+        return sendMessage(GET_BANK_ID, null, token);
+    }
+
+    public static String getWalletBalance() {
+        return sendMessage(GET_WALLET_BALANCE, null, token);
+    }
+
+    public static String sendLogout() {
+        return sendMessage(LOG_OUT, null, token);
+    }
+
+    public static HashMap<String, String> getPersonInfoByToken() {
+        String response = sendMessage(GET_PERSON_INFO_BY_TOKEN, null, token);
+        return (HashMap<String, String>) getObj(new TypeToken<HashMap<String, String>>(){}.getType(), response);
     }
 
     public static String increaseTotalSeen(String productId) {
@@ -66,21 +80,51 @@ public class ServerConnection {
         return sendMessage(GET_PERSON_TYPE, info, "");
     }
 
-//    public static <T> T getPersonByToken(Class<T> personType) { //todo server
-//        String response = sendMessage(, null, token);
-//        return (T) getObj(personType, response);
-//    }
+    public static <T> T getPersonByToken(Class<T> personType) {
+        String response = sendMessage(GET_PERSON_BY_TOKEN, null, token);
+        return (T) getObj(personType, response);
+    }
+
+    public static String getPersonTypeByToken() {
+        return sendMessage(GET_TYPE_BY_TOKEN, null, token);
+    }
+
+    public static String isProductAvailable(String productId) {
+        ArrayList<String> info = new ArrayList<>();
+        info.add(productId);
+        return sendMessage(IS_PRODUCT_AVAILABLE, info, "");
+    }
+
+    public static String getAveragePrice(String productId) {
+        ArrayList<String> info = new ArrayList<>();
+        info.add(productId);
+        return sendMessage(GET_AVERAGE_PRICE, info, "");
+    }
+
+    public static String isProductBought(String productId) {
+        ArrayList<String> info = new ArrayList<>();
+        info.add(productId);
+        return sendMessage(IS_PRODUCT_BOUGHT, info, token);
+    }
+
+    public static String sendAddComment(String productId, String comment, String title) {
+        ArrayList<String> info = new ArrayList<>();
+        info.add(productId);
+        info.add(comment);
+        info.add(title);
+        return sendMessage(ADD_COMMENT, info, token);
+    }
 
     public static String deleteProductForManager(String productId) {
         ArrayList<String> info = new ArrayList<>();
         info.add(productId);
-        return sendMessage(, info, "");
+        return sendMessage(DELETE_PRODUCT_MANAGER, info, "");
     }
 
-    public static String deleteProductRequest(String productId) {  //todo
+    public static String deleteProductRequest(String productId) {
         ArrayList<String> info = new ArrayList<>();
         info.add(productId);
-        return sendMessage(, info, token);
+        return sendMessage(DELETE_PRODUCT_REQUEST, info, token);
     }
 
     public static ArrayList<Discount> getAllDiscountsOfSeller() {
@@ -101,14 +145,14 @@ public class ServerConnection {
     public static String sendRegisterRequest(HashMap< String, String > personInfo){
         ArrayList<String> info = new ArrayList<>();
         info.add(toJson(personInfo));
-        return sendMessage(PacketType.REGISTER, info, "");
+        return sendMessage(REGISTER, info, "");
     }
 
     public static String sendLoginRequest(String username, String password) {
         ArrayList<String> info = new ArrayList<>();
         info.add(username);
         info.add(password);
-        return sendMessage(PacketType.LOGIN, info, "");
+        return sendMessage(LOGIN, info, "");
     }
 
     public static String getBankToken(String username, String password) {
@@ -239,10 +283,41 @@ public class ServerConnection {
         return (ArrayList<Product>) getObj(new TypeToken<ArrayList<Product>>(){}.getType(), response);
     }
 
-    public static ArrayList<model.Request> getAllRequests() {
-        String response = sendMessage(GET_ALL_REQUESTS, null, "");
-        return (ArrayList<model.Request>) getObj(new TypeToken<ArrayList<model.Request>>(){}.getType(), response);
+    public static ArrayList<SalespersonRequest> getSalespersonRequests () {
+        ArrayList<String> info = new ArrayList<>();
+        info.add("salesperson");
+        String response = sendMessage(GET_REQUESTS_OF_TYPE, info, "");
+        return (ArrayList<SalespersonRequest>) getObj(new TypeToken<ArrayList<SalespersonRequest>>(){}.getType(), response);
     }
+
+    public static ArrayList<ProductRequest> getProductRequests () {
+        ArrayList<String> info = new ArrayList<>();
+        info.add("product");
+        String response = sendMessage(GET_REQUESTS_OF_TYPE, info, "");
+        return (ArrayList<ProductRequest>) getObj(new TypeToken<ArrayList<ProductRequest>>(){}.getType(), response);
+    }
+
+    public static ArrayList<DiscountRequest> getDiscountRequests () {
+        ArrayList<String> info = new ArrayList<>();
+        info.add("discount");
+        String response = sendMessage(GET_REQUESTS_OF_TYPE, info, "");
+        return (ArrayList<DiscountRequest>) getObj(new TypeToken<ArrayList<DiscountRequest>>(){}.getType(), response);
+    }
+
+    public static ArrayList<AuctionRequest> getAuctionRequests () {
+        ArrayList<String> info = new ArrayList<>();
+        info.add("auction");
+        String response = sendMessage(GET_REQUESTS_OF_TYPE, info, "");
+        return (ArrayList<AuctionRequest>) getObj(new TypeToken<ArrayList<AuctionRequest>>(){}.getType(), response);
+    }
+
+    public static ArrayList<SupportRequest> getSupportRequests () {
+        ArrayList<String> info = new ArrayList<>();
+        info.add("support");
+        String response = sendMessage(GET_REQUESTS_OF_TYPE, info, "");
+        return (ArrayList<SupportRequest>) getObj(new TypeToken<ArrayList<SupportRequest>>(){}.getType(), response);
+    }
+
 
     public static String addCategory(ArrayList<String> info) {
         return sendMessage(ADD_CATEGORY, info, "");

@@ -61,6 +61,7 @@ public class UserLoginMenuController {
                         ok,
                         cancel);
                 alert.showAndWait();
+                token = response;
                 App.firstScene = new Scene(getFXMLLoader("mainMenu").load());
                 String type = getPersonType(username.getText());
                 if (type.equals("manager")) {
@@ -73,8 +74,8 @@ public class UserLoginMenuController {
                     App.currentScene = new Scene(getFXMLLoader("customerMenu").load());
                 }
                 App.currentStage.setScene(App.currentScene);
-//                token = response;
             }
+
         } catch (Exception e) {
             App.error ( e.getMessage () );
         }

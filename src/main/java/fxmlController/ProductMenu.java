@@ -37,6 +37,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import static clientController.ServerConnection.*;
+
 public class ProductMenu implements Initializable {
     private static final String STAR = "/images/empty-star.png";
     private static final String FUL_STAR = "/images/star.png";
@@ -50,7 +51,6 @@ public class ProductMenu implements Initializable {
     private Parent currentCard;
     private Stage commentStage;
     private Stage rateStage;
-    private Person person;
     private int score = 0;
     private boolean isBought = false;
     private Popup similarProductsPopup;
@@ -81,7 +81,6 @@ public class ProductMenu implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        person = getPersonByToken(Person.class);
         rate.setOpacity(0.3);
         addComment.setDisable(true);
         setSellerCards();
@@ -99,7 +98,7 @@ public class ProductMenu implements Initializable {
         checkAvailable();
         setStarRate();
         checkBought();
-        if (person.getType().equalsIgnoreCase("customer")) {
+        if (getPersonTypeByToken().equalsIgnoreCase("customer")) {
             addComment.setDisable(false);
             addComment.setOnAction(addCommentEvent());
         }
@@ -267,8 +266,7 @@ public class ProductMenu implements Initializable {
     }
 
     private void checkBought() {
-        if (person.getType().equalsIgnoreCase("customer")
-                && ((Customer) person).isProductBought(product)) {
+        if (isProductBought(product.getID()).equals("true")) {
             isBought = true;
         }
     }
@@ -285,7 +283,7 @@ public class ProductMenu implements Initializable {
     }
 
     private void checkAvailable() {
-        if (ProductController.getInstance().isProductAvailable(product))
+        if (isProductAvailable(product.getID()).equals("true"))
             notAvailable.setVisible(false);
     }
 
@@ -346,13 +344,7 @@ public class ProductMenu implements Initializable {
                 showAlert(Alert.AlertType.ERROR, commentStage, "Error", "Fill the comment!");
                 return;
             }
-            Customer customer = (Customer) person;
-            Comment newComment = new Comment(true, customer, comment.getText(), title.getText());
-            if (customer.isProductBought(product)) {
-                newComment.setBought(true);
-            }
-            product.addComment(newComment);
-            Database.saveToFile(product, Database.createPath("products", product.getID()));
+            sendAddComment(product.getID(), comment.getText(), title.getText());
             commentStage.close();
         });
     }

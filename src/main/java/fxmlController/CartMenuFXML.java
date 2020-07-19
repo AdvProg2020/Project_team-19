@@ -29,7 +29,7 @@ import java.util.ResourceBundle;
 
 import static view.App.getFXMLLoader;
 
-public class CartMenuFXML implements Initializable {
+public class CartMenuFXML implements Initializable { //todo
 
     private String backPageName;
     private GridPane ordersBox;

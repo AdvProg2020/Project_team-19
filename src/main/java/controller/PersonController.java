@@ -95,16 +95,11 @@ public class PersonController {
         loggedInPerson = null;
     }
 
-    public void checkPassword(String password, String username) throws WrongPasswordException {
+    public void checkPassword(String password, String username) throws Exception {
         if (!getPersonByUsername (username).getPassword().equals(password))
-            throw new WrongPasswordException("Incorrect password");
+            throw new Exception("Incorrect password");
     }
 
-    public static class WrongPasswordException extends Exception {
-        public WrongPasswordException(String message) {
-            super(message);
-        }
-    }
 
     public Person getLoggedInPerson() {
         return loggedInPerson;

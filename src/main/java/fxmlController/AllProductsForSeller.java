@@ -24,7 +24,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class AllProductsForSeller implements Initializable {
+public class AllProductsForSeller implements Initializable { //todo
     private ArrayList<Parent> productCards;
     private Salesperson salesperson;
     private boolean verified;

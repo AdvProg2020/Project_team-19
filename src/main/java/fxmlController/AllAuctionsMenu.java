@@ -53,6 +53,7 @@ public class AllAuctionsMenu implements Initializable {
     private void setCardsOnPaneAndMouseClicked() {
         int index = 0;
         HashMap<Salesperson, ArrayList<Product>> allAuctions = getAllAuctions();
+        System.out.println(allAuctions);
         for (Salesperson seller : allAuctions.keySet()) {
             for (Product product : allAuctions.get(seller)) {
                 AuctionInList auctionInList = new AuctionInList(seller, product);

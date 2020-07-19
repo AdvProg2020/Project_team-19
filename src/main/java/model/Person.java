@@ -69,9 +69,4 @@ abstract public class Person {
                 "Phone Number : " + personInfo.get ( PHONE.label );
 
     }
-
-    @Override
-    public String toString() {
-        return personInfo.get("username");
-    }
 }

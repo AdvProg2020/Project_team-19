@@ -57,6 +57,45 @@ public class ProductController {
         ProductController.currentProducts = currentProducts;
     }
 
+    public ArrayList<Salesperson> getVerifiedSellersOfProduct(Product product) {
+        ArrayList<Salesperson> sellers = new ArrayList<>();
+        for (Salesperson salesperson : stock.get(product)) {
+            if (salesperson.getProductState(product).label.equals("Verified")) {
+                sellers.add(salesperson);
+            }
+        }
+        return sellers;
+    }
+
+    public ArrayList<Product> getSellerAuctionProducts(Salesperson salesperson){
+        ArrayList<Product> products = new ArrayList<>();
+        for (Product product : salesperson.getOfferedProducts().keySet()) {
+            if (!salesperson.getProductState(product).label.equals("Verified") || salesperson.getProductAmount(product) != 1)
+                continue;
+            products.add(product);
+        }
+        return products;
+    }
+
+    public ArrayList<Product> getSellerVerifiedProducts(Salesperson salesperson){
+        ArrayList<Product> products = new ArrayList<>();
+        for (Product product : salesperson.getOfferedProducts().keySet()) {
+            if (!salesperson.getProductState(product).label.equals("Verified"))
+                continue;
+            products.add(product);
+        }
+        return products;
+    }
+
+    public void addComment(Product product, Customer customer, String commentText, String title) {
+        Comment newComment = new Comment(false, customer, commentText, title);
+        if (customer.isProductBought(product)) {
+            newComment.setBought(true);
+        }
+        product.addComment(newComment);
+        Database.saveToFile(product, Database.createPath("products", product.getID()));
+    }
+
     public static ArrayList<Product> getAllProducts() {
         return allProducts;
     }
@@ -65,11 +104,7 @@ public class ProductController {
         return getProductById(productID) != null;
     }
 
-    public static class WrongProductIdException extends Exception {
-        public String message = "No product with such id";
-    }
-
-    //todo check she hatman tamam vizhegiaye category ro kala dare:
+    // check she hatman tamam vizhegiaye category ro kala dare:
     public ArrayList<Product> getSimilarProducts(Product product) {
         return product.getCategory().getProductList().stream().filter(product1 -> {
             if (product1.equals(product))

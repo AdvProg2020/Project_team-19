@@ -1,15 +1,10 @@
 package fxmlController;
 
-import controller.PersonController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import model.Customer;
-import model.Manager;
-import model.Person;
-import model.Salesperson;
 import view.App;
 
 import java.io.IOException;
@@ -20,9 +15,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static view.App.getFXMLLoader;
+import static clientController.ServerConnection.*;
 
 public class MainMenuController implements Initializable {
     public static boolean isInAllAuction = true;
+    private String type = "null";
     @FXML private ImageView productIcon;
     @FXML private ImageView discountIcon;
     @FXML private ImageView userIcon;
@@ -40,14 +37,18 @@ public class MainMenuController implements Initializable {
     @FXML private void userMenuAction () throws IOException {
         App.akh.play ();
         App.firstScene = App.currentScene;
-        if ( PersonController.getInstance ().isThereLoggedInPerson () ) {
-            Person person = PersonController.getInstance ().getLoggedInPerson ();
-            if ( person instanceof Manager ) {
-                App.currentScene = new Scene ( getFXMLLoader ( "managerMenu" ).load () );
-            } else if ( person instanceof Salesperson ) {
-                App.currentScene = new Scene ( getFXMLLoader ( "salespersonMenu" ).load () );
-            } else {
-                App.currentScene = new Scene ( getFXMLLoader ( "customerMenu" ).load () );
+        type = getPersonTypeByToken();
+        if ( !type.equals("null") && !type.equals("invalid token.") ) {
+            switch (type) {
+                case "manager":
+                    App.currentScene = new Scene(getFXMLLoader("managerMenu").load());
+                    break;
+                case "salesperson":
+                    App.currentScene = new Scene(getFXMLLoader("salespersonMenu").load());
+                    break;
+                case "customer":
+                    App.currentScene = new Scene(getFXMLLoader("customerMenu").load());
+                    break;
             }
         } else {
             App.currentScene = new Scene ( getFXMLLoader ("userLoginMenu").load () );
@@ -80,7 +81,7 @@ public class MainMenuController implements Initializable {
                     timer.cancel();
             }
         };
-        timer.schedule(timerTask, new Date(), 2000);
+        timer.schedule(timerTask, new Date(), 60000);
     }
 
     @FXML void walletClicked() {
@@ -89,12 +90,12 @@ public class MainMenuController implements Initializable {
 
     @Override
     public void initialize ( URL location , ResourceBundle resources ) {
-        Person person = PersonController.getInstance().getLoggedInPerson();
-        if (person instanceof Customer || person instanceof Salesperson) {
+        type = getPersonTypeByToken();
+        if (type.equals("customer") || type.equals("salesperson")) {
             walletIcon.setDisable(false);
             walletIcon.setVisible(true);
         }
-        if (person instanceof Customer) {
+        if (type.equals("customer")) {
             auctionIcon.setDisable(false);
             auctionIcon.setVisible(true);
         }

@@ -57,9 +57,9 @@ public class AddProductFromStock implements Initializable {
             return;
         }
         ArrayList<String> info = new ArrayList<>();
+        info.add(products.getValue());
         info.add(price.getText());
         info.add(amount.getText());
-        info.add(products.getValue());
         String response = addProductRequestFromStock(info);
         App.showAlert(Alert.AlertType.INFORMATION, App.currentStage, response, "your request send to server");
     }

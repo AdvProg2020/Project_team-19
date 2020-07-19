@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 
 import static view.LoginMenu.PersonInfo.PASSWORD;
 
-public class ChangeInfo implements Initializable {
+public class ChangeInfo implements Initializable {  //todo
 
     @FXML private Button cancel;
     @FXML private ChoiceBox<String> field;

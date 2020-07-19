@@ -13,6 +13,7 @@ import view.App;
 import java.io.IOException;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import static clientController.ServerConnection.*;
 
@@ -29,7 +30,13 @@ public class AllRequests implements Initializable {
 
     public void updateTable () {
         vBox.getChildren ().clear ();
-        for (Request request : getAllRequests()) {
+        ArrayList<Request> allRequests = new ArrayList<>();
+        allRequests.addAll(getSalespersonRequests());
+        allRequests.addAll(getProductRequests());
+        allRequests.addAll(getDiscountRequests());
+        allRequests.addAll(getAuctionRequests());
+        allRequests.addAll(getSupportRequests());
+        for (Request request : allRequests) {
             RequestCard card = new RequestCard(request);
             FXMLLoader loader = new FXMLLoader(AllRequests.class.getResource("/fxml/requestCard.fxml"));
             loader.setController(card);

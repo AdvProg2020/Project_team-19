@@ -16,14 +16,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.Manager;
 import model.Product;
 import view.App;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
+import static clientController.ServerConnection.*;
 public class ProductInList implements Initializable {
     @FXML private ImageView productImage;
     @FXML private Label productNameLabel;
@@ -41,7 +40,8 @@ public class ProductInList implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (PersonController.getInstance().getLoggedInPerson() != null && PersonController.getInstance().getLoggedInPerson() instanceof Manager) {
+        String price = getAveragePrice(product.getID());
+        if (getPersonTypeByToken().equals("manager")) {
             deleteProduct.setVisible(true);
             deleteProduct.setCursor(Cursor.HAND);
             deleteProduct.setOnMouseClicked(event -> {
@@ -49,8 +49,8 @@ public class ProductInList implements Initializable {
             });
         }
         editLabel(productNameLabel, product.getName());
-        int index = ("" + product.getAveragePrice()).indexOf(".");
-        editLabel(priceLabel, ("" + product.getAveragePrice()).substring(0, index + 2) + "$");
+        int index = price.indexOf(".");
+        editLabel(priceLabel, price.substring(0, index + 2) + "$");
         setScoreRate();
         checkFinished();
         if (product.getImageURI() != null) {
@@ -108,12 +108,12 @@ public class ProductInList implements Initializable {
     }
 
     private void removeProduct() {
-        ProductController.getInstance().removeProductForManager(product);
-        App.showAlert(Alert.AlertType.INFORMATION, App.currentStage,"remove product", "removed product successfully");
+        String response = deleteProductForManager(product.getID());
+        App.showAlert(Alert.AlertType.INFORMATION, App.currentStage,"remove product", response);
     }
 
     private void checkFinished() {
-        if (ProductController.getInstance().isProductAvailable(product)) {
+        if (isProductAvailable(product.getID()).equals("true")) {
             finished.setVisible(false);
         }
     }

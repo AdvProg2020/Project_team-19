@@ -1,6 +1,5 @@
 package controller;
 
-import javafx.util.Pair;
 import model.Person;
 import model.Product;
 import model.Salesperson;
@@ -65,7 +64,7 @@ public class AuctionController {
     }
 
     public void checkAuctionTime() {
-        HashMap<Salesperson, ArrayList<Product>> allAuctions = new HashMap<>(getAllAuctions());
+        HashMap<Salesperson, ArrayList<Product>> allAuctions = getAllAuctions();
         ArrayList<Product> remove = new ArrayList<>();
         for (Salesperson salesperson : allAuctions.keySet()) {
             remove.clear();

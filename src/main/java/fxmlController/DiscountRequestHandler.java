@@ -74,27 +74,28 @@ public class DiscountRequestHandler implements Initializable {
     }
 
     void send() {
-        Salesperson salesperson = (Salesperson) PersonController.getInstance().getLoggedInPerson();
-        String[] ids = products.getText().split("-");
-        ArrayList<String> productArrayList = new ArrayList<>(Arrays.asList(ids));
-        ArrayList<Product> validProducts= new ArrayList<>();
-        if (mode.equals(requestMode.EDIT)) {
-        DiscountRequest discountRequest = new DiscountRequest(discount,productArrayList,startTime.getValue().atStartOfDay(),endTime.getValue().atStartOfDay(),Double.parseDouble(percentage.getText()),salesperson);
-        } else {
-            if(percentage.getText().length()==0){
-                App.error("Fill Blank Fields!");
-            }else {
-                for (String s : productArrayList) {
-                    if (!ProductController.getInstance().isThereProductById(s)||!ProductController.getInstance().doesSellerHasProduct(ProductController.getInstance().getProductById(s),salesperson)){
-                        App.error("Product Ids are not valid!");
-                        return;
-                    }else {
-                        validProducts.add(ProductController.getInstance().getProductById(s));
-                    }
-
-                }
-            }
-            RequestController.getInstance().addDiscountRequest(validProducts, startTime.getValue().atStartOfDay(), endTime.getValue().atStartOfDay(),Double.parseDouble( percentage.getText()), salesperson);
-        }
+        System.out.println("todo");
+//        Salesperson salesperson = (Salesperson) PersonController.getInstance().getLoggedInPerson();
+//        String[] ids = products.getText().split("-");
+//        ArrayList<String> productArrayList = new ArrayList<>(Arrays.asList(ids));
+//        ArrayList<Product> validProducts= new ArrayList<>();
+//        if (mode.equals(requestMode.EDIT)) {
+//        DiscountRequest discountRequest = new DiscountRequest(discount,productArrayList,startTime.getValue().atStartOfDay(),endTime.getValue().atStartOfDay(),Double.parseDouble(percentage.getText()),salesperson);
+//        } else {
+//            if(percentage.getText().length()==0){
+//                App.error("Fill Blank Fields!");
+//            }else {
+//                for (String s : productArrayList) {
+//                    if (!ProductController.getInstance().isThereProductById(s)||!ProductController.getInstance().doesSellerHasProduct(ProductController.getInstance().getProductById(s),salesperson)){
+//                        App.error("Product Ids are not valid!");
+//                        return;
+//                    }else {
+//                        validProducts.add(ProductController.getInstance().getProductById(s));
+//                    }
+//
+//                }
+//            }
+//            RequestController.getInstance().addDiscountRequest(validProducts, startTime.getValue().atStartOfDay(), endTime.getValue().atStartOfDay(),Double.parseDouble( percentage.getText()), salesperson);
+//        }
     }
 }

@@ -1,11 +1,8 @@
 package fxmlController;
 
-import controller.PersonController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,9 +13,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.Manager;
-import model.Person;
-import model.Salesperson;
 import view.App;
 
 import java.io.IOException;
@@ -27,7 +21,7 @@ import java.util.*;
 
 import static view.App.getFXMLLoader;
 import static view.LoginMenu.PersonInfo.*;
-
+import static clientController.ServerConnection.*;
 public class PersonInfoController implements Initializable {
 
     @FXML private ImageView profile;
@@ -41,7 +35,6 @@ public class PersonInfoController implements Initializable {
 
 
     @FXML private void back () {
-        //todo check
         App.goBack ();
     }
 
@@ -52,7 +45,7 @@ public class PersonInfoController implements Initializable {
     }
 
     public void updateTable () {
-        HashMap<String,String> personInfo = PersonController.getInstance ().getLoggedInPerson ().getPersonInfo ();
+        HashMap<String,String> personInfo = getPersonInfoByToken();
 
         if (personInfo.get ( PROFILE.label ) != null)
             profile.setImage ( new Image ( personInfo.get ( PROFILE.label ) ) );
@@ -65,9 +58,9 @@ public class PersonInfoController implements Initializable {
         if (personInfo.get ( "type" ).equalsIgnoreCase ( "salesperson" )) {
             data[4] = new String[]{"Company",personInfo.get ( COMPANY.label )};
             data[5] = new String[]{"Dar Surate Vjud Sayere Moshakhasat",personInfo.get ( SAYERE_MOSHAKHASAT.label ) };
-        } else {
-            data[4] = new String[]{"",""};
-            data[5] = new String[]{"",""};
+        } else if (personInfo.get("type").equalsIgnoreCase("manager")){
+            data[4] = new String[]{"Wage", personInfo.get(WAGE.label)};
+            data[5] = new String[]{"Min_balance",personInfo.get(MIN_BALANCE.label)};
         }
 
         fieldColumn.setCellValueFactory( p -> {

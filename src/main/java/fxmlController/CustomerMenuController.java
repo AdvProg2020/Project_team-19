@@ -1,6 +1,5 @@
 package fxmlController;
 
-import controller.PersonController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,18 +11,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.AudioClip;
-import javafx.scene.media.MediaPlayer;
 import model.Customer;
 import view.App;
 
-import java.awt.*;
-import java.io.File;
+import static clientController.ServerConnection.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import static view.App.getFXMLLoader;
-import static clientController.ServerConnection.*;
 
 public class CustomerMenuController implements Initializable {
 
@@ -38,8 +34,6 @@ public class CustomerMenuController implements Initializable {
 
     @FXML
     void back ( MouseEvent event ) {
-//        App.currentScene = App.firstScene;
-//        App.currentStage.setScene ( App.currentScene );
         App.setRoot ( "mainMenu" );
     }
 
@@ -63,7 +57,7 @@ public class CustomerMenuController implements Initializable {
 
     @FXML
     void logout ( ActionEvent event ) throws IOException {
-        PersonController.getInstance().logOut();
+        sendLogout();
         App.currentScene = new Scene ( getFXMLLoader ( "mainMenu" ).load () );
         App.currentStage.setScene ( App.currentScene );
     }
@@ -80,7 +74,7 @@ public class CustomerMenuController implements Initializable {
             credit = Double.parseDouble ( enterAmount.getText () );
             App.chaChing.play ();
             //todo PersonController.getInstance().increaseCustomerCredit( (Customer) PersonController.getInstance ().getLoggedInPerson () , credit);
-            yourBalanceLabel.setText ( "Your Balance : " + ((Customer) PersonController.getInstance ().getLoggedInPerson ()).getCredit () );
+            //yourBalanceLabel.setText ( "Your Balance : " + ((Customer) PersonController.getInstance ().getLoggedInPerson ()).getCredit () );
         } catch (Exception e) {
             App.error ( "Enter numbers only." );
         }

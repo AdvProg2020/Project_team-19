@@ -125,7 +125,7 @@ public class BankController {
             throw new BankException("invalid_type");
         if (!money.matches("^\\d*(\\.\\d+)?$"))
             throw new BankException("invalid_number");
-        if (Integer.parseInt(money) == 0)
+        if (Double.parseDouble(money) == 0)
             throw new BankException("money_must_be_greater_than_zero");
         if (receiptType.equals("deposit") && !sourceId.equals("-1"))
             throw new BankException("invalid_account_id");

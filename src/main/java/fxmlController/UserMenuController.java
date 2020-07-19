@@ -26,8 +26,9 @@ public class UserMenuController implements Initializable {
     @FXML private AnchorPane page;
 
     @FXML private void back () {
-        App.currentScene = App.firstScene;
-        App.currentStage.setScene ( App.currentScene );
+        System.out.println("back in usermenu");
+//        App.currentScene = App.firstScene;
+//        App.currentStage.setScene ( App.currentScene );
     }
 
     @FXML private void logout () throws IOException {

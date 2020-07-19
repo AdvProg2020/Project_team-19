@@ -57,7 +57,7 @@ public class RegisterMenuController implements Initializable {
 
     private void checkIfExist () throws Exception {
         String response = getPersonByUsername(username.getText());
-        if (response.equals("invalid username."))
+        if (!response.equals("invalid username."))
             throw new Exception ( "This Dude Already Exists." );
     }
 
@@ -69,9 +69,9 @@ public class RegisterMenuController implements Initializable {
         String response = getIsFirstManagerRegistered();
         if ( type.getValue ().equals ( "Manager" ) && response.contains("true") )
             throw new Exception ( "You can't add a manager. Contact one of the existing managers." );
-        if ( !minBalance.getText().matches("^\\d*(\\.\\d+)?$"))
+        if ( type.getValue ().equals ( "Manager" ) && !minBalance.getText().matches("^\\d*(\\.\\d+)?$"))
             throw new Exception("Min balance should be balance!");
-        if (!wage.getText().matches("^[1-9][0-9]?$|^100$"))
+        if (type.getValue ().equals ( "Manager" ) && !wage.getText().matches("^[1-9][0-9]?$|^100$"))
             throw new Exception("Enter number for wage!");
     }
 
@@ -98,7 +98,7 @@ public class RegisterMenuController implements Initializable {
                 personInfo.put(WAGE.label, wage.getText());
             }
             String response = sendRegisterRequest(personInfo);
-            //RegisterController.getInstance ( ).register ( personInfo );
+
             ButtonType ok = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
             ButtonType cancel = new ButtonType("Ok", ButtonBar.ButtonData.CANCEL_CLOSE);
             Alert alert = new Alert( Alert.AlertType.CONFIRMATION,

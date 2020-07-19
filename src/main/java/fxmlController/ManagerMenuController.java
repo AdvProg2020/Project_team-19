@@ -9,7 +9,7 @@ import javafx.scene.input.MouseEvent;
 import view.App;
 
 import java.io.IOException;
-
+import static clientController.ServerConnection.*;
 import static view.App.getFXMLLoader;
 
 public class ManagerMenuController {
@@ -40,7 +40,7 @@ public class ManagerMenuController {
 
     @FXML
     void logout ( ActionEvent event ) throws IOException {
-        //todo PersonController.getInstance().logOut();
+        sendLogout();
         App.currentScene = new Scene ( getFXMLLoader ( "mainMenu" ).load () );
         App.currentStage.setScene ( App.currentScene );
     }

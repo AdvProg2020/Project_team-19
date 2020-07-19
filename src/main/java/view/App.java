@@ -41,7 +41,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        //ServerConnection.run();
+        ServerConnection.run();
         mainRun();
 //        try {
 //            PersonController.getInstance().login("yasna", "123");
@@ -65,35 +65,15 @@ public class App extends Application {
         background.play ();
 
         primaryStage.show();
-
-
     }
 
     private void mainRun() {
         initializer();
-        App.manageDiscountCodeTimer();
-        App.manageDiscountTimer();
-        App.manageAuctionTimer();
+//        App.manageDiscountCodeTimer();
+//        App.manageDiscountTimer();
+//        App.manageAuctionTimer();
         mainMenu = new MainMenu(null);
         userMenu = new UserMenu(mainMenu);
-    }
-
-    public static void manageDiscountCodeTimer() {
-        Timer timer = new Timer();
-        TimerTask task = new DiscountCodeTimer();
-        timer.schedule(task, new Date(), 60000);
-    }
-
-    public static void manageDiscountTimer() {
-        Timer timer = new Timer();
-        TimerTask task = new DiscountTimer();
-        timer.schedule(task, new Date(), 60000);
-    }
-
-    public static void manageAuctionTimer() {
-        Timer timer = new Timer();
-        TimerTask timerTask = new AuctionTimer();
-        timer.schedule(timerTask, new Date(), 60000);
     }
 
     public static void initializer() {
@@ -143,16 +123,20 @@ public class App extends Application {
     }
 
     public static void goBack() {
-        Person person = PersonController.getInstance().getLoggedInPerson();
-        //todo
-        if (person instanceof Manager) {
-            App.setRoot("managerMenu");
-        } else if (person instanceof Salesperson) {
-            App.setRoot("salespersonMenu");
-        } else if (person instanceof Support) {
-            App.setRoot ("supportMenu");
-        } else {
-            App.setRoot("customerMenu");
+        String person = ServerConnection.getPersonTypeByToken();
+        switch (person) {
+            case "manager":
+                App.setRoot("managerMenu");
+                break;
+            case "salesperson":
+                App.setRoot("salespersonMenu");
+                break;
+            case "support":
+                App.setRoot("supportMenu");
+                break;
+            case "customer":
+                App.setRoot("customerMenu");
+                break;
         }
     }
 

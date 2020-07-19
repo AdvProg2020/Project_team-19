@@ -11,7 +11,7 @@ import java.io.IOException;
 
 import static view.App.getFXMLLoader;
 
-public class BarController {
+public class BarController {  //todo
     @FXML private Button userMenu;
 
     @FXML private void userMenuAction () throws IOException {

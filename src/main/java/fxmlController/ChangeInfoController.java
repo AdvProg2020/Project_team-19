@@ -1,6 +1,5 @@
 package fxmlController;
 
-import controller.PersonController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -18,11 +17,11 @@ import model.Salesperson;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
-
+import static clientController.ServerConnection.*;
 import static view.LoginMenu.PersonInfo.PASSWORD;
 import static view.LoginMenu.PersonInfo.PROFILE;
 
-public class ChangeInfoController implements Initializable {
+public class ChangeInfoController implements Initializable { //todo
 
     @FXML private ImageView profile;
     private File profileFile;
@@ -35,7 +34,7 @@ public class ChangeInfoController implements Initializable {
     @Override
     public void initialize ( URL location , ResourceBundle resources ) {
         ObservableList <String> typeItems;
-        if ( PersonController.getInstance ().getLoggedInPerson () instanceof Salesperson )
+        if ( getPersonTypeByToken().equals("salesperson") )
             typeItems = FXCollections.observableArrayList ( "Password","First Name","Last Name","Email","Phone Number","Company","Dar Surate Vjud Sayere Moshakhsat" );
         else
             typeItems = FXCollections.observableArrayList ( "Password","First Name","Last Name","Email","Phone Number" );
@@ -56,7 +55,7 @@ public class ChangeInfoController implements Initializable {
             }
         } );
 
-        profileFileString =  PersonController.getInstance ().getLoggedInPerson ().getPersonInfo ().get ( PROFILE.label );
+        profileFileString =  getPersonInfoByToken().get(PROFILE.label);
 
         if (profileFileString != null)
             profile.setImage ( new Image ( profileFileString ) );
@@ -81,15 +80,16 @@ public class ChangeInfoController implements Initializable {
     }
 
     @FXML private void done () {
-        if (field.getValue ().equals ( "Password" ) && !password.getText ().isEmpty ()) {
-            PersonController.getInstance ().getLoggedInPerson ().setField ( PASSWORD.label , password.getText () );
-        } else if (!text.getText ().isEmpty ()) {
-            System.out.println ( field.getValue ( ).toLowerCase ( ) );
-            PersonController.getInstance ( ).getLoggedInPerson ( ).setField ( field.getValue ( ).toLowerCase ( ) , text.getText ( ) );
-        }
-        PersonController.getInstance ().getLoggedInPerson ().setField ( PROFILE.label , profileFileString );
-        Metadata.personInfoController.updateTable ();
-        cancel();
+        //todo
+//        if (field.getValue ().equals ( "Password" ) && !password.getText ().isEmpty ()) {
+//            PersonController.getInstance ().getLoggedInPerson ().setField ( PASSWORD.label , password.getText () );
+//        } else if (!text.getText ().isEmpty ()) {
+//            System.out.println ( field.getValue ( ).toLowerCase ( ) );
+//            PersonController.getInstance ( ).getLoggedInPerson ( ).setField ( field.getValue ( ).toLowerCase ( ) , text.getText ( ) );
+//        }
+//        PersonController.getInstance ().getLoggedInPerson ().setField ( PROFILE.label , profileFileString );
+//        Metadata.personInfoController.updateTable ();
+//        cancel();
     }
 
     @FXML private void cancel () {

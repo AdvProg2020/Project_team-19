@@ -59,8 +59,8 @@ public class ProductForSeller implements Initializable {
         if (salesperson.isInDiscount(product)) {
             inDiscount.setVisible(true);
             //todo
-            off.setText(salesperson.getDiscountPercentage(product) + "%");
-            priceInDiscount.setText(salesperson.getDiscountPrice(product) + "$");
+//            off.setText(salesperson.getDiscountPercentage(product) + "%");
+//            priceInDiscount.setText(salesperson.getDiscountPrice(product) + "$");
         } else {
             priceLine.setVisible(false);
         }
