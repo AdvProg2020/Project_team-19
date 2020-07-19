@@ -3,3 +3,5 @@ database
 bankDB
 target
 *.iml
+/bankDB/accounts
+/bankDB/receipts

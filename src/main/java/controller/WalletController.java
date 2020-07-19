@@ -1,6 +1,9 @@
 package controller;
 
 import bank.BankAPI;
+import model.Customer;
+import model.Person;
+import model.Salesperson;
 
 import static controller.Database.*;
 public class WalletController {
@@ -18,6 +21,12 @@ public class WalletController {
             single_instance = new WalletController();
 
         return single_instance;
+    }
+
+    public void initializer() {
+        MIN_BALANCE = (Double) Database.read(Double.class, address.get("min_balance"));
+        WAGE = (Double) read(Double.class, address.get("wage"));
+        SHOP_BANK_ID = (String) read(String.class, address.get("shop_bankId"));
     }
 
     public void setMIN_BALANCE(double MIN_BALANCE) {
@@ -85,6 +94,17 @@ public class WalletController {
                 "hey.";
 
         return BankAPI.getBankResponse(msg);
+    }
+
+    public void increaseWalletBalance(Person person, double amount) {
+        System.out.println(address);
+        if (person instanceof Salesperson) {
+            ((Salesperson) person).getWallet().increaseBalance(amount);
+            saveToFile(person, createPath("salespersons", person.getUsername()));
+        } else if (person instanceof Customer) {
+            ((Customer) person).getWallet().increaseBalance(amount);
+            saveToFile(person, createPath("customers", person.getUsername()));
+        }
     }
 
     public void setWalletForCustomer() {

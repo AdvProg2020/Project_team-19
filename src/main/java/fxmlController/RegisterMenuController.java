@@ -138,6 +138,8 @@ public class RegisterMenuController implements Initializable {
             else {
                 company.setVisible ( false );
                 darSurateVjud.setVisible ( false );
+                minBalance.setVisible(false);
+                wage.setVisible(false);
                 registerBtn.setLayoutY ( 808.0 );
             }
 

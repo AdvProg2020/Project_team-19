@@ -407,18 +407,19 @@ public class Server {
             HashMap<String,String> info = (HashMap<String, String>) Server.read(new TypeToken<HashMap<String, String>>() {}.getType(),connection.getRequest().getJson().get(0));
             System.out.println(info);
             String response = "";
-            if ((info.get("type").equals("customer")) || (!RegisterController.getInstance().isFirstManagerRegistered() && info.get("type").equals("manager"))) {
+            if ((info.get("type").equalsIgnoreCase("customer")) || (!RegisterController.getInstance().isFirstManagerRegistered() && info.get("type").equalsIgnoreCase("manager"))) {
                 response = BankAPI.getBankResponse("create_account " +
                         info.get("first name") + " " +
                         info.get("last name") + " " +
                         info.get("username") + " " +
                         info.get("password") + " " +
                         info.get("password"));
-            } else if (!RegisterController.getInstance().isFirstManagerRegistered() && info.get("type").equals("manager")) {
-                WalletController.MIN_BALANCE = Double.parseDouble(info.get(LoginMenu.PersonInfo.MIN_BALANCE.label));
-                WalletController.WAGE = Double.parseDouble(info.get(LoginMenu.PersonInfo.WAGE.label));
+            }
+            if (!RegisterController.getInstance().isFirstManagerRegistered() && info.get("type").equalsIgnoreCase("manager")) {
+                WalletController.getInstance().setMIN_BALANCE(Double.parseDouble(info.get(LoginMenu.PersonInfo.MIN_BALANCE.label)));
+                WalletController.getInstance().setWAGE(Double.parseDouble(info.get(LoginMenu.PersonInfo.WAGE.label)));
                 if (response.matches("\\d+"))
-                    WalletController.SHOP_BANK_ID = response;
+                    WalletController.getInstance().setSHOP_BANK_ID(response);
                 else
                     connection.SendMessage("error during making shop account : " + response);
             }
@@ -511,6 +512,11 @@ public class Server {
                     .getWalletIncreaseBalanceRespond(Double.parseDouble(amount), bankToken, bankId);
             if (bankReceiptRp.matches("\\d+")) { //it means it is a receipt id
                 bankReceiptRp = WalletController.getInstance().getPayResponse(bankReceiptRp);
+                if (bankReceiptRp.equalsIgnoreCase("successfully paid!")) {
+                    String username = authTokens.get(connection.getRequest().getToken());
+                    Person person = PersonController.getInstance().getPersonByUsername(username);
+                    WalletController.getInstance().increaseWalletBalance(person, Double.parseDouble(amount));
+                }
             }
             connection.SendMessage(bankReceiptRp);
         }
@@ -884,6 +890,7 @@ public class Server {
         PersonController.getInstance().initializePersons();
         ProductController.getInstance().initializeStock();
         RequestController.getInstance().initializeRequests();
+        WalletController.getInstance().initializer();
     }
 
     private static void mainRun() {

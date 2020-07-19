@@ -102,8 +102,10 @@ public class WalletMenu implements Initializable {
                     return;
                 }
             }
-            getIncreaseWalletBalance(tokenField.getText(), priceField.getText());
+            String response = getIncreaseWalletBalance(tokenField.getText(), priceField.getText());
             stage.close();
+            App.showAlert(Alert.AlertType.INFORMATION, App.currentStage, "bank response", response);
+            walletBalance.setText(getWalletBalance());
         });
         gridPane.setVgap(10);
         gridPane.setHgap(10);
