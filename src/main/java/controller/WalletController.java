@@ -46,6 +46,16 @@ public class WalletController {
         saveToFile(SHOP_BANK_ID, address.get("shop_bankId"));
     }
 
+    public void setShopBankUsername(String shopBankUsername) {
+        SHOP_BANK_USERNAME = shopBankUsername;
+        saveToFile(SHOP_BANK_USERNAME, address.get("shop_username"));
+    }
+
+    public void setShopBankPassword(String shopBankPassword) {
+        SHOP_BANK_PASSWORD = shopBankPassword;
+        saveToFile(SHOP_BANK_PASSWORD, address.get("shop_password"));
+    }
+
     public double getMIN_BALANCE() {
         return MIN_BALANCE;
     }

@@ -435,8 +435,11 @@ public class Server {
             if (!RegisterController.getInstance().isFirstManagerRegistered() && info.get("type").equalsIgnoreCase("manager")) {
                 WalletController.getInstance().setMIN_BALANCE(Double.parseDouble(info.get(LoginMenu.PersonInfo.MIN_BALANCE.label)));
                 WalletController.getInstance().setWAGE(Double.parseDouble(info.get(LoginMenu.PersonInfo.WAGE.label)));
-                if (response.matches("\\d+"))
+                if (response.matches("\\d+")) {
                     WalletController.getInstance().setSHOP_BANK_ID(response);
+                    WalletController.getInstance().setShopBankUsername(info.get("username"));
+                    WalletController.getInstance().setShopBankPassword(info.get("password"));
+                }
                 else
                     connection.SendMessage("error during making shop account : " + response);
             }

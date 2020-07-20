@@ -33,9 +33,11 @@ public class Database {
         address.put("min_balance", databaseAddress + File.separator + "min_balance.json");
         address.put("wage", databaseAddress + File.separator + "wage.json");
         address.put("shop_bankId", databaseAddress + File.separator + "shop_bankId.json");
+        address.put("shop_username", databaseAddress + File.separator + "shop_username.json");
+        address.put("shop_password", databaseAddress + File.separator + "shop_password.json");
     }
 
-    public static <T> Object read(Type typeOfT, String address) { //todo oooooooooooooooo
+    public static <T> Object read(Type typeOfT, String address) {
         try {
             GsonBuilder builder = new GsonBuilder().setLenient().enableComplexMapKeySerialization();
             Gson gson = builder.create();
@@ -125,6 +127,8 @@ public class Database {
         createFile(System.getProperty("user.dir") + File.separator + "database" + File.separator + "min_balance.json");
         createFile(System.getProperty("user.dir") + File.separator + "database" + File.separator + "wage.json");
         createFile(System.getProperty("user.dir") + File.separator + "database" + File.separator + "shop_bankId.json");
+        createFile(System.getProperty("user.dir") + File.separator + "database" + File.separator + "shop_username.json");
+        createFile(System.getProperty("user.dir") + File.separator + "database" + File.separator + "shop_password.json");
     }
 
     public static void createFolder(String path) {
