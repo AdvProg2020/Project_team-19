@@ -9,7 +9,6 @@ public class Customer extends Person {
     private ArrayList<BuyLog> buyLogs;
     private HashMap<String, Integer> discountCodes;
     private HashMap<Product, Integer> productsWithScore;
-    private double credit;
     private Cart cart;
     private Wallet wallet;
 
@@ -60,11 +59,12 @@ public class Customer extends Person {
     }
 
     public boolean checkCredit (double price) {
-        return price <= credit;
+        return price <= wallet.getBalance();
     }
 
     public void setCredit ( double credit ) {
-        this.credit = credit;
+        wallet.setBalance(credit);
+        Database.saveToFile(this, Database.createPath("customers", personInfo.get("username")));
     }
 
     public void setCart(Cart cart) {
@@ -80,7 +80,7 @@ public class Customer extends Person {
     }
 
     public double getCredit () {
-        return credit;
+        return wallet.getBalance();
     }
 
     public void addToBuyLogs(BuyLog buyLog) {
@@ -116,7 +116,7 @@ public class Customer extends Person {
     }
 
     public void increaseCredit(double amount) {
-        credit += amount;
+        wallet.increaseBalance(amount);
         Database.saveToFile(this, Database.createPath("customers", personInfo.get("username")));
     }
 

@@ -1,7 +1,5 @@
 package fxmlController;
 
-import controller.CategoryController;
-import controller.ProductController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,7 +14,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Popup;
-import javafx.stage.Stage;
 import model.Category;
 import model.Product;
 import view.App;
@@ -25,6 +22,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
+import static clientController.ServerConnection.*;
 
 public class MainProductsMenu implements Initializable {
     private ArrayList<Parent> categoryCards;
@@ -54,7 +52,7 @@ public class MainProductsMenu implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         filters = new LinkedHashMap<>();
-        filterProducts = new LinkedList<>(ProductController.allProducts);
+        filterProducts = new LinkedList<>(getAllProducts());
         setLeafCategories();
         setCategoryCards();
         setCardsInPagination();
@@ -120,32 +118,25 @@ public class MainProductsMenu implements Initializable {
     }
 
     private void setFilteredProducts() {
-        LinkedList<Product> products = ProductController.allProducts.stream()
-                .filter(product -> {
-                    if (isDiscount)
-                        return product.isInDiscountInTotal();
-                    else
-                        return true;
-                })
-                .collect(Collectors.toCollection(LinkedList::new));
+        LinkedList<Product> products = new LinkedList<>(isDiscount ? getAllInDiscountProducts() : getAllProducts());
 
         switch (selectedFilter) {
             case "name":
-                filterProducts = ProductController.getInstance().filterByName(property, filterByOtherFields(products));
+                //todo filterProducts = ProductController.getInstance().filterByName(property, filterByOtherFields(products));
                 break;
             case "price":
                 if (property.matches("\\d+-\\d+")) {
                     String leastPrice = property.split("-")[0];
                     String mostPrice = property.split("-")[1];
 
-                    filterProducts = ProductController.getInstance().filterByPrice(Integer.parseInt(leastPrice), Integer.parseInt(mostPrice), filterByOtherFields(products));
+                    //todo filterProducts = ProductController.getInstance().filterByPrice(Integer.parseInt(leastPrice), Integer.parseInt(mostPrice), filterByOtherFields(products));
                     filterCombo.setDisable(false);
                 } else {
                     filterCombo.setDisable(true);
                 }
                 break;
             case "brand":
-                filterProducts = ProductController.getInstance().filterByBrand(property, filterByOtherFields(products));
+                //todo filterProducts = ProductController.getInstance().filterByBrand(property, filterByOtherFields(products));
                 break;
         }
     }
@@ -156,16 +147,16 @@ public class MainProductsMenu implements Initializable {
             if (!filters.get(filterField).isEmpty())
                 switch (filterField) {
                     case "name":
-                        filteredProducts = ProductController.getInstance().filterByName(filters.get(filterField), filteredProducts);
+                        //todo filteredProducts = ProductController.getInstance().filterByName(filters.get(filterField), filteredProducts);
                         break;
                     case "price":
                         String price = filters.get(filterField);
                         String leastPrice = price.split("-")[0];
                         String mostPrice = price.split("-")[1];
-                        filteredProducts = ProductController.getInstance().filterByPrice(Integer.parseInt(leastPrice), Integer.parseInt(mostPrice), filteredProducts);
+                        //todo filteredProducts = ProductController.getInstance().filterByPrice(Integer.parseInt(leastPrice), Integer.parseInt(mostPrice), filteredProducts);
                         break;
                     case "brand":
-                        filteredProducts = ProductController.getInstance().filterByBrand(filters.get(filterField), filteredProducts);
+                        //todo filteredProducts = ProductController.getInstance().filterByBrand(filters.get(filterField), filteredProducts);
                         break;
                 }
         }
@@ -289,7 +280,6 @@ public class MainProductsMenu implements Initializable {
     }
 
     private void setLeafCategories() {
-        leafCategories = new ArrayList<>();
-        CategoryController.getInstance().getNodeCategories(leafCategories, CategoryController.rootCategories);
+        leafCategories = getNodeCategories();
     }
 }

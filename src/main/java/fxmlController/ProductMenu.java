@@ -94,7 +94,7 @@ public class ProductMenu implements Initializable {
         setProductInfo();
         checkBackAndForth();
         showComments.setOnAction(showCommentEvent());
-        zoomImage();
+        //zoomImage();
         checkAvailable();
         setStarRate();
         checkBought();

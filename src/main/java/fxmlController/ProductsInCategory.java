@@ -1,6 +1,5 @@
 package fxmlController;
 
-import controller.ProductController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -24,7 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
-
+import static clientController.ServerConnection.*;
 public class ProductsInCategory implements Initializable {
     private ArrayList<Parent> productCards;
     private HashMap<Parent, Product> links;
@@ -73,8 +72,7 @@ public class ProductsInCategory implements Initializable {
             filters.remove(selectedFilter);
             filters.put(selectedFilter, property);
             System.out.println(filters);
-            if (property.isEmpty()) {
-                //popup.hide();
+            if (property.isEmpty()) { //popup.hide();
                 propertyField.setPromptText("Enter Property");
             } else {
                 setFilteredProducts();
@@ -94,13 +92,13 @@ public class ProductsInCategory implements Initializable {
                 })
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        filterProducts = ProductController.getInstance().filterByField(selectedFilter, property, filterByOtherFields(products));
+        //todo filterProducts = ProductController.getInstance().filterByField(selectedFilter, property, filterByOtherFields(products));
     }
 
     private ArrayList<Product> filterByOtherFields(ArrayList<Product> products) {
         ArrayList<Product> filteredProducts = new ArrayList<>();
         for (String filterField : filters.keySet()) {
-            filteredProducts = ProductController.getInstance().filterByField(selectedFilter, filters.get(filterField), products);
+            //todo filteredProducts = ProductController.getInstance().filterByField(selectedFilter, filters.get(filterField), products);
         }
         return filteredProducts;
     }
@@ -172,11 +170,8 @@ public class ProductsInCategory implements Initializable {
     private void setProductCards() {
         productCards = new ArrayList<>();
         links = new HashMap<>();
-        for (Product product : category.getProductList()) {
-            if (isDiscount) {
-                if (!product.isInDiscountInTotal())
-                    continue;
-            }
+        ArrayList<Product> categories = getCategoryProductList(category.getName(), isDiscount);
+        for (Product product : categories) {
             ProductInList productInList = new ProductInList(product);
             FXMLLoader loader = new FXMLLoader(ProductsInCategory.class.getResource("/fxml/productInList.fxml"));
             loader.setController(productInList);

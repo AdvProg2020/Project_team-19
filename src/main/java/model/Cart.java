@@ -1,7 +1,9 @@
 package model;
 
+import bank.BankAPI;
 import controller.PersonController;
 import controller.ProductController;
+import controller.WalletController;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -97,14 +99,23 @@ public class Cart {
         customer.getCart().cleanAfterPurchase();
     }
 
+    public static void purchaseBank(Customer customer) {
+        BuyLog buyLog = new BuyLog(LocalDateTime.now(), customer.getCart().totalPrice, customer.getCart().getTotalPriceAfterDiscountCode(), customer.getCart().getProducts(), false);
+        customer.addToBuyLogs(buyLog);
+        customer.getCart().purchaseForSalesperson();
+        customer.getCart().cleanAfterPurchase();
+    }
+
     public void purchaseForSalesperson(){
         for (String productId : products.keySet()) {
             Product product = ProductController.getInstance().getProductById(productId);
             for (String sellerName : products.get(productId).keySet()) {
                 Salesperson salesperson = (Salesperson)PersonController.getInstance().getPersonByUsername(sellerName);
                 int count = products.get(productId).get(sellerName).count;
+                double deliverAmount = count * salesperson.getProductPrice(product) * (WalletController.WAGE / 100);
+                WalletController.getInstance().increaseShopBalance(deliverAmount);
                 salesperson.addSellLogAndPurchase(new SellLog(LocalDateTime.now(),
-                        salesperson.getProductPrice(product) * count,
+                        salesperson.getProductPrice(product) * count * (1 - WalletController.WAGE / 100),
                         salesperson.discountAmount(product) * count, product,
                         (Customer) PersonController.getInstance().getLoggedInPerson(), true, count));
 

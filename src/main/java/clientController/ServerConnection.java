@@ -30,6 +30,36 @@ public class ServerConnection {
         }
     }
 
+    public static String addToCart(String sellerName, String productId) {
+        ArrayList<String> info = new ArrayList<>();
+        info.add(sellerName);
+        info.add(productId);
+        return sendMessage(ADD_TO_CART, info, token);
+    }
+
+    public static ArrayList<Product> getCategoryProductList(String categoryName, boolean inDiscount) {
+        ArrayList<String> info = new ArrayList<>();
+        info.add(categoryName);
+        String response = sendMessage(inDiscount ? GET_IN_DISCOUNT_CATEGORY_PRODUCTS : GET_CATEGORY_PRODUCTS, info, "");
+        return (ArrayList<Product>) getObj(new TypeToken<ArrayList<Product>>(){}.getType(), response);
+    }
+
+    public static ArrayList<Category> getNodeCategories() {
+        String response = sendMessage(GET_NODE_CATEGORIES, null, "");
+        return (ArrayList<Category>) getObj(new TypeToken<ArrayList<Category>>(){}.getType(), response);
+    }
+
+    public static String getWalletPurchase() {
+        return sendMessage(WALLET_PURCHASE, null, token);
+    }
+
+    public static String getBankPurchase(String username , String password) {
+        ArrayList<String> info = new ArrayList<>();
+        info.add(username);
+        info.add(password);
+        return sendMessage(BANK_PURCHASE, info, token);
+    }
+
     public static String getBankId() {
         return sendMessage(GET_BANK_ID, null, token);
     }
@@ -193,13 +223,17 @@ public class ServerConnection {
         ArrayList<String> info = new ArrayList<>();
         info.add(bankToken);
         info.add(amount);
-        return sendMessage(PacketType.DECREASE_WALLET_BALANCE, info, token);
+        return sendMessage(DECREASE_WALLET_BALANCE, info, token);
     }
 
     public static ArrayList<Product> getAllProducts() {
         String response = sendMessage(GET_ALL_PRODUCTS, null, "");
         return (ArrayList<Product>) getObj(new TypeToken<ArrayList<Product>>(){}.getType(), response);
     }
+
+    public static ArrayList<Product> getAllInDiscountProducts() {
+        String response = sendMessage(GET_ALL_PRODUCTS_IN_DISCOUNT, null, "");
+        return (ArrayList<Product>) getObj(new TypeToken<ArrayList<Product>>(){}.getType(), response);    }
 
     public static String addNewProduct(ArrayList<String> info) {
         return sendMessage(ADD_NEW_PRODUCT, info, token);
@@ -238,12 +272,11 @@ public class ServerConnection {
         return (Product) getObj(Product.class, response);
     }
 
-    public static String addAuctionRequest(String sellerName, String productId, String endTime) {
+    public static String addAuctionRequest(String productId, String endTime) {
         ArrayList<String> info = new ArrayList<>();
-        info.add(sellerName);
         info.add(productId);
         info.add(endTime);
-        return sendMessage(ADD_AUCTION_REQUEST, info, "");
+        return sendMessage(ADD_AUCTION_REQUEST, info, token);
     }
 
 //    public static HashMap<Product> getOfferedProducts() {

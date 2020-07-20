@@ -125,7 +125,7 @@ public class ProductRequestFXML implements Initializable {
         if (category.getText().length() == 0) {
             category.setText("Fill the field.");
             return false;
-        } else if (getCategoryByName(category.getText()) != null && !category.getText().equals("Fill the field.")) {
+        } else if (getCategoryByName(category.getText()) == null && !category.getText().equals("Fill the field.")) {
             category.setText("There is no such category.");
             return false;
         }
@@ -188,7 +188,7 @@ public class ProductRequestFXML implements Initializable {
 
             int rowIndex = 0;
             HashMap<String, TextField> textFields = new HashMap<>();
-            for (String field : getCategoryByName(product.getCategory().getName()).getPropertyFields()) {
+            for (String field : getCategoryByName(category.getText()).getPropertyFields()) {
                 Label label = new Label("new " + field + " : ");
                 label.setTextFill(Color.rgb(8, 181, 255));
                 label.setFont(Font.font("Verdana", 14));

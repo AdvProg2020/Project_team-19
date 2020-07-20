@@ -42,6 +42,7 @@ public class WalletMenu implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        changeToken();
         accountId.setText(getBankId());
         walletBalance.setText(getWalletBalance());
         checkPersonForWithdraw();
@@ -49,9 +50,15 @@ public class WalletMenu implements Initializable {
         getToken.setCursor(Cursor.HAND);
     }
 
+    private void changeToken() {
+        tokenField.setVisible(false);
+        tokenField.setDisable(true);
+        token.setVisible(false);
+    }
+
     private void checkPersonForWithdraw() {
-        Person loginPerson = PersonController.getInstance().getLoggedInPerson();
-        if (!(loginPerson instanceof Salesperson)) {
+        String type = getPersonTypeByToken();
+        if (!(type.equalsIgnoreCase("salesperson"))) {
             decreaseWalletLabel.setOpacity(0.3);
             decreaseWallet.setOpacity(0.3);
             decreaseWallet.setDisable(true);
@@ -73,10 +80,10 @@ public class WalletMenu implements Initializable {
 
     @FXML
     void increaseWalletBalance() {
-        if (tokenField.getText().isEmpty()) {
-            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill bank token box");
-            return;
-        }
+//        if (tokenField.getText().isEmpty()) {
+//            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill bank token box");
+//            return;
+//        }
         Stage stage = new Stage();
         GridPane gridPane = new GridPane();
         Label label = new Label();
@@ -101,8 +108,8 @@ public class WalletMenu implements Initializable {
                     App.showAlert(Alert.AlertType.ERROR, App.currentStage, "wrong number", "Enter number for balance");
                     return;
                 }
-            }
-            String response = getIncreaseWalletBalance(tokenField.getText(), priceField.getText());
+            }                                           //tokenField
+            String response = getIncreaseWalletBalance(token.getText(), priceField.getText());
             stage.close();
             App.showAlert(Alert.AlertType.INFORMATION, App.currentStage, "bank response", response);
             walletBalance.setText(getWalletBalance());
@@ -120,10 +127,10 @@ public class WalletMenu implements Initializable {
 
     @FXML
     void decreaseWalletBalance() {
-        if (tokenField.getText().isEmpty()) {
-            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill bank token box");
-            return;
-        }
+//        if (tokenField.getText().isEmpty()) {
+//            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill bank token box");
+//            return;
+//        }
         Stage stage = new Stage();
         GridPane gridPane = new GridPane();
         Label label = new Label();
@@ -148,9 +155,11 @@ public class WalletMenu implements Initializable {
                     App.showAlert(Alert.AlertType.ERROR, App.currentStage, "wrong number", "Enter number for balance");
                     return;
                 }
-            }
-            getDecreaseWalletBalance(tokenField.getText(), priceField.getText());
+            }                                            //tokenField
+            String response = getDecreaseWalletBalance(token.getText(), priceField.getText());
             stage.close();
+            App.showAlert(Alert.AlertType.INFORMATION, App.currentStage, "bank response", response);
+            walletBalance.setText(getWalletBalance());
         });
         gridPane.setVgap(10);
         gridPane.setHgap(10);
@@ -165,20 +174,20 @@ public class WalletMenu implements Initializable {
 
     @FXML
     void getBalance(MouseEvent event) {
-        if (tokenField.getText().isEmpty()) {
-            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill token box");
-            return;
-        }
-        String response = getBankBalance(tokenField.getText());
+//        if (tokenField.getText().isEmpty()) {
+//            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill token box");
+//            return;
+//        }                               //tokenField
+        String response = getBankBalance(token.getText());
         App.showAlert(Alert.AlertType.INFORMATION, App.currentStage, "Bank response", response);
     }
 
     @FXML
     void increaseBankBalance() {
-        if (tokenField.getText().isEmpty()) {
-            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill bank token box");
-            return;
-        }
+//        if (tokenField.getText().isEmpty()) {
+//            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill bank token box");
+//            return;
+//        }
         Stage stage = new Stage();
         GridPane gridPane = new GridPane();
         Label label = new Label();
@@ -203,8 +212,8 @@ public class WalletMenu implements Initializable {
                     App.showAlert(Alert.AlertType.ERROR, App.currentStage, "wrong number", "Enter number for balance");
                     return;
                 }
-            }
-            getIncreaseBankBalance(tokenField.getText(), priceField.getText());
+            }                      //tokenField
+            getIncreaseBankBalance(token.getText(), priceField.getText());
             stage.close();
         });
         gridPane.setVgap(10);
@@ -220,33 +229,33 @@ public class WalletMenu implements Initializable {
 
     @FXML
     void getTransactionPlus(MouseEvent event) {
-        if (tokenField.getText().isEmpty()) {
-            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill token box");
-            return;
-        }
-        String response = getTransaction(tokenField.getText(), "+");
+//        if (tokenField.getText().isEmpty()) {
+//            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill token box");
+//            return;
+//        }                              tokenField
+        String response = getTransaction(token.getText(), "+");
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, response);
         alert.showAndWait();
     }
 
     @FXML
     void getTransactionMinus(MouseEvent event) {
-        if (tokenField.getText().isEmpty()) {
-            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill token box");
-            return;
-        }
-        String response = getTransaction(tokenField.getText(), "-");
+//        if (tokenField.getText().isEmpty()) {
+//            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill token box");
+//            return;
+//        }                               tokenField
+        String response = getTransaction(token.getText(), "-");
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, response);
         alert.showAndWait();
     }
 
     @FXML
     void getAllTransactions(MouseEvent event) {
-        if (tokenField.getText().isEmpty()) {
-            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill token box");
-            return;
-        }
-        String response = getTransaction(tokenField.getText(), "*");
+//        if (tokenField.getText().isEmpty()) {
+//            App.showAlert(Alert.AlertType.ERROR, App.currentStage, "Fill", "fill token box");
+//            return;
+//        }                               //tokenField
+        String response = getTransaction(token.getText(), "*");
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, response);
         alert.showAndWait();
     }

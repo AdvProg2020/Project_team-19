@@ -1,6 +1,5 @@
 package fxmlController;
 
-import controller.CartController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -14,7 +13,7 @@ import view.App;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-
+import static clientController.ServerConnection.*;
 public class SellerInList implements Initializable {
     private static String FONT = "Verdana";
     private Salesperson salesperson;
@@ -54,6 +53,8 @@ public class SellerInList implements Initializable {
     }
 
     private void handleAddToCart() {
-        CartController.getInstance().addProduct(product, salesperson);
+        addToCart(salesperson.getUsername(), product.getID());
+        //nmidunam casi ke login nakarde token nadare
+        //CartController.getInstance().addProduct(product, salesperson);
     }
 }

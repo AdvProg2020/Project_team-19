@@ -99,6 +99,35 @@ public class CartController {
         }
     }
 
+    public void purchaseWallet(Customer customer) throws NotEnoughCreditMoney {
+        if (!customer.checkCredit(customer.getCart().calculateTotalPrice())) {
+            throw new NotEnoughCreditMoney("Your balance is not enough" + "\n" + "Please increase your credit.");
+        } else {
+            if(customer.getCart().calculateTotalPrice()>1000000){
+                System.out.println("We got that you are rich. Take this discount and show off less.");
+                discountCodeForGoodCustomer(customer);
+            }
+            Cart.purchase(customer);
+            saveToFile(customer, createPath("customers", customer.getUsername()));
+        }
+
+    }
+
+    public void purchaseBank(Customer customer, String bankUsername, String bankPassword) throws Exception {
+        String response;
+        if (!(response = WalletController.getInstance().moveFromCustomerToBank(customer.getCart().calculateTotalPrice(), bankUsername, bankPassword, customer.getWallet().getBankId())).equals("successfully paid!")) {
+            throw new Exception(response);
+        } else {
+            if(customer.getCart().calculateTotalPrice()>1000000){
+                System.out.println("We got that you are rich. Take this discount and show off less.");
+                discountCodeForGoodCustomer(customer);
+            }
+            Cart.purchaseBank(customer);
+            saveToFile(customer, createPath("customers", customer.getUsername()));
+        }
+
+    }
+
     public void purchase(boolean b) throws NoLoggedInPersonException, AccountIsNotCustomerException{
         if (!PersonController.getInstance().isThereLoggedInPerson()) {
             throw new NoLoggedInPersonException("You are not logged in." + "\n" + "Please login to continue.");

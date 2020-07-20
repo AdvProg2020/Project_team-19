@@ -95,7 +95,7 @@ public class AddAuction implements Initializable {
             return;
         }
 
-        String response = addAuctionRequest(salesperson.getUsername(), product.getID(), endTime.getText());
+        String response = addAuctionRequest(product.getID(), endTime.getText());
         App.showAlert(Alert.AlertType.INFORMATION, App.currentStage, response, "Your request will be sent to manager");
         App.setRoot("salespersonMenu");
     }

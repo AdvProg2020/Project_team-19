@@ -19,6 +19,10 @@ public class Wallet {
         return bankId;
     }
 
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
     public void increaseBalance(double amount) {
         balance += amount;
     }

@@ -12,7 +12,15 @@
    <content>
       <AnchorPane fx:id="pane" prefHeight="500.0" prefWidth="800.0">
          <children>
-            <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" onMouseClicked="#back" onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+            <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0"
+                             onMouseClicked="#back" onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall"
+                             strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+            <Label alignment="CENTER" layoutX="334.0" layoutY="14.0" prefHeight="27.0" prefWidth="132.0" text="All Auctions" textFill="#499cc3">
+               <font>
+                  <Font name="Verdana" size="18.0" />
+               </font>
+            </Label>
+            <Separator prefWidth="795.0" layoutY="40"/>
 <!--            <ImageView fx:id="cart" fitHeight="50.0" fitWidth="50.0" layoutX="717.0" layoutY="14.0" onMouseClicked="#cartClicked" pickOnBounds="true" preserveRatio="true">-->
 <!--               <image>-->
 <!--                  <Image url="@../images/cart.png" />-->

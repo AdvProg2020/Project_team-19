@@ -29,6 +29,15 @@ public class CategoryController {
         }
     }
 
+    public ArrayList<Product> getInDiscountsProductsOfCategory(Category category) {
+        ArrayList<Product> products = new ArrayList<>();
+        for (Product product : category.getProductList()) {
+            if (product.isInDiscountInTotal())
+                products.add(product);
+        }
+        return products;
+    }
+
     public void setParents(Category category){
         for (Category child : category.getChildren()) {
             child.setParent(category);

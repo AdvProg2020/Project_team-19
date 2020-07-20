@@ -11,6 +11,8 @@ public class WalletController {
     public static double MIN_BALANCE;
     public static double WAGE;
     public static String SHOP_BANK_ID;
+    public static String SHOP_BANK_USERNAME;
+    public static String SHOP_BANK_PASSWORD;
 
     private WalletController() {
 
@@ -68,6 +70,22 @@ public class WalletController {
         return BankAPI.getBankResponse(msg);
     }
 
+    public String increaseShopBalance(double amount) {
+        String msg = "get_token " + SHOP_BANK_USERNAME + " " + SHOP_BANK_PASSWORD;
+        String token = BankAPI.getBankResponse(msg);
+        String receiptId = getBankIncreaseBalance(amount, token, SHOP_BANK_ID);
+        return getPayResponse(receiptId);
+    }
+
+    public String moveFromCustomerToBank(double amount, String username, String password, String sourceId) {
+        String msg = "get_token " + username + " " + password;
+        String token = BankAPI.getBankResponse(msg);
+        String receiptId = getWalletIncreaseBalanceRespond(amount, token, sourceId);
+        return getPayResponse(receiptId);
+    }
+
+
+
     public String getBankIncreaseBalance(double amount, String token, String destId) {
         String msg = "create_receipt " +
                 token + " " +
@@ -97,12 +115,31 @@ public class WalletController {
     }
 
     public void increaseWalletBalance(Person person, double amount) {
-        System.out.println(address);
         if (person instanceof Salesperson) {
             ((Salesperson) person).getWallet().increaseBalance(amount);
             saveToFile(person, createPath("salespersons", person.getUsername()));
         } else if (person instanceof Customer) {
             ((Customer) person).getWallet().increaseBalance(amount);
+            saveToFile(person, createPath("customers", person.getUsername()));
+        }
+    }
+
+    public boolean canDecreaseWalletBalance(Person person, double amount) {
+        if (person instanceof Salesperson) {
+            return ((Salesperson)person).getWallet().getBalance() - amount >= WalletController.MIN_BALANCE;
+        } else if (person instanceof  Customer) {
+            return ((Customer)person).getWallet().getBalance() - amount >= WalletController.MIN_BALANCE;
+        }
+        return false;
+    }
+
+    public void decreaseWalletBalance(Person person, double amount) {
+        System.out.println(address);
+        if (person instanceof Salesperson) {
+            ((Salesperson) person).getWallet().decreaseBalance(amount);
+            saveToFile(person, createPath("salespersons", person.getUsername()));
+        } else if (person instanceof Customer) {
+            ((Customer) person).getWallet().decreaseBalance(amount);
             saveToFile(person, createPath("customers", person.getUsername()));
         }
     }

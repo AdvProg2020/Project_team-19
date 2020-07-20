@@ -14,7 +14,6 @@ public class Salesperson extends Person {
     private HashMap<String, ProductState> offeredProducts;
     private ArrayList<Discount> discounts;
     private HashMap<String, LocalDateTime> auctions;  //product -> endTime
-    private double credit;
     private Wallet wallet;
 
 
@@ -65,7 +64,7 @@ public class Salesperson extends Person {
 
     public void addSellLogAndPurchase(SellLog sellLog) {
         offeredProducts.get(sellLog.getProduct().getID()).setAmount(offeredProducts.get(sellLog.getProduct().getID()).getAmount() - sellLog.getCount());
-        setCredit(credit + sellLog.getDeliveredAmount());
+        setCredit(wallet.getBalance() + sellLog.getDeliveredAmount());
         sellLogs.add(sellLog);
         Database.saveToFile(this, Database.createPath("salespersons", personInfo.get("username")));
     }
@@ -87,11 +86,11 @@ public class Salesperson extends Person {
     }
 
     public void setCredit(double credit) {
-        this.credit = credit;
+        this.wallet.setBalance(credit);
     }
 
     public double getCredit() {
-        return credit;
+        return wallet.getBalance();
     }
 
     public ArrayList<SellLog> getSellLogs() {

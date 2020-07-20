@@ -51,6 +51,17 @@ public class AuctionController {
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
     }
 
+    public ArrayList<Product> getSellerAuctionProducts(Salesperson salesperson){
+        ArrayList<Product> products = new ArrayList<>();
+        for (Product product : salesperson.getOfferedProducts().keySet()) {
+            if (!salesperson.getProductState(product).label.equals("Verified") || salesperson.getProductAmount(product) != 1
+                    || salesperson.isInAuction(product))
+                continue;
+            products.add(product);
+        }
+        return products;
+    }
+
     public HashMap<Salesperson, ArrayList<Product>> getAllAuctions() {
         HashMap<Salesperson, ArrayList<Product>> auctions = new HashMap<>();
 

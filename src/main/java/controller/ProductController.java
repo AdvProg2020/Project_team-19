@@ -67,15 +67,7 @@ public class ProductController {
         return sellers;
     }
 
-    public ArrayList<Product> getSellerAuctionProducts(Salesperson salesperson){
-        ArrayList<Product> products = new ArrayList<>();
-        for (Product product : salesperson.getOfferedProducts().keySet()) {
-            if (!salesperson.getProductState(product).label.equals("Verified") || salesperson.getProductAmount(product) != 1)
-                continue;
-            products.add(product);
-        }
-        return products;
-    }
+
 
     public ArrayList<Product> getSellerVerifiedProducts(Salesperson salesperson){
         ArrayList<Product> products = new ArrayList<>();
@@ -98,6 +90,15 @@ public class ProductController {
 
     public static ArrayList<Product> getAllProducts() {
         return allProducts;
+    }
+
+    public static ArrayList<Product> getAllProductsInDiscount() {
+        ArrayList<Product> products = new ArrayList<>();
+        for (Product product : allProducts) {
+            if (product.isInDiscountInTotal())
+                products.add(product);
+        }
+        return products;
     }
 
     public boolean isThereProductById(String productID) {
