@@ -95,6 +95,7 @@ public class Server {
         commands.put(GET_IN_DISCOUNT_CATEGORY_PRODUCTS, new GetInDiscountProductsOfCategory());
         commands.put(GET_NODE_CATEGORIES, new GetNodeCategories());
         commands.put(ADD_TO_CART, new AddToCartHandler());
+        commands.put(GET_CART,new GetCartHandler());
     }
 
     public static Server getInstance() {
@@ -184,8 +185,12 @@ public class Server {
         @Override
         public void handle(Connection connection) {
             try {
+                Cart cart = null;
                 ArrayList<String> strings = connection.getRequest().getJson();
-                PersonController.getInstance().login(strings.get(0), strings.get(1));
+                if (PersonController.getInstance().getPersonByUsername(strings.get(0)).getType().equalsIgnoreCase("customer")) {
+                    cart = (Cart) read(Cart.class, strings.get(2));
+                }
+                PersonController.getInstance().login(strings.get(0), strings.get(1),cart);
                 String token = UUID.randomUUID().toString();;
                 authTokens.put(token, strings.get(0));
                 connection.SendMessage(token);
@@ -320,11 +325,21 @@ public class Server {
 
         @Override
         synchronized public void handle(Connection connection) {
+            Customer customer = (Customer) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
             ArrayList<String> strings = connection.getRequest().getJson();
             Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(strings.get(0));
             Product product = ProductController.getInstance().getProductById(strings.get(1));
-            CartController.getInstance().setProductCount(product,-1,salesperson);
+            CartController.getInstance().setProductCount(product,-1,salesperson,customer);
             connection.SendMessage("successful");
+        }
+    }
+
+    class GetCartHandler implements Handler{
+
+        @Override
+        public void handle(Connection connection) {
+            Customer customer = (Customer) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
+            connection.SendMessage(write(customer.getCart()));
         }
     }
 
@@ -332,13 +347,13 @@ public class Server {
 
         @Override
         public void handle(Connection connection) {
-            try {
-
-                CartController.getInstance().purchase(true);
-                App.setRoot("pay");
-            } catch (CartController.NoLoggedInPersonException | CartController.AccountIsNotCustomerException e) {
-                connection.SendMessage(e.getMessage());
-            }
+//            try {
+//
+//                CartController.getInstance().purchase(true);
+//                App.setRoot("pay");
+//            } catch (CartController.NoLoggedInPersonException | CartController.AccountIsNotCustomerException e) {
+//                connection.SendMessage(e.getMessage());
+//            }
         }
     }
 
@@ -346,10 +361,11 @@ public class Server {
 
         @Override
         synchronized public void handle(Connection connection) {
+            Customer customer = (Customer) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
             ArrayList<String> strings = connection.getRequest().getJson();
             Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(strings.get(0));
             Product product = ProductController.getInstance().getProductById(strings.get(1));
-            CartController.getInstance().setProductCount(product,+1,salesperson);
+            CartController.getInstance().setProductCount(product,+1,salesperson,customer);
             connection.SendMessage("successful");
         }
     }
@@ -985,13 +1001,14 @@ public class Server {
 
         @Override
         public void handle(Connection connection) {
+            Customer customer = null;
             String sellerName = connection.getRequest().getJson().get(0);
             String productId = connection.getRequest().getJson().get(1);
-
+            if (connection.getRequest().getToken().length()!=0)
+                 customer = (Customer) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
             Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(sellerName);
             Product product = ProductController.getInstance().getProductById(productId);
-
-            //todo to CartController.add product login persene
+            CartController.getInstance().addProduct(product,salesperson,customer);
         }
     }
 

@@ -10,11 +10,10 @@ import static controller.Database.*;
 public class CartController {
 
     private static CartController single_instance = null;
-    private Cart tempCart;
 
 
     private CartController() {
-        tempCart = new Cart();
+
     }
 
     public static CartController getInstance() {
@@ -48,56 +47,23 @@ public class CartController {
         }
     }
 
-    public void addProduct(Product product, Salesperson salesperson) {
-        if (PersonController.getInstance().isThereLoggedInPerson() && PersonController.getInstance().isLoggedInPersonCustomer()) {
-            Customer customer = (Customer) PersonController.getInstance().getLoggedInPerson();
+    public void addProduct(Product product, Salesperson salesperson,Customer customer) {
             customer.getCart().addProduct(product, salesperson);
             saveToFile(customer, createPath("customers", customer.getUsername()));
-        } else
-            tempCart.addProduct(product, salesperson);
     }
 
-    public void setProductCount(Product product, int count, Salesperson salesperson) {
-        if (PersonController.getInstance().isThereLoggedInPerson() && PersonController.getInstance().isLoggedInPersonCustomer()) {
-            Customer customer = (Customer) PersonController.getInstance().getLoggedInPerson();
+    public void setProductCount(Product product, int count, Salesperson salesperson,Customer customer) {
             customer.getCart().setProductCount(product, salesperson, count);
             saveToFile(customer, createPath("customers", customer.getUsername()));
-        } else
-            tempCart.setProductCount(product, salesperson, count);
+
     }
 
-    public void setLoggedInPersonCart() {
-        ((Customer) PersonController.getInstance().getLoggedInPerson()).setCartAfterLogin(tempCart);
-        tempCart.cleanAfterPurchase();
-        saveToFile( PersonController.getInstance().getLoggedInPerson(),createPath("customers", PersonController.getInstance().getLoggedInPerson().getUsername()));
+    public double calculateTotalPrice(Customer customer) {
+            return (customer.getCart().calculateTotalPrice());
+
     }
 
-    public double calculateTotalPrice() {
-        if (PersonController.getInstance().isThereLoggedInPerson() && PersonController.getInstance().isLoggedInPersonCustomer()) {
-            return ((Customer) PersonController.getInstance().getLoggedInPerson()).getCart().calculateTotalPrice();
-        }
-        return tempCart.calculateTotalPrice();
-    }
 
-    public void purchase() throws NoLoggedInPersonException, AccountIsNotCustomerException, NotEnoughCreditMoney, IOException {
-        if (!PersonController.getInstance().isThereLoggedInPerson()) {
-            throw new NoLoggedInPersonException("You are not logged in." + "\n" + "Please login to continue.");
-        } else if (!PersonController.getInstance().isLoggedInPersonCustomer()) {
-            throw new AccountIsNotCustomerException("Please login with customer account.");
-        } else {
-            Customer customer = (Customer) PersonController.getInstance().getLoggedInPerson();
-            if (!customer.checkCredit(customer.getCart().calculateTotalPrice())) {
-                throw new NotEnoughCreditMoney("Your balance is not enough" + "\n" + "Please increase your credit.");
-            } else {
-                if(customer.getCart().calculateTotalPrice()>1000000){
-                    System.out.println("We got that you are rich. Take this discount and show off less.");
-                    discountCodeForGoodCustomer(customer);
-                }
-                Cart.purchase(customer);
-                saveToFile(customer, createPath("customers", customer.getUsername()));
-            }
-        }
-    }
 
     public void purchaseWallet(Customer customer) throws NotEnoughCreditMoney {
         if (!customer.checkCredit(customer.getCart().calculateTotalPrice())) {
@@ -128,41 +94,29 @@ public class CartController {
 
     }
 
-    public void purchase(boolean b) throws NoLoggedInPersonException, AccountIsNotCustomerException{
-        if (!PersonController.getInstance().isThereLoggedInPerson()) {
-            throw new NoLoggedInPersonException("You are not logged in." + "\n" + "Please login to continue.");
-        } else if (!PersonController.getInstance().isLoggedInPersonCustomer()) {
-            throw new AccountIsNotCustomerException("Please login with customer account.");
-        }
-    }
 
     public void discountCodeForGoodCustomer(Customer customer){
         DiscountCode discountCode = new DiscountCode(LocalDateTime.MIN,LocalDateTime.MAX,10,Double.POSITIVE_INFINITY,1);
-        manageDiscountCode(discountCode);
+        manageDiscountCode(discountCode,customer);
         DiscountCodeController.getInstance().removeDiscountCode(discountCode);
     }
 
 
-    public void manageDiscountCode(DiscountCode discountCode) {
-        Customer customer = (Customer) PersonController.getInstance().getLoggedInPerson();
+    public void manageDiscountCode(DiscountCode discountCode,Customer customer) {
         customer.useDiscountCode(discountCode);
         customer.getCart().setTotalPriceAfterDiscountCode(discountCode.getPriceAfterDiscountCode(customer.getCart().calculateTotalPrice()));
         saveToFile(customer, createPath("customers", customer.getUsername()));
     }
 
-    public int itemNumber() {
-        if (PersonController.getInstance().isThereLoggedInPerson() && PersonController.getInstance().isLoggedInPersonCustomer()) {
-            return ((Customer) PersonController.getInstance().getLoggedInPerson()).getCart().getProducts().size();
-        }
-        return tempCart.getProducts().size();
+    public int itemNumber(Customer customer) {
+            return customer.getCart().getProducts().size();
+
     }
 
 
-    public Cart getCart() {
-        if (PersonController.getInstance().isThereLoggedInPerson() && PersonController.getInstance().isLoggedInPersonCustomer()) {
-            return ((Customer) PersonController.getInstance().getLoggedInPerson()).getCart();
-        }
-        return tempCart;
+    public Cart getCart(Customer customer) {
+            return customer.getCart();
+
     }
 
     public static class NoLoggedInPersonException extends Exception {

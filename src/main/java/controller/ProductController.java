@@ -69,15 +69,6 @@ public class ProductController {
 
 
 
-    public ArrayList<Product> getSellerVerifiedProducts(Salesperson salesperson){
-        ArrayList<Product> products = new ArrayList<>();
-        for (Product product : salesperson.getOfferedProducts().keySet()) {
-            if (!salesperson.getProductState(product).label.equals("Verified"))
-                continue;
-            products.add(product);
-        }
-        return products;
-    }
 
     public void addComment(Product product, Customer customer, String commentText, String title) {
         Comment newComment = new Comment(false, customer, commentText, title);
@@ -160,6 +151,26 @@ public class ProductController {
         editProductForSeller(product, salesperson, price, amount);
         editProductInGeneral(product, category, name, brand, properties);
         changeFilesAfterEditProduct(product, salesperson);
+    }
+
+    public ArrayList<Product> getSellerAuctionProducts(Salesperson salesperson){
+        ArrayList<Product> products = new ArrayList<>();
+        for (Product product : salesperson.getOfferedProducts().keySet()) {
+            if (!salesperson.getProductState(product).label.equals("Verified") || salesperson.getProductAmount(product) != 1)
+                continue;
+            products.add(product);
+        }
+        return products;
+    }
+
+    public ArrayList<Product> getSellerVerifiedProducts(Salesperson salesperson){
+        ArrayList<Product> products = new ArrayList<>();
+        for (Product product : salesperson.getOfferedProducts().keySet()) {
+            if (!salesperson.getProductState(product).label.equals("Verified"))
+                continue;
+            products.add(product);
+        }
+        return products;
     }
 
     public void editProduct(Product product, Salesperson salesperson, int amount, double price,

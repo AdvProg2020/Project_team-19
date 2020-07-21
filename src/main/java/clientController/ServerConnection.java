@@ -19,6 +19,7 @@ public class ServerConnection {
     public static DataOutputStream dataOutputStream;
     public static DataInputStream dataInputStream;
     public static String token = "";
+    private static Cart tempCart = new Cart();
 
     public static void run() {
         try {
@@ -30,11 +31,25 @@ public class ServerConnection {
         }
     }
 
-    public static String addToCart(String sellerName, String productId) {
+    public static String addToCart(Salesperson seller, Product product) {
         ArrayList<String> info = new ArrayList<>();
-        info.add(sellerName);
-        info.add(productId);
-        return sendMessage(ADD_TO_CART, info, token);
+        if (token.length()!=0) {
+            info.add(seller.getUsername());
+            info.add(product.getID());
+            return sendMessage(ADD_TO_CART, info, token);
+        }else {
+            tempCart.addProduct(product,seller);
+            return "successful";
+        }
+    }
+
+    public static Cart getCart(){
+        if (token.length()!=0){
+            String response = sendMessage(GET_CART,null,token);
+            return (Cart) getObj(Cart.class,response);
+        }else {
+            return tempCart;
+        }
     }
 
     public static ArrayList<Product> getCategoryProductList(String categoryName, boolean inDiscount) {
