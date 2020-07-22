@@ -83,7 +83,7 @@ public class PersonController {
         Person person = PersonController.getInstance().getPersonByUsername(username);
         if (person.getType().equalsIgnoreCase("customer")) {
             Customer customer = (Customer) person;
-            customer.getCart().setCartAfterLogIn(cart);
+            CartController.getInstance().setCartAfterLogIn(cart,customer);
             Database.saveToFile(customer,Database.createPath("customers",customer.getUsername()));
         }
     }

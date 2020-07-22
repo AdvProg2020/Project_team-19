@@ -96,6 +96,8 @@ public class Server {
         commands.put(GET_NODE_CATEGORIES, new GetNodeCategories());
         commands.put(ADD_TO_CART, new AddToCartHandler());
         commands.put(GET_CART,new GetCartHandler());
+        commands.put(GET_COUNT_IN_CART,new GetContInCart());
+        commands.put(SET_COUNT_IN_CART,new SetCountInCart());
     }
 
     public static Server getInstance() {
@@ -340,6 +342,29 @@ public class Server {
         public void handle(Connection connection) {
             Customer customer = (Customer) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
             connection.SendMessage(write(customer.getCart()));
+        }
+    }
+
+    class GetContInCart implements Handler{
+
+        @Override
+        public void handle(Connection connection) {
+            Customer customer = (Customer) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
+            Product product = ProductController.getInstance().getProductById(connection.getRequest().getJson().get(0));
+            Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(connection.getRequest().getJson().get(1));
+            connection.SendMessage(String.valueOf(CartController.getInstance().getCart(customer).getProducts().get(product).get(salesperson).getCount()));
+        }
+    }
+
+    class SetCountInCart implements Handler{
+
+        @Override
+        public void handle(Connection connection) {
+            Customer customer = (Customer) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
+            Product product = ProductController.getInstance().getProductById(connection.getRequest().getJson().get(0));
+            Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(connection.getRequest().getJson().get(1));
+            CartController.getInstance().setProductCount(product,Integer.parseInt(connection.getRequest().getJson().get(2)),salesperson,customer);
+            connection.SendMessage("successful.");
         }
     }
 

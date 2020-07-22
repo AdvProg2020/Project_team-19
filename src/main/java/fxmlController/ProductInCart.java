@@ -1,6 +1,6 @@
 package fxmlController;
 
-import controller.CartController;
+import clientController.ServerConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -12,9 +12,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ProductInCart implements Initializable {
-
-    private ProductStateInCart productStateInCart;
-
     @FXML private ImageView productImage;
     @FXML private Label totalPriceLabel;
     @FXML private Label discountPriceLabel;
@@ -25,6 +22,7 @@ public class ProductInCart implements Initializable {
     @FXML private Label priceLabel;
     @FXML private ImageView decrease;
     private boolean productIsInCart;
+    private ProductStateInCart productStateInCart;
 
     public ProductInCart(ProductStateInCart productStateInCart) {
         this.productStateInCart = productStateInCart;
@@ -32,38 +30,39 @@ public class ProductInCart implements Initializable {
     }
 
     private void decreaseOnClick() {
-        if (productStateInCart.getCount() == 1) {
+        int count = ServerConnection.getCountInCart(productStateInCart.getProduct(),productStateInCart.getSalesperson());
+        if (count == 1) {
             productIsInCart = false;
         }
-        if (productStateInCart.getCount()-1 == 1) {
+        if (count-1 == 1) {
             Image image = new Image("/images/filled-trash.png");
             decrease.setImage(image);
         }
-        CartController.getInstance().setProductCount(productStateInCart.getProduct(), -1, productStateInCart.getSalesperson());
-        countLabel.setText(String.valueOf(productStateInCart.getCount()));
+        ServerConnection.setCountInCart(productStateInCart.getProduct(),productStateInCart.getSalesperson(),-1);
+        countLabel.setText(String.valueOf(ServerConnection.getCountInCart(productStateInCart.getProduct(),productStateInCart.getSalesperson())));
     }
 
     private void increaseOnClick() {
         Image image = new Image("/images/icons8-minus-30.png");
         decrease.setImage(image);
-        CartController.getInstance().setProductCount(productStateInCart.getProduct(), 1, productStateInCart.getSalesperson());
-        countLabel.setText(String.valueOf(productStateInCart.getCount()));
+        ServerConnection.setCountInCart(productStateInCart.getProduct(),productStateInCart.getSalesperson(),1);
+        countLabel.setText(String.valueOf(ServerConnection.getCountInCart(productStateInCart.getProduct(),productStateInCart.getSalesperson())));
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        productNameLabel.setText(productStateInCart.getProduct().getName());
-        sellerNameLabel.setText(productStateInCart.getSalesperson().getUsername());
-        totalPriceLabel.setText(String.valueOf(productStateInCart.getSalesperson().getProductPrice(productStateInCart.getProduct())));
-        if (productStateInCart.getCount() == 1) {
+        productNameLabel.setText(productStateInCart.getProductName());
+        sellerNameLabel.setText(productStateInCart.getSalesperson());
+        totalPriceLabel.setText(String.valueOf(productStateInCart.getPrice()));
+        if (ServerConnection.getCountInCart(productStateInCart.getProduct(),productStateInCart.getSalesperson()) == 1) {
             decrease.setImage(new Image("/images/filled-trash.png"));
         }
-        countLabel.setText(String.valueOf(productStateInCart.getCount()));
+        countLabel.setText(String.valueOf(ServerConnection.getCountInCart(productStateInCart.getProduct(),productStateInCart.getSalesperson())));
         decrease.setOnMouseClicked(event -> decreaseOnClick());
         increase.setOnMouseClicked(event -> increaseOnClick());
-        if (productStateInCart.getProduct().getImageURI() != null) {
-            productImage.setImage(new Image(productStateInCart.getProduct().getImageURI()));
-        }
+//        if (productStateInCart.getProduct().getImageURI() != null) {
+//            productImage.setImage(new Image(productStateInCart.getProduct().getImageURI()));
+//        }
     }
 
     public boolean isProductInCart() {
