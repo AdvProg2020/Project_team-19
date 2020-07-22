@@ -92,7 +92,7 @@ public class ProductRequest extends Request {
                 ProductController.getInstance().addProduct(product, salesperson);
                 break;
             case EDIT:
-                ProductController.getInstance().editProduct(product, salesperson, amount, price, category, name, brand, properties, imageURI, mediaURI);
+                ProductController.getInstance().editProduct(product, salesperson, amount, price, properties);
                 break;
             case DELETE:
                 ProductController.getInstance().removeProduct(product, salesperson);

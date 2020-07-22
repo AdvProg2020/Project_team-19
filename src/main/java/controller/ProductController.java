@@ -163,12 +163,10 @@ public class ProductController {
         changeFilesAfterEditProduct(product, salesperson);
     }
 
-    public void editProduct(Product product, Salesperson salesperson, int amount, double price,
-                            String category, String name, String brand, HashMap<String, String> properties, String imageURI, String mediaURI) {
-
+    public void editProduct(Product product, Salesperson salesperson, int amount, double price, HashMap<String, String> properties) {
+        product.setProperties(properties);
         changeStateToVerified(product, salesperson);
         editProductForSeller(product, salesperson, price, amount);
-        editProductInGeneral(product, category, name, brand, properties, imageURI, mediaURI);
         changeFilesAfterEditProduct(product, salesperson);
     }
 
