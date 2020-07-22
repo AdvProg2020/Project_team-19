@@ -20,7 +20,7 @@ public class CustomerOrdersMenu extends Menu {
 
     @Override
     public void show () {
-        Customer customer = (Customer) PersonController.getInstance ().getLoggedInPerson ();
+        Customer customer = null;// (Customer) PersonController.getInstance ().getLoggedInPerson ();
         System.out.println ( customer.getBuyLogs () );
         System.out.println (
                 "These commands are available :\n" +
@@ -35,7 +35,7 @@ public class CustomerOrdersMenu extends Menu {
     public void execute() {
         String input;
         Matcher matcher;
-        Customer customer = (Customer) PersonController.getInstance ().getLoggedInPerson ();
+        Customer customer = null;// = (Customer) PersonController.getInstance ().getLoggedInPerson ();
         do {
             input = scanner.nextLine();
             if (input.equals (BACK_BUTTON)) {

@@ -17,7 +17,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 public class SalespersonProductMenu extends Menu {
 
-    private Salesperson salesperson = (Salesperson) PersonController.getInstance ().getLoggedInPerson ();
+    private Salesperson salesperson;//(Salesperson) PersonController.getInstance ().getLoggedInPerson ();
 
     public SalespersonProductMenu(Menu parent) {
         super("Manage Products", parent);
@@ -78,7 +78,7 @@ public class SalespersonProductMenu extends Menu {
                     productID = getValidProductId();
                     if (productID.equals(BACK_BUTTON))
                         break;
-                    Salesperson salesperson = (Salesperson) PersonController.getInstance().getLoggedInPerson();
+                    //Salesperson salesperson = (Salesperson) PersonController.getInstance().getLoggedInPerson();
                     for (SellLog sellLog : salesperson.getSellLogs()) {
                         if (sellLog.getProduct().getID().equals(productID))
                             System.out.println(sellLog.getBuyer().getUsername());

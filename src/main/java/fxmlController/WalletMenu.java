@@ -21,6 +21,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Person;
 import model.Salesperson;
+import model.Wallet;
 import view.App;
 
 import java.net.URL;
@@ -29,6 +30,7 @@ import static clientController.ServerConnection.*;
 
 public class WalletMenu implements Initializable {
     private TextField balanceField = new TextField();
+    private Wallet wallet;
     @FXML private Label accountId;
     @FXML private TextField password;
     @FXML private Label walletBalance;
@@ -42,9 +44,10 @@ public class WalletMenu implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        wallet = getWallet();
         changeToken();
-        accountId.setText(getBankId());
-        walletBalance.setText(getWalletBalance());
+        accountId.setText(wallet.getBankId());
+        walletBalance.setText(wallet.getBalance() + "$" + "(" + wallet.getBlocked() + ")");
         checkPersonForWithdraw();
         getToken.setOnMouseClicked(event -> getToken());
         getToken.setCursor(Cursor.HAND);
@@ -112,7 +115,8 @@ public class WalletMenu implements Initializable {
             String response = getIncreaseWalletBalance(token.getText(), priceField.getText());
             stage.close();
             App.showAlert(Alert.AlertType.INFORMATION, App.currentStage, "bank response", response);
-            walletBalance.setText(getWalletBalance());
+            Wallet wallet = getWallet();
+            walletBalance.setText(wallet.getBalance() + "$" + "(" + wallet.getBlocked() + ")");
         });
         gridPane.setVgap(10);
         gridPane.setHgap(10);
@@ -159,7 +163,8 @@ public class WalletMenu implements Initializable {
             String response = getDecreaseWalletBalance(token.getText(), priceField.getText());
             stage.close();
             App.showAlert(Alert.AlertType.INFORMATION, App.currentStage, "bank response", response);
-            walletBalance.setText(getWalletBalance());
+            Wallet wallet = getWallet();
+            walletBalance.setText(wallet.getBalance() + "$" + "(" + wallet.getBlocked() + ")");
         });
         gridPane.setVgap(10);
         gridPane.setHgap(10);

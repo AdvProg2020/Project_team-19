@@ -38,7 +38,7 @@ public class RegisterController {
     }
 
     public void registerCustomer (HashMap<String, String> personInfo, String bankId) {
-        Customer customer = new Customer(personInfo, bankId, WalletController.MIN_BALANCE);
+        Customer customer = new Customer(personInfo, bankId);
     }
 
     public void registerSalesperson (HashMap<String, String> personInfo) {

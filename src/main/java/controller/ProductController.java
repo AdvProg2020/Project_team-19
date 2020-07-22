@@ -60,7 +60,8 @@ public class ProductController {
     public ArrayList<Salesperson> getVerifiedSellersOfProduct(Product product) {
         ArrayList<Salesperson> sellers = new ArrayList<>();
         for (Salesperson salesperson : stock.get(product)) {
-            if (salesperson.getProductState(product).label.equals("Verified")) {
+            if (salesperson.getProductState(product).label.equals("Verified") &&
+            !AuctionController.getInstance().isInAuction(salesperson, product)) {
                 sellers.add(salesperson);
             }
         }

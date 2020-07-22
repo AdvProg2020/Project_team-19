@@ -76,9 +76,9 @@ public class WaguTest {
         Product product = new Product("panir", "lighvan", "chiz", properties);
         HashMap<String, String> info = new HashMap<>();
         info.put("username", "seller");
-        Salesperson se = new Salesperson(info, null,0 );
+        Salesperson se = new Salesperson(info, null);
         se.addToOfferedProducts(product, 2, 3000);
-        Salesperson s2 = new Salesperson(info,null,0);
+        Salesperson s2 = new Salesperson(info,null);
         s2.addToOfferedProducts(product, 5, 1000);
         ArrayList<Salesperson> sellers = new ArrayList<>();
         sellers.add(se);
@@ -119,9 +119,9 @@ public class WaguTest {
         properties1.put("sia", "small");
         Product product1 = new Product("shir", "mihan", "labaniat", properties1);
         info.put("username", "seller");
-        Salesperson se = new Salesperson(info,null,0);
+        Salesperson se = new Salesperson(info,null);
         se.addToOfferedProducts(product, 2, 3000);
-        Salesperson s2 = new Salesperson(info,null,0);
+        Salesperson s2 = new Salesperson(info,"");
         s2.addToOfferedProducts(product1, 5, 1000);
         s2.addToOfferedProducts(product, 2 , 500);
         ArrayList<Salesperson> seller1 = new ArrayList<>();

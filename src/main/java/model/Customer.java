@@ -12,13 +12,13 @@ public class Customer extends Person {
     private Cart cart;
     private Wallet wallet;
 
-    public Customer(HashMap<String, String> personInfo, String bankId, double minBalance) {
+    public Customer(HashMap<String, String> personInfo, String bankId) {
         super(personInfo);
         discountCodes = new HashMap<>();
         buyLogs = new ArrayList<>();
         productsWithScore = new HashMap<>();
         cart = new Cart();
-        wallet = new Wallet(minBalance, bankId);
+        wallet = new Wallet(bankId);
         Database.saveToFile(this, Database.createPath("customers", personInfo.get("username")));
     }
 

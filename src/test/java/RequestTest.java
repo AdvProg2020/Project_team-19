@@ -27,7 +27,7 @@ public class RequestTest {
         HashMap<String, String> personInfo = new HashMap<>();
         personInfo.put("username", "yeki");
         personInfo.put("password", "salam");
-        Salesperson seller1 = new Salesperson(personInfo, null,0);
+        Salesperson seller1 = new Salesperson(personInfo, "");
 
         requests.add(new DiscountRequest(new Discount(null, null, 20, new ArrayList<>()) ,seller1, Request.RequestState.ADD));
         requests.add(new ProductRequest(seller1, product));
@@ -61,7 +61,7 @@ public class RequestTest {
         HashMap<String, String> personInfo = new HashMap<>();
         personInfo.put("username", "yeki");
         personInfo.put("password", "salam");
-        Salesperson seller1 = new Salesperson(personInfo,null,0);
+        Salesperson seller1 = new Salesperson(personInfo,null);
         seller1.addToOfferedProducts(product, 2, 2000);
         seller1.setBuildInProgress(product);
         if (!ProductController.stock.containsKey(product))
@@ -129,7 +129,7 @@ public class RequestTest {
         HashSet<String> properties1 = new HashSet<>();
         properties1.add("color");
         Category category = new Category( "labaniat", null, properties1);
-        Salesperson seller = new Salesperson(personInfo,null,0);
+        Salesperson seller = new Salesperson(personInfo,null);
         HashMap<String,String> properties = new HashMap<>();
         RequestController.getInstance().addProductRequest(2000.0, 2, seller, category.getName(), "panir", null, properties);
         Assert.assertNotNull(allRequests);
@@ -145,7 +145,7 @@ public class RequestTest {
         HashSet<String> properties1 = new HashSet<>();
         properties1.add("color");
         Category category = new Category( "labaniat", null, properties1);
-        Salesperson seller = new Salesperson(personInfo,null,0);
+        Salesperson seller = new Salesperson(personInfo,null);
         Product product = new Product( "panir", "lighvan",
                 category.getName(), new HashMap<>());
         ProductRequest pr = new ProductRequest(2000, 2 ,seller, product);

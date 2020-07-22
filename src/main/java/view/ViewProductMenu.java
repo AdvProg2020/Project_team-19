@@ -30,7 +30,6 @@ public class ViewProductMenu extends Menu {
         if (product != null) {
             product.increaseSeen();
         }
-        ;
     }
 
     @Override
@@ -189,7 +188,7 @@ public class ViewProductMenu extends Menu {
                             System.out.println("Sorry mojud nadarim.");
                             return;
                         }
-                        CartController.getInstance().addProduct(product, getValidSeller(input));
+                        //CartController.getInstance().addProduct(product, getValidSeller(input));
                         System.out.println("Successfully added.");
                         check = true;
                     } else {
@@ -229,20 +228,20 @@ public class ViewProductMenu extends Menu {
                     }
                 }
                 System.out.println();
-                if (PersonController.getInstance().isLoggedInPersonCustomer()) {
-                    System.out.println("Enter \"..\" to return.");
-                    System.out.println("1. Add comment");
-                } else {
-                    System.out.println("1. Back.");
-                }
+//                if (PersonController.getInstance().isLoggedInPersonCustomer()) {
+//                    System.out.println("Enter \"..\" to return.");
+//                    System.out.println("1. Add comment");
+//                } else {
+//                    System.out.println("1. Back.");
+//                }
             }
 
             @Override
             public void execute() {
                 String num = getValidMenuNumber(1, 1);
-                if (PersonController.getInstance().isLoggedInPersonCustomer()) {
-                    buildComment((Customer) PersonController.getInstance().getLoggedInPerson());
-                }
+//                if (PersonController.getInstance().isLoggedInPersonCustomer()) {
+//                    buildComment((Customer) PersonController.getInstance().getLoggedInPerson());
+//                }
             }
         };
     }

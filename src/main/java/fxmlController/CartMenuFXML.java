@@ -1,6 +1,6 @@
 package fxmlController;
 
-import controller.CartController;
+import static clientController.ServerConnection.*;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,7 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Cart;
 import model.Product;
@@ -24,7 +23,6 @@ import view.App;
 
 import java.io.IOException;
 import java.net.URL;
-import java.security.PublicKey;
 import java.util.ResourceBundle;
 
 import static view.App.getFXMLLoader;
@@ -55,15 +53,15 @@ public class CartMenuFXML implements Initializable { //todo
         ordersBox.setHgap(5);
         scrollPane.setContent(ordersBox);
         basePane.add(scrollPane, 0 , 1);
-        totalPrice.setText(String.valueOf(CartController.getInstance().getCart().calculateTotalPrice()));
+        totalPrice.setText(String.valueOf(getCart().calculateTotalPrice()));
         System.out.println(backPageName);
         back.setOnMouseClicked ( event -> App.setRoot ( backPageName ) );
 
         back.setOnMousePressed ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #17b5ff,75,0,5,0);" ) );
 
         back.setOnMouseReleased ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" ) );
-
-        discountCodeAmount.setText(String.valueOf(CartController.getInstance().getCart().calculateTotalPrice () - CartController.getInstance ().getCart ().getTotalPriceAfterDiscountCode ()));
+        Cart cart = getCart();
+        discountCodeAmount.setText(String.valueOf(cart.calculateTotalPrice () - cart.getTotalPriceAfterDiscountCode ()));
     }
 
     @FXML
@@ -82,18 +80,17 @@ public class CartMenuFXML implements Initializable { //todo
 
     @FXML
     void purchase(ActionEvent event) {
-        try {
-            CartController.getInstance().purchase(true);
-            App.setRoot("pay");
-        } catch (CartController.NoLoggedInPersonException e) {
+        if (token.length()==0) {
             App.showAlert(Alert.AlertType.ERROR,App.currentStage,"Error","You need to login.");
-        } catch (CartController.AccountIsNotCustomerException e) {
+        } else if(!getPersonTypeByToken().equalsIgnoreCase("customer")) {
             App.showAlert(Alert.AlertType.ERROR,App.currentStage,"Error","You need to login with customer account.");
+        }else {
+            App.setRoot("pay");
         }
     }
 
     private void setCartsOnPane() {
-        Cart cart = CartController.getInstance().getCart();
+        Cart cart = getCart();
         int rowIndex = 0;
         for (Product product : cart.getProducts().keySet()) {
             for (Salesperson salesperson : cart.getProducts().get(product).keySet()){

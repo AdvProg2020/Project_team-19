@@ -1,6 +1,7 @@
 package model;
 
 
+import controller.AuctionController;
 import controller.Database;
 import controller.DiscountController;
 import controller.ProductController;
@@ -13,17 +14,18 @@ public class Salesperson extends Person {
     private ArrayList<SellLog> sellLogs;
     private HashMap<String, ProductState> offeredProducts;
     private ArrayList<Discount> discounts;
-    private HashMap<String, LocalDateTime> auctions;  //product -> endTime
+    //private HashMap<String, LocalDateTime> auctions;  //product -> endTime
+    private ArrayList<String> auctions;
     private Wallet wallet;
 
 
-    public Salesperson(HashMap<String, String> personInfo, String bankId, double minBalance) {
+    public Salesperson(HashMap<String, String> personInfo, String bankId) {
         super(personInfo);
         sellLogs = new ArrayList<>();
         offeredProducts = new HashMap<>();
         discounts = new ArrayList<>();
-        auctions = new HashMap<>();
-        wallet = new Wallet(minBalance, bankId);
+        auctions = new ArrayList<>();
+        wallet = new Wallet(bankId);
         Database.saveToFile(this, Database.createPath("salespersons", personInfo.get("username")));
     }
 
@@ -31,32 +33,25 @@ public class Salesperson extends Person {
         return wallet;
     }
 
-    public void addAuction(Product product, LocalDateTime endTime) {
-        auctions.put(product.getID(), endTime);
+    public void addAuction(String auctionId) {
+        auctions.add(auctionId);
     }
 
-    public void removeAuction(Product product) {
-        auctions.remove(product.getID());
+    public void removeAuction(String auctionId) {
+        auctions.remove(auctionId);
     }
 
-    public boolean isInAuction(Product product) {
-        return auctions.containsKey(product.getID());
-    }
-
-    public boolean checkEndTimeAuction(Product product) {
-        return auctions.get(product.getID()).isBefore(LocalDateTime.now());
-    }
-
-    public LocalDateTime getAuctionEndTime(Product product) {
-        return auctions.get(product.getID());
-    }
+//    public boolean checkEndTimeAuction(Product product) {
+//        return auctions.get(product.getID()).isBefore(LocalDateTime.now());
+//    }
 
     public HashMap<Product, LocalDateTime> getAuctions() {
         HashMap<Product, LocalDateTime> auctionsMap = new HashMap<>();
 
-        for (String productId : auctions.keySet()) {
-            Product product = ProductController.getInstance().getProductById(productId);
-            auctionsMap.put(product, auctions.get(productId));
+        for (String auctionId : auctions) {
+            Auction auction = AuctionController.getInstance().getAuctionById(auctionId);
+            Product product = ProductController.getInstance().getProductById(auction.getProductId());
+            auctionsMap.put(product, auction.getEndTime());
         }
 
         return auctionsMap;

@@ -7,7 +7,7 @@ import model.SellLog;
 
 public class SalespersonMenu extends Menu {
 
-    Salesperson salesperson = (Salesperson) PersonController.getInstance ().getLoggedInPerson ();
+    //Salesperson salesperson = (Salesperson) PersonController.getInstance ().getLoggedInPerson ();
 
     public SalespersonMenu ( Menu parent ) {
         super ( "Salesperson Menu" , parent );
@@ -37,8 +37,9 @@ public class SalespersonMenu extends Menu {
             @Override
             public void show () {
                 System.out.println (
-                        "Company : " + salesperson.getPersonInfo ( ).get ( "company" ) + "\n" +
-                                "Dar Surate Vjud Sayere Moshakhsat :" + salesperson.getPersonInfo ( ).get ( "dar surate vjud sayere moshakhsat" ) );
+                        "Company : " + //salesperson.getPersonInfo ( ).get ( "company" ) + "\n" +
+                                "Dar Surate Vjud Sayere Moshakhsat :" +
+                                "salesperson.getPersonInfo ( ).get ( dar surate vjud sayere moshakhsat ) ");
                 super.show ( );
             }
 
@@ -53,7 +54,7 @@ public class SalespersonMenu extends Menu {
         return new Menu ( "Show Balance" , this ) {
             @Override
             public void show () {
-                System.out.println ( "Your balance is : " + salesperson.getCredit ( ) );
+                //System.out.println ( "Your balance is : " + salesperson.getCredit ( ) );
                 super.show ( );
             }
 
@@ -68,10 +69,10 @@ public class SalespersonMenu extends Menu {
         return new Menu("View Sales History",this) {
             @Override
             public void show() {
-                for (SellLog sellLog : salesperson.getSellLogs ( )) {
-                    System.out.println ( sellLog.getEverythingString () );
-                    System.out.println ( LINE );
-                }
+//                for (SellLog sellLog : salesperson.getSellLogs ( )) {
+//                    System.out.println ( sellLog.getEverythingString () );
+//                    System.out.println ( LINE );
+//                }
                 super.show();
             }
 

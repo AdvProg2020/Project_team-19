@@ -16,7 +16,7 @@ public class purchaseTest {
         Database.initializeAddress();
         HashMap<String,String> Info = new HashMap<>();
         Info.put("username","reza");
-        Customer customer = new Customer(Info, null, 0);
+        Customer customer = new Customer(Info, null);
         customer.setCredit(100000);
         PersonController.getInstance().addPerson(customer);
       //  PersonController.getInstance().login("reza");
@@ -24,7 +24,7 @@ public class purchaseTest {
         Product product2 = new Product("comb","beauty","",Info);
         HashMap<String,String> info = new HashMap<>();
         info.put("username","ogy");
-        Salesperson salesperson = new Salesperson(info, null, 0);
+        Salesperson salesperson = new Salesperson(info, null);
         salesperson.addToOfferedProducts(product1,5,6000);
         salesperson.addToOfferedProducts(product2,5,2000);
         customer.getCart().addProduct(product1,salesperson);
@@ -33,7 +33,7 @@ public class purchaseTest {
         DiscountCode discountCode = DiscountCodeController.getInstance().addNewDiscountCode(LocalDateTime.MIN,LocalDateTime.MAX,10,100000,5,null);
         DiscountCodeController.getInstance().addToCustomer(discountCode,customer);
         DiscountCodeController.getInstance().editDiscountCode(discountCode,3,"50");
-        CartController.getInstance().manageDiscountCode(discountCode);
+        //CartController.getInstance().manageDiscountCode(discountCode);
         Assert.assertEquals(customer.getCart().getTotalPriceAfterDiscountCode(), 13000, 1);
     }
 
@@ -42,7 +42,7 @@ public class purchaseTest {
         Database.initializeAddress();
         HashMap<String,String> Info = new HashMap<>();
         Info.put("username","reza");
-        Customer customer = new Customer(Info, null ,0);
+        Customer customer = new Customer(Info, null );
         customer.setCredit(100000);
         PersonController.getInstance().addPerson(customer);
         //PersonController.getInstance().login("reza");
@@ -50,7 +50,7 @@ public class purchaseTest {
         Product product2 = new Product("comb","beauty","",Info);
         HashMap<String,String> info = new HashMap<>();
         info.put("username","ogy");
-        Salesperson salesperson = new Salesperson(info, null, 0);
+        Salesperson salesperson = new Salesperson(info, null);
         salesperson.addToOfferedProducts(product1,5,5000);
         salesperson.addToOfferedProducts(product2,5,2000);
         customer.getCart().addProduct(product1,salesperson);
@@ -58,7 +58,7 @@ public class purchaseTest {
         customer.getCart().setProductCount(product1,salesperson,3);
         DiscountCode discountCode = DiscountCodeController.getInstance().addNewDiscountCode(LocalDateTime.MIN,LocalDateTime.MAX,10,100,5,null);
         DiscountCodeController.getInstance().addToCustomer(discountCode,customer);
-        CartController.getInstance().manageDiscountCode(discountCode);
+        //CartController.getInstance().manageDiscountCode(discountCode);
         Assert.assertEquals(customer.getCart().getTotalPriceAfterDiscountCode(), 21900, 1);
     }
 
@@ -67,7 +67,7 @@ public class purchaseTest {
         Database.initializeAddress();
         HashMap<String,String> Info = new HashMap<>();
         Info.put("username","reza");
-        Customer customer = new Customer(Info, null, 0);
+        Customer customer = new Customer(Info, null);
         customer.setCredit(100000);
         PersonController.getInstance().addPerson(customer);
       //  PersonController.getInstance().login("reza");
@@ -75,7 +75,7 @@ public class purchaseTest {
         Product product2 = new Product("comb","beauty","",Info);
         HashMap<String,String> info = new HashMap<>();
         info.put("username","ogy");
-        Salesperson salesperson = new Salesperson(info, null, 0);
+        Salesperson salesperson = new Salesperson(info, null);
         salesperson.addToOfferedProducts(product1,5,5000);
         salesperson.addToOfferedProducts(product2,5,2000);
         ArrayList<Product> products = new ArrayList<>();
@@ -90,7 +90,7 @@ public class purchaseTest {
         customer.getCart().addProduct(product1,salesperson);
         customer.getCart().addProduct(product2,salesperson);
         customer.getCart().setProductCount(product1,salesperson,3);
-        CartController.getInstance().purchase();
+        //CartController.getInstance().purchase();
         Assert.assertEquals(22000,salesperson.getCredit(),1);
         Assert.assertEquals(78000,customer.getCredit(),1);
     }

@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import model.Auction;
 import model.Product;
 import model.Salesperson;
 import view.App;
@@ -42,9 +43,9 @@ public class AllAuctionsMenu implements Initializable {
         setCardsOnPaneAndMouseClicked();
     }
 
-    private void handleClickOnAuction(Salesperson salesperson, Product product, Parent card) {
+    private void handleClickOnAuction(Auction auction, Parent card) {
         MainMenuController.isInAllAuction = false;
-        AuctionMenu auctionMenu = new AuctionMenu(salesperson, product, card);
+        AuctionMenu auctionMenu = new AuctionMenu(auction, card);
         FXMLLoader loader = new FXMLLoader(AllAuctionsMenu.class.getResource("/fxml/auctionMenu.fxml"));
         loader.setController(auctionMenu);
         App.setRoot(loader);
@@ -52,25 +53,23 @@ public class AllAuctionsMenu implements Initializable {
 
     private void setCardsOnPaneAndMouseClicked() {
         int index = 0;
-        HashMap<Salesperson, ArrayList<Product>> allAuctions = getAllAuctions();
-        for (Salesperson seller : allAuctions.keySet()) {
-            for (Product product : allAuctions.get(seller)) {
-                AuctionInList auctionInList = new AuctionInList(seller, product);
-                FXMLLoader loader = new FXMLLoader(AllAuctionsMenu.class.getResource("/fxml/auctionInList.fxml"));
-                loader.setController(auctionInList);
-                Parent parent = null;
-                try {
-                    parent = loader.load();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                assert parent != null;
-                auctionCards.add(parent);
-                cardsBase.add(parent, index % 3, index / 3);
-                Parent finalParent = parent;
-                parent.setOnMouseClicked(event -> handleClickOnAuction(seller, product, finalParent));
-                index++;
+        ArrayList<Auction> allAuctions = getAllAuctions();
+        for (Auction auction : allAuctions) {
+            AuctionInList auctionInList = new AuctionInList(auction);
+            FXMLLoader loader = new FXMLLoader(AllAuctionsMenu.class.getResource("/fxml/auctionInList.fxml"));
+            loader.setController(auctionInList);
+            Parent parent = null;
+            try {
+                parent = loader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            assert parent != null;
+            auctionCards.add(parent);
+            cardsBase.add(parent, index % 3, index / 3);
+            Parent finalParent = parent;
+            parent.setOnMouseClicked(event -> handleClickOnAuction(auction, finalParent));
+            index++;
         }
     }
 

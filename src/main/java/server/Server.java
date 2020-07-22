@@ -6,7 +6,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import controller.*;
 import model.*;
-import view.App;
 import view.LoginMenu;
 
 import java.io.*;
@@ -87,6 +86,7 @@ public class Server {
         commands.put(GET_PERSON_BY_TOKEN, new GetPersonByToken());
         commands.put(GET_BANK_ID, new GetBankId());
         commands.put(GET_WALLET_BALANCE, new GetWalletBalance());
+        commands.put(GET_WALLET, new GetWallet());
         commands.put(GET_REQUESTS_OF_TYPE, new GetRequestsOfType());
         commands.put(GET_PERSON_INFO_BY_TOKEN, new GetPersonInfoByToken());
         commands.put(WALLET_PURCHASE, new WalletPurchaseHandler());
@@ -95,6 +95,10 @@ public class Server {
         commands.put(GET_IN_DISCOUNT_CATEGORY_PRODUCTS, new GetInDiscountProductsOfCategory());
         commands.put(GET_NODE_CATEGORIES, new GetNodeCategories());
         commands.put(ADD_TO_CART, new AddToCartHandler());
+        commands.put(GET_CART,new GetCartHandler());
+        commands.put(OFFER_PRICE_FOR_AUCTION, new OfferPriceForAuctionHandler());
+        commands.put(SEND_AUCTION_MESSAGE, new SendAuctionMessage());
+        commands.put(AUCTION_PURCHASE, new AuctionPurchase());
     }
 
     public static Server getInstance() {
@@ -184,8 +188,12 @@ public class Server {
         @Override
         public void handle(Connection connection) {
             try {
+                Cart cart = null;
                 ArrayList<String> strings = connection.getRequest().getJson();
-                PersonController.getInstance().login(strings.get(0), strings.get(1));
+//                if (PersonController.getInstance().getPersonByUsername(strings.get(0)).getType().equalsIgnoreCase("customer")) {
+//                    cart = (Cart) read(Cart.class, strings.get(2));
+//                }
+                PersonController.getInstance().login(strings.get(0), strings.get(1),cart);
                 String token = UUID.randomUUID().toString();;
                 authTokens.put(token, strings.get(0));
                 connection.SendMessage(token);
@@ -278,9 +286,10 @@ public class Server {
         @Override
         public void handle(Connection connection) {
             ArrayList<String> strings = connection.getRequest().getJson();
+            Product product = ProductController.getInstance().getProductById(strings.get(0));
             Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
-            HashMap<String, String> properties = (HashMap<String, String>) Server.read(new TypeToken<HashMap<String, String>>() {}.getType(),connection.getRequest().getJson().get(6));
-            RequestController.getInstance().editProductRequest(strings.get(0),strings.get(1),salesperson,strings.get(2),strings.get(3),strings.get(4),strings.get(5),properties,strings.get(7),strings.get(8));
+            HashMap<String, String> properties = (HashMap<String, String>) Server.read(new TypeToken<HashMap<String, String>>() {}.getType(),connection.getRequest().getJson().get(3));
+            RequestController.getInstance().editProductRequest(strings.get(1),strings.get(2),salesperson,product.getID(), properties);
             connection.SendMessage("successful");
         }
     }
@@ -320,11 +329,21 @@ public class Server {
 
         @Override
         synchronized public void handle(Connection connection) {
+            Customer customer = (Customer) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
             ArrayList<String> strings = connection.getRequest().getJson();
             Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(strings.get(0));
             Product product = ProductController.getInstance().getProductById(strings.get(1));
-            CartController.getInstance().setProductCount(product,-1,salesperson);
+            CartController.getInstance().setProductCount(product,-1,salesperson,customer);
             connection.SendMessage("successful");
+        }
+    }
+
+    class GetCartHandler implements Handler{
+
+        @Override
+        public void handle(Connection connection) {
+            Customer customer = (Customer) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
+            connection.SendMessage(write(customer.getCart()));
         }
     }
 
@@ -332,13 +351,13 @@ public class Server {
 
         @Override
         public void handle(Connection connection) {
-            try {
-
-                CartController.getInstance().purchase(true);
-                App.setRoot("pay");
-            } catch (CartController.NoLoggedInPersonException | CartController.AccountIsNotCustomerException e) {
-                connection.SendMessage(e.getMessage());
-            }
+//            try {
+//
+//                CartController.getInstance().purchase(true);
+//                App.setRoot("pay");
+//            } catch (CartController.NoLoggedInPersonException | CartController.AccountIsNotCustomerException e) {
+//                connection.SendMessage(e.getMessage());
+//            }
         }
     }
 
@@ -346,10 +365,11 @@ public class Server {
 
         @Override
         synchronized public void handle(Connection connection) {
+            Customer customer = (Customer) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
             ArrayList<String> strings = connection.getRequest().getJson();
             Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(strings.get(0));
             Product product = ProductController.getInstance().getProductById(strings.get(1));
-            CartController.getInstance().setProductCount(product,+1,salesperson);
+            CartController.getInstance().setProductCount(product,+1,salesperson,customer);
             connection.SendMessage("successful");
         }
     }
@@ -581,6 +601,22 @@ public class Server {
         }
     }
 
+    class GetWallet implements Handler {
+
+        @Override
+        public void handle(Connection connection) {
+            String username = authTokens.get(connection.getRequest().getToken());
+            Person person = PersonController.getInstance().getPersonByUsername(username);
+            String wallet = "";
+            if (person.getType().equalsIgnoreCase("customer")) {
+                wallet = write(((Customer) person).getWallet());
+            } else if (person.getType().equalsIgnoreCase("salesperson")) {
+                wallet = write(((Salesperson)person).getWallet());
+            }
+            connection.SendMessage(wallet);
+        }
+    }
+
     class GetWalletBalance implements Handler {
 
         @Override
@@ -711,7 +747,7 @@ public class Server {
         @Override
         public void handle(Connection connection) {
             Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
-            connection.SendMessage(write(AuctionController.getInstance().getSellerAuctionProducts(salesperson)));
+            connection.SendMessage(write(AuctionController.getInstance().getSellerAvailableProductsForAuction(salesperson)));
         }
     }
 
@@ -985,13 +1021,61 @@ public class Server {
 
         @Override
         public void handle(Connection connection) {
+            Customer customer = null;
             String sellerName = connection.getRequest().getJson().get(0);
             String productId = connection.getRequest().getJson().get(1);
-
+            if (connection.getRequest().getToken().length()!=0)
+                 customer = (Customer) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
             Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(sellerName);
             Product product = ProductController.getInstance().getProductById(productId);
+            CartController.getInstance().addProduct(product,salesperson,customer);
+        }
+    }
 
-            //todo to CartController.add product login persene
+    class OfferPriceForAuctionHandler implements Handler {
+
+        @Override
+        public void handle(Connection connection) {
+            String username = authTokens.get(connection.getRequest().getToken());
+            String auctionId = connection.getRequest().getJson().get(0);
+            String amount = connection.getRequest().getJson().get(1);
+
+            Customer customer = (Customer) PersonController.getInstance().getPersonByUsername(username);
+            Auction auction = AuctionController.getInstance().getAuctionById(auctionId);
+
+            if (WalletController.getInstance().canDecreaseWalletBalance(customer, Double.parseDouble(amount))) {
+                AuctionController.getInstance().addBuyer(auction, customer, Double.parseDouble(amount));
+                connection.SendMessage("successful");
+            } else {
+                connection.SendMessage("not enough money in your wallet");
+            }
+        }
+    }
+
+    class AuctionPurchase implements Handler {
+
+        @Override
+        public void handle(Connection connection) {
+            Auction auction = AuctionController.getInstance().getAuctionById(connection.getRequest().getJson().get(0));
+            String username = authTokens.get(connection.getRequest().getToken());
+            if (AuctionController.getInstance().getHighestOfferPriceCustomer(auction) != null && AuctionController.getInstance().getHighestOfferPriceCustomer(auction).getUsername().equals(username)) {
+                connection.SendMessage("Yaaay! you won the auction :)");
+            } else {
+                connection.SendMessage(username + " won thw auction :(");
+            }
+            AuctionController.getInstance().purchase(auction);
+        }
+    }
+
+    class SendAuctionMessage implements Handler {
+
+        @Override
+        public void handle(Connection connection) {
+            String username = authTokens.get(connection.getRequest().getToken());
+            Customer customer = (Customer) PersonController.getInstance().getPersonByUsername(username);
+            Auction auction = AuctionController.getInstance().getAuctionById(connection.getRequest().getJson().get(0));
+            String text = connection.getRequest().getJson().get(1);
+
         }
     }
 
@@ -1013,6 +1097,7 @@ public class Server {
         ProductController.getInstance().initializeProducts();
         CategoryController.getInstance().initializeRootCategories();
         PersonController.getInstance().initializePersons();
+        AuctionController.getInstance().initializeAuctions();
         ProductController.getInstance().initializeStock();
         RequestController.getInstance().initializeRequests();
         WalletController.getInstance().initializer();

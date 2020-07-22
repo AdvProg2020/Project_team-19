@@ -70,7 +70,7 @@ public class PurchaseMenu extends Menu {
                 String code = getDiscountCode();
                 if (code.equals(BACK_BUTTON))
                     return;
-                CartController.getInstance().manageDiscountCode(DiscountCodeController.getInstance().findDiscountCodeByCode(code));
+               // CartController.getInstance().manageDiscountCode(DiscountCodeController.getInstance().findDiscountCodeByCode(code));
                 discountCodeIsUsed = true;
             }
         };
@@ -86,7 +86,7 @@ public class PurchaseMenu extends Menu {
             @Override
             public void execute() {
                 try {
-                    CartController.getInstance().purchase();
+                  //  CartController.getInstance().purchase();
                 }catch (Exception e){
                     System.out.println(e.getMessage());
                 }
@@ -95,7 +95,7 @@ public class PurchaseMenu extends Menu {
     }
 
     public String getDiscountCode(){
-        Customer customer= (Customer) PersonController.getInstance().getLoggedInPerson();
+        Customer customer= null;// (Customer) PersonController.getInstance().getLoggedInPerson();
 
         boolean check;
         String input;

@@ -19,6 +19,7 @@ public class ServerConnection {
     public static DataOutputStream dataOutputStream;
     public static DataInputStream dataInputStream;
     public static String token = "";
+    private static Cart tempCart = new Cart();
 
     public static void run() {
         try {
@@ -30,11 +31,45 @@ public class ServerConnection {
         }
     }
 
-    public static String addToCart(String sellerName, String productId) {
+    public static String auctionPurchase(String auctionId) {
         ArrayList<String> info = new ArrayList<>();
-        info.add(sellerName);
-        info.add(productId);
-        return sendMessage(ADD_TO_CART, info, token);
+        info.add(auctionId);
+        return sendMessage(AUCTION_PURCHASE, info, token);
+    }
+
+    public static String sendAuctionMessage(String auctionId, String text) {
+        ArrayList<String> info = new ArrayList<>();
+        info.add(auctionId);
+        info.add(text);
+        return sendMessage(SEND_AUCTION_MESSAGE, info, token);
+    }
+
+    public static String getOfferPriceForAuction(String auctionId, double amount) {
+        ArrayList<String> info = new ArrayList<>();
+        info.add(auctionId);
+        info.add(String.valueOf(amount));
+        return sendMessage(OFFER_PRICE_FOR_AUCTION, info, token);
+    }
+
+    public static String addToCart(Salesperson seller, Product product) {
+        ArrayList<String> info = new ArrayList<>();
+        if (token.length()!=0) {
+            info.add(seller.getUsername());
+            info.add(product.getID());
+            return sendMessage(ADD_TO_CART, info, token);
+        }else {
+            tempCart.addProduct(product,seller);
+            return "successful";
+        }
+    }
+
+    public static Cart getCart(){
+        if (token.length()!=0){
+            String response = sendMessage(GET_CART,null,token);
+            return (Cart) getObj(Cart.class,response);
+        }else {
+            return tempCart;
+        }
     }
 
     public static ArrayList<Product> getCategoryProductList(String categoryName, boolean inDiscount) {
@@ -68,6 +103,11 @@ public class ServerConnection {
         return sendMessage(GET_WALLET_BALANCE, null, token);
     }
 
+    public static Wallet getWallet() {
+        String response = sendMessage(GET_WALLET, null, token);
+        return (Wallet) getObj(Wallet.class, response);
+    }
+
     public static String sendLogout() {
         return sendMessage(LOG_OUT, null, token);
     }
@@ -90,7 +130,7 @@ public class ServerConnection {
         return sendMessage(INCREASE_SCORE, info, "");
     }
 
-    public static ArrayList<Salesperson> getProductSellers(String productId) {
+    public static ArrayList<Salesperson> getProductSellersForProductMenu(String productId) {
         ArrayList<String> info = new ArrayList<>();
         info.add(productId);
         String response = sendMessage(GET_SELLERS_OF_PRODUCTS, info, "");
@@ -181,7 +221,7 @@ public class ServerConnection {
     public static String sendLoginRequest(String username, String password) {
         ArrayList<String> info = new ArrayList<>();
         info.add(username);
-        info.add(password);
+        info.add(password); //todo n
         return sendMessage(LOGIN, info, "");
     }
 
@@ -306,9 +346,9 @@ public class ServerConnection {
         return sendMessage(REMOVE_CATEGORY, info, "");
     }
 
-    public static HashMap<Salesperson, ArrayList<Product>> getAllAuctions() {
+    public static ArrayList<Auction> getAllAuctions() {
         String response = sendMessage(GET_ALL_AUCTIONS, null, "");
-        return (HashMap<Salesperson, ArrayList<Product>>) getObj(new TypeToken<HashMap<Salesperson, ArrayList<Product>>>(){}.getType(), response);
+        return (ArrayList<Auction>) getObj(new TypeToken<ArrayList<Auction>>(){}.getType(), response);
     }
 
     public static ArrayList<Product> getAvailableProductsForAuction() {

@@ -26,11 +26,11 @@ public class ChangeInfo implements Initializable {  //todo
 
     @Override
     public void initialize ( URL location , ResourceBundle resources ) {
-        ObservableList <String> typeItems;
-        if ( PersonController.getInstance ().getLoggedInPerson () instanceof Salesperson )
-            typeItems = FXCollections.observableArrayList ( "Password","First Name","Last Name","Email","Phone Number","Company","Dar Surate Vjud Sayere Moshakhsat" );
-        else
-            typeItems = FXCollections.observableArrayList ( "Password","First Name","Last Name","Email","Phone Number" );
+        ObservableList <String> typeItems = null;
+//        if ( PersonController.getInstance ().getLoggedInPerson () instanceof Salesperson )
+//            typeItems = FXCollections.observableArrayList ( "Password","First Name","Last Name","Email","Phone Number","Company","Dar Surate Vjud Sayere Moshakhsat" );
+//        else
+//            typeItems = FXCollections.observableArrayList ( "Password","First Name","Last Name","Email","Phone Number" );
         field.setItems ( typeItems );
         field.setValue ( "Password" );
         text.setVisible ( false );
@@ -49,13 +49,13 @@ public class ChangeInfo implements Initializable {  //todo
         } );
     }
 
-    @FXML private void done () {
-        if (field.getValue ().equals ( "Password" )) {
-            PersonController.getInstance ().getLoggedInPerson ().setField ( PASSWORD.label , password.getText () );
-        } else {
-            System.out.println ( field.getValue ().toLowerCase () );
-            PersonController.getInstance ().getLoggedInPerson ().setField ( field.getValue ().toLowerCase () , text.getText () );
-        }
+    @FXML private void done () { //todo
+//        if (field.getValue ().equals ( "Password" )) {
+//            PersonController.getInstance ().getLoggedInPerson ().setField ( PASSWORD.label , password.getText () );
+//        } else {
+//            System.out.println ( field.getValue ().toLowerCase () );
+//            PersonController.getInstance ().getLoggedInPerson ().setField ( field.getValue ().toLowerCase () , text.getText () );
+//        }
         Metadata.personInfoController.updateTable ();
         cancel();
     }

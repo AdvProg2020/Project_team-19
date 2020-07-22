@@ -88,10 +88,10 @@ public abstract class Menu {
             nextMenu = subMenus.get(chosenMenu);
         assert nextMenu != null;
         nextMenu.run();
-        if (nextMenu instanceof UserMenu && !PersonController.getInstance().isThereLoggedInPerson())
-            nextMenu.parentMenu.run();
-        else
-            this.run();
+        //if (nextMenu instanceof UserMenu && !PersonController.getInstance().isThereLoggedInPerson())
+//            nextMenu.parentMenu.run();
+//        else
+//            this.run();
     }
 
     public Menu getCategoryMenu(Menu parent) {
@@ -201,7 +201,7 @@ public abstract class Menu {
 
             @Override
             public void execute() {
-                PersonController.getInstance().logOut();
+                //PersonController.getInstance().logOut();
             }
         };
     }
@@ -245,17 +245,17 @@ public abstract class Menu {
 
     public String getValidCustomer() {
         boolean check;
-        String input;
-        do {
-            input = scanner.nextLine();
-            if (input.equals(BACK_BUTTON))
-                return input;
-            check = PersonController.getInstance().isLoggedInPersonCustomer();
-            if (!check) {
-                System.out.println("There is no customer with that username. Please enter username again:");
-            }
-
-        } while (!check);
+        String input = "ggg";
+//        do {
+//            input = scanner.nextLine();
+//            if (input.equals(BACK_BUTTON))
+//                return input;
+//            //check = PersonController.getInstance().isLoggedInPersonCustomer();
+////            if (!check) {
+////                System.out.println("There is no customer with that username. Please enter username again:");
+////            }
+//
+//        } while (!check);
         return input;
     }
 
@@ -358,8 +358,8 @@ public abstract class Menu {
             nextMenu = subMenus.get(chosenMenu);
         assert nextMenu != null;
         nextMenu.run();
-        if (!(this instanceof LoginMenu) && PersonController.getInstance().getLoggedInPerson() != null)
-            this.run();
+//        if (!(this instanceof LoginMenu) && PersonController.getInstance().getLoggedInPerson() != null)
+//            this.run();
     }
 
 //    public static void clearScreen(int x, int y) throws AWTException {

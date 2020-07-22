@@ -26,9 +26,11 @@ public class WalletController {
     }
 
     public void initializer() {
-        MIN_BALANCE = (Double) Database.read(Double.class, address.get("min_balance"));
-        WAGE = (Double) read(Double.class, address.get("wage"));
-        SHOP_BANK_ID = (String) read(String.class, address.get("shop_bankId"));
+        MIN_BALANCE = Database.read(Double.class, address.get("min_balance")) == null ? 0 : (Double) Database.read(Double.class, address.get("min_balance"));
+        WAGE =  read(Double.class, address.get("wage")) == null ? 0 : (Double)read(Double.class, address.get("wage"));
+        SHOP_BANK_ID = read(String.class, address.get("shop_bankId")) == null ? "" : (String) read(String.class, address.get("shop_bankId"));
+        SHOP_BANK_USERNAME = read(String.class, address.get("shop_username")) == null ? "" : (String)read(String.class, address.get("shop_username"));
+        SHOP_BANK_PASSWORD = read(String.class, address.get("shop_password")) == null ? "" : (String)read(String.class, address.get("shop_password"));
     }
 
     public void setMIN_BALANCE(double MIN_BALANCE) {
@@ -136,9 +138,9 @@ public class WalletController {
 
     public boolean canDecreaseWalletBalance(Person person, double amount) {
         if (person instanceof Salesperson) {
-            return ((Salesperson)person).getWallet().getBalance() - amount >= WalletController.MIN_BALANCE;
+            return ((Salesperson)person).getWallet().getBalance() - amount >= ((Salesperson)person).getWallet().getBlocked();
         } else if (person instanceof  Customer) {
-            return ((Customer)person).getWallet().getBalance() - amount >= WalletController.MIN_BALANCE;
+            return ((Customer)person).getWallet().getBalance() - amount >= ((Customer)person).getWallet().getBlocked();
         }
         return false;
     }
@@ -152,9 +154,5 @@ public class WalletController {
             ((Customer) person).getWallet().decreaseBalance(amount);
             saveToFile(person, createPath("customers", person.getUsername()));
         }
-    }
-
-    public void setWalletForCustomer() {
-
     }
 }

@@ -53,8 +53,6 @@ public class SellerInList implements Initializable {
     }
 
     private void handleAddToCart() {
-        addToCart(salesperson.getUsername(), product.getID());
-        //nmidunam casi ke login nakarde token nadare
-        //CartController.getInstance().addProduct(product, salesperson);
+        addToCart(salesperson, product);
     }
 }

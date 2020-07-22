@@ -1,6 +1,5 @@
 package fxmlController;
 
-import controller.CartController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -10,6 +9,7 @@ import model.ProductStateInCart;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import static clientController.ServerConnection.*;
 
 public class ProductInCart implements Initializable {
 
@@ -39,14 +39,14 @@ public class ProductInCart implements Initializable {
             Image image = new Image("/images/filled-trash.png");
             decrease.setImage(image);
         }
-        CartController.getInstance().setProductCount(productStateInCart.getProduct(), -1, productStateInCart.getSalesperson());
+        //todo CartController.getInstance().setProductCount(productStateInCart.getProduct(), -1, productStateInCart.getSalesperson());
         countLabel.setText(String.valueOf(productStateInCart.getCount()));
     }
 
     private void increaseOnClick() {
         Image image = new Image("/images/icons8-minus-30.png");
         decrease.setImage(image);
-        CartController.getInstance().setProductCount(productStateInCart.getProduct(), 1, productStateInCart.getSalesperson());
+        //todo CartController.getInstance().setProductCount(productStateInCart.getProduct(), 1, productStateInCart.getSalesperson());
         countLabel.setText(String.valueOf(productStateInCart.getCount()));
     }
 

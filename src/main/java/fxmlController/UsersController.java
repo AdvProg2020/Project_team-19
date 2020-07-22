@@ -29,7 +29,7 @@ import java.util.ResourceBundle;
 
 import static view.App.getFXMLLoader;
 
-public class UsersController implements Initializable {
+public class UsersController implements Initializable { //todo alireza
 
     public TableView < UserForTable > tableView;
     public TableColumn < UserForTable,String > nameColumn;
@@ -78,8 +78,8 @@ public class UsersController implements Initializable {
                     if (result.orElse(cancel) == ok) {
                         Person person = PersonController.getInstance ().getPersonByUsername ( userForTable.getName () );
                         try {
-                            if (person == PersonController.getInstance ().getLoggedInPerson ())
-                                throw new Exception ( "Don't Commit Suicide" );
+//                            if (person == PersonController.getInstance ().getLoggedInPerson ())
+//                                throw new Exception ( "Don't Commit Suicide" );
                             if (person instanceof Salesperson ) {
                                 CartController.getInstance ( ).removeSeller ( (Salesperson) person );
                                 ProductController.getInstance ().removeSellerInStock ( (Salesperson) person );

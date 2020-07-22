@@ -135,15 +135,10 @@ public class ProductRequestFXML implements Initializable {
     private void action() {
         if (state.equals(Request.RequestState.EDIT)) {
             ArrayList<String> info = new ArrayList<>();
+            info.add(product.getID());
             info.add(price.getText());
             info.add(amount.getText());
-            info.add(product.getID());
-            info.add(category.getText());
-            info.add(name.getText());
-            info.add(brand.getText());
             info.add(toJson(properties));
-            info.add(image);
-            info.add(media);
             editProductRequest(info);
         } else if (state.equals(Request.RequestState.ADD)) {
             ArrayList<String> info = new ArrayList<>();

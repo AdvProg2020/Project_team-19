@@ -58,18 +58,14 @@ public class ProductRequest extends Request {
         save();
     }
 
-    public ProductRequest(double price, int amount, Salesperson salesperson, String category, String name
-            , String brand, HashMap<String, String> properties, Product product, String imageURI, String mediaURI) {
+    public ProductRequest(double price, int amount, Salesperson salesperson, HashMap<String, String> properties, Product product) {
         super(RequestState.EDIT);
-        this.imageURI = imageURI;
-        this.mediaURI = mediaURI;
         this.productId = product.getID();
         this.price = price;
         this.amount = amount;
+        this.name = product.getName();
+        this.category = product.getCategory().getName();
         this.salespersonUsername = salesperson.getUsername();
-        this.category = category;
-        this.name = name;
-        this.brand = brand;
         this.properties = new HashMap<>(properties);
         save();
     }

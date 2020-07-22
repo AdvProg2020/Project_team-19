@@ -15,7 +15,7 @@ public class PersonalInfoMenu extends Menu {
         super ( "Personal Information" , parent );
         this.subMenus.put ( 1 , getViewMenu () );
         this.subMenus.put ( 2 , getEditMenu () );
-        thisGuy = PersonController.getInstance ().getLoggedInPerson ();
+        //thisGuy = PersonController.getInstance ().getLoggedInPerson ();
     }
 
     public Menu getViewMenu(){
@@ -23,7 +23,7 @@ public class PersonalInfoMenu extends Menu {
             @Override
             public void show() {
                 System.out.println (
-                        PersonController.getInstance ().getLoggedInPerson ().getPersonalInfo ()
+                        // PersonController.getInstance ().getLoggedInPerson ().getPersonalInfo ()
                 );
                 System.out.println ( "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014" );
                 super.show ();
@@ -62,8 +62,7 @@ public class PersonalInfoMenu extends Menu {
 
                 System.out.println ( "Enter desired value : " );
                 String desiredValue = getValidInput ( patternArray[chosenMenu-1] , chosenMenu-1 );
-                PersonController.getInstance ().getLoggedInPerson ().setField
-                        ( LoginMenu.informationArray[chosenMenu-1] , desiredValue );
+                //todo PersonController.getInstance ().getLoggedInPerson ().setField( LoginMenu.informationArray[chosenMenu-1] , desiredValue );
             }
         };
     }

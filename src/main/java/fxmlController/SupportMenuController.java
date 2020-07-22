@@ -25,8 +25,8 @@ public class SupportMenuController {
     }
 
     @FXML
-    void logout ( ActionEvent event ) throws IOException {
-        PersonController.getInstance().logOut();
+    void logout ( ActionEvent event ) throws IOException { //todo
+        //todo PersonController.getInstance().logOut();
         App.currentScene = new Scene ( getFXMLLoader ( "mainMenu" ).load () );
         App.currentStage.setScene ( App.currentScene );
     }

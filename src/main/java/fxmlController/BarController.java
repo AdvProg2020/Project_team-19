@@ -16,12 +16,12 @@ public class BarController {  //todo
 
     @FXML private void userMenuAction () throws IOException {
         App.firstScene = App.currentScene;
-        if ( PersonController.getInstance ().isThereLoggedInPerson () ) {
-            Person person = PersonController.getInstance ().getLoggedInPerson ();
-            App.currentScene = new Scene ( getFXMLLoader ( "userMenu" ).load () );
-        } else {
-            App.currentScene = new Scene ( getFXMLLoader ("userLoginMenu").load () );
-        }
+//        if ( PersonController.getInstance ().isThereLoggedInPerson () ) {
+//            Person person = PersonController.getInstance ().getLoggedInPerson ();
+//            App.currentScene = new Scene ( getFXMLLoader ( "userMenu" ).load () );
+//        } else {
+//            App.currentScene = new Scene ( getFXMLLoader ("userLoginMenu").load () );
+//        }
         App.currentStage.setScene ( App.currentScene );
     }
 }

@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 public class PersonController {
     public static ArrayList<Person> allPersons = new ArrayList<>();
-    private static Person loggedInPerson = null;
     private static PersonController single_instance = null;
 
     private PersonController() {
@@ -64,9 +63,6 @@ public class PersonController {
         allPersons.remove(person);
     }
 
-    public boolean isThereLoggedInPerson() {
-        return loggedInPerson != null;
-    }
 
     public boolean isTherePersonByUsername(String username) {
         return getPersonByUsername (username) != null;
@@ -80,33 +76,22 @@ public class PersonController {
         return null;
     }
 
-    public void login(String username,String password) throws Exception {
+    public void login(String username,String password,Cart cart) throws Exception {
         if (!PersonController.getInstance ( ).isTherePersonByUsername ( username ))
             throw new Exception ( "You Don't Exist. Go Make Yourself." );
-
         else checkPassword(password, username);
-        loggedInPerson = getPersonByUsername (username);
-        if (isLoggedInPersonCustomer()) {
-            CartController.getInstance().setLoggedInPersonCart();
+        Person person = PersonController.getInstance().getPersonByUsername(username);
+        if (person.getType().equalsIgnoreCase("customer")) {
+            Customer customer = (Customer) person;
+            //customer.getCart().setCartAfterLogIn(cart);
+            //Database.saveToFile(customer,Database.createPath("customers",customer.getUsername()));
         }
     }
 
-    public void logOut() {
-        loggedInPerson = null;
-    }
 
     public void checkPassword(String password, String username) throws Exception {
         if (!getPersonByUsername (username).getPassword().equals(password))
             throw new Exception("Incorrect password");
-    }
-
-
-    public Person getLoggedInPerson() {
-        return loggedInPerson;
-    }
-
-    public boolean isLoggedInPersonCustomer() {
-        return loggedInPerson instanceof Customer;
     }
 
     public <T> ArrayList<Person> filterByRoll(Class<T> personType) {

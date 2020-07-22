@@ -23,6 +23,7 @@ public class Database {
         address.put("salespersons", databaseAddress + File.separator + "persons" + File.separator + "salespersons");
         address.put("supports", databaseAddress + File.separator + "persons" + File.separator + "supports");
         address.put("products", databaseAddress + File.separator + "products");
+        address.put("auctions", databaseAddress + File.separator + "auctions");
         address.put("discount_codes", databaseAddress + File.separator + "discount_codes");
         address.put("root_categories", databaseAddress + File.separator + "root_categories.json");
         address.put("product_requests", databaseAddress + File.separator + "requests" + File.separator + "product_requests");
@@ -123,6 +124,7 @@ public class Database {
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "requests" + File.separator + "auction_requests");
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "discount_codes");
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "products");
+        createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "auctions");
         createFile(System.getProperty("user.dir") + File.separator + "database" + File.separator + "root_categories.json");
         createFile(System.getProperty("user.dir") + File.separator + "database" + File.separator + "min_balance.json");
         createFile(System.getProperty("user.dir") + File.separator + "database" + File.separator + "wage.json");

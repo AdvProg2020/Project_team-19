@@ -50,7 +50,7 @@ public class CommentCard implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        person = PersonController.getInstance().getLoggedInPerson();
+        //todo person = PersonController.getInstance().getLoggedInPerson();
         commentLabel.setText(comment.getCommentString());
         commenterName.setText(comment.getCommenterUsername());
         commenterImage.setImage(new Image(comment.getCommenter().getImage()));

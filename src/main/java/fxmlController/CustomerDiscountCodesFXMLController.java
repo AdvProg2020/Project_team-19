@@ -64,23 +64,23 @@ public class CustomerDiscountCodesFXMLController implements Initializable {
     }
 
     public void updateTable() {
-        ArrayList < DiscountCode > users = new ArrayList <> ( ((Customer) PersonController.getInstance ().getLoggedInPerson ()).getDiscountCodes ().keySet () );
+        //todo ArrayList < DiscountCode > users = new ArrayList <> ( ((Customer) PersonController.getInstance ().getLoggedInPerson ()).getDiscountCodes ().keySet () );
 
         codeColumn.setCellValueFactory ( new PropertyValueFactory<> ( "code" ) );
         startColumn.setCellValueFactory ( new PropertyValueFactory<> ( "startTime" ) );
         endColumn.setCellValueFactory ( new PropertyValueFactory<> ( "endTime" ) );
         percentColumn.setCellValueFactory ( new PropertyValueFactory<> ( "discountPercentage" ) );
         maxColumn.setCellValueFactory ( new PropertyValueFactory<> ( "maxDiscount" ) );
-        countColumn.setCellValueFactory( p -> {
-            DiscountCode discountCode = p.getValue ();
-            if (discountCode != null) {
-                return new SimpleIntegerProperty (((Customer) PersonController.getInstance ().getLoggedInPerson ()).getDiscountCodes ().get ( discountCode )).asObject ();
-            } else {
-                return new SimpleIntegerProperty(0).asObject ();
-            }
-        } );
+//        countColumn.setCellValueFactory( p -> {
+//            DiscountCode discountCode = p.getValue ();
+//            if (discountCode != null) {
+//                //todo return new SimpleIntegerProperty (((Customer) PersonController.getInstance ().getLoggedInPerson ()).getDiscountCodes ().get ( discountCode )).asObject ();
+//            } else {
+//                return new SimpleIntegerProperty(0).asObject ();
+//            }
+//        //} );
 
-        tableView.setItems ( FXCollections.observableArrayList ( users ) );
+        //todo tableView.setItems ( FXCollections.observableArrayList ( users ) );
     }
 
 

@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
-<AnchorPane fx:id="pane" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: #99ddff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-       <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
-      <Label layoutX="26.0" layoutY="43.0" prefHeight="27.0" prefWidth="112.0" text="Enter price :" textFill="#5baed7">
+      <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+      <Label layoutX="62.0" layoutY="43.0" prefHeight="27.0" prefWidth="76.0" text="Enter price :">
          <font>
-            <Font name="Verdana" size="14.0" />
+            <Font name="Tw Cen MT Condensed" size="18.0" />
          </font>
       </Label>
       <TextField fx:id="offerPrice" layoutX="138.0" layoutY="42.0" prefHeight="28.0" prefWidth="148.0" stylesheets="@textField.css">
@@ -21,15 +20,67 @@
             <Font name="Verdana" size="14.0" />
          </font>
       </TextField>
-      <ImageView fx:id="submitPrice" fitHeight="28.0" fitWidth="27.0" layoutX="259.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="submitPrice" fitHeight="28.0" fitWidth="27.0" layoutX="286.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/yes.png" />
          </image>
       </ImageView>
-      <Label alignment="CENTER" layoutX="332.0" layoutY="14.0" prefHeight="27.0" prefWidth="136.0" text="Welcome" textFill="#5baed7" >
+      <Label alignment="CENTER" layoutX="332.0" layoutY="14.0" prefHeight="27.0" prefWidth="136.0" text="Welcome" textFill="#499cc3">
           <font>
               <Font name="Verdana" size="18.0" />
           </font>
       </Label>
+      <Label fx:id="timer" layoutX="168.0" layoutY="161.0" prefHeight="21.0" prefWidth="112.0" text="Label" textFill="#bf4b4b">
+         <font>
+            <Font name="Tw Cen MT Condensed" size="18.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="27.0" fitWidth="29.0" layoutX="138.0" layoutY="158.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/timer.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="62.0" layoutY="100.0" prefHeight="27.0" prefWidth="76.0" text="Base price :">
+         <font>
+            <Font name="Tw Cen MT Condensed" size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="basePrice" layoutX="165.0" layoutY="100.0" prefHeight="27.0" prefWidth="112.0" text="base price">
+         <font>
+            <Font name="Tw Cen MT Condensed" size="18.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="27.0" fitWidth="29.0" layoutX="138.0" layoutY="100.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/expensive-2.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="62.0" layoutY="158.0" prefHeight="27.0" prefWidth="76.0" text="Timer :">
+         <font>
+            <Font name="Tw Cen MT Condensed" size="18.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="310.0" layoutY="43.0" prefHeight="27.0" prefWidth="180.0" text="(less than your wallet balance)" textFill="#00000071">
+         <font>
+            <Font name="Tw Cen MT Condensed" size="18.0" />
+         </font>
+      </Label>
+      <Pane fx:id="productPane" layoutX="52.0" layoutY="220.0" prefHeight="250.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: #5baed7; -fx-border-radius: 5; -fx-border-width: 2; -fx-background-radius: 5;" />
+      <Pane layoutX="368.0" layoutY="89.0" prefHeight="377.0" prefWidth="384.0">
+         <children>
+            <TextArea fx:id="messageField" layoutX="17.0" layoutY="315.0" prefHeight="48.0" prefWidth="306.0" style="-fx-background-radius: 5; -fx-border-color: #5baed7; -fx-border-width: 2; -fx-border-radius: 5;" />
+            <ImageView fx:id="send" fitHeight="48.0" fitWidth="50.0" layoutX="323.0" layoutY="315.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/email.png" />
+               </image>
+            </ImageView>
+            <Separator layoutX="17.0" layoutY="302.0" prefHeight="0.0" prefWidth="358.0" />
+            <ScrollPane layoutX="16.0" layoutY="13.0" prefHeight="282.0" prefWidth="358.0" style="-fx-background-radius: 5;">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="280.0" prefWidth="356.0" style="-fx-border-color: #5baed7; -fx-border-width: 2; -fx-border-radius: 5; -fx-background-radius: 5;" />
+              </content>
+            </ScrollPane>
+         </children>
+      </Pane>
    </children>
 </AnchorPane>

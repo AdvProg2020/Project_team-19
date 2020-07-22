@@ -414,9 +414,7 @@ public class ProductMenu implements Initializable {
     }
 
     private void setSellerCards() {
-        for (Salesperson seller : getProductSellers(product.getID())) {
-            if (seller.isInAuction(product))
-                continue;
+        for (Salesperson seller : getProductSellersForProductMenu(product.getID())) {
             if (isDiscount) {
                 if (!seller.isInDiscount(product))
                     continue;

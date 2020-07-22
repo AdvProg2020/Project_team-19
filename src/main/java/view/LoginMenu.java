@@ -130,11 +130,11 @@ public class LoginMenu extends Menu {
                 String password = getValidPassword (username);
                 if ( password.equals ( BACK_BUTTON ) )
                     return;
-                try {
-                    PersonController.getInstance ().login ( username ,password);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    PersonController.getInstance ().login ( username ,password);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
                 usernameInstance = username;
                 setHelpArray ();
                 System.out.println ( "Yaaay! It was successful! Welcome to our app " + username + " :D" );

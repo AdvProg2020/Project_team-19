@@ -18,22 +18,22 @@ public class UserMenu extends Menu {
 
     @Override
     public void execute () {
-        Person loggedInPerson = PersonController.getInstance().getLoggedInPerson ();
-        if ( loggedInPerson == null ) {
-            LoginMenu loginMenu = new LoginMenu ( this );
-            loginMenu.run ();
-        }
-        else {
-            if (loggedInPerson instanceof Manager ) {
-                ManagerMenu managerMenu = new ManagerMenu ( this );
-                managerMenu.run();
-            } else if (loggedInPerson instanceof Salesperson ) {
-                SalespersonMenu salespersonMenu = new SalespersonMenu ( this );
-                salespersonMenu.run();
-            } else {
-                CustomerMenu customerMenu = new CustomerMenu ( this );
-                customerMenu.run ();
-            }
-        }
+        //Person loggedInPerson = PersonController.getInstance().getLoggedInPerson ();
+//        if ( loggedInPerson == null ) {
+//            LoginMenu loginMenu = new LoginMenu ( this );
+//            loginMenu.run ();
+//        }
+//        else {
+//            if (loggedInPerson instanceof Manager ) {
+//                ManagerMenu managerMenu = new ManagerMenu ( this );
+//                managerMenu.run();
+//            } else if (loggedInPerson instanceof Salesperson ) {
+//                SalespersonMenu salespersonMenu = new SalespersonMenu ( this );
+//                salespersonMenu.run();
+//            } else {
+//                CustomerMenu customerMenu = new CustomerMenu ( this );
+//                customerMenu.run ();
+//            }
+//        }
     }
 }

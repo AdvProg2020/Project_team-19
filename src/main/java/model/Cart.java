@@ -37,6 +37,7 @@ public class Cart {
         }
     }
 
+
     public void setCartAfterLogIn(Cart cart) {
         for (String productId : cart.products.keySet()) {
             Product product = ProductController.getInstance().getProductById(productId);
@@ -95,18 +96,18 @@ public class Cart {
         customer.setCredit(customer.getCredit() - customer.getCart().totalPrice);
         BuyLog buyLog = new BuyLog(LocalDateTime.now(), customer.getCart().totalPrice, customer.getCart().getTotalPriceAfterDiscountCode(), customer.getCart().getProducts(), false);
         customer.addToBuyLogs(buyLog);
-        customer.getCart().purchaseForSalesperson();
+        customer.getCart().purchaseForSalesperson(customer);
         customer.getCart().cleanAfterPurchase();
     }
 
     public static void purchaseBank(Customer customer) {
         BuyLog buyLog = new BuyLog(LocalDateTime.now(), customer.getCart().totalPrice, customer.getCart().getTotalPriceAfterDiscountCode(), customer.getCart().getProducts(), false);
         customer.addToBuyLogs(buyLog);
-        customer.getCart().purchaseForSalesperson();
+        customer.getCart().purchaseForSalesperson(customer);
         customer.getCart().cleanAfterPurchase();
     }
 
-    public void purchaseForSalesperson(){
+    public void purchaseForSalesperson(Customer customer){
         for (String productId : products.keySet()) {
             Product product = ProductController.getInstance().getProductById(productId);
             for (String sellerName : products.get(productId).keySet()) {
@@ -117,7 +118,7 @@ public class Cart {
                 salesperson.addSellLogAndPurchase(new SellLog(LocalDateTime.now(),
                         salesperson.getProductPrice(product) * count * (1 - WalletController.WAGE / 100),
                         salesperson.discountAmount(product) * count, product,
-                        (Customer) PersonController.getInstance().getLoggedInPerson(), true, count));
+                        customer, true, count));
 
             }
         }

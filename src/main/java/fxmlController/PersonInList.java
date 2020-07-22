@@ -23,7 +23,8 @@ public class PersonInList implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         role.setText(person.getType());
-        profilePic.setImage(new Image(person.getImage()));
+        if (person.getImage() != null)
+            profilePic.setImage(new Image(person.getImage()));
         username.setText(person.getUsername());
     }
 }

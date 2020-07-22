@@ -1,16 +1,12 @@
 package fxmlController;
 
-import controller.PersonController;
-import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import model.Customer;
-import model.Manager;
-import model.Salesperson;
 import view.App;
 
 import java.io.IOException;
@@ -18,7 +14,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static view.App.getFXMLLoader;
-
+import static clientController.ServerConnection.*;
 public class UserMenuController implements Initializable {
 
     @FXML private Button sellBuy;
@@ -32,7 +28,7 @@ public class UserMenuController implements Initializable {
     }
 
     @FXML private void logout () throws IOException {
-        PersonController.getInstance().logOut();
+        sendLogout();
         App.currentScene = new Scene ( getFXMLLoader ( "mainMenu" ).load () , 600 , 400);
         App.currentStage.setScene ( App.currentScene );
     }

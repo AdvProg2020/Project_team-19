@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-public class SellBuyLogsController implements Initializable {
+public class SellBuyLogsController implements Initializable { //todo
 
     public TableView<LogForTable> tableView;
     public TableColumn<LogForTable,String> dateColumn;
@@ -41,7 +41,7 @@ public class SellBuyLogsController implements Initializable {
 
     @Override
     public void initialize ( URL location , ResourceBundle resources ) {
-        person = PersonController.getInstance ().getLoggedInPerson ();
+        //todo person = PersonController.getInstance ().getLoggedInPerson ();
         if (person instanceof Customer ) {
             buyLogs ( );
             label.setText ( "Buy Logs" );
@@ -69,13 +69,13 @@ public class SellBuyLogsController implements Initializable {
                     if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
                         LogForTable rowData = row.getItem();
                         Metadata.date = row.getItem ().getDate ();
-                        BuyLog buyLog = ((Customer) PersonController.getInstance ().getLoggedInPerson ()).getBuyLogAtTime ( Metadata.date );
-                        StringBuilder stringBuilder = new StringBuilder (  );
-                        buyLog.getProducts ().forEach ( (key,value) -> stringBuilder.append ( ProductController.getInstance ( ).getProductById ( key ) ).append ( " :\n" ).append ( value ) );
-                        Metadata.product = stringBuilder.toString ();
-                        Metadata.deliveredAmount = buyLog.getPaymentAmount ();
-                        Metadata.discountAmount = buyLog.getDiscountCodeAmount ();
-                        Metadata.transmitted = buyLog.isReachedBuyer ();
+                        //todo BuyLog buyLog = ((Customer) PersonController.getInstance ().getLoggedInPerson ()).getBuyLogAtTime ( Metadata.date );
+//                        StringBuilder stringBuilder = new StringBuilder (  );
+//                        buyLog.getProducts ().forEach ( (key,value) -> stringBuilder.append ( ProductController.getInstance ( ).getProductById ( key ) ).append ( " :\n" ).append ( value ) );
+//                        Metadata.product = stringBuilder.toString ();
+//                        Metadata.deliveredAmount = buyLog.getPaymentAmount ();
+//                        Metadata.discountAmount = buyLog.getDiscountCodeAmount ();
+//                        Metadata.transmitted = buyLog.isReachedBuyer ();
                         App.setRoot ( "buyLogView" );
                     }
                 });
@@ -89,12 +89,12 @@ public class SellBuyLogsController implements Initializable {
                         LogForTable rowData = row.getItem();
                         Metadata.date = row.getItem ().getDate ();
                         Metadata.product = row.getItem ().getProducts ();
-                        SellLog sellLog = ((Salesperson) PersonController.getInstance ().getLoggedInPerson ()).getSellLogAtTime ( Metadata.date );
-                        Metadata.deliveredAmount = sellLog.getDeliveredAmount ();
-                        Metadata.discountAmount = sellLog.getDiscountAmount ();
-                        Metadata.buyerUsername = sellLog.getBuyer ().getUsername ();
-                        Metadata.count = sellLog.getCount ();
-                        Metadata.transmitted = sellLog.isTransmitted ();
+//                        SellLog sellLog = ((Salesperson) PersonController.getInstance ().getLoggedInPerson ()).getSellLogAtTime ( Metadata.date );
+//                        Metadata.deliveredAmount = sellLog.getDeliveredAmount ();
+//                        Metadata.discountAmount = sellLog.getDiscountAmount ();
+//                        Metadata.buyerUsername = sellLog.getBuyer ().getUsername ();
+//                        Metadata.count = sellLog.getCount ();
+//                        Metadata.transmitted = sellLog.isTransmitted ();
                         App.setRoot ( "sellLogView" );
                     }
                 });

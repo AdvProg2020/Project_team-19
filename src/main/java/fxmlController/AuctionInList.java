@@ -5,6 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import model.Auction;
 import model.Product;
 import model.Salesperson;
 
@@ -12,8 +13,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AuctionInList implements Initializable {
-    private Salesperson salesperson;
-    private Product product;
+    private Auction auction;
 
     @FXML
     private Label sellerName;
@@ -30,25 +30,24 @@ public class AuctionInList implements Initializable {
     @FXML
     private ImageView productPic;
 
-    public AuctionInList(Salesperson salesperson, Product product) {
-        this.salesperson = salesperson;
-        this.product = product;
+    public AuctionInList(Auction auction) {
+        this.auction = auction;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        sellerName.setText(salesperson.getUsername());
-        profilePic.setImage(new Image(salesperson.getImage()));
+        sellerName.setText(auction.getSellerName());
+        profilePic.setImage(new Image(auction.getSellerImageURL()));
 
-        productName.setText(product.getName());
-        productPic.setImage(new Image(product.getImageURI()));
+        productName.setText(auction.getProductName());
+        productPic.setImage(new Image(auction.getProductImageURL()));
 
         endTime.setText(fancyEndTime());
 
     }
 
     private String fancyEndTime() {
-        String uglyEndTime = String.valueOf(salesperson.getAuctionEndTime(product));
+        String uglyEndTime = String.valueOf(auction.getEndTime());
         uglyEndTime = uglyEndTime.replace("-", "/");
         uglyEndTime = uglyEndTime.replace("T", "  ");
         return uglyEndTime;

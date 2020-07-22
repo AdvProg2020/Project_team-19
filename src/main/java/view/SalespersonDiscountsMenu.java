@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class SalespersonDiscountsMenu extends Menu {
-    private Salesperson salesperson = (Salesperson) PersonController.getInstance().getLoggedInPerson();
+    private Salesperson salesperson;// (Salesperson) PersonController.getInstance().getLoggedInPerson();
 
     public SalespersonDiscountsMenu ( Menu parent) {
         super("Discounts Menu", parent);
@@ -89,7 +89,7 @@ public class SalespersonDiscountsMenu extends Menu {
 
             @Override
             public void execute() {
-                Salesperson salesperson = (Salesperson) PersonController.getInstance().getLoggedInPerson ();
+                Salesperson salesperson = null ;// (Salesperson) PersonController.getInstance().getLoggedInPerson ();
                 String input;
                 Discount discount;
                 while (true) {

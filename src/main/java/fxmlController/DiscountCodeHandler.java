@@ -41,7 +41,7 @@ public class DiscountCodeHandler implements Initializable {
 //            errorLabel.setText("The Entered Code Is Wrong.");
 //        }
         else {
-            CartController.getInstance().manageDiscountCode(DiscountCode.findDiscountCodeByCode(codes.getValue()));
+            //CartController.getInstance().manageDiscountCode(DiscountCode.findDiscountCodeByCode(codes.getValue()));
             errorLabel.setText("Successful.");
             errorLabel.setTextFill(Color.web("#79d2a6"));
             tickImage.setVisible(true);
@@ -50,11 +50,11 @@ public class DiscountCodeHandler implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (((Customer)PersonController.getInstance().getLoggedInPerson()).getDiscountCodesList().size()==0){
-            showAlert(Alert.AlertType.ERROR, App.currentStage,"Bitch","You do not have any discount code.");
-        }
-        else
-            codes.setItems(FXCollections.observableArrayList(((Customer)PersonController.getInstance().getLoggedInPerson()).getDiscountCodesList()));
+//        if (((Customer)PersonController.getInstance().getLoggedInPerson()).getDiscountCodesList().size()==0){
+//            showAlert(Alert.AlertType.ERROR, App.currentStage,"Bitch","You do not have any discount code.");
+//        }
+//        else
+//            codes.setItems(FXCollections.observableArrayList(((Customer)PersonController.getInstance().getLoggedInPerson()).getDiscountCodesList()));
     }
 
     public void showAlert(Alert.AlertType alertType, Stage owner, String title, String message) {

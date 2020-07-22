@@ -114,7 +114,7 @@ public class RequestController {
                 personInfo.get("password") + " " +
                 personInfo.get("password"));
         if (response.matches("\\d+")) {
-            Salesperson salesperson = new Salesperson(personInfo, response, WalletController.MIN_BALANCE);
+            Salesperson salesperson = new Salesperson(personInfo, response);
             PersonController.getInstance().addPerson(salesperson);
         }
     }
@@ -206,17 +206,14 @@ public class RequestController {
         new ProductRequest(pr, am, salesperson, category, name, brand, properties, product);
     }
 
-    public void editProductRequest(String price, String amount, Salesperson salesperson, String productID
-            , String category, String name, String brand, HashMap<String, String> properties, String image, String media) {
+    public void editProductRequest(String price, String amount, Salesperson salesperson, String productID, HashMap<String, String> properties) {
 
         Product product = ProductController.getInstance().getProductById(productID);
-        product.setImageURI(image);
-        product.setMediaURI(media);
         salesperson.setEditInProgress(product);
         saveFileChangesForProductBeforeSendingRequest(product, salesperson);
-        double pr = (price == null) ? salesperson.getProductPrice(product) : Double.parseDouble(price);
-        int am = (amount == null) ? salesperson.getProductAmount(product) : Integer.parseInt(amount);
-        new ProductRequest(pr, am, salesperson, category, name, brand, properties, product, image, media);
+        double pr = (price == null || price.isEmpty()) ? salesperson.getProductPrice(product) : Double.parseDouble(price);
+        int am = (amount == null || amount.isEmpty()) ? salesperson.getProductAmount(product) : Integer.parseInt(amount);
+        new ProductRequest(pr, am, salesperson, properties, product);
     }
 
     public void deleteDiscountRequest(Discount discount, Salesperson salesperson) {
