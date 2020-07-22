@@ -99,6 +99,8 @@ public class Server {
         commands.put(OFFER_PRICE_FOR_AUCTION, new OfferPriceForAuctionHandler());
         commands.put(SEND_AUCTION_MESSAGE, new SendAuctionMessage());
         commands.put(AUCTION_PURCHASE, new AuctionPurchase());
+        commands.put(GET_COUNT_IN_CART,new GetContInCart());
+        commands.put(SET_COUNT_IN_CART,new SetCountInCart());
     }
 
     public static Server getInstance() {
@@ -190,9 +192,9 @@ public class Server {
             try {
                 Cart cart = null;
                 ArrayList<String> strings = connection.getRequest().getJson();
-//                if (PersonController.getInstance().getPersonByUsername(strings.get(0)).getType().equalsIgnoreCase("customer")) {
-//                    cart = (Cart) read(Cart.class, strings.get(2));
-//                }
+                if (PersonController.getInstance().getPersonByUsername(strings.get(0)).getType().equalsIgnoreCase("customer")) {
+                    cart = (Cart) read(Cart.class, strings.get(2));
+                }
                 PersonController.getInstance().login(strings.get(0), strings.get(1),cart);
                 String token = UUID.randomUUID().toString();;
                 authTokens.put(token, strings.get(0));
@@ -344,6 +346,29 @@ public class Server {
         public void handle(Connection connection) {
             Customer customer = (Customer) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
             connection.SendMessage(write(customer.getCart()));
+        }
+    }
+
+    class GetContInCart implements Handler{
+
+        @Override
+        public void handle(Connection connection) {
+            Customer customer = (Customer) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
+            Product product = ProductController.getInstance().getProductById(connection.getRequest().getJson().get(0));
+            Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(connection.getRequest().getJson().get(1));
+            connection.SendMessage(String.valueOf(CartController.getInstance().getCart(customer).getProducts().get(product).get(salesperson).getCount()));
+        }
+    }
+
+    class SetCountInCart implements Handler{
+
+        @Override
+        public void handle(Connection connection) {
+            Customer customer = (Customer) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
+            Product product = ProductController.getInstance().getProductById(connection.getRequest().getJson().get(0));
+            Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(connection.getRequest().getJson().get(1));
+            CartController.getInstance().setProductCount(product,Integer.parseInt(connection.getRequest().getJson().get(2)),salesperson,customer);
+            connection.SendMessage("successful.");
         }
     }
 
@@ -1025,7 +1050,7 @@ public class Server {
             String sellerName = connection.getRequest().getJson().get(0);
             String productId = connection.getRequest().getJson().get(1);
             if (connection.getRequest().getToken().length()!=0)
-                 customer = (Customer) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
+                customer = (Customer) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
             Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(sellerName);
             Product product = ProductController.getInstance().getProductById(productId);
             CartController.getInstance().addProduct(product,salesperson,customer);

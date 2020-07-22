@@ -51,24 +51,50 @@ public class ServerConnection {
         return sendMessage(OFFER_PRICE_FOR_AUCTION, info, token);
     }
 
-    public static String addToCart(Salesperson seller, Product product) {
+    public static String addToCart(Salesperson seller, Product product,double price,double priceAfterDiscount) {
         ArrayList<String> info = new ArrayList<>();
         if (token.length()!=0) {
             info.add(seller.getUsername());
             info.add(product.getID());
             return sendMessage(ADD_TO_CART, info, token);
         }else {
-            tempCart.addProduct(product,seller);
+            tempCart.addProduct(product.getID(),seller.getUsername(),price,priceAfterDiscount);
             return "successful";
         }
     }
 
     public static Cart getCart(){
-        if (token.length()!=0){
-            String response = sendMessage(GET_CART,null,token);
-            return (Cart) getObj(Cart.class,response);
-        }else {
             return tempCart;
+    }
+
+    public static Cart getCartAfterLogin(){
+        String response = sendMessage(GET_CART,null,token);
+        return (model.Cart) getObj(Cart.class,response);
+    }
+
+    public static int getCountInCart(String productId,String salesperson){
+        if (token.length()!=0){
+            ArrayList<String> info = new ArrayList<>();
+            info.add(productId);
+            info.add(salesperson);
+            String response = sendMessage(GET_COUNT_IN_CART,info,token);
+            return Integer.parseInt(response);
+        }else {
+            return tempCart.getProducts().get(productId).get(salesperson).getCount();
+        }
+    }
+
+    public static String setCountInCart(String productId,String sellerName,int count){
+        if (token.length()!=0){
+            ArrayList<String> info = new ArrayList<>();
+            info.add(productId);
+            info.add(sellerName);
+            info.add(String.valueOf(count));
+            String response = sendMessage(SET_COUNT_IN_CART,info,token);
+            return response;
+        }else {
+            tempCart.setProductCount(productId,sellerName,1);
+            return "successful";
         }
     }
 
@@ -221,7 +247,7 @@ public class ServerConnection {
     public static String sendLoginRequest(String username, String password) {
         ArrayList<String> info = new ArrayList<>();
         info.add(username);
-        info.add(password); //todo n
+        info.add(password);
         return sendMessage(LOGIN, info, "");
     }
 
