@@ -66,6 +66,9 @@ public class RequestController {
         for (File file : Database.returnListOfFiles(address.get("support_requests"))) {
             allRequests.add((SupportRequest) read(SupportRequest.class, file.getAbsolutePath()));
         }
+        for (File file : Database.returnListOfFiles(address.get("file_requests"))) {
+            allRequests.add((FileRequest) read(FileRequest.class, file.getAbsolutePath()));
+        }
     }
 
     public void acceptRequest(Request request) {
@@ -82,6 +85,8 @@ public class RequestController {
                 deleteFile(createPath("auction_requests", request.getRequestId()));
             else if (request instanceof SupportRequest)
                 deleteFile(createPath("support_requests", request.getRequestId()));
+            else if (request instanceof FileRequest)
+                deleteFile(createPath("file_requests", request.getRequestId()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -101,6 +106,8 @@ public class RequestController {
                 deleteFile(createPath("auction_requests", request.getRequestId()));
             else if (request instanceof SupportRequest)
                 deleteFile(createPath("support_requests", request.getRequestId()));
+            else if (request instanceof FileRequest)
+                deleteFile(createPath("file_requests", request.getRequestId()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -144,6 +151,10 @@ public class RequestController {
         Product product = ProductController.getInstance().getProductById(productId);
 
         new AuctionRequest(salesperson, product, end);
+    }
+
+    public void addFileRequest(String sellerId, String fileName, String description, double price, String address) {
+        new FileRequest(sellerId, fileName, description, price, address);
     }
 
     public void addProductRequest(Double price, Integer amount, Salesperson salesperson

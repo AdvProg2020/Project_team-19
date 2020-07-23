@@ -14,19 +14,25 @@ public class Salesperson extends Person {
     private ArrayList<SellLog> sellLogs;
     private HashMap<String, ProductState> offeredProducts;
     private ArrayList<Discount> discounts;
-    //private HashMap<String, LocalDateTime> auctions;  //product -> endTime
     private ArrayList<String> auctions;
+    private ArrayList<String> files;
     private Wallet wallet;
+    private int port;
 
 
     public Salesperson(HashMap<String, String> personInfo, String bankId) {
         super(personInfo);
+        files = new ArrayList<>();
         sellLogs = new ArrayList<>();
         offeredProducts = new HashMap<>();
         discounts = new ArrayList<>();
         auctions = new ArrayList<>();
         wallet = new Wallet(bankId);
         Database.saveToFile(this, Database.createPath("salespersons", personInfo.get("username")));
+    }
+
+    public void addFile(String fileId) {
+        files.add(fileId);
     }
 
     public Wallet getWallet() {
@@ -40,10 +46,6 @@ public class Salesperson extends Person {
     public void removeAuction(String auctionId) {
         auctions.remove(auctionId);
     }
-
-//    public boolean checkEndTimeAuction(Product product) {
-//        return auctions.get(product.getID()).isBefore(LocalDateTime.now());
-//    }
 
     public HashMap<Product, LocalDateTime> getAuctions() {
         HashMap<Product, LocalDateTime> auctionsMap = new HashMap<>();

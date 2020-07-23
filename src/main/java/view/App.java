@@ -64,6 +64,11 @@ public class App extends Application {
         background.setCycleCount ( AudioClip.INDEFINITE );
         background.play ();
 
+        primaryStage.setOnCloseRequest ( event -> {
+            ServerConnection.sendLogout ();
+            ServerConnection.exit ();
+        } );
+
         primaryStage.show();
     }
 

@@ -133,19 +133,6 @@ public class AuctionMenu implements Initializable { //todo
         String response = auctionPurchase(auction.getId());
         App.showAlert(Alert.AlertType.INFORMATION, App.currentStage, "", response);
         submitPrice.setDisable(true);
-//        isInAllAuction = true;
-//        Timer timer = new Timer();
-//        TimerTask timerTask = new TimerTask() {
-//            @Override
-//            public void run() {
-//                if (isInAllAuction) {
-//                    App.setRoot("allAuctionsMenu");
-//                    System.out.println("load");
-//                } else
-//                    timer.cancel();
-//            }
-//        };
-//        timer.schedule(timerTask, new Date(), 60000);
     }
 
     private void setback() {

@@ -33,6 +33,7 @@ public class AllRequests implements Initializable {
         ArrayList<Request> allRequests = new ArrayList<>();
         allRequests.addAll(getSalespersonRequests());
         allRequests.addAll(getProductRequests());
+        allRequests.addAll(getFileRequests());
         allRequests.addAll(getDiscountRequests());
         allRequests.addAll(getAuctionRequests());
         allRequests.addAll(getSupportRequests());

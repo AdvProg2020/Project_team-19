@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<ScrollPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.AllFiles">
+   <content>
+      <AnchorPane fx:id="base" prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: #99ddff; -fx-background-radius: 5;">
+          <children>
+              <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" onMouseClicked="#back" onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+              <Label alignment="CENTER" layoutX="352.0" layoutY="14.0" prefHeight="27.0" prefWidth="97.0" text="All Files" textFill="#27aae8">
+                  <font>
+                      <Font name="Verdana" size="18.0" />
+                  </font>
+              </Label>
+              <Separator layoutX="13.0" layoutY="55.0" prefHeight="0.0" prefWidth="775.0" />
+          </children>
+      </AnchorPane>
+   </content>
+</ScrollPane>

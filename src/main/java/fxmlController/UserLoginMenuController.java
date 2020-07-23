@@ -67,6 +67,7 @@ public class UserLoginMenuController {
                 if (type.equals("manager")) {
                     App.currentScene = new Scene(getFXMLLoader("managerMenu").load());
                 } else if (type.equals("salesperson")) {
+                    sendFile();
                     App.currentScene = new Scene(getFXMLLoader("salespersonMenu").load());
                 }else if (type.equals("support")){
                     App.currentScene = new Scene ( getFXMLLoader ( "supportMenu" ).load () );

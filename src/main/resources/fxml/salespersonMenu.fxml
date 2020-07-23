@@ -16,6 +16,7 @@
         <Button layoutX="259.0" layoutY="259.0" mnemonicParsing="false" onAction="#availableProd" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="My Available Products" />
         <Button layoutX="259.0" layoutY="217.0" mnemonicParsing="false" onAction="#prod" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="My Products" />
         <Button layoutX="259.0" layoutY="175.0" mnemonicParsing="false" onAction="#addAuctionForSeller" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Auction" />
+        <Button layoutX="259.0" layoutY="133.0" mnemonicParsing="false" onAction="#addFileForSeller" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Add File" />
         <Label layoutX="160.0" layoutY="60.0" text="HELLO SALESMAN... OR WOMAN">
             <font>
                 <Font name="Bodoni MT" size="30.0" />

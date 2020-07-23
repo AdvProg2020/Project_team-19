@@ -26,10 +26,6 @@ public class Customer extends Person {
         return wallet;
     }
 
-    public void setCartAfterLogin(Cart cart) {
-        this.cart.setCartAfterLogIn(cart);
-    }
-
     public boolean isThereDiscountCodeByCode(String code) {
         for (String discountCode : discountCodes.keySet()) {
             if (discountCode.equals(code))

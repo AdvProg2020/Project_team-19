@@ -25,7 +25,7 @@ public class BuyLog {
             ArrayList<String> strings= new ArrayList<>();
             String state ;
             for (ProductStateInCart value : tradedProductList.get(product).values()) {
-                state = "seller:"+value.getSalesperson().getUsername()+"\n"
+                state = "seller:"+value.getSalesperson()+"\n"
                         +"count: "+value.count+"\n"
                         +"price: "+value.getPrice()+"\n";
                 if(value.isInDiscount())

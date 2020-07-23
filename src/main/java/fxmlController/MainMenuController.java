@@ -25,7 +25,7 @@ public class MainMenuController implements Initializable {
     @FXML private ImageView userIcon;
     @FXML private ImageView auctionIcon;
     @FXML private ImageView walletIcon;
-
+    @FXML private ImageView files;
 
 //    @FXML Button productMenu;
 //    @FXML Button discountMenu;
@@ -88,6 +88,10 @@ public class MainMenuController implements Initializable {
         App.setRoot("walletMenu");
     }
 
+    @FXML void filesClicked() {
+        App.setRoot("allFiles");
+    }
+
     @Override
     public void initialize ( URL location , ResourceBundle resources ) {
         type = getPersonTypeByToken();
@@ -147,5 +151,13 @@ public class MainMenuController implements Initializable {
 
     @FXML private void walletIconSmall() {
         walletIcon.setStyle ( "" );
+    }
+
+    @FXML private void fileIconBig() {
+        files.setStyle ( "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);" );
+    }
+
+    @FXML private void fileIconSmall() {
+        files.setStyle ( "" );
     }
 }
