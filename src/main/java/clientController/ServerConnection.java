@@ -26,7 +26,7 @@ public class ServerConnection {
 
     public static void run() {
         try {
-            socket = new Socket("tcp://0.tcp.ngrok.io", 11725);
+            socket = new Socket("localhost", 4444);
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
             dataInputStream = new DataInputStream(socket.getInputStream());
         } catch (IOException e) {
@@ -539,14 +539,6 @@ public class ServerConnection {
         String response = sendMessage(GET_REQUESTS_OF_TYPE, info, "");
         return (ArrayList<AuctionRequest>) getObj(new TypeToken<ArrayList<AuctionRequest>>(){}.getType(), response);
     }
-
-    public static ArrayList<SupportRequest> getSupportRequests () {
-        ArrayList<String> info = new ArrayList<>();
-        info.add("support");
-        String response = sendMessage(GET_REQUESTS_OF_TYPE, info, "");
-        return (ArrayList<SupportRequest>) getObj(new TypeToken<ArrayList<SupportRequest>>(){}.getType(), response);
-    }
-
 
     public static String addCategory(ArrayList<String> info) {
         return sendMessage(ADD_CATEGORY, info, "");

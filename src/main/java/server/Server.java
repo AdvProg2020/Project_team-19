@@ -6,7 +6,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import controller.*;
 import model.*;
-import view.LoginMenu;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -24,18 +23,15 @@ public class Server {
     private static BlockingQueue<Connection> requests;
     private HashMap<String, String> authTokens = new HashMap<>();
     public static ArrayList<FileRequestInfo> fileRequestInfo = new ArrayList<>();
-    private HashMap<String, Connection> tokenConnectionHashmap = new HashMap <> (  );
-    private HashMap<String, String> tokenSupportMessagesHashmap = new HashMap <> (  ); //client token, history messages
-    public static ArrayList<String> allSupportTokens = new ArrayList <> (  );
     public static HashMap<String, HashMap<String,Chat>> clientChatsHashmap = new HashMap <> (  );
+    public static HashMap<String,HashMap<String,Connection>> auctionHashmap = new HashMap <> (  );
 
 
 
     private Server() {
         try {
             requests = new LinkedBlockingQueue<>();
-            serverSocket = new ServerSocket(0);
-            PORT = serverSocket.getLocalPort();
+            serverSocket = new ServerSocket(4444);
             System.out.println("Server Started To Listen ON PORT: " + PORT);
         } catch (IOException e) {
             e.printStackTrace();
@@ -231,7 +227,8 @@ public class Server {
             try {
                 Cart cart = null;
                 ArrayList<String> strings = connection.getRequest().getJson();
-                if (PersonController.getInstance().getPersonByUsername(strings.get(0)).getType().equalsIgnoreCase("customer")) {
+                Person person = PersonController.getInstance().getPersonByUsername(strings.get(0));
+                if (person != null && person.getType().equalsIgnoreCase("customer")) {
                     cart = (Cart) read(Cart.class, strings.get(2));
                 }
                 PersonController.getInstance().login(strings.get(0), strings.get(1), cart);
@@ -531,7 +528,6 @@ public class Server {
         public void handle(Connection connection) {
             HashMap<String, String> info = (HashMap<String, String>) Server.read(new TypeToken<HashMap<String, String>>() {
             }.getType(), connection.getRequest().getJson().get(0));
-            System.out.println(info);
             String response = "";
             if ((info.get("type").equalsIgnoreCase("customer")) || (!RegisterController.getInstance().isFirstManagerRegistered() && info.get("type").equalsIgnoreCase("manager"))) {
                 response = BankAPI.getBankResponse("create_account " +
@@ -542,8 +538,8 @@ public class Server {
                         info.get("password"));
             }
             if (!RegisterController.getInstance().isFirstManagerRegistered() && info.get("type").equalsIgnoreCase("manager")) {
-                WalletController.getInstance().setMIN_BALANCE(Double.parseDouble(info.get(LoginMenu.PersonInfo.MIN_BALANCE.label)));
-                WalletController.getInstance().setWAGE(Double.parseDouble(info.get(LoginMenu.PersonInfo.WAGE.label)));
+                WalletController.getInstance().setMIN_BALANCE(Double.parseDouble(info.get("min_balance")));
+                WalletController.getInstance().setWAGE(Double.parseDouble(info.get("wage")));
                 if (response.matches("\\d+")) {
                     WalletController.getInstance().setSHOP_BANK_ID(response);
                     WalletController.getInstance().setShopBankUsername(info.get("username"));
@@ -1137,6 +1133,15 @@ public class Server {
 
             if (WalletController.getInstance().canDecreaseWalletBalance(customer, Double.parseDouble(amount))) {
                 AuctionController.getInstance().addBuyer(auction, customer, Double.parseDouble(amount));
+
+                if (auctionHashmap.get ( auctionId ) == null) {
+                    auctionHashmap.put ( auctionId , new HashMap <String,Connection> ( ) {{
+                        put ( username , connection );
+                    }} );
+                }
+                else
+                    auctionHashmap.get ( auctionId ).put ( username , connection );
+
                 connection.SendMessage("successful");
             } else {
                 connection.SendMessage("not enough money in your wallet");
@@ -1163,11 +1168,13 @@ public class Server {
 
         @Override
         public void handle(Connection connection) {
-            String username = authTokens.get(connection.getRequest().getToken());
-            Customer customer = (Customer) PersonController.getInstance().getPersonByUsername(username);
-            Auction auction = AuctionController.getInstance().getAuctionById(connection.getRequest().getJson().get(0));
-            String text = connection.getRequest().getJson().get(1);
-
+            ArrayList<String> info = connection.getRequest ().getJson ();
+            String message = authTokens.get ( connection.getRequest ().getToken () ) + " : " + info.get ( 0 );
+            String auctionID = info.get ( 1 );
+            Auction auction = AuctionController.getInstance ().getAuctionById ( auctionID );
+            auction.messages = auction.messages.concat ( message );
+            auctionHashmap.get ( auctionID ).forEach ( (k,v) -> v.SendMessage ( message ) );
+            connection.SendMessage ( message );
         }
     }
 
@@ -1235,6 +1242,12 @@ public class Server {
         public void handle ( Connection connection ) {
             String field = connection.getRequest ().getJson ().get ( 0 );
             String newValue = connection.getRequest ().getJson ().get ( 1 );
+            if (field.equalsIgnoreCase("wage")) {
+                WalletController.getInstance().setWAGE(Double.parseDouble(newValue));
+            }
+            if (field.equalsIgnoreCase("min_balance")) {
+                WalletController.getInstance().setMIN_BALANCE(Double.parseDouble(newValue));
+            }
             PersonController.getInstance ().getPersonByUsername ( authTokens.get ( connection.getRequest ().getToken () ) ).setField ( field , newValue );
             connection.SendMessage ( "successful" );
         }
@@ -1335,11 +1348,16 @@ public class Server {
     }
 
     public static FileRequestInfo findRequestForSeller(String username) {
+        FileRequestInfo temp = null;
         for (FileRequestInfo requestInfo : fileRequestInfo) {
-            if (requestInfo.sellerName.equals(username))
-                return requestInfo;
+            if (requestInfo.sellerName.equals(username)) {
+                temp = requestInfo;
+                break;
+            }
         }
-        return null;
+        if (temp != null)
+            fileRequestInfo.remove ( temp );
+        return temp;
     }
 
     class BuyFileRequestHandler implements Handler {

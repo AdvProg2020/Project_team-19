@@ -30,8 +30,6 @@ public class App extends Application {
     private double xOffset, yOffset;
 
     public static AudioClip akh = new AudioClip ( new File ( "src/main/resources/akh.mp3" ).toURI ().toString () );
-    public static AudioClip bop = new AudioClip ( new File ( "src/main/resources/bop.mp3" ).toURI ().toString () );
-    public static AudioClip click = new AudioClip ( new File ( "src/main/resources/mouseClick.mp3" ).toURI ().toString () );
     public static AudioClip chaChing = new AudioClip ( new File ( "src/main/resources/chaChing.mp3" ).toURI ().toString () );
 
 
@@ -43,11 +41,6 @@ public class App extends Application {
     public void start(Stage primaryStage) throws IOException {
         ServerConnection.run();
         mainRun();
-//        try {
-//            PersonController.getInstance().login("yasna", "123");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
         App.currentStage = primaryStage;
 
         AnchorPane root = getFXMLLoader("mainMenu").load();
@@ -66,26 +59,11 @@ public class App extends Application {
             ServerConnection.sendLogout ();
             ServerConnection.exit ();
         } );
-
     }
 
     private void mainRun() {
-        initializer();
-//        App.manageDiscountCodeTimer();
-//        App.manageDiscountTimer();
-//        App.manageAuctionTimer();
         mainMenu = new MainMenu(null);
         userMenu = new UserMenu(mainMenu);
-    }
-
-    public static void initializer() {
-        Database.createDatabase();
-        Database.initializeAddress();
-        ProductController.getInstance().initializeProducts();
-        CategoryController.getInstance().initializeRootCategories();
-        PersonController.getInstance().initializePersons();
-        ProductController.getInstance().initializeStock();
-        RequestController.getInstance().initializeRequests();
     }
 
 

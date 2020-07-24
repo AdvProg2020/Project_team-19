@@ -1,6 +1,5 @@
 package model;
 
-import com.sun.org.apache.bcel.internal.generic.ARETURN;
 import controller.CategoryController;
 import controller.Database;
 import controller.ProductController;

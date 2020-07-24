@@ -34,8 +34,22 @@ public class WalletController {
     }
 
     public void setMIN_BALANCE(double MIN_BALANCE) {
+        setAllPersonsMinBalance(MIN_BALANCE);
         WalletController.MIN_BALANCE = MIN_BALANCE;
         saveToFile(MIN_BALANCE, address.get("min_balance"));
+    }
+
+    public void setAllPersonsMinBalance(double amount) {
+        for (Person person : PersonController.allPersons) {
+            if (person instanceof Customer) {
+                ((Customer)person).getWallet().increaseBlocked(amount - MIN_BALANCE);
+                saveToFile(person, createPath("customers", person.getUsername()));
+            }
+            if (person instanceof Salesperson) {
+                ((Salesperson)person).getWallet().increaseBlocked(amount - MIN_BALANCE);
+                saveToFile(person, createPath("salespersons", person.getUsername()));
+            }
+        }
     }
 
     public void setWAGE(double WAGE) {

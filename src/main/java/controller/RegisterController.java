@@ -46,7 +46,7 @@ public class RegisterController {
     }
 
     public void registerSupport (HashMap<String, String> personInfo) {
-        SupportRequest request = new SupportRequest (personInfo);
+        Support support = new Support(personInfo);
     }
 
     public boolean isFirstManagerRegistered() {

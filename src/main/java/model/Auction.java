@@ -16,6 +16,8 @@ public class Auction {
     private LocalDateTime endTime;
     private HashMap<String, Double> customers = new HashMap<>();
 
+    transient public String messages = "";
+
     public Auction(Salesperson salesperson, Product product, LocalDateTime endTime) {
         this.sellerName = salesperson.getUsername();
         this.productId = product.getID();
