@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
-<?import java.lang.*?>
-<?import javafx.scene.image.*?>
 <?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.CustomerMenuController">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlController.CustomerMenuController">
     <children>
         <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" onMouseClicked="#back" onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
         <Button layoutX="259.0" layoutY="437.0" mnemonicParsing="false" onAction="#logout" prefHeight="26.0" prefWidth="282.0" styleClass="btn" stylesheets="@button.css" text="Logout" />
@@ -35,5 +34,6 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </ImageView>
+      <Button fx:id="supportChat" layoutX="662.0" layoutY="273.0" mnemonicParsing="false" onAction="#supportChatAction" text="Support Chat" />
     </children>
 </AnchorPane>

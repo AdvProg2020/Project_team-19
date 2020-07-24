@@ -29,7 +29,6 @@ public class Database {
         address.put("product_requests", databaseAddress + File.separator + "requests" + File.separator + "product_requests");
         address.put("discount_requests", databaseAddress + File.separator + "requests" + File.separator + "discount_requests");
         address.put("salesperson_requests", databaseAddress + File.separator + "requests" + File.separator + "salesperson_requests");
-        address.put("support_requests", databaseAddress + File.separator + "requests" + File.separator + "support_requests");
         address.put("auction_requests", databaseAddress + File.separator + "requests" + File.separator + "auction_requests");
         address.put("min_balance", databaseAddress + File.separator + "min_balance.json");
         address.put("wage", databaseAddress + File.separator + "wage.json");
@@ -118,7 +117,6 @@ public class Database {
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "persons" + File.separator + "managers");
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "requests");
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "requests" + File.separator + "salesperson_requests");
-        createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "requests" + File.separator + "support_requests");
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "requests" + File.separator + "product_requests");
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "requests" + File.separator + "discount_requests");
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "requests" + File.separator + "auction_requests");

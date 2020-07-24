@@ -1,5 +1,6 @@
 package fxmlController;
 
+import clientController.ServerConnection;
 import controller.CartController;
 import controller.PersonController;
 import controller.ProductController;
@@ -24,16 +25,18 @@ import view.App;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static view.App.getFXMLLoader;
 
-public class UsersController implements Initializable { //todo alireza
+public class UsersController implements Initializable {
 
     public TableView < UserForTable > tableView;
     public TableColumn < UserForTable,String > nameColumn;
     public TableColumn< UserForTable,String > typeColumn;
+    public TableColumn < UserForTable, String > statusColumn;
     public TableColumn < UserForTable, String > removeColumn;
 
     @FXML
@@ -76,19 +79,9 @@ public class UsersController implements Initializable { //todo alireza
                     alert.setTitle("Life And Death Situation");
                     Optional < ButtonType > result = alert.showAndWait();
                     if (result.orElse(cancel) == ok) {
-                        Person person = PersonController.getInstance ().getPersonByUsername ( userForTable.getName () );
-                        try {
-//                            if (person == PersonController.getInstance ().getLoggedInPerson ())
-//                                throw new Exception ( "Don't Commit Suicide" );
-                            if (person instanceof Salesperson ) {
-                                CartController.getInstance ( ).removeSeller ( (Salesperson) person );
-                                ProductController.getInstance ().removeSellerInStock ( (Salesperson) person );
-                            }
-                            PersonController.getInstance ().removePersonFromAllPersons ( person );
-                            System.out.println ( "Removed successfully." );
-                        } catch (Exception exception) {
-                            App.error ( exception.getMessage () );
-                        }
+                            System.out.println ( ServerConnection.removeUser( new ArrayList<String> () {{
+                                add ( userForTable.getName () );
+                            }} ) );
                     } else {
                         System.out.println ( "Cancelled" );
                     }
@@ -102,9 +95,9 @@ public class UsersController implements Initializable { //todo alireza
 
     private void updateTable () {
         ArrayList<UserForTable> users = new ArrayList <> (  );
-        for (Person person : PersonController.allPersons) {
-            users.add ( new UserForTable ( person.getUsername () , person.getType () ) );
-        }
+        HashMap <String,String> allPersons = ServerConnection.getAllPersonInfo ();
+        allPersons.forEach ( (k,v) -> users.add ( new UserForTable ( k , v ) ) );
+
         nameColumn.setCellValueFactory ( new PropertyValueFactory<> ( "name" ) );
         typeColumn.setCellValueFactory ( new PropertyValueFactory <> ( "type" ) );
         removeColumn.setCellValueFactory( p -> {
@@ -116,6 +109,20 @@ public class UsersController implements Initializable { //todo alireza
             }
         } );
         removeColumn.setStyle ( "-fx-alignment: center; -fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-font-color: white; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" );
+
+        statusColumn.setCellValueFactory ( param -> {
+            UserForTable user = param.getValue ();
+            if (user != null) {
+                if (ServerConnection.isOnline ( new ArrayList<String>() {{
+                    add ( user.getName () );
+                }} )) {
+                    return new SimpleStringProperty ( "■" );
+                } else return new SimpleStringProperty ( "□" );
+            } else return new SimpleStringProperty ("<no name>");
+        } );
+
+        statusColumn.setStyle ( "-fx-alignment: center; -fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-font-color: white; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" );
+
 
         tableView.setItems ( FXCollections.observableArrayList ( users ) );
     }
@@ -129,6 +136,25 @@ public class UsersController implements Initializable { //todo alireza
         }
         Stage window = new Stage ( );
         window.setTitle ( "Add A Manager" );
+        assert root != null;
+        Scene scene = new Scene ( root , 600 , 300 );
+        window.setScene ( scene );
+        window.initModality ( Modality.APPLICATION_MODAL );
+        window.centerOnScreen ();
+        window.showAndWait ();
+        updateTable ();
+    }
+
+
+    public void newOneSupport ( ActionEvent event ) {
+        Parent root = null;
+        try {
+            root = getFXMLLoader ( "addSupport" ).load ();
+        } catch (IOException ioException) {
+            ioException.printStackTrace ( );
+        }
+        Stage window = new Stage ( );
+        window.setTitle ( "Add A Support" );
         assert root != null;
         Scene scene = new Scene ( root , 600 , 300 );
         window.setScene ( scene );

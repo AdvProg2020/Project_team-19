@@ -1,5 +1,6 @@
 package fxmlController;
 
+import clientController.ServerConnection;
 import controller.PersonController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +14,7 @@ import javafx.stage.Stage;
 import model.Salesperson;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import static view.LoginMenu.PersonInfo.PASSWORD;
@@ -26,11 +28,14 @@ public class ChangeInfo implements Initializable {  //todo
 
     @Override
     public void initialize ( URL location , ResourceBundle resources ) {
-        ObservableList <String> typeItems = null;
-//        if ( PersonController.getInstance ().getLoggedInPerson () instanceof Salesperson )
-//            typeItems = FXCollections.observableArrayList ( "Password","First Name","Last Name","Email","Phone Number","Company","Dar Surate Vjud Sayere Moshakhsat" );
-//        else
-//            typeItems = FXCollections.observableArrayList ( "Password","First Name","Last Name","Email","Phone Number" );
+        ObservableList <String> typeItems;
+        String type = ServerConnection.getPersonTypeByToken ();
+        if ( type.equalsIgnoreCase ( "salesperson" ) )
+            typeItems = FXCollections.observableArrayList ( "Password","First Name","Last Name","Email","Phone Number","Company","Dar Surate Vjud Sayere Moshakhsat" );
+        else if ( type.equalsIgnoreCase ( "manager" ) )
+            typeItems = FXCollections.observableArrayList ( "Password","First Name","Last Name","Email","Phone Number","Minimum Balance","Wage" );
+        else
+            typeItems = FXCollections.observableArrayList ( "Password","First Name","Last Name","Email","Phone Number" );
         field.setItems ( typeItems );
         field.setValue ( "Password" );
         text.setVisible ( false );
@@ -49,13 +54,14 @@ public class ChangeInfo implements Initializable {  //todo
         } );
     }
 
-    @FXML private void done () { //todo
-//        if (field.getValue ().equals ( "Password" )) {
-//            PersonController.getInstance ().getLoggedInPerson ().setField ( PASSWORD.label , password.getText () );
-//        } else {
-//            System.out.println ( field.getValue ().toLowerCase () );
-//            PersonController.getInstance ().getLoggedInPerson ().setField ( field.getValue ().toLowerCase () , text.getText () );
-//        }
+    @FXML private void done () {
+        ServerConnection.changeInfo ( new ArrayList <String> () {{
+            add ( field.getValue ().toLowerCase () );
+            if (field.getValue ().equals ( "Password" ))
+                add ( password.getText () );
+            else
+                add ( text.getText () );
+        }} );
         Metadata.personInfoController.updateTable ();
         cancel();
     }

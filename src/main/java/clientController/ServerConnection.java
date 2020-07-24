@@ -109,7 +109,14 @@ public class ServerConnection {
     }
 
     public static String sendLogout() {
-        return sendMessage(LOG_OUT, null, token);
+        String response = sendMessage(LOG_OUT, null, token);
+        token = "";
+        return response;
+    }
+
+    public static HashMap<String, String> getAllPersonInfo() {
+        String response = sendMessage(GET_ALL_PERSON_INFO, null, "");
+        return (HashMap<String, String>) getObj(new TypeToken<HashMap<String, String>>(){}.getType(), response);
     }
 
     public static HashMap<String, String> getPersonInfoByToken() {
@@ -384,14 +391,6 @@ public class ServerConnection {
         return (ArrayList<AuctionRequest>) getObj(new TypeToken<ArrayList<AuctionRequest>>(){}.getType(), response);
     }
 
-    public static ArrayList<SupportRequest> getSupportRequests () {
-        ArrayList<String> info = new ArrayList<>();
-        info.add("support");
-        String response = sendMessage(GET_REQUESTS_OF_TYPE, info, "");
-        return (ArrayList<SupportRequest>) getObj(new TypeToken<ArrayList<SupportRequest>>(){}.getType(), response);
-    }
-
-
     public static String addCategory(ArrayList<String> info) {
         return sendMessage(ADD_CATEGORY, info, "");
     }
@@ -403,6 +402,50 @@ public class ServerConnection {
     public static ArrayList<String> getParentCategories() {
         String response = sendMessage(GET_PARENT_CATEGORIES, null, "");
         return (ArrayList<String>) getObj(new TypeToken<ArrayList<String>>(){}.getType(), response);
+    }
+
+    public static String changeInfo (ArrayList<String> info) {
+        return sendMessage ( CHANGE_INFO , info , token );
+    }
+
+    public static void supportChatSend ( ArrayList<String> info) {
+        try {
+            dataOutputStream.writeUTF(toJson(new Request(SUPPORT_CHAT_SEND, info, token)));
+        } catch (IOException ioException) {
+            ioException.printStackTrace ( );
+        }
+    }
+
+    public static void supportChatOpen (ArrayList<String> info) {
+        try {
+            dataOutputStream.writeUTF(toJson(new Request(SUPPORT_CHAT_OPEN, info, token)));
+        } catch (IOException ioException) {
+            ioException.printStackTrace ( );
+        }
+    }
+
+    public static String removeUser ( ArrayList<String> info ) {
+        return sendMessage ( REMOVE_USER , info, token );
+    }
+
+    public static boolean isOnline ( ArrayList<String> info ) {
+        return sendMessage ( IS_ONLINE , info , "" ).equals ( "successful" );
+    }
+
+    public static ArrayList<String> getAllOnlineSupports () {
+        return (ArrayList<String>) getObj(new TypeToken<ArrayList<String>>(){}.getType(), sendMessage ( GET_ALL_ONLINE_SUPPORTS , null , "" ));
+    }
+
+    public static ArrayList<String> getAllClientsWithChats () {
+        return (ArrayList<String>) getObj(new TypeToken<ArrayList<String>>(){}.getType(), sendMessage ( GET_ALL_CLIENTS_WITH_CHATS , null , token ));
+    }
+
+    public static void exit() {
+        try {
+            dataOutputStream.writeUTF(toJson(new Request(EXIT, null, "")));
+        } catch (IOException ioException) {
+            ioException.printStackTrace ( );
+        }
     }
 
     private static String sendMessage(PacketType packetType, ArrayList<String> info, String token) {

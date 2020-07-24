@@ -9,11 +9,13 @@
         <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" onMouseClicked="#back" onMousePressed="#backSizeBig" onMouseReleased="#backSizeSmall" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
         <TableView fx:id="tableView" layoutY="50.0" prefHeight="451.0" prefWidth="800.0">
             <columns>
-                <TableColumn fx:id="nameColumn" editable="false" prefWidth="447.0" resizable="false" style="-fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" text="Username" />
-                <TableColumn fx:id="typeColumn" editable="false" minWidth="0.0" prefWidth="176.79998779296875" resizable="false" style="-fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" text="Type" />
-            <TableColumn fx:id="removeColumn" editable="false" minWidth="0.0" prefWidth="176.79998779296875" resizable="false" style="-fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" text="Remove" />
+                <TableColumn fx:id="nameColumn" editable="false" prefWidth="368.60000002384186" resizable="false" style="-fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" text="Username" />
+                <TableColumn fx:id="typeColumn" editable="false" minWidth="0.0" prefWidth="205.80001831054688" resizable="false" style="-fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" text="Type" />
+            <TableColumn fx:id="statusColumn" editable="false" minWidth="0.0" prefWidth="108.20001220703125" resizable="false" style="-fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" text="Status" />
+            <TableColumn fx:id="removeColumn" editable="false" minWidth="0.0" prefWidth="113.4000244140625" resizable="false" style="-fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" text="Remove" />
             </columns>
         </TableView>
         <Button layoutX="232.0" layoutY="12.0" mnemonicParsing="false" onAction="#newOne" prefHeight="26.0" prefWidth="554.0" styleClass="btn" stylesheets="@button.css" text="New Manager To Help You Out With This Hard Job And Sympathize With You" />
+      <Button layoutX="100.0" layoutY="12.0" mnemonicParsing="false" onAction="#newOneSupport" prefHeight="26.0" prefWidth="113.0" styleClass="btn" stylesheets="@button.css" text="New Support" />
     </children>
 </AnchorPane>

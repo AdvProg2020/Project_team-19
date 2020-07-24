@@ -22,7 +22,11 @@ public class Server {
     private static Server single_instance = null;
     private static int PORT = 4444;
     private static BlockingQueue<Connection> requests;
-    private HashMap<String, String> authTokens = new HashMap<>();
+    private HashMap<String, String> authTokens = new HashMap<>(); //authToken, Username
+    private HashMap<String, Connection> tokenConnectionHashmap = new HashMap <> (  );
+    private HashMap<String, String> tokenSupportMessagesHashmap = new HashMap <> (  ); //client token, history messages
+    public static ArrayList<String> allSupportTokens = new ArrayList <> (  );
+    public static HashMap<String, HashMap<String,Chat>> clientChatsHashmap = new HashMap <> (  );
 
 
     private Server() {
@@ -99,6 +103,15 @@ public class Server {
         commands.put(OFFER_PRICE_FOR_AUCTION, new OfferPriceForAuctionHandler());
         commands.put(SEND_AUCTION_MESSAGE, new SendAuctionMessage());
         commands.put(AUCTION_PURCHASE, new AuctionPurchase());
+        commands.put (SUPPORT_CHAT_OPEN , new SupportChatOpen () );
+        commands.put (SUPPORT_CHAT_SEND , new SupportChatSend () );
+        commands.put (CHANGE_INFO,new ChangeInfo() );
+        commands.put (GET_ALL_PERSON_INFO, new GetAllPersonInfo() );
+        commands.put (REMOVE_USER, new RemoveUser() );
+        commands.put (IS_ONLINE, new IsOnline() );
+        commands.put (GET_ALL_ONLINE_SUPPORTS, new GetAllOnlineSupports() );
+        commands.put (SUPPORT_CHAT_BACK, new SupportChatBack() );
+        commands.put (GET_ALL_CLIENTS_WITH_CHATS, new GetAllClientsWithChats() );
     }
 
     public static Server getInstance() {
@@ -106,6 +119,14 @@ public class Server {
             single_instance = new Server();
 
         return single_instance;
+    }
+
+    public String getTokenByUsername(String username) {
+        for (Map.Entry < String, String > stringStringEntry : authTokens.entrySet ( )) {
+            if (stringStringEntry.getValue ().equals ( username ))
+                return stringStringEntry.getKey ();
+        }
+        return "";
     }
 
     private ServerSocket serverSocket;
@@ -158,13 +179,20 @@ public class Server {
                     String string = dataInputStream.readUTF();
                     System.out.println(string);
                     Request request = (Request) read(Request.class, string);
+                    if (request.getRequestType () == EXIT) {
+                        dataOutputStream.close ();
+                        dataInputStream.close ();
+                        socket.close ( );
+                        return;
+                    }
                     if (request.getToken().length() > 0){
                         if (!checkToken(request.getToken())) {
                             dataOutputStream.writeUTF("invalid token.");
                             continue;
                         }
                     }
-                    requests.put(new Connection(request, dataOutputStream));
+                    Connection connection = new Connection ( request, dataOutputStream );
+                    requests.put(connection);
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -194,7 +222,10 @@ public class Server {
 //                    cart = (Cart) read(Cart.class, strings.get(2));
 //                }
                 PersonController.getInstance().login(strings.get(0), strings.get(1),cart);
-                String token = UUID.randomUUID().toString();;
+                String token = UUID.randomUUID().toString();
+                if (PersonController.getInstance().getPersonByUsername(strings.get(0)).getType().equalsIgnoreCase("support")) {
+                    allSupportTokens.add ( token );
+                }
                 authTokens.put(token, strings.get(0));
                 connection.SendMessage(token);
             } catch (Exception e) {
@@ -649,9 +680,14 @@ public class Server {
 
         @Override
         public void handle(Connection connection) {
-            String username = authTokens.get(connection.getRequest().getToken());
-            authTokens.remove(connection.getRequest().getToken());
-            connection.SendMessage(username + " logout");
+            String token = connection.getRequest().getToken();
+            if (!token.isEmpty ()) {
+                String username = authTokens.get ( token );
+                authTokens.remove ( token );
+                connection.SendMessage ( username + " logout" );
+            } else {
+                connection.SendMessage ( "offline" );
+            }
         }
     }
 
@@ -696,9 +732,6 @@ public class Server {
                     break;
                 case "auction":
                     connection.SendMessage(write(RequestController.getInstance().filterByType(AuctionRequest.class)));
-                    break;
-                case "support":
-                    connection.SendMessage(write(RequestController.getInstance().filterByType(SupportRequest.class)));
                     break;
             }
         }
@@ -1079,6 +1112,156 @@ public class Server {
         }
     }
 
+    class SupportChatOpen implements Handler {
+
+        @Override
+        public void handle ( Connection connection ) {
+            Chat chat;
+
+            if (connection.getRequest ().getJson ().get ( 0 ).equals ( "customer" )) {
+                String clientUsername = authTokens.get ( connection.getRequest ().getToken () );
+                String supportUsername = connection.getRequest ().getJson ().get ( 1 );
+
+                HashMap < String, Chat > supportHashmap = clientChatsHashmap.computeIfAbsent ( clientUsername , k -> new HashMap <> ( ) );
+
+                chat = supportHashmap.computeIfAbsent ( supportUsername , k -> new Chat ( supportUsername , connection ) );
+
+            } else {
+                String clientUsername = connection.getRequest ().getJson ().get ( 1 );
+                String supportUsername = authTokens.get ( connection.getRequest ().getToken () );
+
+                HashMap < String, Chat > supportHashmap = clientChatsHashmap.get ( clientUsername );
+
+                chat = supportHashmap.get ( supportUsername );
+                chat.setSupportConnection ( connection );
+
+            }
+            connection.SendMessage ( "/open/" + chat.messages );
+
+        }
+    }
+
+    class SupportChatSend implements Handler {
+
+        @Override
+        public void handle ( Connection connection ) {
+            Chat chat;
+            String message;
+            String client;
+            String support;
+            if (connection.getRequest ().getJson ().get ( 0 ).equals ( "customer" )) {
+                client = authTokens.get ( connection.getRequest ().getToken () );
+                message = client + " : " + connection.getRequest ().getJson ().get ( 1 );
+                support = connection.getRequest ().getJson ().get ( 2 );
+                HashMap<String,Chat> supportHashmap = clientChatsHashmap.get ( client );
+                chat = supportHashmap.get ( support );
+                if (chat.supportConnection != null)
+                    chat.supportConnection.SendMessage ( message );
+            } else {
+                support = authTokens.get ( connection.getRequest ().getToken () );
+                message = support + " : " + connection.getRequest ().getJson ().get ( 1 );
+                client = connection.getRequest ().getJson ().get ( 2 );
+                HashMap<String,Chat> supportHashmap = clientChatsHashmap.get ( client );
+                chat = supportHashmap.get ( support );
+                chat.clientConnection.SendMessage ( message );
+            }
+            chat.messages = chat.messages.concat ( message );
+            connection.SendMessage ( message );
+        }
+    }
+
+    class ChangeInfo implements Handler {
+
+        @Override
+        public void handle ( Connection connection ) {
+            String field = connection.getRequest ().getJson ().get ( 0 );
+            String newValue = connection.getRequest ().getJson ().get ( 1 );
+            PersonController.getInstance ().getPersonByUsername ( authTokens.get ( connection.getRequest ().getToken () ) ).setField ( field , newValue );
+            connection.SendMessage ( "successful" );
+        }
+    }
+
+    class GetAllPersonInfo implements Handler {
+
+        @Override
+        public void handle ( Connection connection ) {
+            HashMap<String,String> response = new HashMap <> (  );
+            for (Person person : PersonController.allPersons) {
+                response.put ( person.getUsername () , person.getType () );
+            }
+            connection.SendMessage(write(response));
+        }
+    }
+
+    class RemoveUser implements Handler {
+
+        @Override
+        public void handle ( Connection connection ) {
+            Person person = PersonController.getInstance ().getPersonByUsername ( connection.getRequest ().getJson ().get ( 0 ) );
+            try {
+                if (person == PersonController.getInstance ().getPersonByUsername ( authTokens.get ( connection.getRequest ().getToken () ) ))
+                    throw new Exception ( "Don't Commit Suicide" );
+                if (person instanceof Salesperson) {
+                    CartController.getInstance ( ).removeSeller ( (Salesperson) person );
+                    ProductController.getInstance ().removeSellerInStock ( (Salesperson) person );
+                }
+                PersonController.getInstance ().removePersonFromAllPersons ( person );
+                connection.SendMessage ( "Removed Successfully" );
+            } catch (Exception exception) {
+                connection.SendMessage ( exception.getMessage () );
+            }
+        }
+    }
+
+    class IsOnline implements Handler {
+
+        @Override
+        public void handle ( Connection connection ) {
+            if ( authTokens.containsValue ( connection.getRequest ().getJson ().get ( 0 ) ) )
+                connection.SendMessage ( "successful" );
+            else
+                connection.SendMessage ( "unsuccessful" );
+        }
+    }
+
+    class GetAllOnlineSupports implements Handler {
+
+        @Override
+        public void handle ( Connection connection ) {
+            ArrayList<String> allOnlineSupports = new ArrayList <> ();
+            for (Map.Entry < String, String > stringStringEntry : authTokens.entrySet ( )) {
+                String username = stringStringEntry.getValue ();
+                Person person = PersonController.getInstance ().getPersonByUsername ( username );
+                if (person instanceof Support)
+                    allOnlineSupports.add ( person.getUsername () );
+            }
+            connection.SendMessage ( write ( allOnlineSupports ) );
+        }
+    }
+
+    class GetAllClientsWithChats implements Handler {
+
+        @Override
+        public void handle ( Connection connection ) {
+            ArrayList<String> allClientsWithChats = new ArrayList <> ();
+            String supportUsername = authTokens.get ( connection.getRequest ().getToken () );
+            for (Map.Entry < String, HashMap < String, Chat > > stringHashMapEntry : clientChatsHashmap.entrySet ( )) {
+                if (stringHashMapEntry.getValue ().containsKey ( supportUsername ))
+                    allClientsWithChats.add ( stringHashMapEntry.getKey () );
+            }
+//            clientChatsHashmap.get ( supportUsername ).forEach ( (k,v) -> allClientsWithChats.add ( k ) );
+            connection.SendMessage ( write ( allClientsWithChats ) );
+        }
+    }
+
+    class SupportChatBack implements Handler {
+
+        @Override
+        public void handle ( Connection connection ) {
+            connection.SendMessage ( "/back/" );
+        }
+    }
+
     public static void main(String[] args) {
         mainRun();
         Thread listen = getInstance().listenRequest();
@@ -1130,8 +1313,8 @@ public class Server {
 }
 
 class Connection {
-    private Request request;
-    private DataOutputStream dataOutputStream;
+    private final Request request;
+    private final DataOutputStream dataOutputStream;
 
     public Connection(Request request, DataOutputStream dataOutputStream) {
         this.request = request;
@@ -1150,6 +1333,7 @@ class Connection {
     public void SendMessage(String msg)  {
         try {
             dataOutputStream.writeUTF(msg);
+            dataOutputStream.flush ();
         } catch (IOException e) {
             try {
                 dataOutputStream.writeUTF(e.getMessage());
@@ -1157,6 +1341,23 @@ class Connection {
                 ex.printStackTrace();
             }
         }
+    }
+}
+
+class Chat {
+    Connection clientConnection;
+    Connection supportConnection;
+    String supportUsername;
+    String messages;
+
+    public Chat ( String supportUsername , Connection clientConnection ) {
+        this.clientConnection = clientConnection;
+        this.supportUsername = supportUsername;
+        messages = "";
+    }
+
+    public void setSupportConnection ( Connection supportConnection ) {
+        this.supportConnection = supportConnection;
     }
 }
 

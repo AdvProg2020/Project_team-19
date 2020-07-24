@@ -56,15 +56,17 @@ public class App extends Application {
         primaryStage.setTitle("Bruh");
         primaryStage.setScene(currentScene);
 
-
-
-
-
         AudioClip background = new AudioClip ( new File ( "src/main/resources/Soul_and_Mind.mp3" ).toURI ().toString () );
         background.setCycleCount ( AudioClip.INDEFINITE );
         background.play ();
 
         primaryStage.show();
+
+        primaryStage.setOnCloseRequest ( event -> {
+            ServerConnection.sendLogout ();
+            ServerConnection.exit ();
+        } );
+
     }
 
     private void mainRun() {
