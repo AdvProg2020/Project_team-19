@@ -63,9 +63,6 @@ public class RequestController {
         for (File file : Database.returnListOfFiles(address.get("auction_requests"))) {
             allRequests.add((AuctionRequest) read(AuctionRequest.class, file.getAbsolutePath()));
         }
-        for (File file : Database.returnListOfFiles(address.get("support_requests"))) {
-            allRequests.add((SupportRequest) read(SupportRequest.class, file.getAbsolutePath()));
-        }
         for (File file : Database.returnListOfFiles(address.get("file_requests"))) {
             allRequests.add((FileRequest) read(FileRequest.class, file.getAbsolutePath()));
         }
@@ -83,8 +80,6 @@ public class RequestController {
                 deleteFile(createPath("salesperson_requests", request.getRequestId()));
             else if (request instanceof AuctionRequest)
                 deleteFile(createPath("auction_requests", request.getRequestId()));
-            else if (request instanceof SupportRequest)
-                deleteFile(createPath("support_requests", request.getRequestId()));
             else if (request instanceof FileRequest)
                 deleteFile(createPath("file_requests", request.getRequestId()));
         } catch (IOException e) {
@@ -104,8 +99,6 @@ public class RequestController {
                 deleteFile(createPath("salesperson_requests", request.getRequestId()));
             else if (request instanceof AuctionRequest)
                 deleteFile(createPath("auction_requests", request.getRequestId()));
-            else if (request instanceof SupportRequest)
-                deleteFile(createPath("support_requests", request.getRequestId()));
             else if (request instanceof FileRequest)
                 deleteFile(createPath("file_requests", request.getRequestId()));
         } catch (IOException e) {
