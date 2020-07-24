@@ -14,16 +14,19 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Salesperson;
+import view.App;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
+
 import static clientController.ServerConnection.*;
 import static view.LoginMenu.PersonInfo.PASSWORD;
 import static view.LoginMenu.PersonInfo.PROFILE;
 
-public class ChangeInfoController implements Initializable { //todo
+public class ChangeInfoController implements Initializable {
 
     @FXML private ImageView profile;
     private File profileFile;
@@ -40,7 +43,7 @@ public class ChangeInfoController implements Initializable { //todo
         if ( type.equalsIgnoreCase ( "salesperson" ) )
             typeItems = FXCollections.observableArrayList ( "Password","First Name","Last Name","Email","Phone Number","Company","Dar Surate Vjud Sayere Moshakhsat" );
         else if ( type.equalsIgnoreCase ( "manager" ) )
-            typeItems = FXCollections.observableArrayList ( "Password","First Name","Last Name","Email","Phone Number","Minimum Balance","Wage" );
+            typeItems = FXCollections.observableArrayList ( "Password","First Name","Last Name","Email","Phone Number","Min_balance","Wage" );
         else
             typeItems = FXCollections.observableArrayList ( "Password","First Name","Last Name","Email","Phone Number" );
 
@@ -86,7 +89,6 @@ public class ChangeInfoController implements Initializable { //todo
     }
 
     @FXML private void done () {
-        //todo
 //        if (field.getValue ().equals ( "Password" ) && !password.getText ().isEmpty ()) {
 //            PersonController.getInstance ().getLoggedInPerson ().setField ( PASSWORD.label , password.getText () );
 //        } else if (!text.getText ().isEmpty ()) {
@@ -94,14 +96,35 @@ public class ChangeInfoController implements Initializable { //todo
 //            PersonController.getInstance ( ).getLoggedInPerson ( ).setField ( field.getValue ( ).toLowerCase ( ) , text.getText ( ) );
 //        }
 //        PersonController.getInstance ().getLoggedInPerson ().setField ( PROFILE.label , profileFileString );
-        ServerConnection.changeInfo ( new ArrayList <String> () {{
-            add ( field.getValue ().toLowerCase () );
-            if (field.getValue ().equals ( "Password" ) && !password.getText ().isEmpty ())
-                add ( password.getText () );
-            else
-                if (!text.getText ().isEmpty ())
-                    add ( text.getText () );
-        }} );
+        ArrayList<String> info = new ArrayList <> ();
+        info.add ( field.getValue ().toLowerCase () );
+        try {
+            if ( (field.getValue ( ).equals ( "Password" )) ) {
+                if ( !password.getText ( ).isEmpty ( ) ) {
+                    info.add ( password.getText ( ) );
+                    ServerConnection.changeInfo ( info );
+                }
+            } else {
+                if ( !text.getText ( ).isEmpty ( ) ) {
+                    if ( field.getValue ( ).equals ( "Wage" ) ) {
+                        if ( text.getText ( ).matches ( "^\\d*(\\.\\d+)?$" ) && Integer.parseInt ( text.getText ( ) ) < 100 ) {
+                            info.add ( text.getText ( ) );
+                            ServerConnection.changeInfo ( info );
+                        } else App.error ( "error" );
+                    } else if ( field.getValue ( ).equals ( "Min_balance" ) ) {
+                        if ( text.getText ( ).matches ( "^\\d*(\\.\\d+)?$" ) ) {
+                            info.add ( text.getText ( ) );
+                            ServerConnection.changeInfo ( info );
+                        } else App.error ( "error" );
+                    } else {
+                        info.add ( text.getText ( ) );
+                        ServerConnection.changeInfo ( info );
+                    }
+                }
+            }
+        } catch (Exception e) {
+            App.error ( e.getMessage () );
+        }
         Metadata.personInfoController.updateTable ();
         cancel();
     }

@@ -35,7 +35,6 @@ public class MainMenuController implements Initializable {
 //    @FXML private Button userMenu;
 
     @FXML private void userMenuAction () throws IOException {
-        App.akh.play ();
         App.firstScene = App.currentScene;
         type = getPersonTypeByToken();
         if ( !type.equals("null") && !type.equals("invalid token.") ) {
@@ -60,13 +59,11 @@ public class MainMenuController implements Initializable {
 
     @FXML private void productAction () {
         MainProductsMenu.isDiscount = false;
-        App.akh.play ();
         App.setRoot ( "mainProductsMenu" );
     }
 
     @FXML void discountAction() {
         MainProductsMenu.isDiscount = true;
-        App.akh.play ();
         App.setRoot ( "mainProductsMenu" );
     }
 

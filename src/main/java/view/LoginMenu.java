@@ -22,7 +22,7 @@ public class LoginMenu extends Menu {
         COMPANY ( "company" ),
         SAYERE_MOSHAKHASAT ( "dar surate vjud sayere moshakhsat" ),
         PROFILE ("profile"),
-        MIN_BALANCE("min balance"),
+        MIN_BALANCE("min_balance"),
         WAGE("wage");
 
         public final String label;

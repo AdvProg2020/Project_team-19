@@ -31,6 +31,8 @@ abstract public class Person {
                 Database.saveToFile ( this , Database.createPath("salespersons", getUsername()) );
             else if ( this instanceof Customer )
                 Database.saveToFile( this , Database.createPath("customers", getUsername()) );
+            else if ( this instanceof Support )
+                Database.saveToFile( this , Database.createPath("supports", getUsername()) );
         } catch (Exception e) {
             System.out.println ( "Couldn't save the change to file.\n" + e.getMessage () );
         }

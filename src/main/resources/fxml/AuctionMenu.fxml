@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.text.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
-<AnchorPane prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: #99ddff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: #99ddff;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <FontAwesomeIcon fx:id="back" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
       <Label layoutX="62.0" layoutY="43.0" prefHeight="27.0" prefWidth="76.0" text="Enter price :">
@@ -68,18 +67,14 @@
       <Pane fx:id="productPane" layoutX="52.0" layoutY="220.0" prefHeight="250.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: #5baed7; -fx-border-radius: 5; -fx-border-width: 2; -fx-background-radius: 5;" />
       <Pane layoutX="368.0" layoutY="89.0" prefHeight="377.0" prefWidth="384.0">
          <children>
-            <TextArea fx:id="messageField" layoutX="17.0" layoutY="315.0" prefHeight="48.0" prefWidth="306.0" style="-fx-background-radius: 5; -fx-border-color: #5baed7; -fx-border-width: 2; -fx-border-radius: 5;" />
+            <TextArea fx:id="add" layoutX="17.0" layoutY="315.0" prefHeight="48.0" prefWidth="306.0" style="-fx-background-radius: 5; -fx-border-color: #5baed7; -fx-border-width: 2; -fx-border-radius: 5;" />
             <ImageView fx:id="send" fitHeight="48.0" fitWidth="50.0" layoutX="323.0" layoutY="315.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/email.png" />
                </image>
             </ImageView>
             <Separator layoutX="17.0" layoutY="302.0" prefHeight="0.0" prefWidth="358.0" />
-            <ScrollPane layoutX="16.0" layoutY="13.0" prefHeight="282.0" prefWidth="358.0" style="-fx-background-radius: 5;">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="280.0" prefWidth="356.0" style="-fx-border-color: #5baed7; -fx-border-width: 2; -fx-border-radius: 5; -fx-background-radius: 5;" />
-              </content>
-            </ScrollPane>
+            <TextArea fx:id="see" layoutX="14.0" layoutY="14.0" prefHeight="276.0" prefWidth="358.0" style="-fx-background-radius: 5; -fx-border-color: #5baed7; -fx-border-width: 2; -fx-border-radius: 5;" />
          </children>
       </Pane>
    </children>

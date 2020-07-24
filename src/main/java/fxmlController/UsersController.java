@@ -36,11 +36,13 @@ public class UsersController implements Initializable {
     public TableColumn< UserForTable,String > typeColumn;
     public TableColumn < UserForTable, String > statusColumn;
     public TableColumn < UserForTable, String > removeColumn;
+    public Timer timer;
 
     @FXML
     private FontAwesomeIcon back;
 
     @FXML private void back () {
+        timer.cancel ();
         App.goBack ();
     }
 
@@ -92,7 +94,7 @@ public class UsersController implements Initializable {
     }
 
     private void updateTable () {
-        Timer timer = new Timer();
+        timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -149,6 +151,7 @@ public class UsersController implements Initializable {
         window.setScene ( scene );
         window.initModality ( Modality.APPLICATION_MODAL );
         window.centerOnScreen ();
+        timer.cancel ();
         window.showAndWait ();
         updateTable ();
     }
@@ -168,6 +171,7 @@ public class UsersController implements Initializable {
         window.setScene ( scene );
         window.initModality ( Modality.APPLICATION_MODAL );
         window.centerOnScreen ();
+        timer.cancel ();
         window.showAndWait ();
         updateTable ();
     }

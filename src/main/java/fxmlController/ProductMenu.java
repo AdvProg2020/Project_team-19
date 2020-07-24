@@ -114,10 +114,10 @@ public class ProductMenu implements Initializable {
             setSimilarProductsAction();
             similarProductsPopup.show(App.currentStage);
         });
-        checkMedia();
-        if (product.getImageURI() != null) {
-            productImage.setImage(new Image(product.getImageURI()));
-        }
+//        checkMedia();
+//        if (product.getImageURI() != null) {
+//            productImage.setImage(new Image(product.getImageURI()));
+//        }
         back.setOnMouseClicked ( event -> App.setRoot ( "mainProductsMenu" ) );
 
         back.setOnMousePressed ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #17b5ff,75,0,5,0);" ) );

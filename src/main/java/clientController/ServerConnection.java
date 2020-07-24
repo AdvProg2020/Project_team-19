@@ -26,7 +26,7 @@ public class ServerConnection {
 
     public static void run() {
         try {
-            socket = new Socket("tcp://0.tcp.ngrok.io", 11725);
+            socket = new Socket("2.tcp.ngrok.io", 10711);
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
             dataInputStream = new DataInputStream(socket.getInputStream());
         } catch (IOException e) {
@@ -148,13 +148,6 @@ public class ServerConnection {
         ArrayList<String> info = new ArrayList<>();
         info.add(auctionId);
         return sendMessage(AUCTION_PURCHASE, info, token);
-    }
-
-    public static String sendAuctionMessage(String auctionId, String text) {
-        ArrayList<String> info = new ArrayList<>();
-        info.add(auctionId);
-        info.add(text);
-        return sendMessage(SEND_AUCTION_MESSAGE, info, token);
     }
 
     public static String getOfferPriceForAuction(String auctionId, double amount) {
@@ -540,14 +533,6 @@ public class ServerConnection {
         return (ArrayList<AuctionRequest>) getObj(new TypeToken<ArrayList<AuctionRequest>>(){}.getType(), response);
     }
 
-    public static ArrayList<SupportRequest> getSupportRequests () {
-        ArrayList<String> info = new ArrayList<>();
-        info.add("support");
-        String response = sendMessage(GET_REQUESTS_OF_TYPE, info, "");
-        return (ArrayList<SupportRequest>) getObj(new TypeToken<ArrayList<SupportRequest>>(){}.getType(), response);
-    }
-
-
     public static String addCategory(ArrayList<String> info) {
         return sendMessage(ADD_CATEGORY, info, "");
     }
@@ -595,6 +580,20 @@ public class ServerConnection {
 
     public static ArrayList<String> getAllClientsWithChats () {
         return (ArrayList<String>) getObj(new TypeToken<ArrayList<String>>(){}.getType(), sendMessage ( GET_ALL_CLIENTS_WITH_CHATS , null , token ));
+    }
+
+    public static String sendAuctionMessage (ArrayList<String> info, boolean onlyRead) {
+        try {
+            Socket s = new Socket ( socket.getLocalAddress () , socket.getLocalPort () );
+            DataInputStream dis = new DataInputStream ( s.getInputStream () );
+            DataOutputStream dos = new DataOutputStream ( s.getOutputStream () );
+            if (!onlyRead)
+                dos.writeUTF ( toJson ( new Request ( SEND_AUCTION_MESSAGE , info , token ) ) );
+            return dis.readUTF ();
+        } catch (IOException ioException) {
+            ioException.printStackTrace ( );
+        }
+        return "error";
     }
 
     public static void exit() {

@@ -74,7 +74,6 @@ public class CustomerMenuController implements Initializable {
         double credit;
         try {
             credit = Double.parseDouble ( enterAmount.getText () );
-            App.chaChing.play ();
             //todo PersonController.getInstance().increaseCustomerCredit( (Customer) PersonController.getInstance ().getLoggedInPerson () , credit);
             //yourBalanceLabel.setText ( "Your Balance : " + ((Customer) PersonController.getInstance ().getLoggedInPerson ()).getCredit () );
         } catch (Exception e) {

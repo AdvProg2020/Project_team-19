@@ -37,10 +37,10 @@ public class AuctionInList implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         sellerName.setText(auction.getSellerName());
-        profilePic.setImage(new Image(auction.getSellerImageURL()));
+//        profilePic.setImage(new Image(auction.getSellerImageURL()));
 
         productName.setText(auction.getProductName());
-        productPic.setImage(new Image(auction.getProductImageURL()));
+//        productPic.setImage(new Image(auction.getProductImageURL()));
 
         endTime.setText(fancyEndTime());
 

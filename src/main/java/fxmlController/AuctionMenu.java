@@ -2,6 +2,7 @@ package fxmlController;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -13,19 +14,21 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import model.Auction;
+import server.Request;
 import view.App;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import static fxmlController.MainMenuController.isInAllAuction;
 import static clientController.ServerConnection.*;
+import static server.PacketType.SUPPORT_CHAT_BACK;
 
 public class AuctionMenu implements Initializable { //todo
     private Auction auction;
@@ -34,7 +37,9 @@ public class AuctionMenu implements Initializable { //todo
     @FXML
     private Label timer;
     @FXML
-    private TextArea messageField;
+    private TextArea see;
+    @FXML
+    private TextArea add;
     @FXML
     private Pane productPane;
     @FXML
@@ -48,6 +53,8 @@ public class AuctionMenu implements Initializable { //todo
     @FXML
     private FontAwesomeIcon back;
 
+    ExecutorService executor = Executors.newCachedThreadPool ( );
+
     public AuctionMenu(Auction auction, Parent productCard) {
         this.auction = auction;
         this.productCard = productCard;
@@ -55,13 +62,49 @@ public class AuctionMenu implements Initializable { //todo
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        see.setText ( auction.messages );
+
+//        new Thread ( "Listening Thread" ) {
+//            @Override
+//            public void run () {
+//                while(true) {
+//                    try {
+//                        String string = sendAuctionMessage ( null , true );
+//                        if ( string.equals ( "/back/" ) )
+//                            break;
+//                        displayMessage ( string );
+//                    } catch (Exception e) {
+//                        System.out.println ( e.getMessage () );
+//                        break;
+//                    }
+//                }
+//            }
+//
+//            private void displayMessage ( String string ) {
+//                Task display_message = new Task<Void>() {
+//                    @Override
+//                    public Void call() throws Exception {
+//
+//                        Platform.runLater( () -> see.appendText(string) );
+//
+//                        return null;
+//                    }
+//                };
+//
+//                executor.execute(display_message);
+//            }
+//
+//        }.start ();
+
         setTimer();
         send.setOnMouseClicked(event -> {
-            if (messageField.getText().isEmpty()) {
+            if (add.getText().isEmpty()) {
                 App.error("write something :|");
-                return;
-            }
-            senMessage();
+            } else
+                sendAuctionMessage ( new ArrayList <String> () {{
+                    add ( add.getText () + '\n' );
+                    add ( auction.getId () );
+                }}, false );
         });
         basePrice.setText(auction.getBasePrice() + "$");
         productPane.getChildren().add(productCard);
@@ -99,10 +142,6 @@ public class AuctionMenu implements Initializable { //todo
         App.showAlert(Alert.AlertType.CONFIRMATION, App.currentStage, "entered price", offerPrice.getText() + "$ submitted");
 
         previousPrice = Double.parseDouble(offerPrice.getText());
-    }
-
-    private void senMessage() {
-        sendAuctionMessage(auction.getId(), messageField.getText());
     }
 
     private void setTimer() {
@@ -150,6 +189,11 @@ public class AuctionMenu implements Initializable { //todo
                 }
             };
             timer.schedule(timerTask, new Date(), 60000);
+            try {
+                dataOutputStream.writeUTF(toJson(new Request (SUPPORT_CHAT_BACK, null, "")));
+            } catch (IOException ioException) {
+                ioException.printStackTrace ( );
+            }
         } );
         back.setOnMousePressed ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 20;-fx-effect: innershadow(gaussian, #17b5ff,75,0,5,0);" ) );
         back.setOnMouseReleased ( event -> back.setStyle ( "-fx-font-family: FontAwesome; -fx-font-size: 1em" ) );

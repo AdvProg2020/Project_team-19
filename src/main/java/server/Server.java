@@ -24,10 +24,8 @@ public class Server {
     private static BlockingQueue<Connection> requests;
     private HashMap<String, String> authTokens = new HashMap<>();
     public static ArrayList<FileRequestInfo> fileRequestInfo = new ArrayList<>();
-    private HashMap<String, Connection> tokenConnectionHashmap = new HashMap <> (  );
-    private HashMap<String, String> tokenSupportMessagesHashmap = new HashMap <> (  ); //client token, history messages
-    public static ArrayList<String> allSupportTokens = new ArrayList <> (  );
     public static HashMap<String, HashMap<String,Chat>> clientChatsHashmap = new HashMap <> (  );
+    public static HashMap<String,HashMap<String,Connection>> auctionHashmap = new HashMap <> (  );
 
 
 
@@ -1137,6 +1135,15 @@ public class Server {
 
             if (WalletController.getInstance().canDecreaseWalletBalance(customer, Double.parseDouble(amount))) {
                 AuctionController.getInstance().addBuyer(auction, customer, Double.parseDouble(amount));
+
+                if (auctionHashmap.get ( auctionId ) == null) {
+                    auctionHashmap.put ( auctionId , new HashMap <String,Connection> ( ) {{
+                        put ( username , connection );
+                    }} );
+                }
+                else
+                    auctionHashmap.get ( auctionId ).put ( username , connection );
+
                 connection.SendMessage("successful");
             } else {
                 connection.SendMessage("not enough money in your wallet");
@@ -1163,11 +1170,13 @@ public class Server {
 
         @Override
         public void handle(Connection connection) {
-            String username = authTokens.get(connection.getRequest().getToken());
-            Customer customer = (Customer) PersonController.getInstance().getPersonByUsername(username);
-            Auction auction = AuctionController.getInstance().getAuctionById(connection.getRequest().getJson().get(0));
-            String text = connection.getRequest().getJson().get(1);
-
+            ArrayList<String> info = connection.getRequest ().getJson ();
+            String message = authTokens.get ( connection.getRequest ().getToken () ) + " : " + info.get ( 0 );
+            String auctionID = info.get ( 1 );
+            Auction auction = AuctionController.getInstance ().getAuctionById ( auctionID );
+            auction.messages = auction.messages.concat ( message );
+            auctionHashmap.get ( auctionID ).forEach ( (k,v) -> v.SendMessage ( message ) );
+            connection.SendMessage ( message );
         }
     }
 
@@ -1335,11 +1344,16 @@ public class Server {
     }
 
     public static FileRequestInfo findRequestForSeller(String username) {
+        FileRequestInfo temp = null;
         for (FileRequestInfo requestInfo : fileRequestInfo) {
-            if (requestInfo.sellerName.equals(username))
-                return requestInfo;
+            if (requestInfo.sellerName.equals(username)) {
+                temp = requestInfo;
+                break;
+            }
         }
-        return null;
+        if (temp != null)
+            fileRequestInfo.remove ( temp );
+        return temp;
     }
 
     class BuyFileRequestHandler implements Handler {

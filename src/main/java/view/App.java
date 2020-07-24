@@ -26,14 +26,7 @@ public class App extends Application {
 
     public static Scene currentScene;
     public static Stage currentStage;
-    public static Scene firstScene; //ToDo feilan injow mizarimesh
-    private double xOffset, yOffset;
-
-    public static AudioClip akh = new AudioClip ( new File ( "src/main/resources/akh.mp3" ).toURI ().toString () );
-    public static AudioClip bop = new AudioClip ( new File ( "src/main/resources/bop.mp3" ).toURI ().toString () );
-    public static AudioClip click = new AudioClip ( new File ( "src/main/resources/mouseClick.mp3" ).toURI ().toString () );
-    public static AudioClip chaChing = new AudioClip ( new File ( "src/main/resources/chaChing.mp3" ).toURI ().toString () );
-
+    public static Scene firstScene;
 
     public static void main(String[] args) {
         launch(args);
@@ -43,11 +36,6 @@ public class App extends Application {
     public void start(Stage primaryStage) throws IOException {
         ServerConnection.run();
         mainRun();
-//        try {
-//            PersonController.getInstance().login("yasna", "123");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
         App.currentStage = primaryStage;
 
         AnchorPane root = getFXMLLoader("mainMenu").load();
@@ -55,10 +43,6 @@ public class App extends Application {
         currentScene = new Scene(root);
         primaryStage.setTitle("Bruh");
         primaryStage.setScene(currentScene);
-
-        AudioClip background = new AudioClip ( new File ( "src/main/resources/Soul_and_Mind.mp3" ).toURI ().toString () );
-        background.setCycleCount ( AudioClip.INDEFINITE );
-        background.play ();
 
         primaryStage.show();
 
@@ -70,24 +54,9 @@ public class App extends Application {
     }
 
     private void mainRun() {
-        initializer();
-//        App.manageDiscountCodeTimer();
-//        App.manageDiscountTimer();
-//        App.manageAuctionTimer();
         mainMenu = new MainMenu(null);
         userMenu = new UserMenu(mainMenu);
     }
-
-    public static void initializer() {
-        Database.createDatabase();
-        Database.initializeAddress();
-        ProductController.getInstance().initializeProducts();
-        CategoryController.getInstance().initializeRootCategories();
-        PersonController.getInstance().initializePersons();
-        ProductController.getInstance().initializeStock();
-        RequestController.getInstance().initializeRequests();
-    }
-
 
     public static FXMLLoader getFXMLLoader(String fxml) {
         return new FXMLLoader(App.class.getResource("/fxml/" + fxml + ".fxml"));
