@@ -51,6 +51,8 @@ public class App extends Application {
             ServerConnection.exit ();
         } );
 
+        System.out.println ( "Hello To Terminal" );
+
     }
 
     private void mainRun() {
