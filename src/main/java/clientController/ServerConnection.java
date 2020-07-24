@@ -3,14 +3,15 @@ package clientController;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import javafx.application.Platform;
 import model.*;
 import server.PacketType;
 import server.Request;
 
 import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 import static server.PacketType.*;
 
@@ -19,16 +20,128 @@ public class ServerConnection {
     public static DataOutputStream dataOutputStream;
     public static DataInputStream dataInputStream;
     public static String token = "";
+    public static boolean logout = false;
+
     private static Cart tempCart = new Cart();
 
     public static void run() {
         try {
-            socket = new Socket("localhost", 4444);
+            socket = new Socket("tcp://0.tcp.ngrok.io", 11725);
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
             dataInputStream = new DataInputStream(socket.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static ArrayList<FileProduct> getAllFiles() {
+        String response = sendMessage(GET_ALL_FILES, null, "");
+        return (ArrayList<FileProduct>) getObj(new TypeToken<ArrayList<FileProduct>>(){}.getType(), response);
+    }
+
+    public static String addFileRequest(String name, String description, String price, String path) {
+        ArrayList<String> info = new ArrayList<>();
+        info.add(name);
+        info.add(description);
+        info.add(price);
+        info.add(path);
+        return sendMessage(ADD_FILE_REQUEST, info, token);
+    }
+
+    public static void sendFile() {
+        Timer timer1 = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    String respond = sendMessage(ASK_FOR_FILE_REQUEST, null, token);
+                    System.out.println(respond);
+                    if (!respond.equals("no request")) {
+                        startSellerThread(Integer.parseInt(respond.split("\\s")[0]), respond.split("\\s")[1]);
+                    }
+                    if (logout) {
+                        timer1.cancel();
+                    }
+                });
+                Platform.setImplicitExit(false);
+            }
+        };
+        timer1.schedule(timerTask, new Date(), 1000);
+    }
+
+    public static void startSellerThread(int PORT, String fileId) {
+        new Thread(() -> {
+            try {
+                Socket socket = new Socket("localhost", PORT);
+                DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+
+                int count;
+                byte[] buffer = new byte[1024];
+
+                File file = new File(getSellerFilePath(fileId));
+                BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
+
+                while ((count = bufferedInputStream.read(buffer)) >= 0) {
+                    //CryptoUtils.encrypt(key, buffer);
+                    dataOutputStream.write(buffer, 0, count);
+                    dataOutputStream.flush();
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }).start();
+    }
+
+    public static String getSellerFilePath(String fileId) {
+        ArrayList<String> info = new ArrayList<>();
+        info.add(fileId);
+        return sendMessage(GET_FILE_PATH, info, "");
+    }
+
+    public static String fileWalletPurchase(String fileId) {
+        ArrayList<String> info = new ArrayList<>();
+        info.add(fileId);
+        return sendMessage(FILE_WALLET_PURCHASE, info, token);
+    }
+
+    public static String fileBankPurchase(String fileId, String username, String password) {
+        ArrayList<String> info = new ArrayList<>();
+        info.add(fileId);
+        info.add(username);
+        info.add(password);
+        return sendMessage(FILE_BANK_PURCHASE, info, token);
+    }
+
+    public static void buyFileRequest(String sellerName, String fileId, String fileName) {
+        new Thread(() -> {
+            ServerSocket serverSocket;
+            ArrayList<String> info = new ArrayList<>();
+            info.add(sellerName);
+            info.add(fileId);
+            try {
+                serverSocket = new ServerSocket(0);
+                info.add(String.valueOf(serverSocket.getLocalPort()));
+                String response = sendMessage(BUY_FILE_REQUEST, info, token);
+                if (response.equals("successful")) {
+                    Socket socket = serverSocket.accept();
+                    FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+                    byte[] buffer = new byte[1024];
+                    int count;
+                    InputStream in = socket.getInputStream();
+                    while ((count = in.read(buffer)) > 0) {
+                        fileOutputStream.write(buffer, 0, count);
+                    }
+                    fileOutputStream.flush();
+                    fileOutputStream.close();
+                    socket.close();
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     public static String auctionPurchase(String auctionId) {
@@ -51,24 +164,50 @@ public class ServerConnection {
         return sendMessage(OFFER_PRICE_FOR_AUCTION, info, token);
     }
 
-    public static String addToCart(Salesperson seller, Product product) {
+    public static String addToCart(Salesperson seller, Product product,double price,double priceAfterDiscount) {
         ArrayList<String> info = new ArrayList<>();
         if (token.length()!=0) {
             info.add(seller.getUsername());
             info.add(product.getID());
             return sendMessage(ADD_TO_CART, info, token);
         }else {
-            tempCart.addProduct(product,seller);
+            tempCart.addProduct(product.getID(),seller.getUsername(),price,priceAfterDiscount);
             return "successful";
         }
     }
 
     public static Cart getCart(){
-        if (token.length()!=0){
-            String response = sendMessage(GET_CART,null,token);
-            return (Cart) getObj(Cart.class,response);
-        }else {
             return tempCart;
+    }
+
+    public static Cart getCartAfterLogin(){
+        String response = sendMessage(GET_CART,null,token);
+        return (model.Cart) getObj(Cart.class,response);
+    }
+
+    public static int getCountInCart(String productId,String salesperson){
+        if (token.length()!=0){
+            ArrayList<String> info = new ArrayList<>();
+            info.add(productId);
+            info.add(salesperson);
+            String response = sendMessage(GET_COUNT_IN_CART,info,token);
+            return Integer.parseInt(response);
+        }else {
+            return tempCart.getProducts().get(productId).get(salesperson).getCount();
+        }
+    }
+
+    public static String setCountInCart(String productId,String sellerName,int count){
+        if (token.length()!=0){
+            ArrayList<String> info = new ArrayList<>();
+            info.add(productId);
+            info.add(sellerName);
+            info.add(String.valueOf(count));
+            String response = sendMessage(SET_COUNT_IN_CART,info,token);
+            return response;
+        }else {
+            tempCart.setProductCount(productId,sellerName,1);
+            return "successful";
         }
     }
 
@@ -111,6 +250,7 @@ public class ServerConnection {
     public static String sendLogout() {
         String response = sendMessage(LOG_OUT, null, token);
         token = "";
+        logout = true;
         return response;
     }
 
@@ -228,7 +368,9 @@ public class ServerConnection {
     public static String sendLoginRequest(String username, String password) {
         ArrayList<String> info = new ArrayList<>();
         info.add(username);
-        info.add(password); //todo n
+        info.add(password);
+        info.add(toJson(tempCart));
+        logout = false;
         return sendMessage(LOGIN, info, "");
     }
 
@@ -377,6 +519,13 @@ public class ServerConnection {
         return (ArrayList<ProductRequest>) getObj(new TypeToken<ArrayList<ProductRequest>>(){}.getType(), response);
     }
 
+    public static ArrayList<FileRequest> getFileRequests () {
+        ArrayList<String> info = new ArrayList<>();
+        info.add("file");
+        String response = sendMessage(GET_REQUESTS_OF_TYPE, info, "");
+        return (ArrayList<FileRequest>) getObj(new TypeToken<ArrayList<FileRequest>>(){}.getType(), response);
+    }
+
     public static ArrayList<DiscountRequest> getDiscountRequests () {
         ArrayList<String> info = new ArrayList<>();
         info.add("discount");
@@ -390,6 +539,14 @@ public class ServerConnection {
         String response = sendMessage(GET_REQUESTS_OF_TYPE, info, "");
         return (ArrayList<AuctionRequest>) getObj(new TypeToken<ArrayList<AuctionRequest>>(){}.getType(), response);
     }
+
+    public static ArrayList<SupportRequest> getSupportRequests () {
+        ArrayList<String> info = new ArrayList<>();
+        info.add("support");
+        String response = sendMessage(GET_REQUESTS_OF_TYPE, info, "");
+        return (ArrayList<SupportRequest>) getObj(new TypeToken<ArrayList<SupportRequest>>(){}.getType(), response);
+    }
+
 
     public static String addCategory(ArrayList<String> info) {
         return sendMessage(ADD_CATEGORY, info, "");

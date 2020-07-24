@@ -1,5 +1,6 @@
 package model;
 
+import com.sun.org.apache.bcel.internal.generic.ARETURN;
 import controller.CategoryController;
 import controller.Database;
 import controller.ProductController;
@@ -118,6 +119,10 @@ public class Product {
 
     public Category getCategory() {
         return CategoryController.getInstance().getCategoryByName(category, rootCategories);
+    }
+
+    public String getCategoryName() {
+        return category;
     }
 
     public ArrayList<Comment> getComments() {

@@ -15,6 +15,7 @@ import static controller.Database.*;
 
 public class ProductController {
     public static ArrayList<Product> allProducts = new ArrayList<>();
+    public static ArrayList<FileProduct> allFiles = new ArrayList<>();
     public static ArrayList<Product> currentProducts = new ArrayList<>();
     public static HashMap<Product, ArrayList<Salesperson>> stock;
 
@@ -34,6 +35,44 @@ public class ProductController {
         for (File file : Database.returnListOfFiles(Database.address.get("products"))) {
             allProducts.add((Product) Database.read(Product.class, file.getAbsolutePath()));
         }
+    }
+
+    public void initializeFiles() {
+        for (File file : Database.returnListOfFiles(Database.address.get("files"))) {
+            allFiles.add((FileProduct) Database.read(FileProduct.class, file.getAbsolutePath()));
+        }
+    }
+
+    public void purchaseFileWallet(Customer customer, FileProduct fileProduct, Salesperson salesperson) {
+        double price = fileProduct.getPrice();
+        customer.getWallet().decreaseBalance(price);
+
+        double sellerPrice = price * (100 - WalletController.WAGE) / 100;
+        salesperson.getWallet().increaseBalance(sellerPrice);
+
+        //todo sell buy
+
+        saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
+        saveToFile(customer, createPath("customers", customer.getUsername()));
+    }
+
+    public void purchaseFileBank(Customer customer, FileProduct fileProduct, Salesperson salesperson) {
+        double price = fileProduct.getPrice();
+        double sellerPrice = price * (100 - WalletController.WAGE) / 100;
+        salesperson.getWallet().increaseBalance(sellerPrice);
+
+        //todo sell buy
+
+        saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
+        saveToFile(customer, createPath("customers", customer.getUsername()));
+    }
+
+    public void addFile(Salesperson salesperson, String fileName, String description, double price, String address) {
+        FileProduct fileProduct = new FileProduct(salesperson, fileName, description, price, address);
+        allFiles.add(fileProduct);
+        salesperson.addFile(fileProduct.getId());
+        saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
+        saveToFile(fileProduct, createPath("files", fileProduct.getId()));
     }
 
     public void initializeStock() {
@@ -136,6 +175,14 @@ public class ProductController {
         return null;
     }
 
+    public FileProduct getFileById(String fileId) {
+        for (FileProduct file : allFiles) {
+            if(file.getId().equals(fileId))
+                return file;
+        }
+        return null;
+    }
+
     public void addProduct(Product product, Salesperson salesperson) {
         if (!product.getCategory().getProductList().contains(product))
             product.getCategory().addProduct(product);
@@ -163,12 +210,10 @@ public class ProductController {
         changeFilesAfterEditProduct(product, salesperson);
     }
 
-    public void editProduct(Product product, Salesperson salesperson, int amount, double price,
-                            String category, String name, String brand, HashMap<String, String> properties, String imageURI, String mediaURI) {
-
+    public void editProduct(Product product, Salesperson salesperson, int amount, double price, HashMap<String, String> properties) {
+        product.setProperties(properties);
         changeStateToVerified(product, salesperson);
         editProductForSeller(product, salesperson, price, amount);
-        editProductInGeneral(product, category, name, brand, properties, imageURI, mediaURI);
         changeFilesAfterEditProduct(product, salesperson);
     }
 

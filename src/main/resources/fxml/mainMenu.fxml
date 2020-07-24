@@ -26,12 +26,12 @@
 <!--      <Button fx:id="back" cancelButton="true" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" style="-fx-background-color: whitesmoke;" text="Back" />-->
 <!--      <Button fx:id="userMenu" layoutX="690.0" layoutY="180.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="" prefHeight="26.0" prefWidth="94.0" styleClass="userBtn" stylesheets="@button.css" text="User Menu" />-->
 <!--      <Button fx:id="help" layoutX="14.0" layoutY="460.0" mnemonicParsing="false" style="-fx-background-color: whitesmoke;" text="?" />-->
-      <ImageView fx:id="productIcon" fitHeight="150.0" fitWidth="200.0" layoutX="425.0" layoutY="250.0" onMouseClicked="#productAction" onMousePressed="#productIconBig" onMouseReleased="#productIconSmall" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="productIcon" fitHeight="150.0" fitWidth="200.0" layoutX="325.0" layoutY="250.0" onMouseClicked="#productAction" onMousePressed="#productIconBig" onMouseReleased="#productIconSmall" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/product.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="discountIcon" fitHeight="150.0" fitWidth="200.0" layoutX="217.0" layoutY="250.0" onMouseClicked="#discountAction" onMousePressed="#discountIconBig" onMouseReleased="#discountIconSmall" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="discountIcon" fitHeight="150.0" fitWidth="200.0" layoutX="150.0" layoutY="250.0" onMouseClicked="#discountAction" onMousePressed="#discountIconBig" onMouseReleased="#discountIconSmall" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/discount.png" />
          </image>
@@ -49,6 +49,11 @@
       <ImageView fx:id="walletIcon" disable="true" fitHeight="72.0" fitWidth="72.0" layoutX="14.0" layoutY="14.0" onMouseClicked="#walletClicked" onMousePressed="#walletIconBig" onMouseReleased="#walletIconSmall" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../images/wallet.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="files" fitHeight="105.0" fitWidth="124.0" layoutX="506.0" layoutY="273.0" onMouseClicked="#filesClicked" onMousePressed="#fileIconBig" onMouseReleased="#fileIconSmall" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/folder.png" />
          </image>
       </ImageView>
    </children>

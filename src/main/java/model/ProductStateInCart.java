@@ -8,11 +8,17 @@ public class ProductStateInCart {
     String salespersonUsername;
     boolean inDiscount;
     private String productId;
+    double price;
+    double priceAfterDiscount;
+    String productName;
 
-    public ProductStateInCart(int count, Salesperson salesperson, Product product) {
-        this.productId = product.getID();
+    public ProductStateInCart(int count, String salesperson,String product,double price,double priceAfterDiscount,String productName) {
+        this.productId = product;
         this.count = count;
-        this.salespersonUsername = salesperson.getUsername();
+        this.salespersonUsername = salesperson;
+        this.price = price;
+        this.priceAfterDiscount = priceAfterDiscount;
+        this.productName = productName;
     }
 
     public double getTotalPrice() {
@@ -26,7 +32,11 @@ public class ProductStateInCart {
     }
 
     public double getPriceAfterDiscount() {
-        return ((Salesperson)PersonController.getInstance().getPersonByUsername(salespersonUsername)).getDiscountPrice(getProduct());
+        return priceAfterDiscount;
+    }
+
+    public String getProductName() {
+        return productName;
     }
 
     public double getFinalPrice() {
@@ -39,16 +49,16 @@ public class ProductStateInCart {
         return count;
     }
 
-    public Salesperson getSalesperson() {
-        return (Salesperson)PersonController.getInstance().getPersonByUsername(salespersonUsername);
+    public String getSalesperson() {
+        return salespersonUsername;
     }
 
-    public Product getProduct() {
-        return ProductController.getInstance().getProductById(productId);
+    public String getProduct() {
+        return productId;
     }
 
     public double getPrice() {
-        return ((Salesperson)PersonController.getInstance().getPersonByUsername(salespersonUsername)).getProductPrice(getProduct());
+        return price;
     }
 
     public void setCount(int count) {

@@ -90,11 +90,15 @@ public class CartMenuFXML implements Initializable { //todo
     }
 
     private void setCartsOnPane() {
-        Cart cart = getCart();
+        Cart cart=null;
+        if (token.length()==0)
+           cart = getCart();
+        else
+            cart = getCartAfterLogin();
         int rowIndex = 0;
-        for (Product product : cart.getProducts().keySet()) {
-            for (Salesperson salesperson : cart.getProducts().get(product).keySet()){
-                ProductInCart productInCart = new ProductInCart(cart.getProducts().get(product).get(salesperson));
+        for (String productId : cart.getProductsForClient().keySet()) {
+            for (String sellerName : cart.getProductsForClient().get(productId).keySet()){
+                ProductInCart productInCart = new ProductInCart(cart.getProductsForClient().get(productId).get(sellerName));
                 FXMLLoader loader = new FXMLLoader(CartMenuFXML.class.getResource("/fxml/productInCart.fxml"));
                 loader.setController(productInCart);
                 Parent parent = null;

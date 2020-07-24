@@ -12,7 +12,7 @@ import static bank.PacketType.*;
  * and also responses from Bank server.
  */
 public class BankAPI {
-    public static final int PORT = 2222;
+    public static final int PORT = 55143;
     public static final String IP = "localhost";
 
     private static ArrayList<PacketType> types;

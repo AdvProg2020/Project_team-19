@@ -28,7 +28,6 @@ public class SellBuyLogsController implements Initializable { //todo
     public TableColumn<LogForTable,String> dateColumn;
     public TableColumn<LogForTable,String> productColumn;
     public TableColumn < LogForTable, String > costColumn;
-
     @FXML private FontAwesomeIcon back;
     @FXML private Label label;
 

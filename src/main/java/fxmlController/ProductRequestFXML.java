@@ -234,8 +234,16 @@ public class ProductRequestFXML implements Initializable {
         brand.setPromptText(product.getBrand());
         price.setPromptText(String.valueOf(salesperson.getProductPrice(product)));
         amount.setPromptText(salesperson.getProductAmount(product) + "");
-        category.setPromptText(product.getCategory().getName());
+        category.setPromptText(product.getCategoryName());
         description.setPromptText(product.getDescription());
+        if (state.equals(Request.RequestState.EDIT)) {
+            name.setDisable(true);
+            category.setDisable(true);
+            category.setText(product.getCategoryName());
+            brand.setDisable(true);
+            chooseFile.setDisable(true);
+            chooseFileMedia.setDisable(true);
+        }
     }
 
     private void setActionButton() {

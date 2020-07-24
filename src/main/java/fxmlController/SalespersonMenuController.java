@@ -90,6 +90,11 @@ public class SalespersonMenuController implements Initializable {
         App.setRoot(loader);
     }
 
+    @FXML
+    void addFileForSeller() {
+        App.setRoot("addFile");
+    }
+
     @Override
     public void initialize ( URL location , ResourceBundle resources ) {
         //todo

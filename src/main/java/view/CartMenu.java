@@ -127,24 +127,23 @@ public class CartMenu extends Menu {
         Cart cart = null;// CartController.getInstance().getCart();
         String firstRowFormat = "|%-27s|%-27s|";
         String onFormat = "|%-55s|";
-        for (Product product : cart.getProducts().keySet()) {
-            System.out.println(String.format("%s", LINE));
-            System.out.println(String.format(firstRowFormat, "product ID: " + product.getID(), "product Name: " + product.getName()));
-            System.out.println(String.format("%s", LINE));
-            System.out.println(String.format(onFormat, "Order Details"));
-            System.out.println(String.format("%s", STRAIGHT_LINE));
-            for (Salesperson salesperson : cart.getProducts().get(product).keySet()) {
-                System.out.println(String.format(onFormat, "seller: " + salesperson.getUsername()));
-                System.out.println(String.format(onFormat, "count: " + cart.getProducts().get(product).get(salesperson).getCount()));
-                System.out.println(String.format(onFormat, "product price: " + cart.getProducts().get(product).get(salesperson).getPrice()));
-                if (cart.getProducts().get(product).get(salesperson).isInDiscount())
-                    System.out.println(String.format(onFormat, "price after discount" + cart.getProducts().get(product).get(salesperson).getPriceAfterDiscount()));
-                System.out.println(String.format(onFormat, "total price:" + cart.getProducts().get(product).get(salesperson).getFinalPrice()));
-                System.out.println(String.format("%s", STRAIGHT_LINE));
-            }
+//        for (Product product : cart.getProducts().keySet()) {
+//            System.out.println(String.format("%s", LINE));
+//            System.out.println(String.format(firstRowFormat, "product ID: " + product.getID(), "product Name: " + product.getName()));
+//            System.out.println(String.format("%s", LINE));
+//            System.out.println(String.format(onFormat, "Order Details"));
+//            System.out.println(String.format("%s", STRAIGHT_LINE));
+//            for (Salesperson salesperson : cart.getProducts().get(product).keySet()) {
+//                System.out.println(String.format(onFormat, "seller: " + salesperson.getUsername()));
+//                System.out.println(String.format(onFormat, "count: " + cart.getProducts().get(product).get(salesperson).getCount()));
+//                System.out.println(String.format(onFormat, "product price: " + cart.getProducts().get(product).get(salesperson).getPrice()));
+//                if (cart.getProducts().get(product).get(salesperson).isInDiscount())
+//                    System.out.println(String.format(onFormat, "price after discount" + cart.getProducts().get(product).get(salesperson).getPriceAfterDiscount()));
+//                System.out.println(String.format(onFormat, "total price:" + cart.getProducts().get(product).get(salesperson).getFinalPrice()));
+//                System.out.println(String.format("%s", STRAIGHT_LINE));
+//            }
             System.out.println("\n");
         }
-    }
 
     public String getValidSellerUsername(Product product) {
         String input;

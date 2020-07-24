@@ -23,10 +23,12 @@ public class Database {
         address.put("salespersons", databaseAddress + File.separator + "persons" + File.separator + "salespersons");
         address.put("supports", databaseAddress + File.separator + "persons" + File.separator + "supports");
         address.put("products", databaseAddress + File.separator + "products");
+        address.put("files", databaseAddress + File.separator + "files");
         address.put("auctions", databaseAddress + File.separator + "auctions");
         address.put("discount_codes", databaseAddress + File.separator + "discount_codes");
         address.put("root_categories", databaseAddress + File.separator + "root_categories.json");
         address.put("product_requests", databaseAddress + File.separator + "requests" + File.separator + "product_requests");
+        address.put("file_requests", databaseAddress + File.separator + "requests" + File.separator + "file_requests");
         address.put("discount_requests", databaseAddress + File.separator + "requests" + File.separator + "discount_requests");
         address.put("salesperson_requests", databaseAddress + File.separator + "requests" + File.separator + "salesperson_requests");
         address.put("auction_requests", databaseAddress + File.separator + "requests" + File.separator + "auction_requests");
@@ -120,9 +122,11 @@ public class Database {
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "requests" + File.separator + "product_requests");
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "requests" + File.separator + "discount_requests");
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "requests" + File.separator + "auction_requests");
+        createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "requests" + File.separator + "file_requests");
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "discount_codes");
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "products");
         createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "auctions");
+        createFolder(System.getProperty("user.dir") + File.separator + "database" + File.separator + "files");
         createFile(System.getProperty("user.dir") + File.separator + "database" + File.separator + "root_categories.json");
         createFile(System.getProperty("user.dir") + File.separator + "database" + File.separator + "min_balance.json");
         createFile(System.getProperty("user.dir") + File.separator + "database" + File.separator + "wage.json");

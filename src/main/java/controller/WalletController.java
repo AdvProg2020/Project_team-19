@@ -70,7 +70,7 @@ public class WalletController {
         return SHOP_BANK_ID;
     }
 
-    public String getWalletIncreaseBalanceRespond(double amount, String token, String sourceId) {
+    public String getBankDecreaseBalanceRespond(double amount, String token, String sourceId) {
         String msg = "create_receipt " +
                 token + " " +
                 "move " +
@@ -92,11 +92,9 @@ public class WalletController {
     public String moveFromCustomerToBank(double amount, String username, String password, String sourceId) {
         String msg = "get_token " + username + " " + password;
         String token = BankAPI.getBankResponse(msg);
-        String receiptId = getWalletIncreaseBalanceRespond(amount, token, sourceId);
+        String receiptId = getBankDecreaseBalanceRespond(amount, token, sourceId);
         return getPayResponse(receiptId);
     }
-
-
 
     public String getBankIncreaseBalance(double amount, String token, String destId) {
         String msg = "create_receipt " +

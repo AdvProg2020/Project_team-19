@@ -5,6 +5,7 @@ import controller.CartController;
 import controller.PersonController;
 import controller.ProductController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -24,10 +25,7 @@ import view.App;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static view.App.getFXMLLoader;
 
@@ -94,37 +92,47 @@ public class UsersController implements Initializable {
     }
 
     private void updateTable () {
-        ArrayList<UserForTable> users = new ArrayList <> (  );
-        HashMap <String,String> allPersons = ServerConnection.getAllPersonInfo ();
-        allPersons.forEach ( (k,v) -> users.add ( new UserForTable ( k , v ) ) );
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    ArrayList<UserForTable> users = new ArrayList <> (  );
+                    HashMap <String,String> allPersons = ServerConnection.getAllPersonInfo ();
+                    allPersons.forEach ( (k,v) -> users.add ( new UserForTable ( k , v ) ) );
 
-        nameColumn.setCellValueFactory ( new PropertyValueFactory<> ( "name" ) );
-        typeColumn.setCellValueFactory ( new PropertyValueFactory <> ( "type" ) );
-        removeColumn.setCellValueFactory( p -> {
-            UserForTable user = p.getValue ();
-            if (user != null) {
-                return new SimpleStringProperty ("X");
-            } else {
-                return new SimpleStringProperty("<no name>");
+                    nameColumn.setCellValueFactory ( new PropertyValueFactory<> ( "name" ) );
+                    typeColumn.setCellValueFactory ( new PropertyValueFactory <> ( "type" ) );
+                    removeColumn.setCellValueFactory( p -> {
+                        UserForTable user = p.getValue ();
+                        if (user != null) {
+                            return new SimpleStringProperty ("X");
+                        } else {
+                            return new SimpleStringProperty("<no name>");
+                        }
+                    } );
+                    removeColumn.setStyle ( "-fx-alignment: center; -fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-font-color: white; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" );
+
+                    statusColumn.setCellValueFactory ( param -> {
+                        UserForTable user = param.getValue ();
+                        if (user != null) {
+                            if (ServerConnection.isOnline ( new ArrayList<String>() {{
+                                add ( user.getName () );
+                            }} )) {
+                                return new SimpleStringProperty ( "■" );
+                            } else return new SimpleStringProperty ( "□" );
+                        } else return new SimpleStringProperty ("<no name>");
+                    } );
+
+                    statusColumn.setStyle ( "-fx-alignment: center; -fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-font-color: white; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" );
+
+
+                    tableView.setItems ( FXCollections.observableArrayList ( users ) );
+                });
+                Platform.setImplicitExit(false);
             }
-        } );
-        removeColumn.setStyle ( "-fx-alignment: center; -fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-font-color: white; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" );
-
-        statusColumn.setCellValueFactory ( param -> {
-            UserForTable user = param.getValue ();
-            if (user != null) {
-                if (ServerConnection.isOnline ( new ArrayList<String>() {{
-                    add ( user.getName () );
-                }} )) {
-                    return new SimpleStringProperty ( "■" );
-                } else return new SimpleStringProperty ( "□" );
-            } else return new SimpleStringProperty ("<no name>");
-        } );
-
-        statusColumn.setStyle ( "-fx-alignment: center; -fx-font-family: 'Consolas'; -fx-font-size: 20; -fx-font-color: white; -fx-border-color: #225f8e; -fx-background-color: #89b7ff;" );
-
-
-        tableView.setItems ( FXCollections.observableArrayList ( users ) );
+        };
+        timer.schedule(timerTask, new Date(), 1000);
     }
 
     public void newOne () {

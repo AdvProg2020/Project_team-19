@@ -74,20 +74,36 @@ public class AuctionController {
             Person person = PersonController.getInstance().getPersonByUsername(username);
             ((Customer) person).getWallet().decreaseBlocked(auction.getCustomers().get(username));
         }
-        //todo customer.addToBuyLogs(new BuyLog(LocalDateTime.now(), amount, ));
-        customer.getWallet().decreaseBalance(amount);
-
         Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(auction.getSellerName());
         Product product = ProductController.getInstance().getProductById(auction.getProductId());
 
-        //todo add to buylogs
+        BuyLog buyLog = new BuyLog(LocalDateTime.now(), amount, amount, getProduct(product, salesperson, amount), false);
+        customer.addToBuyLogs(buyLog);
+        customer.getWallet().decreaseBalance(amount);
+
+        double sellerAmount = amount * (100 - WalletController.WAGE) / 100;
+        SellLog sellLog = new SellLog(LocalDateTime.now(), sellerAmount, sellerAmount, product, customer, true, 1);
+        salesperson.getSellLogs().add(sellLog);
+
         removeAuction(auction);
         allAuctions.remove(auction);
         ProductController.stock.get(product).remove(salesperson);
+
         salesperson.removeFromOfferedProducts(product);
-        salesperson.getWallet().increaseBalance(amount * (100 - WalletController.WAGE) / 100);
+        salesperson.getWallet().increaseBalance(sellerAmount);
         saveToFile(salesperson, createPath("salespersons", salesperson.getUsername()));
         saveToFile(customer, createPath("customers", customer.getUsername()));
+    }
+
+    private HashMap<Product, HashMap<Salesperson, ProductStateInCart>> getProduct (Product product, Salesperson salesperson,double price) {
+        ProductStateInCart productStateInCart = new ProductStateInCart(1, salesperson.getUsername(), product.getID(), price, price, product.getName());
+        HashMap<Salesperson, ProductStateInCart> middle = new HashMap<>();
+        middle.put(salesperson, productStateInCart);
+
+        HashMap<Product, HashMap<Salesperson, ProductStateInCart>> total = new HashMap<>();
+        total.put(product, middle);
+
+        return total;
     }
 
     public ArrayList<Product> getSellerAvailableProductsForAuction(Salesperson salesperson){
