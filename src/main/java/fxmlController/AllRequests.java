@@ -36,7 +36,6 @@ public class AllRequests implements Initializable {
         allRequests.addAll(getFileRequests());
         allRequests.addAll(getDiscountRequests());
         allRequests.addAll(getAuctionRequests());
-        allRequests.addAll(getSupportRequests());
         for (Request request : allRequests) {
             RequestCard card = new RequestCard(request);
             FXMLLoader loader = new FXMLLoader(AllRequests.class.getResource("/fxml/requestCard.fxml"));

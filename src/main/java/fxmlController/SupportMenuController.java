@@ -11,6 +11,7 @@ import view.App;
 
 import java.io.IOException;
 
+import static clientController.ServerConnection.sendLogout;
 import static view.App.getFXMLLoader;
 
 public class SupportMenuController {
@@ -25,8 +26,8 @@ public class SupportMenuController {
     }
 
     @FXML
-    void logout ( ActionEvent event ) throws IOException { //todo
-        //todo PersonController.getInstance().logOut();
+    void logout ( ActionEvent event ) throws IOException {
+        sendLogout();
         App.currentScene = new Scene ( getFXMLLoader ( "mainMenu" ).load () );
         App.currentStage.setScene ( App.currentScene );
     }
@@ -46,6 +47,6 @@ public class SupportMenuController {
     }
 
     public void questions ( ActionEvent event ) {
-        App.setRoot ( "supportChat" );
+        App.setRoot ( "supportChatSupport" );
     }
 }

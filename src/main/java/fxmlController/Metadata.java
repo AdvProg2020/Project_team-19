@@ -18,4 +18,6 @@ public class Metadata {
 
     public static AllRequests allRequests;
 
+    public static String supportMessages;
+
 }

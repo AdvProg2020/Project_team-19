@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -24,6 +25,7 @@ import static view.App.getFXMLLoader;
 public class CustomerMenuController implements Initializable {
 
 
+    public Button supportChat;
     @FXML private TextField enterAmount;
     @FXML private FontAwesomeIcon increaseCredit;
     @FXML private FontAwesomeIcon back;
@@ -125,5 +127,9 @@ public class CustomerMenuController implements Initializable {
             enterAmount.setVisible ( true );
             increaseCredit.setVisible ( true );
         }
+    }
+
+    public void supportChatAction ( ActionEvent event ) {
+        App.setRoot ( "supportChatClient" );
     }
 }

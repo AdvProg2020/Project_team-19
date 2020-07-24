@@ -88,7 +88,10 @@ public class RegisterMenuController implements Initializable {
             personInfo.put ( LAST_NAME.label , lastName.getText () );
             personInfo.put ( EMAIL.label , email.getText () );
             personInfo.put ( PHONE.label , phone.getText () );
-            personInfo.put ( PROFILE.label , profileFile.toURI ().toString () );
+            if (profileFile == null)
+                personInfo.put ( PROFILE.label , null );
+            else
+                personInfo.put ( PROFILE.label , profileFile.toURI ().toString () );
             if (type.getValue ().equals ( "Salesperson" )) {
                 personInfo.put ( COMPANY.label , company.getText ( ) );
                 personInfo.put ( SAYERE_MOSHAKHASAT.label , darSurateVjud.getText ( ) );
@@ -122,7 +125,7 @@ public class RegisterMenuController implements Initializable {
 
     @Override
     public void initialize ( URL location , ResourceBundle resources ) {
-        ObservableList<String> typeItems = FXCollections.observableArrayList ( "Customer","Salesperson","Manager","Support" );
+        ObservableList<String> typeItems = FXCollections.observableArrayList ( "Customer","Salesperson","Manager" );
         type.setItems ( typeItems );
         type.setValue ( "Customer" );
         type.setOnAction ( event -> {

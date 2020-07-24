@@ -49,6 +49,8 @@ public class MainMenuController implements Initializable {
                 case "customer":
                     App.currentScene = new Scene(getFXMLLoader("customerMenu").load());
                     break;
+                case "support":
+                    App.currentScene = new Scene (getFXMLLoader("supportMenu").load ());
             }
         } else {
             App.currentScene = new Scene ( getFXMLLoader ("userLoginMenu").load () );

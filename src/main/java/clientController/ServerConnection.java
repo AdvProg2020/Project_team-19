@@ -26,7 +26,7 @@ public class ServerConnection {
 
     public static void run() {
         try {
-            socket = new Socket("localhost", 4444);
+            socket = new Socket("tcp://0.tcp.ngrok.io", 11725);
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
             dataInputStream = new DataInputStream(socket.getInputStream());
         } catch (IOException e) {
@@ -252,6 +252,11 @@ public class ServerConnection {
         token = "";
         logout = true;
         return response;
+    }
+
+    public static HashMap<String, String> getAllPersonInfo() {
+        String response = sendMessage(GET_ALL_PERSON_INFO, null, "");
+        return (HashMap<String, String>) getObj(new TypeToken<HashMap<String, String>>(){}.getType(), response);
     }
 
     public static HashMap<String, String> getPersonInfoByToken() {
@@ -554,6 +559,42 @@ public class ServerConnection {
     public static ArrayList<String> getParentCategories() {
         String response = sendMessage(GET_PARENT_CATEGORIES, null, "");
         return (ArrayList<String>) getObj(new TypeToken<ArrayList<String>>(){}.getType(), response);
+    }
+
+    public static String changeInfo (ArrayList<String> info) {
+        return sendMessage ( CHANGE_INFO , info , token );
+    }
+
+    public static void supportChatSend ( ArrayList<String> info) {
+        try {
+            dataOutputStream.writeUTF(toJson(new Request(SUPPORT_CHAT_SEND, info, token)));
+        } catch (IOException ioException) {
+            ioException.printStackTrace ( );
+        }
+    }
+
+    public static void supportChatOpen (ArrayList<String> info) {
+        try {
+            dataOutputStream.writeUTF(toJson(new Request(SUPPORT_CHAT_OPEN, info, token)));
+        } catch (IOException ioException) {
+            ioException.printStackTrace ( );
+        }
+    }
+
+    public static String removeUser ( ArrayList<String> info ) {
+        return sendMessage ( REMOVE_USER , info, token );
+    }
+
+    public static boolean isOnline ( ArrayList<String> info ) {
+        return sendMessage ( IS_ONLINE , info , "" ).equals ( "successful" );
+    }
+
+    public static ArrayList<String> getAllOnlineSupports () {
+        return (ArrayList<String>) getObj(new TypeToken<ArrayList<String>>(){}.getType(), sendMessage ( GET_ALL_ONLINE_SUPPORTS , null , "" ));
+    }
+
+    public static ArrayList<String> getAllClientsWithChats () {
+        return (ArrayList<String>) getObj(new TypeToken<ArrayList<String>>(){}.getType(), sendMessage ( GET_ALL_CLIENTS_WITH_CHATS , null , token ));
     }
 
     public static void exit() {

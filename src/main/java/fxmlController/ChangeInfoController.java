@@ -1,5 +1,6 @@
 package fxmlController;
 
+import clientController.ServerConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,6 +17,7 @@ import model.Salesperson;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import static clientController.ServerConnection.*;
 import static view.LoginMenu.PersonInfo.PASSWORD;
@@ -34,10 +36,14 @@ public class ChangeInfoController implements Initializable { //todo
     @Override
     public void initialize ( URL location , ResourceBundle resources ) {
         ObservableList <String> typeItems;
-        if ( getPersonTypeByToken().equals("salesperson") )
+        String type = ServerConnection.getPersonTypeByToken ();
+        if ( type.equalsIgnoreCase ( "salesperson" ) )
             typeItems = FXCollections.observableArrayList ( "Password","First Name","Last Name","Email","Phone Number","Company","Dar Surate Vjud Sayere Moshakhsat" );
+        else if ( type.equalsIgnoreCase ( "manager" ) )
+            typeItems = FXCollections.observableArrayList ( "Password","First Name","Last Name","Email","Phone Number","Minimum Balance","Wage" );
         else
             typeItems = FXCollections.observableArrayList ( "Password","First Name","Last Name","Email","Phone Number" );
+
         field.setItems ( typeItems );
         field.setValue ( "Password" );
         text.setVisible ( false );
@@ -88,8 +94,16 @@ public class ChangeInfoController implements Initializable { //todo
 //            PersonController.getInstance ( ).getLoggedInPerson ( ).setField ( field.getValue ( ).toLowerCase ( ) , text.getText ( ) );
 //        }
 //        PersonController.getInstance ().getLoggedInPerson ().setField ( PROFILE.label , profileFileString );
-//        Metadata.personInfoController.updateTable ();
-//        cancel();
+        ServerConnection.changeInfo ( new ArrayList <String> () {{
+            add ( field.getValue ().toLowerCase () );
+            if (field.getValue ().equals ( "Password" ) && !password.getText ().isEmpty ())
+                add ( password.getText () );
+            else
+                if (!text.getText ().isEmpty ())
+                    add ( text.getText () );
+        }} );
+        Metadata.personInfoController.updateTable ();
+        cancel();
     }
 
     @FXML private void cancel () {
