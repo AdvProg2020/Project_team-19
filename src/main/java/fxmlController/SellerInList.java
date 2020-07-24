@@ -45,7 +45,7 @@ public class SellerInList implements Initializable {
         sellerName.setText(salesperson.getUsername());
         sellerName.setFont(Font.font(FONT, 18));
         price.setText(salesperson.getProductPrice(product) + "$");
-        priceInDiscount.setText(salesperson.getDiscountPrice(product) + "$");
+//        priceInDiscount.setText(salesperson.getDiscountPrice(product) + "$");
         editLabel();
         addToCart.setOnAction(event -> {
             handleAddToCart();

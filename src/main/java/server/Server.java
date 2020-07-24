@@ -6,7 +6,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import controller.*;
 import model.*;
-import view.LoginMenu;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -32,8 +31,7 @@ public class Server {
     private Server() {
         try {
             requests = new LinkedBlockingQueue<>();
-            serverSocket = new ServerSocket(0);
-            PORT = serverSocket.getLocalPort();
+            serverSocket = new ServerSocket(4444);
             System.out.println("Server Started To Listen ON PORT: " + PORT);
         } catch (IOException e) {
             e.printStackTrace();
@@ -229,17 +227,18 @@ public class Server {
             try {
                 Cart cart = null;
                 ArrayList<String> strings = connection.getRequest().getJson();
-                if (PersonController.getInstance().getPersonByUsername(strings.get(0)).getType().equalsIgnoreCase("customer")) {
+                Person person = PersonController.getInstance().getPersonByUsername(strings.get(0));
+                if (person != null && person.getType().equalsIgnoreCase("customer")) {
                     cart = (Cart) read(Cart.class, strings.get(2));
                 }
                 PersonController.getInstance().login(strings.get(0), strings.get(1), cart);
                 String token = UUID.randomUUID().toString();
 
                 authTokens.put(token, strings.get(0));
-                connection.SendMessage(token);
+                connection.sendMessage (token);
             } catch (Exception e) {
                 e.printStackTrace();
-                connection.SendMessage(e.getMessage());
+                connection.sendMessage (e.getMessage());
             }
         }
     }
@@ -258,7 +257,7 @@ public class Server {
             LocalDateTime start = DiscountCodeController.getInstance().changeStringTDataTime(strings.get(2));
             LocalDateTime end = DiscountCodeController.getInstance().changeStringTDataTime(strings.get(3));
             RequestController.getInstance().addDiscountRequest(products, start, end, Double.parseDouble(strings.get(4)), salesperson);
-            connection.SendMessage("successful");
+            connection.sendMessage ("successful");
         }
     }
 
@@ -270,7 +269,7 @@ public class Server {
             Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(strings.get(0));
             Discount discount = DiscountController.getInstance().getDiscountByIdFromAll(strings.get(1));
             RequestController.getInstance().deleteDiscountRequest(discount, salesperson);
-            connection.SendMessage("successful");
+            connection.sendMessage ("successful");
         }
     }
 
@@ -286,7 +285,7 @@ public class Server {
             LocalDateTime start = (LocalDateTime) DiscountCodeController.getInstance().changeStringTDataTime(strings.get(3));
             LocalDateTime end = (LocalDateTime) DiscountCodeController.getInstance().changeStringTDataTime(strings.get(4));
             RequestController.getInstance().editDiscountRequest(discount, products, start, end, Double.parseDouble(strings.get(5)), salesperson);
-            connection.SendMessage("successful");
+            connection.sendMessage ("successful");
         }
     }
 
@@ -300,7 +299,7 @@ public class Server {
             HashMap<String, String> properties = (HashMap<String, String>) Server.read(new TypeToken<HashMap<String, String>>() {
             }.getType(), connection.getRequest().getJson().get(5));
             RequestController.getInstance().addProductRequest(Double.parseDouble(strings.get(0)), Integer.parseInt(strings.get(1)), salesperson, strings.get(2), strings.get(3), strings.get(4), properties, strings.get(6), strings.get(7));
-            connection.SendMessage("successful");
+            connection.sendMessage ("successful");
         }
     }
 
@@ -316,7 +315,7 @@ public class Server {
             String price = info.get(2);
             String path = info.get(3);
             RequestController.getInstance().addFileRequest(salesperson.getUsername(), fileName, description, Double.parseDouble(price), path);
-            connection.SendMessage("successful");
+            connection.sendMessage ("successful");
         }
     }
 
@@ -329,7 +328,7 @@ public class Server {
             Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
             Product product = ProductController.getInstance().getProductById(strings.get(0));
             RequestController.getInstance().addProductRequest(Double.parseDouble(strings.get(1)), Integer.parseInt(strings.get(2)), salesperson, product);
-            connection.SendMessage("add prod from stock" + product.getID());
+            connection.sendMessage ("add prod from stock" + product.getID());
         }
     }
 
@@ -337,7 +336,7 @@ public class Server {
 
         @Override
         public void handle(Connection connection) {
-            connection.SendMessage(write(CategoryController.getInstance().getCategoryByName(connection.getRequest().getJson().get(0), CategoryController.rootCategories)));
+            connection.sendMessage (write(CategoryController.getInstance().getCategoryByName(connection.getRequest().getJson().get(0), CategoryController.rootCategories)));
         }
     }
 
@@ -351,7 +350,7 @@ public class Server {
             HashMap<String, String> properties = (HashMap<String, String>) Server.read(new TypeToken<HashMap<String, String>>() {
             }.getType(), connection.getRequest().getJson().get(3));
             RequestController.getInstance().editProductRequest(strings.get(1), strings.get(2), salesperson, product.getID(), properties);
-            connection.SendMessage("successful");
+            connection.sendMessage ("successful");
         }
     }
 
@@ -362,7 +361,7 @@ public class Server {
             ArrayList<String> strings = connection.getRequest().getJson();
             Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(strings.get(0));
             RequestController.getInstance().deleteProductRequest(strings.get(1), salesperson);
-            connection.SendMessage("successful");
+            connection.sendMessage ("successful");
         }
     }
 
@@ -372,7 +371,7 @@ public class Server {
         synchronized public void handle(Connection connection) {
             model.Request request = RequestController.getInstance().getRequestById(connection.getRequest().getJson().get(0));
             RequestController.getInstance().acceptRequest(request);
-            connection.SendMessage(request.getRequestId() + "accepted");
+            connection.sendMessage (request.getRequestId() + "accepted");
         }
     }
 
@@ -382,7 +381,7 @@ public class Server {
         synchronized public void handle(Connection connection) {
             model.Request request = RequestController.getInstance().getRequestById(connection.getRequest().getJson().get(0));
             RequestController.getInstance().declineRequest(request);
-            connection.SendMessage(request.getRequestId() + "declined");
+            connection.sendMessage (request.getRequestId() + "declined");
         }
     }
 
@@ -395,7 +394,7 @@ public class Server {
             Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(strings.get(0));
             Product product = ProductController.getInstance().getProductById(strings.get(1));
             CartController.getInstance().setProductCount(product.getID(), -1, salesperson.getUsername(), customer);
-            connection.SendMessage("successful");
+            connection.sendMessage ("successful");
         }
     }
 
@@ -404,7 +403,7 @@ public class Server {
         @Override
         public void handle(Connection connection) {
             Customer customer = (Customer) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
-            connection.SendMessage(write(customer.getCart()));
+            connection.sendMessage (write(customer.getCart()));
         }
     }
 
@@ -415,7 +414,7 @@ public class Server {
             Customer customer = (Customer) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
             Product product = ProductController.getInstance().getProductById(connection.getRequest().getJson().get(0));
             Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(connection.getRequest().getJson().get(1));
-            connection.SendMessage(String.valueOf(CartController.getInstance().getCart(customer).getProducts().get(product.getID()).get(salesperson.getUsername()).getCount()));
+            connection.sendMessage (String.valueOf(CartController.getInstance().getCart(customer).getProducts().get(product.getID()).get(salesperson.getUsername()).getCount()));
         }
     }
 
@@ -427,7 +426,7 @@ public class Server {
             Product product = ProductController.getInstance().getProductById(connection.getRequest().getJson().get(0));
             Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(connection.getRequest().getJson().get(1));
             CartController.getInstance().setProductCount(product.getID(), Integer.parseInt(connection.getRequest().getJson().get(2)), salesperson.getUsername(), customer);
-            connection.SendMessage("successful.");
+            connection.sendMessage ("successful.");
         }
     }
 
@@ -454,7 +453,7 @@ public class Server {
             Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(strings.get(0));
             Product product = ProductController.getInstance().getProductById(strings.get(1));
             CartController.getInstance().setProductCount(product.getID(), +1, salesperson.getUsername(), customer);
-            connection.SendMessage("successful");
+            connection.sendMessage ("successful");
         }
     }
 
@@ -467,7 +466,7 @@ public class Server {
             HashSet<String> properties = (HashSet<String>) Server.read(new TypeToken<HashSet<String>>() {
             }.getType(), connection.getRequest().getJson().get(2));
             CategoryController.getInstance().addCategory(strings.get(0), category, properties);
-            connection.SendMessage("successful");
+            connection.sendMessage ("successful");
         }
     }
 
@@ -485,7 +484,7 @@ public class Server {
             } else {
                 CategoryController.getInstance().editCategory(strings.get(0), category, null, properties, true);
             }
-            connection.SendMessage("successful");
+            connection.sendMessage ("successful");
         }
     }
 
@@ -497,7 +496,7 @@ public class Server {
             Category category = CategoryController.getInstance().getCategoryByName(strings.get(1), CategoryController.rootCategories);
             Category parentCategory = CategoryController.getInstance().getCategoryByName(strings.get(0), CategoryController.rootCategories);
             CategoryController.getInstance().removeCategory(parentCategory, category);
-            connection.SendMessage("successful");
+            connection.sendMessage ("successful");
         }
     }
 
@@ -529,7 +528,6 @@ public class Server {
         public void handle(Connection connection) {
             HashMap<String, String> info = (HashMap<String, String>) Server.read(new TypeToken<HashMap<String, String>>() {
             }.getType(), connection.getRequest().getJson().get(0));
-            System.out.println(info);
             String response = "";
             if ((info.get("type").equalsIgnoreCase("customer")) || (!RegisterController.getInstance().isFirstManagerRegistered() && info.get("type").equalsIgnoreCase("manager"))) {
                 response = BankAPI.getBankResponse("create_account " +
@@ -540,17 +538,17 @@ public class Server {
                         info.get("password"));
             }
             if (!RegisterController.getInstance().isFirstManagerRegistered() && info.get("type").equalsIgnoreCase("manager")) {
-                WalletController.getInstance().setMIN_BALANCE(Double.parseDouble(info.get(LoginMenu.PersonInfo.MIN_BALANCE.label)));
-                WalletController.getInstance().setWAGE(Double.parseDouble(info.get(LoginMenu.PersonInfo.WAGE.label)));
+                WalletController.getInstance().setMIN_BALANCE(Double.parseDouble(info.get("min_balance")));
+                WalletController.getInstance().setWAGE(Double.parseDouble(info.get("wage")));
                 if (response.matches("\\d+")) {
                     WalletController.getInstance().setSHOP_BANK_ID(response);
                     WalletController.getInstance().setShopBankUsername(info.get("username"));
                     WalletController.getInstance().setShopBankPassword(info.get("password"));
                 } else
-                    connection.SendMessage("error during making shop account : " + response);
+                    connection.sendMessage ("error during making shop account : " + response);
             }
             RegisterController.getInstance().register(info, response);
-            connection.SendMessage("Registered successfully.\nYour bank response : " + response);
+            connection.sendMessage ("Registered successfully.\nYour bank response : " + response);
         }
     }
 
@@ -558,7 +556,7 @@ public class Server {
 
         @Override
         public void handle(Connection connection) {
-            connection.SendMessage(write(RegisterController.getInstance().isFirstManagerRegistered()));
+            connection.sendMessage (write(RegisterController.getInstance().isFirstManagerRegistered()));
         }
     }
 
@@ -567,7 +565,7 @@ public class Server {
         @Override
         public void handle(Connection connection) {
             ArrayList<String> strings = connection.getRequest().getJson();
-            connection.SendMessage(PersonController.getInstance().getPersonByUsername(strings.get(0)).getType());
+            connection.sendMessage (PersonController.getInstance().getPersonByUsername(strings.get(0)).getType());
         }
     }
 
@@ -580,7 +578,7 @@ public class Server {
             String password = info.get(1);
             String msg = "get_token " + username + " " + password;
             String response = BankAPI.getBankResponse(msg);
-            connection.SendMessage(response);
+            connection.sendMessage (response);
         }
     }
 
@@ -592,7 +590,7 @@ public class Server {
             String token = info.get(0);
             String msg = "get_balance " + token;
             String response = BankAPI.getBankResponse(msg);
-            connection.SendMessage(response);
+            connection.sendMessage (response);
         }
     }
 
@@ -605,7 +603,7 @@ public class Server {
             String type = info.get(1);
             String msg = "get_transaction " + token + " " + type;
             String response = BankAPI.getBankResponse(msg);
-            connection.SendMessage(response);
+            connection.sendMessage (response);
         }
     }
 
@@ -622,7 +620,7 @@ public class Server {
             if (bankReceiptRp.matches("\\d+")) { //it means it is a receipt id
                 bankReceiptRp = WalletController.getInstance().getPayResponse(bankReceiptRp);
             }
-            connection.SendMessage(bankReceiptRp);
+            connection.sendMessage (bankReceiptRp);
         }
     }
 
@@ -644,7 +642,7 @@ public class Server {
                     WalletController.getInstance().increaseWalletBalance(person, Double.parseDouble(amount));
                 }
             }
-            connection.SendMessage(bankReceiptRp);
+            connection.sendMessage (bankReceiptRp);
         }
     }
 
@@ -674,7 +672,7 @@ public class Server {
                     }
                 }
             }
-            connection.SendMessage(bankReceiptRp);
+            connection.sendMessage (bankReceiptRp);
         }
     }
 
@@ -683,7 +681,7 @@ public class Server {
         @Override
         public void handle(Connection connection) {
             String token = connection.getRequest().getToken();
-            connection.SendMessage(getBankId(token));
+            connection.sendMessage (getBankId(token));
         }
     }
 
@@ -699,7 +697,7 @@ public class Server {
             } else if (person.getType().equalsIgnoreCase("salesperson")) {
                 wallet = write(((Salesperson) person).getWallet());
             }
-            connection.SendMessage(wallet);
+            connection.sendMessage (wallet);
         }
     }
 
@@ -715,7 +713,7 @@ public class Server {
             } else if (person.getType().equalsIgnoreCase("salesperson")) {
                 balance = String.valueOf(((Salesperson) person).getWallet().getBalance());
             }
-            connection.SendMessage(balance);
+            connection.sendMessage (balance);
         }
     }
 
@@ -739,9 +737,9 @@ public class Server {
             if (!token.isEmpty ()) {
                 String username = authTokens.get ( token );
                 authTokens.remove ( token );
-                connection.SendMessage ( username + " logout" );
+                connection.sendMessage ( username + " logout" );
             } else {
-                connection.SendMessage ( "offline" );
+                connection.sendMessage ( "offline" );
             }
         }
     }
@@ -749,7 +747,7 @@ public class Server {
 
         @Override
         public void handle(Connection connection) {
-            connection.SendMessage(write(ProductController.getAllProducts()));
+            connection.sendMessage (write(ProductController.getAllProducts()));
         }
     }
 
@@ -757,7 +755,7 @@ public class Server {
 
         @Override
         public void handle(Connection connection) {
-            connection.SendMessage(write(ProductController.getAllProductsInDiscount()));
+            connection.sendMessage (write(ProductController.getAllProductsInDiscount()));
         }
     }
 
@@ -776,19 +774,19 @@ public class Server {
             String type = connection.getRequest().getJson().get(0);
             switch (type) {
                 case "salesperson":
-                    connection.SendMessage(write(RequestController.getInstance().filterByType(SalespersonRequest.class)));
+                    connection.sendMessage (write(RequestController.getInstance().filterByType(SalespersonRequest.class)));
                     break;
                 case "product":
-                    connection.SendMessage(write(RequestController.getInstance().filterByType(ProductRequest.class)));
+                    connection.sendMessage (write(RequestController.getInstance().filterByType(ProductRequest.class)));
                     break;
                 case "discount":
-                    connection.SendMessage(write(RequestController.getInstance().filterByType(DiscountRequest.class)));
+                    connection.sendMessage (write(RequestController.getInstance().filterByType(DiscountRequest.class)));
                     break;
                 case "auction":
-                    connection.SendMessage(write(RequestController.getInstance().filterByType(AuctionRequest.class)));
+                    connection.sendMessage (write(RequestController.getInstance().filterByType(AuctionRequest.class)));
                     break;
                 case "file":
-                    connection.SendMessage(write(RequestController.getInstance().filterByType(FileRequest.class)));
+                    connection.sendMessage (write(RequestController.getInstance().filterByType(FileRequest.class)));
                     break;
             }
         }
@@ -800,7 +798,7 @@ public class Server {
         public void handle(Connection connection) {
             ArrayList<String> categories = new ArrayList<>();
             CategoryController.getInstance().getParentCategories(categories, CategoryController.rootCategories);
-            connection.SendMessage(write(categories));
+            connection.sendMessage (write(categories));
         }
     }
 
@@ -808,7 +806,7 @@ public class Server {
 
         @Override
         public void handle(Connection connection) {
-            connection.SendMessage(write(ProductController.getInstance().getProductById(connection.getRequest().getJson().get(0))));
+            connection.sendMessage (write(ProductController.getInstance().getProductById(connection.getRequest().getJson().get(0))));
         }
     }
 
@@ -817,7 +815,7 @@ public class Server {
         @Override
         public void handle(Connection connection) {
             Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
-            connection.SendMessage(write(salesperson.getOfferedProducts().keySet()));
+            connection.sendMessage (write(salesperson.getOfferedProducts().keySet()));
         }
     }
 
@@ -828,7 +826,7 @@ public class Server {
             ArrayList<String> strings = connection.getRequest().getJson();
             String username = authTokens.get(connection.getRequest().getToken());
             RequestController.getInstance().addAuctionRequest(username, strings.get(0), strings.get(1));
-            connection.SendMessage("successful");
+            connection.sendMessage ("successful");
         }
     }
 
@@ -837,7 +835,7 @@ public class Server {
         @Override
         public void handle(Connection connection) {
             Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
-            connection.SendMessage(write(AuctionController.getInstance().getSellerAvailableProductsForAuction(salesperson)));
+            connection.sendMessage (write(AuctionController.getInstance().getSellerAvailableProductsForAuction(salesperson)));
         }
     }
 
@@ -845,7 +843,7 @@ public class Server {
 
         @Override
         public void handle(Connection connection) {
-            connection.SendMessage(write(AuctionController.getInstance().getAllAuctions()));
+            connection.sendMessage (write(AuctionController.getInstance().getAllAuctions()));
         }
     }
 
@@ -853,7 +851,7 @@ public class Server {
 
         @Override
         public void handle(Connection connection) {
-            connection.SendMessage(write(CategoryController.rootCategories));
+            connection.sendMessage (write(CategoryController.rootCategories));
         }
     }
 
@@ -862,7 +860,7 @@ public class Server {
         @Override
         public void handle(Connection connection) {
             Product product = ProductController.getInstance().getProductById(connection.getRequest().getJson().get(0));
-            connection.SendMessage(write(ProductController.getInstance().getSimilarProducts(product)));
+            connection.sendMessage (write(ProductController.getInstance().getSimilarProducts(product)));
         }
     }
 
@@ -871,7 +869,7 @@ public class Server {
         @Override
         public void handle(Connection connection) {
             Product product = ProductController.getInstance().getProductById(connection.getRequest().getJson().get(0));
-            connection.SendMessage(write(ProductController.getInstance().getVerifiedSellersOfProduct(product)));
+            connection.sendMessage (write(ProductController.getInstance().getVerifiedSellersOfProduct(product)));
         }
     }
 
@@ -881,7 +879,7 @@ public class Server {
         public void handle(Connection connection) {
             String username = authTokens.get(connection.getRequest().getToken());
             Person person = PersonController.getInstance().getPersonByUsername(username);
-            connection.SendMessage(write(person.getPersonInfo()));
+            connection.sendMessage (write(person.getPersonInfo()));
         }
     }
 
@@ -890,7 +888,7 @@ public class Server {
         @Override
         public void handle(Connection connection) {
             Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
-            connection.SendMessage(write(ProductController.getInstance().getSellerVerifiedProducts(salesperson)));
+            connection.sendMessage (write(ProductController.getInstance().getSellerVerifiedProducts(salesperson)));
         }
     }
 
@@ -900,7 +898,7 @@ public class Server {
         public void handle(Connection connection) {
             Product product = ProductController.getInstance().getProductById(connection.getRequest().getJson().get(0));
             product.increaseSeen();
-            connection.SendMessage("successful");
+            connection.sendMessage ("successful");
         }
     }
 
@@ -910,7 +908,7 @@ public class Server {
         public void handle(Connection connection) {
             Product product = ProductController.getInstance().getProductById(connection.getRequest().getJson().get(0));
             product.increaseTotalScore(Integer.parseInt(connection.getRequest().getJson().get(1)));
-            connection.SendMessage("successful");
+            connection.sendMessage ("successful");
         }
     }
 
@@ -919,7 +917,7 @@ public class Server {
         @Override
         public void handle(Connection connection) {
             Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(authTokens.get(connection.getRequest().getToken()));
-            connection.SendMessage(write(salesperson.getDiscounts()));
+            connection.sendMessage (write(salesperson.getDiscounts()));
         }
     }
 
@@ -931,7 +929,7 @@ public class Server {
             String productId = info.get(0);
             Product product = ProductController.getInstance().getProductById(productId);
             ProductController.getInstance().removeProductForManager(product);
-            connection.SendMessage(" send delete prod (manager) : " + productId);
+            connection.sendMessage (" send delete prod (manager) : " + productId);
         }
     }
 
@@ -945,7 +943,7 @@ public class Server {
             String username = authTokens.get(token);
             Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(username);
             RequestController.getInstance().deleteProductRequest(productId, salesperson);
-            connection.SendMessage(username + " send delete prod request : " + productId);
+            connection.sendMessage (username + " send delete prod request : " + productId);
         }
     }
 
@@ -961,11 +959,11 @@ public class Server {
             String username = authTokens.get(connection.getRequest().getToken());
             Person person = PersonController.getInstance().getPersonByUsername(username);
             if (!person.getType().equals("customer")) {
-                connection.SendMessage("you are not a customer :(");
+                connection.sendMessage ("you are not a customer :(");
                 return;
             }
             ProductController.getInstance().addComment(product, (Customer) person, comment, title);
-            connection.SendMessage("your comment added");
+            connection.sendMessage ("your comment added");
         }
     }
 
@@ -977,9 +975,9 @@ public class Server {
             String productId = info.get(0);
             Product product = ProductController.getInstance().getProductById(productId);
             if (ProductController.getInstance().isProductAvailable(product)) {
-                connection.SendMessage("true");
+                connection.sendMessage ("true");
             } else {
-                connection.SendMessage("false");
+                connection.sendMessage ("false");
             }
         }
     }
@@ -992,9 +990,9 @@ public class Server {
             String username = authTokens.get(token);
             Person person = PersonController.getInstance().getPersonByUsername(username);
             if (person != null)
-                connection.SendMessage(person.getType());
+                connection.sendMessage (person.getType());
             else
-                connection.SendMessage("null");
+                connection.sendMessage ("null");
         }
     }
 
@@ -1009,9 +1007,9 @@ public class Server {
             String productId = connection.getRequest().getJson().get(0);
             Product product = ProductController.getInstance().getProductById(productId);
             if (person != null && person.getType().equals("customer") && ((Customer) person).isProductBought(product)) {
-                connection.SendMessage("true");
+                connection.sendMessage ("true");
             } else {
-                connection.SendMessage("false");
+                connection.sendMessage ("false");
             }
         }
     }
@@ -1022,7 +1020,7 @@ public class Server {
         public void handle(Connection connection) {
             String productId = connection.getRequest().getJson().get(0);
             Product product = ProductController.getInstance().getProductById(productId);
-            connection.SendMessage(String.valueOf(product.getAveragePrice()));
+            connection.sendMessage (String.valueOf(product.getAveragePrice()));
         }
     }
 
@@ -1033,9 +1031,9 @@ public class Server {
             String username = authTokens.get(connection.getRequest().getToken());
             Person person = PersonController.getInstance().getPersonByUsername(username);
             if (person != null) {
-                connection.SendMessage(write(person));
+                connection.sendMessage (write(person));
             } else
-                connection.SendMessage("null");
+                connection.sendMessage ("null");
         }
     }
 
@@ -1048,12 +1046,12 @@ public class Server {
             if (person instanceof Customer) {
                 try {
                     CartController.getInstance().purchaseWallet((Customer) person);
-                    connection.SendMessage("successful");
+                    connection.sendMessage ("successful");
                 } catch (CartController.NotEnoughCreditMoney notEnoughCreditMoney) {
-                    connection.SendMessage(notEnoughCreditMoney.getMessage());
+                    connection.sendMessage (notEnoughCreditMoney.getMessage());
                 }
             } else
-                connection.SendMessage("you should be a customer");
+                connection.sendMessage ("you should be a customer");
         }
     }
 
@@ -1068,12 +1066,12 @@ public class Server {
             if (person instanceof Customer) {
                 try {
                     CartController.getInstance().purchaseBank((Customer) person, bankUsername, bankPassword);
-                    connection.SendMessage("successful");
+                    connection.sendMessage ("successful");
                 } catch (Exception e) {
-                    connection.SendMessage(e.getMessage());
+                    connection.sendMessage (e.getMessage());
                 }
             } else
-                connection.SendMessage("you should be a customer");
+                connection.sendMessage ("you should be a customer");
         }
     }
 
@@ -1083,7 +1081,7 @@ public class Server {
         public void handle(Connection connection) {
             String categoryName = connection.getRequest().getJson().get(0);
             Category category = CategoryController.getInstance().getCategoryByName(categoryName, CategoryController.rootCategories);
-            connection.SendMessage(write(category.getProductList()));
+            connection.sendMessage (write(category.getProductList()));
         }
     }
 
@@ -1093,7 +1091,7 @@ public class Server {
         public void handle(Connection connection) {
             String categoryName = connection.getRequest().getJson().get(0);
             Category category = CategoryController.getInstance().getCategoryByName(categoryName, CategoryController.rootCategories);
-            connection.SendMessage(write(CategoryController.getInstance().getInDiscountsProductsOfCategory(category)));
+            connection.sendMessage (write(CategoryController.getInstance().getInDiscountsProductsOfCategory(category)));
         }
     }
 
@@ -1103,7 +1101,7 @@ public class Server {
         public void handle(Connection connection) {
             ArrayList<Category> leafCategories = new ArrayList<>();
             CategoryController.getInstance().getNodeCategories(leafCategories, CategoryController.rootCategories);
-            connection.SendMessage(write(leafCategories));
+            connection.sendMessage (write(leafCategories));
         }
     }
 
@@ -1144,9 +1142,9 @@ public class Server {
                 else
                     auctionHashmap.get ( auctionId ).put ( username , connection );
 
-                connection.SendMessage("successful");
+                connection.sendMessage ("successful");
             } else {
-                connection.SendMessage("not enough money in your wallet");
+                connection.sendMessage ("not enough money in your wallet");
             }
         }
     }
@@ -1158,9 +1156,9 @@ public class Server {
             Auction auction = AuctionController.getInstance().getAuctionById(connection.getRequest().getJson().get(0));
             String username = authTokens.get(connection.getRequest().getToken());
             if (AuctionController.getInstance().getHighestOfferPriceCustomer(auction) != null && AuctionController.getInstance().getHighestOfferPriceCustomer(auction).getUsername().equals(username)) {
-                connection.SendMessage("Yaaay! you won the auction :)");
+                connection.sendMessage ("Yaaay! you won the auction :)");
             } else {
-                connection.SendMessage(username + " won thw auction :(");
+                connection.sendMessage (username + " won thw auction :(");
             }
             AuctionController.getInstance().purchase(auction);
         }
@@ -1175,8 +1173,9 @@ public class Server {
             String auctionID = info.get ( 1 );
             Auction auction = AuctionController.getInstance ().getAuctionById ( auctionID );
             auction.messages = auction.messages.concat ( message );
-            auctionHashmap.get ( auctionID ).forEach ( (k,v) -> v.SendMessage ( message ) );
-            connection.SendMessage ( message );
+            System.out.println ( message );
+            auctionHashmap.get ( auctionID ).forEach ( (k,v) -> v.sendMessage ( message ) );
+            connection.sendMessage ( message );
         }
     }
 
@@ -1204,7 +1203,7 @@ public class Server {
                 chat.setSupportConnection ( connection );
 
             }
-            connection.SendMessage ( "/open/" + chat.messages );
+            connection.sendMessage ( "/open/" + chat.messages );
 
         }
     }
@@ -1224,17 +1223,17 @@ public class Server {
                 HashMap<String,Chat> supportHashmap = clientChatsHashmap.get ( client );
                 chat = supportHashmap.get ( support );
                 if (chat.supportConnection != null)
-                    chat.supportConnection.SendMessage ( message );
+                    chat.supportConnection.sendMessage ( message );
             } else {
                 support = authTokens.get ( connection.getRequest ().getToken () );
                 message = support + " : " + connection.getRequest ().getJson ().get ( 1 );
                 client = connection.getRequest ().getJson ().get ( 2 );
                 HashMap<String,Chat> supportHashmap = clientChatsHashmap.get ( client );
                 chat = supportHashmap.get ( support );
-                chat.clientConnection.SendMessage ( message );
+                chat.clientConnection.sendMessage ( message );
             }
             chat.messages = chat.messages.concat ( message );
-            connection.SendMessage ( message );
+            connection.sendMessage ( message );
         }
     }
 
@@ -1244,8 +1243,14 @@ public class Server {
         public void handle ( Connection connection ) {
             String field = connection.getRequest ().getJson ().get ( 0 );
             String newValue = connection.getRequest ().getJson ().get ( 1 );
+            if (field.equalsIgnoreCase("wage")) {
+                WalletController.getInstance().setWAGE(Double.parseDouble(newValue));
+            }
+            if (field.equalsIgnoreCase("min_balance")) {
+                WalletController.getInstance().setMIN_BALANCE(Double.parseDouble(newValue));
+            }
             PersonController.getInstance ().getPersonByUsername ( authTokens.get ( connection.getRequest ().getToken () ) ).setField ( field , newValue );
-            connection.SendMessage ( "successful" );
+            connection.sendMessage ( "successful" );
         }
     }
 
@@ -1257,7 +1262,7 @@ public class Server {
             for (Person person : PersonController.allPersons) {
                 response.put ( person.getUsername () , person.getType () );
             }
-            connection.SendMessage(write(response));
+            connection.sendMessage (write(response));
         }
     }
 
@@ -1274,9 +1279,9 @@ public class Server {
                     ProductController.getInstance ().removeSellerInStock ( (Salesperson) person );
                 }
                 PersonController.getInstance ().removePersonFromAllPersons ( person );
-                connection.SendMessage ( "Removed Successfully" );
+                connection.sendMessage ( "Removed Successfully" );
             } catch (Exception exception) {
-                connection.SendMessage ( exception.getMessage () );
+                connection.sendMessage ( exception.getMessage () );
             }
         }
     }
@@ -1286,9 +1291,9 @@ public class Server {
         @Override
         public void handle ( Connection connection ) {
             if ( authTokens.containsValue ( connection.getRequest ().getJson ().get ( 0 ) ) )
-                connection.SendMessage ( "successful" );
+                connection.sendMessage ( "successful" );
             else
-                connection.SendMessage ( "unsuccessful" );
+                connection.sendMessage ( "unsuccessful" );
         }
     }
 
@@ -1303,7 +1308,7 @@ public class Server {
                 if (person instanceof Support)
                     allOnlineSupports.add ( person.getUsername () );
             }
-            connection.SendMessage ( write ( allOnlineSupports ) );
+            connection.sendMessage ( write ( allOnlineSupports ) );
         }
     }
 
@@ -1318,7 +1323,7 @@ public class Server {
                     allClientsWithChats.add ( stringHashMapEntry.getKey () );
             }
 //            clientChatsHashmap.get ( supportUsername ).forEach ( (k,v) -> allClientsWithChats.add ( k ) );
-            connection.SendMessage ( write ( allClientsWithChats ) );
+            connection.sendMessage ( write ( allClientsWithChats ) );
         }
     }
 
@@ -1326,7 +1331,7 @@ public class Server {
 
         @Override
         public void handle ( Connection connection ) {
-            connection.SendMessage ( "/back/" );
+            connection.sendMessage ( "/back/" );
         }
     }
 
@@ -1336,9 +1341,9 @@ public class Server {
             String username = authTokens.get(connection.getRequest().getToken());
             FileRequestInfo info = findRequestForSeller(username);
             if (info == null) {
-                connection.SendMessage("no request");
+                connection.sendMessage ("no request");
             } else {
-                connection.SendMessage(info.port + " " + info.fileId);
+                connection.sendMessage (info.port + " " + info.fileId);
             }
         }
     }
@@ -1363,7 +1368,7 @@ public class Server {
             ArrayList<String> strings = connection.getRequest().getJson();
             FileRequestInfo info = new FileRequestInfo(strings.get(0), strings.get(1), strings.get(2));
             fileRequestInfo.add(info);
-            connection.SendMessage("successful");
+            connection.sendMessage ("successful");
         }
     }
 
@@ -1380,12 +1385,12 @@ public class Server {
                 if (WalletController.getInstance().canDecreaseWalletBalance(person, fileProduct.getPrice())) {
                     Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(fileProduct.getSellerId());
                     ProductController.getInstance().purchaseFileWallet((Customer)person, fileProduct, salesperson);
-                    connection.SendMessage("successful");
+                    connection.sendMessage ("successful");
                 } else {
-                    connection.SendMessage("not enough money in your wallet.");
+                    connection.sendMessage ("not enough money in your wallet.");
                 }
             } else {
-                connection.SendMessage("login with customer account.");
+                connection.sendMessage ("login with customer account.");
             }
         }
     }
@@ -1406,12 +1411,12 @@ public class Server {
                 if (WalletController.getInstance().moveFromCustomerToBank(fileProduct.getPrice(), bankUsername, bankPass , ((Customer)person).getWallet().getBankId()).equals("successfully paid!")) {
                     Salesperson salesperson = (Salesperson) PersonController.getInstance().getPersonByUsername(fileProduct.getSellerId());
                     ProductController.getInstance().purchaseFileBank((Customer)person, fileProduct, salesperson);
-                    connection.SendMessage("successful");
+                    connection.sendMessage ("successful");
                 } else {
-                    connection.SendMessage("not enough money in tour account");
+                    connection.sendMessage ("not enough money in tour account");
                 }
             } else {
-                connection.SendMessage("login with customer account.");
+                connection.sendMessage ("login with customer account.");
             }
 
         }
@@ -1421,7 +1426,7 @@ public class Server {
 
         @Override
         public void handle(Connection connection) {
-            connection.SendMessage(write(ProductController.allFiles));
+            connection.sendMessage (write(ProductController.allFiles));
         }
     }
 
@@ -1431,7 +1436,7 @@ public class Server {
         public void handle(Connection connection) {
             String fileId = connection.getRequest().getJson().get(0);
             FileProduct fileProduct = ProductController.getInstance().getFileById(fileId);
-            connection.SendMessage(fileProduct.getAddress());
+            connection.sendMessage (fileProduct.getAddress());
         }
     }
 
@@ -1516,7 +1521,7 @@ class Connection {
     }
 
 
-    public void SendMessage(String msg) {
+    public void sendMessage ( String msg) {
         try {
             dataOutputStream.writeUTF(msg);
             //dataOutputStream.flush ();

@@ -7,10 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import model.Auction;
@@ -47,7 +44,7 @@ public class AuctionMenu implements Initializable { //todo
     @FXML
     private ImageView submitPrice;
     @FXML
-    private ImageView send;
+    private Button send;
     @FXML
     private Label basePrice;
     @FXML
@@ -97,15 +94,17 @@ public class AuctionMenu implements Initializable { //todo
 //        }.start ();
 
         setTimer();
-        send.setOnMouseClicked(event -> {
-            if (add.getText().isEmpty()) {
-                App.error("write something :|");
-            } else
-                sendAuctionMessage ( new ArrayList <String> () {{
-                    add ( add.getText () + '\n' );
-                    add ( auction.getId () );
-                }}, false );
-        });
+//        send.setOnMouseClicked(event -> {
+//            if (add.getText().isEmpty()) {
+//                App.error("write something :|");
+//            } else {
+//                sendAuctionMessage ( new ArrayList < String > ( ) {{
+//                    add ( add.getText ( ) + '\n' );
+//                    add ( auction.getId ( ) );
+//                }} , false );
+//                add.setText ( "" );
+//            }
+//        });
         basePrice.setText(auction.getBasePrice() + "$");
         productPane.getChildren().add(productCard);
         submitPrice.setOnMouseClicked(event -> submitPrice());

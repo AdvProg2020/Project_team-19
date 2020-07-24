@@ -26,7 +26,8 @@ public class ServerConnection {
 
     public static void run() {
         try {
-            socket = new Socket("2.tcp.ngrok.io", 10711);
+//            socket = new Socket("2.tcp.ngrok.io", 10711);
+            socket = new Socket("localhost", 4444);
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
             dataInputStream = new DataInputStream(socket.getInputStream());
         } catch (IOException e) {
@@ -584,7 +585,7 @@ public class ServerConnection {
 
     public static String sendAuctionMessage (ArrayList<String> info, boolean onlyRead) {
         try {
-            Socket s = new Socket ( socket.getLocalAddress () , socket.getLocalPort () );
+            Socket s = new Socket ( "localhost" , 4444 );
             DataInputStream dis = new DataInputStream ( s.getInputStream () );
             DataOutputStream dos = new DataOutputStream ( s.getOutputStream () );
             if (!onlyRead)

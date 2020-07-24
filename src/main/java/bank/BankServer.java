@@ -24,9 +24,9 @@ public class BankServer {
         try {
             initializer();
             createLists();
-            ServerSocket serverSocket = new ServerSocket(0);
-            port = serverSocket.getLocalPort();
-            System.out.println("port :" + port);
+            ServerSocket serverSocket = new ServerSocket(2222);
+//            port = serverSocket.getLocalPort();
+//            System.out.println("port :" + port);
             new ServerImpl(serverSocket).start();
         } catch (IOException e) {
             e.printStackTrace();
